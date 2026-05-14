@@ -6,6 +6,25 @@
 
 更推荐的使用方式是：每次新建一个对话，就当作新建一个项目。Codex 会读取 `AGENTS.md`，自动判断项目类型，少量追问，并在对话框里推进完整流程。
 
+## 当前版本
+
+- 当前运行版本：`V1.2.3`
+- 稳定调用入口：`/SW_V1.0` 或 `@SW_V1.0`
+- 版本同步入口：`@sw_update`
+- 完整更新记录：[`VERSION.md`](VERSION.md) / [`Architecture_Update_Log.md`](Architecture_Update_Log.md)
+
+## 更新日志
+
+首页只展示最近更新，方便打开仓库时快速判断当前能力；完整细节以 `Architecture_Update_Log.md` 为准。
+
+| 版本 | 日期 | 更新内容 |
+| --- | --- | --- |
+| V1.2.3 | 2026-05-14 | 在 README 首页增加当前版本和最近更新日志，打开 GitHub 仓库即可看到运行版本、调用入口和完整日志入口。 |
+| V1.2.2 | 2026-05-14 | 增加 Fast Path 派单，减少常规项目的路由文件读取；补充 UTF-8 校验和统一回归测试。 |
+| V1.2.1 | 2026-05-14 | 升级 `presentation-designer`，强化客户提案型 PPT、地方文旅/城市形象片提案、电影感视觉和交付检查。 |
+| V1.2.0 | 2026-05-14 | 新增独立 `presentation-designer` 岗位，加入 PPT/deck 命令别名、阶段规则和自动派单。 |
+| V1.1.2 | 2026-05-12 | 增加 presentation/PPT/deck 路由和审查支持，可通过现有工作室岗位处理。 |
+
 ## 对话式启动
 
 每次新建对话时，最推荐先调用：
@@ -23,7 +42,7 @@
 调用成功后，Codex 应回复：
 
 ```text
-SW loaded successfully. Current version: V1.2.2
+SW loaded successfully. Current version: V1.2.3
 ```
 
 Version synchronization uses a separate entry:
@@ -35,7 +54,7 @@ Version synchronization uses a separate entry:
 Expected reply:
 
 ```text
-SW version synchronized. Current version: V1.2.2
+SW version synchronized. Current version: V1.2.3
 ```
 
 For other project folders, copy both `SW_V1.0.md` and `sw_update.md`; copying only the startup file will not create the local update entry.

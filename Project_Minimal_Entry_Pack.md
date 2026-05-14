@@ -31,13 +31,13 @@ Copy these when you want version history and troubleshooting available inside th
 Startup:
 
 ```text
-SW loaded successfully. Current version: V1.2.2
+SW loaded successfully. Current version: V1.2.3
 ```
 
 Version sync:
 
 ```text
-SW version synchronized. Current version: V1.2.2
+SW version synchronized. Current version: V1.2.3
 ```
 
 ## Rule

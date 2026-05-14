@@ -22,8 +22,8 @@ Get-ChildItem .\Studio_Skills -Directory | ForEach-Object {
 Check version consistency:
 
 ```powershell
-rg "Current version: V1.2.2|Current runtime version: V1.2.2" .
-rg "V1.2.2" .
+rg "Current version: V1.2.3|Current runtime version: V1.2.3" .
+rg "V1.2.3" .
 rg "<previous-version>" . --glob "!VERSION.md" --glob "!Architecture_Update_Log.md"
 ```
 

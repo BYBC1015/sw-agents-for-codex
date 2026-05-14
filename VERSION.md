@@ -1,6 +1,6 @@
 # SW Version
 
-Current runtime version: V1.2.2
+Current runtime version: V1.2.3
 Stable invocation name: SW_V1.0
 Stable invocation aliases: `/SW_V1.0`, `@SW_V1.0`, `/sw_v1.0`, `/sw-v1-0`
 Version sync aliases: `@sw_update`, `SW_UPDATE`, `/sw_update`, `SW_REFRESH`
@@ -76,6 +76,7 @@ Each entry must include:
 
 | Version | Date | Change |
 | --- | --- | --- |
+| V1.2.3 | 2026-05-14 | Added a README homepage changelog and current-version block so GitHub visitors can see the active runtime, recent updates, and full log entry points immediately. |
 | V1.2.2 | 2026-05-14 | Added Fast Path dispatch to reduce routing file reads, added UTF-8 validation guidance, and introduced a unified regression test suite for safer maintenance. |
 | V1.2.1 | 2026-05-14 | Upgraded `presentation-designer` with progressive references for client-facing proposal decks, local tourism/city image film proposal PPTs, cinematic visual rules, layer/overlay QA, and proposal cost gates. |
 | V1.2.0 | 2026-05-14 | Added dedicated `presentation-designer` role, PPT/deck command aliases, presentation stage rules, and auto-assignment routing based on researched presentation structure, accessibility, and PPTX placeholder practices. |
