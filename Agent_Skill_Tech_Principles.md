@@ -135,3 +135,23 @@ If SW later adds deterministic helper scripts:
 - keep output bounded or write large output to files
 
 Creative judgment should stay in role skills; scripts are only for repeatable validation, conversion, extraction, or packaging.
+
+### 9. OpenAI Agents SDK-Inspired Dispatch Pattern
+
+Adopt the useful pattern, not the runtime dependency, unless the user explicitly asks to build an SDK app.
+
+Use these ideas when improving SW role dispatch:
+
+- Handoffs: treat a role switch as ownership transfer, not a decorative mention. Pass a compact handoff packet with reason, locked decisions, risks, next action, and cost lane.
+- Guardrails: run blocking preflight checks before high-cost, privacy-sensitive, external-tool, publishing, or irreversible actions. Use output review only on the final deliverable role.
+- Tracing: keep a lightweight internal trace of selected role, handoff reason, guardrails checked, loaded files, and cost decision. Show only the public role trace unless the user asks for audit/debug.
+- Sessions/state: preserve only locked decisions and useful project state across turns. Avoid replaying the full conversation into each role.
+- Tool boundaries: when an external tool is added later, put tool-specific checks around that tool rather than relying only on the first and last role.
+
+Known drawbacks and limits:
+
+- This does not make SW a real Agents SDK application; it is a design pattern for local skill routing.
+- Real SDK integration adds code, dependencies, credentials, trace storage, and maintenance cost.
+- Traces can include sensitive user material if captured too broadly, so default SW traces must stay compact and internal.
+- Too many handoffs can slow simple design tasks and increase tokens; keep the default to one primary role plus one support role.
+- Guardrail placement matters: first-role input checks and final-role output checks do not cover every tool action, so tool integrations still need their own safety rules.

@@ -100,6 +100,23 @@ cost_lane:
 
 Show it only when the user asks for status, audit, or handoff notes.
 
+## Agents SDK-Inspired Routing Rules
+
+Use the OpenAI Agents SDK pattern as an internal routing discipline:
+
+- a handoff means the next role owns the next answer
+- the handoff reason must be short and tied to the next deliverable
+- blocking guardrails run before expensive generation, tool use, uploads, publishing, or irreversible actions
+- final output review belongs to the final deliverable/review role, not every intermediate role
+- internal trace should record selected role, handoff reason, checked guardrails, and cost lane
+
+Do not over-apply this pattern:
+
+- do not create extra roles just because a handoff is possible
+- do not expose debug trace unless the user asks
+- do not claim a real SDK trace, guardrail, or agent run unless an actual SDK/tool integration was used
+- do not treat role-level guardrails as enough for external tools; tool integrations need their own checks
+
 ## No Pretend Calls
 
 Do not say a role was loaded unless its `SKILL.md` file was available and read.

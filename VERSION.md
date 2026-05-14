@@ -1,6 +1,6 @@
 # SW Version
 
-Current runtime version: V1.2.4
+Current runtime version: V1.2.5
 Stable invocation name: SW_V1.0
 Stable invocation aliases: `/SW_V1.0`, `@SW_V1.0`, `/sw_v1.0`, `/sw-v1-0`
 Version sync aliases: `@sw_update`, `SW_UPDATE`, `/sw_update`, `SW_REFRESH`
@@ -76,6 +76,7 @@ Each entry must include:
 
 | Version | Date | Change |
 | --- | --- | --- |
+| V1.2.5 | 2026-05-14 | Added an OpenAI Agents SDK-inspired dispatch pattern for role handoffs, blocking guardrails, lightweight tracing, session/state carryover, and tool-boundary safety, with drawbacks documented. |
 | V1.2.4 | 2026-05-14 | Expanded the README homepage changelog to include the complete version history instead of only recent entries. |
 | V1.2.3 | 2026-05-14 | Added a README homepage changelog and current-version block so GitHub visitors can see the active runtime, recent updates, and full log entry points immediately. |
 | V1.2.2 | 2026-05-14 | Added Fast Path dispatch to reduce routing file reads, added UTF-8 validation guidance, and introduced a unified regression test suite for safer maintenance. |

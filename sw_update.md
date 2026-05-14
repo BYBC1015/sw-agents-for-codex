@@ -27,7 +27,7 @@ SW_REFRESH
 After synchronization, reply exactly:
 
 ```text
-SW version synchronized. Current version: V1.2.4
+SW version synchronized. Current version: V1.2.5
 ```
 
 ## Behavior

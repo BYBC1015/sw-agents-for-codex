@@ -8,7 +8,7 @@
 
 ## 当前版本
 
-- 当前运行版本：`V1.2.4`
+- 当前运行版本：`V1.2.5`
 - 稳定调用入口：`/SW_V1.0` 或 `@SW_V1.0`
 - 版本同步入口：`@sw_update`
 - 完整更新记录：[`VERSION.md`](VERSION.md) / [`Architecture_Update_Log.md`](Architecture_Update_Log.md)
@@ -19,6 +19,7 @@
 
 | 版本 | 日期 | 更新内容 |
 | --- | --- | --- |
+| V1.2.5 | 2026-05-14 | 加入 OpenAI Agents SDK-inspired dispatch pattern，用 handoff、guardrails、tracing 和 session/state 思路增强 SW 岗位派单，同时记录真实 SDK 接入的依赖、隐私和过度派单风险。 |
 | V1.2.4 | 2026-05-14 | 将 README 首页更新日志扩展为完整版本历史，不再只展示最近几条，方便 GitHub 首页直接查看全部演进记录。 |
 | V1.2.3 | 2026-05-14 | 在 README 首页增加当前版本和最近更新日志，打开 GitHub 仓库即可看到运行版本、调用入口和完整日志入口。 |
 | V1.2.2 | 2026-05-14 | 增加 Fast Path 派单，减少常规项目的路由文件读取；补充 UTF-8 校验和统一回归测试。 |
@@ -54,7 +55,7 @@
 调用成功后，Codex 应回复：
 
 ```text
-SW loaded successfully. Current version: V1.2.4
+SW loaded successfully. Current version: V1.2.5
 ```
 
 Version synchronization uses a separate entry:
@@ -66,7 +67,7 @@ Version synchronization uses a separate entry:
 Expected reply:
 
 ```text
-SW version synchronized. Current version: V1.2.4
+SW version synchronized. Current version: V1.2.5
 ```
 
 For other project folders, copy both `SW_V1.0.md` and `sw_update.md`; copying only the startup file will not create the local update entry.
