@@ -1,0 +1,4 @@
+interface:
+  display_name: "Asset Producer"
+  short_description: "Plans source, AI, and post-production asset needs"
+  default_prompt: "Plan the needed production assets."

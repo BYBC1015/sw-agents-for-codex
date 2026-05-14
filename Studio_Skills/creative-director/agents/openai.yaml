@@ -1,0 +1,4 @@
+interface:
+  display_name: "Creative Director"
+  short_description: "Creates and selects concise creative directions"
+  default_prompt: "Give three creative directions and recommend one."

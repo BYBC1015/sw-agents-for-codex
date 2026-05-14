@@ -1,0 +1,4 @@
+interface:
+  display_name: "Studio Orchestrator"
+  short_description: "Routes design projects across studio skills"
+  default_prompt: "Run this design project like a small studio."

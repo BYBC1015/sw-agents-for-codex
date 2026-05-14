@@ -1,0 +1,4 @@
+interface:
+  display_name: "Prompt Director"
+  short_description: "Writes precise image and video generation prompts"
+  default_prompt: "Write production-ready image or video prompts."

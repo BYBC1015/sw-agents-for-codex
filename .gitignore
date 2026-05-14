@@ -1,0 +1,25 @@
+# OS/editor noise
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.tmp
+*.temp
+*.log
+
+# Python/cache artifacts
+__pycache__/
+*.py[cod]
+
+# Node/build artifacts, in case future tooling is added
+node_modules/
+dist/
+build/
+.next/
+
+# Local environment files
+.env
+.env.*
+
+# Generated previews/exports
+*.bak
+~$*

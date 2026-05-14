@@ -1,0 +1,4 @@
+interface:
+  display_name: "Presentation Designer"
+  short_description: "Plan and review PPT, proposal, and slide decks."
+  default_prompt: "Use presentation-designer for PPT/deck storyline, client-facing proposal structure, slide purpose, readability, and delivery planning."

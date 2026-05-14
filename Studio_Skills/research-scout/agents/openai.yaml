@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research Scout"
+  short_description: "Extracts style, reference, and material insights"
+  default_prompt: "Analyze references and style direction."

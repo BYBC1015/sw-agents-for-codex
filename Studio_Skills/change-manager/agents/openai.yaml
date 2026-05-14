@@ -1,0 +1,4 @@
+interface:
+  display_name: "Change Manager"
+  short_description: "Classifies revisions and controls scope and token cost"
+  default_prompt: "Evaluate this requested change."

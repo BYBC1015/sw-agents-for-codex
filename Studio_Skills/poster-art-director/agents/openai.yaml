@@ -1,0 +1,4 @@
+interface:
+  display_name: "Poster Art Director"
+  short_description: "Builds poster copy, layout, and visual execution plans"
+  default_prompt: "Create a poster execution plan."

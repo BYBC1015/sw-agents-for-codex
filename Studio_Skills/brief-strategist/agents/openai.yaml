@@ -1,0 +1,4 @@
+interface:
+  display_name: "Brief Strategist"
+  short_description: "Turns messy requests into an executable brief"
+  default_prompt: "Compress this request into a design brief."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tool Integrator"
+  short_description: "Registers and routes newly integrated AI tools"
+  default_prompt: "Register or adapt an AI tool for this studio workflow."

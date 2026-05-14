@@ -1,0 +1,4 @@
+interface:
+  display_name: "Edit Director"
+  short_description: "Creates timelines, rhythm, subtitles, music, and transitions"
+  default_prompt: "Create an edit plan."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Producer"
+  short_description: "Performs final brand, copyright, platform, and delivery checks"
+  default_prompt: "Review this project for delivery."
