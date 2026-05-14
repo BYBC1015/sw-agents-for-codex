@@ -37,10 +37,10 @@
 
 必须执行 `Command_Aliases.md`：
 
-- 用户输入 `/SW_V1.0`、`@SW_V1.0`、`/sw_v1.0`、`/sw-v1-0`、`@sw-v1-0`、`调用 SW_V1.0` 或 `启用 SW_V1.0` 时，必须加载本项目架构，并先回复且只把成功语放在第一位：`SW loaded successfully. Current version: V1.2.3`。
+- 用户输入 `/SW_V1.0`、`@SW_V1.0`、`/sw_v1.0`、`/sw-v1-0`、`@sw-v1-0`、`调用 SW_V1.0` 或 `启用 SW_V1.0` 时，必须加载本项目架构，并先回复且只把成功语放在第一位：`SW loaded successfully. Current version: V1.2.4`。
 - 如果用户只输入 SW 调用命令，不要继续展开项目；等待用户输入诉求。
 - 如果用户在同一条消息里附带诉求，先回复成功语，再按本项目架构执行。
-- 如果用户输入 `@sw_update`、`SW_UPDATE`、`/sw_update`、`SW_REFRESH`、`/SW_REFRESH` 或要求刷新/同步 SW，必须读取 `VERSION.md`、`sw_update.md`、`Architecture_Update_Log.md`、`Legacy_Conversation_Recovery.md`，并先回复：`SW version synchronized. Current version: V1.2.3`。历史对话可能缓存旧 skill；若刷新后仍是旧版，提示用户新建对话是可靠路径。
+- 如果用户输入 `@sw_update`、`SW_UPDATE`、`/sw_update`、`SW_REFRESH`、`/SW_REFRESH` 或要求刷新/同步 SW，必须读取 `VERSION.md`、`sw_update.md`、`Architecture_Update_Log.md`、`Legacy_Conversation_Recovery.md`，并先回复：`SW version synchronized. Current version: V1.2.4`。历史对话可能缓存旧 skill；若刷新后仍是旧版，提示用户新建对话是可靠路径。
 - 旧版工作室入口不再作为推荐入口；新项目统一使用 `/SW_V1.0` 或 `@SW_V1.0`。
 
 ## 版本更新规则

@@ -33,7 +33,7 @@ activate SW_V1.0
 After activation succeeds, reply exactly:
 
 ```text
-SW loaded successfully. Current version: V1.2.3
+SW loaded successfully. Current version: V1.2.4
 ```
 
 If the user only invokes SW, stop after the required reply and wait for the project request.
@@ -53,7 +53,7 @@ For synchronization in historical conversations or other project folders, use:
 Expected sync reply:
 
 ```text
-SW version synchronized. Current version: V1.2.3
+SW version synchronized. Current version: V1.2.4
 ```
 
 ## Minimum Project Folder Package

@@ -7,13 +7,13 @@ This is the compact runtime index for SW_V1.0. Read it before deeper project fil
 Activation reply:
 
 ```text
-SW loaded successfully. Current version: V1.2.3
+SW loaded successfully. Current version: V1.2.4
 ```
 
 Sync reply:
 
 ```text
-SW version synchronized. Current version: V1.2.3
+SW version synchronized. Current version: V1.2.4
 ```
 
 If the user only invokes SW or only invokes sync, reply with the matching fixed line and stop.

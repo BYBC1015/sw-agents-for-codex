@@ -8,22 +8,34 @@
 
 ## 当前版本
 
-- 当前运行版本：`V1.2.3`
+- 当前运行版本：`V1.2.4`
 - 稳定调用入口：`/SW_V1.0` 或 `@SW_V1.0`
 - 版本同步入口：`@sw_update`
 - 完整更新记录：[`VERSION.md`](VERSION.md) / [`Architecture_Update_Log.md`](Architecture_Update_Log.md)
 
 ## 更新日志
 
-首页只展示最近更新，方便打开仓库时快速判断当前能力；完整细节以 `Architecture_Update_Log.md` 为准。
+首页展示完整版本历史，方便打开仓库时快速判断当前能力和演进过程；更详细的影响范围以 `Architecture_Update_Log.md` 为准。
 
 | 版本 | 日期 | 更新内容 |
 | --- | --- | --- |
+| V1.2.4 | 2026-05-14 | 将 README 首页更新日志扩展为完整版本历史，不再只展示最近几条，方便 GitHub 首页直接查看全部演进记录。 |
 | V1.2.3 | 2026-05-14 | 在 README 首页增加当前版本和最近更新日志，打开 GitHub 仓库即可看到运行版本、调用入口和完整日志入口。 |
 | V1.2.2 | 2026-05-14 | 增加 Fast Path 派单，减少常规项目的路由文件读取；补充 UTF-8 校验和统一回归测试。 |
 | V1.2.1 | 2026-05-14 | 升级 `presentation-designer`，强化客户提案型 PPT、地方文旅/城市形象片提案、电影感视觉和交付检查。 |
 | V1.2.0 | 2026-05-14 | 新增独立 `presentation-designer` 岗位，加入 PPT/deck 命令别名、阶段规则和自动派单。 |
 | V1.1.2 | 2026-05-12 | 增加 presentation/PPT/deck 路由和审查支持，可通过现有工作室岗位处理。 |
+| V1.1.1 | 2026-05-11 | 增加 agent/skill 技术原则：渐进式读取、handoff packet、guardrail gate、状态延续、可观测 trace、eval loop 和脚本/工具设计规则。 |
+| V1.1.0 | 2026-05-11 | 重磅扩展为海报、视频、电影/品牌片全流程工作室；新增英文岗位标注、制作链路图和 3-5 个关键问题规则。 |
+| V1.0.8 | 2026-05-11 | 增加紧凑运行索引和 UTF-8 fallback 指南，让新对话加载 SW 更省 token，并减少编码异常。 |
+| V1.0.7 | 2026-05-11 | 增加 runtime cost governor、英文 role trace、高消耗确认门和自检规则，让低消耗使用更稳定。 |
+| V1.0.6 | 2026-05-11 | 增加强制 Studio 子 skill 派单协议，要求真实项目读取对应岗位 skill，并显示轻量岗位痕迹。 |
+| V1.0.5 | 2026-05-11 | 增加 `@sw_update` 版本同步入口、独立 `sw-update` skill 和跨项目最小入口包。 |
+| V1.0.4 | 2026-05-11 | 增加历史对话恢复指南和 `SW_REFRESH`，说明新对话是更新后的可靠路径。 |
+| V1.0.3 | 2026-05-11 | 将调用成功回复改为 ASCII 英文，避免新对话出现中文乱码。 |
+| V1.0.2 | 2026-05-11 | 增加详细更新内容记录规则和 `Architecture_Update_Log.md`。 |
+| V1.0.1 | 2026-05-11 | 增加自动版本号升级规则，并明确入口名 `SW_V1.0` 保持稳定。 |
+| V1.0 | 2026-05-11 | 初始设计工作室自动化架构和调用协议。 |
 
 ## 对话式启动
 
@@ -42,7 +54,7 @@
 调用成功后，Codex 应回复：
 
 ```text
-SW loaded successfully. Current version: V1.2.3
+SW loaded successfully. Current version: V1.2.4
 ```
 
 Version synchronization uses a separate entry:
@@ -54,7 +66,7 @@ Version synchronization uses a separate entry:
 Expected reply:
 
 ```text
-SW version synchronized. Current version: V1.2.3
+SW version synchronized. Current version: V1.2.4
 ```
 
 For other project folders, copy both `SW_V1.0.md` and `sw_update.md`; copying only the startup file will not create the local update entry.
