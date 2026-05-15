@@ -19,7 +19,16 @@ build/
 # Local environment files
 .env
 .env.*
+*.key
+*.pem
+secrets.*
 
 # Generated previews/exports
 *.bak
 ~$*
+banana_outputs/
+banana-pro-output/
+openrouter_payload*.json
+openrouter_response*.json
+banana_prompt_full.txt
+banana_prompt_used.txt

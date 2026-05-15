@@ -1,0 +1,4 @@
+interface:
+  display_name: "Banana Pro"
+  short_description: "Generate images with Banana Pro"
+  default_prompt: "Use $banana-pro to generate an image after the SW prompt is ready."

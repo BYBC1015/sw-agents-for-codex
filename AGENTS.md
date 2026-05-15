@@ -37,10 +37,10 @@
 
 必须执行 `Command_Aliases.md`：
 
-- 用户输入 `/SW_V1.0`、`@SW_V1.0`、`/sw_v1.0`、`/sw-v1-0`、`@sw-v1-0`、`调用 SW_V1.0` 或 `启用 SW_V1.0` 时，必须加载本项目架构，并先回复且只把成功语放在第一位：`SW loaded successfully. Current version: V1.2.5`。
+- 用户输入 `/SW_V1.0`、`@SW_V1.0`、`/sw_v1.0`、`/sw-v1-0`、`@sw-v1-0`、`调用 SW_V1.0` 或 `启用 SW_V1.0` 时，必须加载本项目架构，并先回复且只把成功语放在第一位：`SW loaded successfully. Current version: V1.3.5`。
 - 如果用户只输入 SW 调用命令，不要继续展开项目；等待用户输入诉求。
 - 如果用户在同一条消息里附带诉求，先回复成功语，再按本项目架构执行。
-- 如果用户输入 `@sw_update`、`SW_UPDATE`、`/sw_update`、`SW_REFRESH`、`/SW_REFRESH` 或要求刷新/同步 SW，必须读取 `VERSION.md`、`sw_update.md`、`Architecture_Update_Log.md`、`Legacy_Conversation_Recovery.md`，并先回复：`SW version synchronized. Current version: V1.2.5`。历史对话可能缓存旧 skill；若刷新后仍是旧版，提示用户新建对话是可靠路径。
+- 如果用户输入 `@sw_update`、`SW_UPDATE`、`/sw_update`、`SW_REFRESH`、`/SW_REFRESH` 或要求刷新/同步 SW，必须读取 `VERSION.md`、`sw_update.md`、`Architecture_Update_Log.md`、`Legacy_Conversation_Recovery.md`，并先回复：`SW version synchronized. Current version: V1.3.5`。历史对话可能缓存旧 skill；若刷新后仍是旧版，提示用户新建对话是可靠路径。
 - 旧版工作室入口不再作为推荐入口；新项目统一使用 `/SW_V1.0` 或 `@SW_V1.0`。
 
 ## 版本更新规则
@@ -73,6 +73,10 @@
 - 岗位 skill 负责各自交付物，不越界生成整套流程。
 - 需要图片/视频提示词时，由 `prompt-director` 读取 `Prompts/Prompt_Spec_Rules.md`。
 - 新增、接入或适配 AI/设计工具时，由 `tool-integrator` 读取 `AI_Tool_Integration_Rules.md` 和 `Tool_Registry.md`，先建工具卡再进入正式执行。
+- `banana-pro` 是显式调用的图像生成/出图成员，作用类似 `imagegen`，位于 `prompt-director` 之后：只有用户明确要求香蕉、banana、Banana Pro、Nano Banana、OpenRouter 图像生成、`@banana-pro` 或“用 banana-pro”时才加载；普通图片提示词、海报方案和分镜首帧不要自动调用它。
+- `banana-pro` 不能越过上游岗位：如果用户同时要求分镜、视频/电影镜头、海报、PPT/deck/slide、版式、角色、产品、道具或场景设计并要求用 banana 出图，必须先由对应 Studio role 产出设计 handoff，再由 `prompt-director` 转为最终视觉 prompt，最后只生成选中的一张/一帧；批量出图必须另行确认。
+- `banana-pro` 不是 Studio role，不在 `Studio_Skills/` 里查找，也不要放进 `Studio roles:` trace。它必须作为 Tool skill 单独显示，并优先读取当前项目的 `banana-pro/SKILL.md`；如果没有，再读用户级或插件级 `banana-pro/SKILL.md`。
+- `banana-pro` 已打包 OpenRouter API 执行脚本。真实出图需要用户明确要求、通过高消耗/上传 guardrail，并且环境存在 `OPENROUTER_API_KEY`；没有 key 时只做 dry-run 或 payload，不要声称已生成图片。
 - 有改稿反馈时，先由 `change-manager` 判断 S/M/L/XL，再回到对应岗位。
 
 ## AI 工具适配规则
@@ -360,6 +364,7 @@ PPT 项目的阶段为：
 - `AI_Tool_Integration_Rules.md` 是 AI/设计工具接入和工具版 prompt 转换规则，新增工具时必须使用。
 - `AI_Tool_Prompt_Profiles.md` 是图像、视频、编辑、版式、音频等工具类型的提示词剖面，生成工具版 prompt 时必须使用。
 - `Tool_Registry.md` 是工具注册表，新增工具必须先登记工具卡。
+- `banana-pro/SKILL.md` 是显式调用的 Banana Pro 图像生成工具 skill；它不是 `Studio_Skills/` 下的岗位 skill。
 - `Studio_Skills/*/SKILL.md` 是本项目的岗位 skill，按任务需要逐个调用。
 - `Prompts/Prompt_Library.md` 是备用提示词库，不要默认整段复制给用户。
 - `Prompts/Prompt_Spec_Rules.md` 是图片和视频提示词的生成规范，用户要提示词时必须使用。

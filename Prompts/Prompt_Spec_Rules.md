@@ -10,6 +10,8 @@
 - 如果用户给的信息不足，先按常用默认值生成一版，并标注默认假设，不要反复追问。
 - 若用于商业交付，避免要求生成真实名人、品牌 logo、受版权保护角色、仿某在世艺术家的风格。
 - 先输出通用提示词，再按 `Tool_Registry.md` 转成工具专用提示词；没有工具卡时，交给 `tool-integrator` 注册工具。
+- Banana Pro / `banana-pro` 是提示词后的图像生成成员，作用类似 `imagegen`；只在用户明确要求香蕉、banana、Banana Pro、Nano Banana 或 OpenRouter 图像生成时调用，普通图片提示词不要自动切换到 Banana Pro。
+- 用户同时要求“设计分镜/海报/PPT 页面/角色/产品/场景”和“使用 banana 出图”时，不能越过上游设计环节直接生成。先由对应 Studio 角色锁定分镜、版式、页面角色或视觉 brief，再由 `prompt-director` 转成可执行提示词，最后交给 `banana-pro` 生成选中的一张或一帧。
 
 ## 工具适配层
 

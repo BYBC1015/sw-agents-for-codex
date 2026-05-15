@@ -41,6 +41,9 @@ The cost gate decides:
 - Use up to three roles only for complex campaign/film turns.
 - Never read all studio skills by default.
 - Prompt-only requests go directly to `prompt-director`.
+- Explicit 香蕉 / banana / Banana Pro / Nano Banana / OpenRouter image-generation requests can add `banana-pro` as the image-generation member after `prompt-director`; use `tool-integrator` only when capability, parameters, API, or connection state is unclear. Do not load it for generic image prompts.
+- Banana Pro is a post-prompt execution step, not a shortcut around Studio roles. If the request also asks for storyboard, video/film shot design, poster design, PPT/deck/slide layout, character/product/prop design, or scene planning, the responsible Studio role must produce the upstream handoff before `prompt-director` and `banana-pro`.
+- `banana-pro` is a tool skill, not a Studio role. It does not count as an extra Studio support role, but generation still uses the high-cost gate when quota, uploads, or final-use assets are involved.
 - Presentation/deck structure requests go to `presentation-designer` first; full long decks or batch slide rewrites require the high-cost gate.
 - Proposal decks can load `presentation-designer` references only when the request mentions client-facing, government, local tourism, city image film, video production proposal, visual QA, or similar specialized needs.
 
@@ -95,8 +98,11 @@ Pause and ask for confirmation before:
 - privacy-sensitive uploads
 - irreversible tool actions
 - final-use AI output involving brand, face, product, logo, copyright, or exact text risk
+- Banana Pro / banana / OpenRouter image generation that may consume quota, requires `OPENROUTER_API_KEY`, or uploads reference images
 - unknown tool-specific prompt conversion
 - any action that consumes quota without a clear preview
+
+Explicit generation wording such as "use banana to generate one draft" counts as confirmation for one draft image only. It does not confirm batch generation, private reference uploads, or final-use brand/face/product output.
 
 If blocked, produce a preview, risk note, or one-question confirmation instead of executing.
 

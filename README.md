@@ -8,7 +8,7 @@
 
 ## 当前版本
 
-- 当前运行版本：`V1.2.5`
+- 当前运行版本：`V1.3.5`
 - 稳定调用入口：`/SW_V1.0` 或 `@SW_V1.0`
 - 版本同步入口：`@sw_update`
 - 完整更新记录：[`VERSION.md`](VERSION.md) / [`Architecture_Update_Log.md`](Architecture_Update_Log.md)
@@ -19,6 +19,12 @@
 
 | 版本 | 日期 | 更新内容 |
 | --- | --- | --- |
+| V1.3.5 | 2026-05-15 | 为 `banana-pro` 增加不可越级规则和草稿提速默认值：分镜/海报/PPT/场景等任务必须先走对应 Studio role 和 `prompt-director`，再生成选中画面；默认 1K 草稿、整理输出目录、提示词压缩、图片路径展示、减少重复 key 检查和无图重试。 |
+| V1.3.4 | 2026-05-15 | 为 `banana-pro` 增加 Windows 用户级 `OPENROUTER_API_KEY` fallback，方便本机写入 key 后无需重启也能读取。 |
+| V1.3.3 | 2026-05-15 | 将 `banana-pro` 正式打包为可执行图像生成 skill，新增 OpenRouter API 脚本；配置 `OPENROUTER_API_KEY` 后可真实出图，未配置时只 dry-run/payload。 |
+| V1.3.2 | 2026-05-15 | 修正 `banana-pro` 派单显示和查找路径：它不再被当作 Studio role，而是单独显示为 Tool skill，并明确读取 `banana-pro/SKILL.md`、用户级或插件级 skill。 |
+| V1.3.1 | 2026-05-15 | 校准 `banana-pro` 定位：它是提示词之后的图像生成/出图成员，作用类似 `imagegen`；触发词扩展为“香蕉 / banana / Banana Pro / Nano Banana”等。 |
+| V1.3.0 | 2026-05-15 | 新增 `banana-pro` 图像生成成员和工具卡；仅在用户明确要求 Banana Pro / Nano Banana / OpenRouter 图像生成时调用，普通图片提示词仍走 `prompt-director`。 |
 | V1.2.5 | 2026-05-14 | 加入 OpenAI Agents SDK-inspired dispatch pattern，用 handoff、guardrails、tracing 和 session/state 思路增强 SW 岗位派单，同时记录真实 SDK 接入的依赖、隐私和过度派单风险。 |
 | V1.2.4 | 2026-05-14 | 将 README 首页更新日志扩展为完整版本历史，不再只展示最近几条，方便 GitHub 首页直接查看全部演进记录。 |
 | V1.2.3 | 2026-05-14 | 在 README 首页增加当前版本和最近更新日志，打开 GitHub 仓库即可看到运行版本、调用入口和完整日志入口。 |
@@ -55,7 +61,7 @@
 调用成功后，Codex 应回复：
 
 ```text
-SW loaded successfully. Current version: V1.2.5
+SW loaded successfully. Current version: V1.3.5
 ```
 
 Version synchronization uses a separate entry:
@@ -67,7 +73,7 @@ Version synchronization uses a separate entry:
 Expected reply:
 
 ```text
-SW version synchronized. Current version: V1.2.5
+SW version synchronized. Current version: V1.3.5
 ```
 
 For other project folders, copy both `SW_V1.0.md` and `sw_update.md`; copying only the startup file will not create the local update entry.
@@ -143,6 +149,7 @@ Studio roles: Brief Strategist / `brief-strategist` + Storyboard Director / `sto
 - `AI_Tool_Integration_Rules.md`：AI/设计工具适配、工具版 prompt 转换和新增工具流程。
 - `AI_Tool_Prompt_Profiles.md`：不同 AI 工具类型的提示词剖面。
 - `Tool_Registry.md`：工具注册表，未来接入工具时先登记工具卡。
+- `banana-pro/`：显式调用的 Banana Pro / Nano Banana 图像生成 skill，包含 OpenRouter API 执行脚本；补齐 `OPENROUTER_API_KEY` 后可在提示词后真实生成图片。
 - `Studio_Skills/`：每个岗位一个 project-local `SKILL.md`。
 - `Start_New_Project.md`：新项目启动语和最小输入示例。
 - `00_Brief/Brief.md`：项目需求入口。

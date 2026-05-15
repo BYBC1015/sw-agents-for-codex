@@ -45,6 +45,20 @@
 - 二维码
 - 严格不变形的产品标签
 
+### Banana Pro / OpenRouter 图像生成补充
+
+仅在用户明确要求香蕉、banana、Banana Pro、Nano Banana、OpenRouter 图像生成或 `@banana-pro` 时使用。它是 `prompt-director` 之后的图像生成/出图环节，作用类似 `imagegen`，不能替代上游的分镜、版式、海报、PPT 页面、角色、产品或场景设计岗位。
+
+输出必须包含：
+
+- model：`google/gemini-3.1-flash-image-preview`
+- modalities：`["image", "text"]`
+- image_config：`aspect_ratio` 与 `image_size`
+- reference roles：仅在用户提供参考图时列出，如 character reference、product reference、scene reference、composition reference
+- QA checklist：主体一致性、画幅、文字/logo 风险、额外物体、可排版性
+
+不要在普通图像提示词里自动切换到 Banana Pro；先保留通用 prompt，用户确认使用该成员后再进入生成/执行。若用户同时要求“设计分镜/海报/PPT 页面并用 banana 出图”，先产出对应设计 handoff，再转最终 prompt，再生成选中的一张/一帧。Banana Pro 已打包 OpenRouter 执行脚本；如果 `OPENROUTER_API_KEY` 未配置，只输出 dry-run payload，不声称已出图。
+
 ## 图像编辑剖面
 
 适合：局部替换、扩图、去背景、补背景、风格统一。
@@ -150,4 +164,3 @@
 生成后质检：
 失败替代方案：
 ```
-

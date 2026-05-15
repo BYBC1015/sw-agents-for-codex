@@ -7,13 +7,13 @@ This is the compact runtime index for SW_V1.0. Read it before deeper project fil
 Activation reply:
 
 ```text
-SW loaded successfully. Current version: V1.2.5
+SW loaded successfully. Current version: V1.3.5
 ```
 
 Sync reply:
 
 ```text
-SW version synchronized. Current version: V1.2.5
+SW version synchronized. Current version: V1.3.5
 ```
 
 If the user only invokes SW or only invokes sync, reply with the matching fixed line and stop.
@@ -97,9 +97,50 @@ Cost gate: high-cost output needs confirmation. I will generate one confirmed ve
 - Video: `brief-strategist` -> `creative-director` -> `scriptwriter` -> `storyboard-director` -> `cinematographer` -> `edit-director` -> `motion-designer` -> `sound-designer` -> `colorist` -> `review-producer` -> `finishing-producer`.
 - Film/brand film: `brief-strategist` -> `creative-director` -> `film-director` -> `scriptwriter` -> `production-designer` -> `cinematographer` -> `storyboard-director` -> `edit-director` -> `sound-designer` -> `colorist` -> `review-producer` -> `finishing-producer`.
 - Prompt-only: `prompt-director`; add `tool-integrator` only for a specific or new tool.
+- Explicit 香蕉 / banana / Banana Pro / Nano Banana / OpenRouter image generation:
+  - If the user already provides a complete final image prompt, use `prompt-director` -> `banana-pro`.
+  - If the same request includes storyboard, video, film, poster, PPT/deck/slide, layout, character, product, prop, or scene design work, do not jump directly to Banana Pro. First run the responsible Studio role for the upstream deliverable, then `prompt-director`, then `banana-pro` only for the selected frame/image.
+  - Add `tool-integrator` only when capability, parameters, API, or connection state is unclear.
+  Treat `banana-pro` like an `imagegen`-style image-generation member after prompt preparation. It includes `scripts/generate_openrouter_image.py`; real generation needs confirmation and `OPENROUTER_API_KEY`. If the key is missing, run dry-run or output the payload and do not claim an image was generated.
 - Revision: `change-manager` first, then affected role.
 
 Default role read budget: one primary plus up to one support role. Use up to three only for campaign or film complexity.
+
+## Tool Skill Loading
+
+`banana-pro` is a tool skill, not a Studio role. Do not look for `Studio_Skills/banana-pro/SKILL.md`.
+
+When the user explicitly asks for 香蕉 / banana / Banana Pro / Nano Banana / `@banana-pro`, first decide whether upstream Studio work is still needed. Load Banana Pro only after the current upstream deliverable and prompt are ready.
+
+Default upstream chains:
+
+- storyboard/video/film frame request: `storyboard-director` or `cinematographer` -> `prompt-director` -> `banana-pro`
+- poster visual request: `poster-art-director` or `layout-designer` -> `prompt-director` -> `banana-pro`
+- PPT/deck/slide visual request: `presentation-designer` or `layout-designer` -> `prompt-director` -> `banana-pro`
+- direct final prompt request: `prompt-director` -> `banana-pro`
+
+For Banana execution, load:
+
+1. `Studio_Skills/prompt-director/SKILL.md`
+2. the first available Banana Pro tool skill path:
+   - `banana-pro/SKILL.md`
+   - `C:\Users\Administrator\.codex\skills\banana-pro\SKILL.md`
+   - `C:\Users\Administrator\plugins\sw-v1-0\skills\banana-pro\SKILL.md`
+
+Use this visible trace:
+
+```text
+Studio roles: Prompt Director / `prompt-director` (loaded). Cost lane: high-cost.
+Tool skill: Banana Pro / `banana-pro` (loaded by explicit user request).
+```
+
+Execution rule:
+
+- If `OPENROUTER_API_KEY` is set and generation is confirmed, run the Banana Pro script from the loaded skill folder.
+- Treat explicit "use banana to generate one draft" as confirmation for one draft image only; still pause for private uploads, final-use brand/face/product assets, or batch generation.
+- Default Banana output is draft `1K`; use `2K` or `4K` after user confirmation or final review.
+- Do not run a separate key-check command every time. Let the Banana runner check the key; after one successful key-readable check or generation in the same conversation, treat the key as available unless the runner reports otherwise.
+- If `OPENROUTER_API_KEY` is missing, run `--dry-run` or return the payload path/status; do not search for another imaginary executor.
 
 ## Prompt Quality Rules
 

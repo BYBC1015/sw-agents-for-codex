@@ -33,12 +33,14 @@ activate SW_V1.0
 After activation succeeds, reply exactly:
 
 ```text
-SW loaded successfully. Current version: V1.2.5
+SW loaded successfully. Current version: V1.3.5
 ```
 
 If the user only invokes SW, stop after the required reply and wait for the project request.
 
 If the same user message includes a project request, put the required reply first, then continue using `SW_Runtime_Index.md` and `AGENTS.md`.
+
+If the same request asks for upstream design work and Banana Pro output, do not jump straight to generation. Produce the responsible Studio role handoff first, convert it through `prompt-director`, then use `banana-pro` only for the selected image/frame.
 
 ## Version Sync Is Separate
 
@@ -53,7 +55,7 @@ For synchronization in historical conversations or other project folders, use:
 Expected sync reply:
 
 ```text
-SW version synchronized. Current version: V1.2.5
+SW version synchronized. Current version: V1.3.5
 ```
 
 ## Minimum Project Folder Package

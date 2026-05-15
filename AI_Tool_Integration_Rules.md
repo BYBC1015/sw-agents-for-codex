@@ -10,6 +10,9 @@
 - 新工具接入时，先注册工具卡，再加入自动派单。
 - 工具参数不确定或可能已更新时，优先查官方文档或让用户提供工具说明。
 - 涉及付费、高成本、外部发布、版权风险时，先低成本预检。
+- Banana Pro / `banana-pro` 是显式调用的出图成员，作用类似 `imagegen`，位于 `prompt-director` 之后：只有用户明确提到香蕉、banana、Banana Pro、Nano Banana、OpenRouter 图像生成、`@banana-pro`，或明确要求用这个成员生成图片时才加载；普通图片提示词仍由 `prompt-director` 处理。
+- Banana Pro 不能越过上游设计岗位。若同一请求包含分镜、视频/电影镜头、海报、PPT/deck/slide、版式、角色、产品、道具或场景设计，先由对应 Studio role 产出设计 handoff，再由 `prompt-director` 转为最终视觉 prompt，最后才交给 Banana Pro 生成选中的一张/一帧。
+- Banana Pro 已包含 OpenRouter API 执行脚本；真实生成需要用户明确确认且环境存在 `OPENROUTER_API_KEY`。没有 key 时只做 dry-run/payload，不声称已出图。
 
 ## 工具类型
 
@@ -63,6 +66,7 @@
 | 需要真实产品不变形 | 原产品图 + 图像编辑/合成，不直接重绘 |
 | 需要多镜头连续人物 | 先做分镜和一致性锁定，再用视频工具 |
 | 需要封面或海报主视觉 | 图像生成/图像编辑 + 后期排版 |
+| 用户明确要求香蕉 / banana / Banana Pro / Nano Banana / OpenRouter 图像生成 | 已有完整 prompt：`prompt-director` -> `banana-pro`；仍需设计：先上游 Studio role -> `prompt-director` -> `banana-pro`；`tool-integrator` 只在能力、参数或接入状态不清楚时介入 |
 | 需要剪辑节奏 | 视频编辑工具或人工剪辑方案 |
 | 需要音效/BGM | 音频工具或授权素材库 |
 | 需要团队协作 | Canva/云盘/项目管理工具 |

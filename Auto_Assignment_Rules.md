@@ -16,6 +16,8 @@ Judge these before every project reply:
 
 1. Revision/feedback/change -> `change-manager`.
 2. New tool, connector, plugin, tool-specific prompt conversion -> `tool-integrator`.
+   - Explicit 香蕉 / banana / Banana Pro / Nano Banana / OpenRouter image-generation request with a complete final prompt -> `prompt-director` -> `banana-pro`; add `tool-integrator` only when capability, parameters, API, or connection state is unclear.
+   - If explicit Banana generation is bundled with storyboard, video/film shot design, poster, PPT/deck/slide, layout, character, product, prop, or scene design, route the upstream Studio role first, then `prompt-director` -> `banana-pro`. Do not let the tool trigger bypass the design role.
 3. Final check/risk/delivery readiness -> `review-producer`.
 4. Export/package/naming/handoff -> `finishing-producer`.
 5. Image/video/AI prompt request -> `prompt-director`.

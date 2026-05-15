@@ -1,6 +1,6 @@
 # SW Version
 
-Current runtime version: V1.2.5
+Current runtime version: V1.3.5
 Stable invocation name: SW_V1.0
 Stable invocation aliases: `/SW_V1.0`, `@SW_V1.0`, `/sw_v1.0`, `/sw-v1-0`
 Version sync aliases: `@sw_update`, `SW_UPDATE`, `/sw_update`, `SW_REFRESH`
@@ -76,6 +76,12 @@ Each entry must include:
 
 | Version | Date | Change |
 | --- | --- | --- |
+| V1.3.5 | 2026-05-15 | Added Banana Pro no-bypass routing and draft-speed defaults: storyboard/poster/PPT/scene design must hand off through the responsible Studio role and `prompt-director` before Banana generation; Banana drafts now default to 1K, use organized output folders, prompt compression, inline markdown paths, no repeated key-check preflight, and one retry for no-image responses. |
+| V1.3.4 | 2026-05-15 | Added a Windows user-environment fallback for `OPENROUTER_API_KEY` in the Banana Pro runner so locally saved keys can be read without requiring a Codex restart. |
+| V1.3.3 | 2026-05-15 | Packaged `banana-pro` as an executable OpenRouter image-generation skill with a bundled standard-library Python script; generation works after `OPENROUTER_API_KEY` is configured, while missing-key runs only create dry-run payloads. |
+| V1.3.2 | 2026-05-15 | Fixed `banana-pro` dispatch display and lookup rules so it is shown as a separate Tool skill, not a Studio role, and loaded from the project, user-level, or plugin-level Banana Pro skill path. |
+| V1.3.1 | 2026-05-15 | Corrected `banana-pro` positioning as a post-prompt image-generation member similar to `imagegen`, and expanded explicit triggers to include 香蕉 / banana / Banana Pro / Nano Banana. |
+| V1.3.0 | 2026-05-15 | Added the explicit-call `banana-pro` image-generation member, registered its Banana Pro / Nano Banana / OpenRouter tool card, and updated routing/cost rules so it only loads when the user explicitly requests it. |
 | V1.2.5 | 2026-05-14 | Added an OpenAI Agents SDK-inspired dispatch pattern for role handoffs, blocking guardrails, lightweight tracing, session/state carryover, and tool-boundary safety, with drawbacks documented. |
 | V1.2.4 | 2026-05-14 | Expanded the README homepage changelog to include the complete version history instead of only recent entries. |
 | V1.2.3 | 2026-05-14 | Added a README homepage changelog and current-version block so GitHub visitors can see the active runtime, recent updates, and full log entry points immediately. |

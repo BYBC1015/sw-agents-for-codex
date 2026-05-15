@@ -21,7 +21,7 @@
 调用成功后必须先回复：
 
 ```text
-SW loaded successfully. Current version: V1.2.5
+SW loaded successfully. Current version: V1.3.5
 ```
 
 如果只输入调用命令，回复成功语后停止等待诉求。如果调用命令后附带需求，先回复成功语，再继续执行项目流程。
@@ -35,7 +35,7 @@ Version sync:
 Required reply:
 
 ```text
-SW version synchronized. Current version: V1.2.5
+SW version synchronized. Current version: V1.3.5
 ```
 
 Historical conversation fallback:
