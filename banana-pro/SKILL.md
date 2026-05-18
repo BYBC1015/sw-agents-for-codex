@@ -81,6 +81,7 @@ python <banana-pro-skill-dir>\scripts\generate_openrouter_image.py --prompt "<fi
 
 6. Return concise result.
    - If generated: show the image inline when possible, saved image path(s), settings, and one-line QA.
+   - If historical accuracy is enabled for the project, run image-stage historical QA on the generated still before calling it acceptable. Check visible clothing, architecture, props, materials, symbols, and anachronisms against the Period Lock Card.
    - If missing key: state `OPENROUTER_API_KEY` is missing and give the payload path.
    - Never expose API keys or raw secret values.
 
@@ -104,5 +105,6 @@ Banana Pro result:
 - Treat an explicit phrase such as "use banana to generate one draft" as confirmation for one draft image only; still pause for private uploads, final brand/face/product assets, or batch generation.
 - Do not use `banana-pro` for ordinary prompt drafting.
 - Do not use `banana-pro` to replace `storyboard-director`, `poster-art-director`, `presentation-designer`, `layout-designer`, `asset-producer`, or `prompt-director`.
+- Do not use `banana-pro` to bypass confirmed historical accuracy checking. If historical checking is enabled, the output is not acceptable until the generated still/image has been checked.
 - Do not say an image was generated unless the script returned saved image files.
 - If the API returns no images after the built-in retry, report the response path and suggest prompt simplification.

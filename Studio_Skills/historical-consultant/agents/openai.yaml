@@ -1,0 +1,4 @@
+interface:
+  display_name: "Historical Consultant"
+  short_description: "Check historical accuracy for visual outputs"
+  default_prompt: "Use historical-consultant after historical accuracy checking is explicitly enabled."

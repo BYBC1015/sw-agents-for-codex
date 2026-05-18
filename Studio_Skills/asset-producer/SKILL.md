@@ -28,3 +28,5 @@ Ask 3 by default; ask up to 5 when product, logo, footage, music, font, or licen
 - Do not generate prompts for every asset by default.
 - Pick only 1-3 key AI assets worth generating.
 - Hand off to `prompt-director`, `sound-designer`, or `review-producer`.
+- If historical accuracy is enabled, mark period-sensitive assets such as clothing, architecture, props, furniture, vessels, weapons, patterns, signage, and scene references. Send those to `historical-consultant` before prompt or image generation.
+- For video projects, treat historical asset checking as image-stage work: storyboard first frames, reference stills, production design images, and generated visual assets.

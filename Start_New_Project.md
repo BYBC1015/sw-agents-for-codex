@@ -15,7 +15,7 @@
 调用成功后，Codex 应只回复：
 
 ```text
-SW loaded successfully. Current version: V1.4.0
+SW loaded successfully. Current version: V1.5.4
 ```
 
 然后你再输入项目诉求即可。Codex 会自动判断这是海报、PPT/deck、视频，还是海报+视频，并按本项目的设计工作室架构执行。
@@ -94,4 +94,3 @@ SW loaded successfully. Current version: V1.4.0
 ```text
 做一个艺术市集 30 秒短视频，发抖音和视频号，风格轻松、有城市感，希望看完让大家想来现场。
 ```
-

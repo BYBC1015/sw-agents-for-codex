@@ -92,6 +92,19 @@ Never combine Banana Pro into the Studio role trace.
 
 External tool skills must not replace upstream Studio roles.
 
+## Historical Accuracy No-Bypass Rule
+
+Historical accuracy is confirmation-gated and visual-output focused.
+
+- Clear historical risk without confirmation only adds: `检测到历史准确性风险。是否开启历史准确性检查？默认不开启。`
+- If the project request is otherwise actionable, continue the normal route with historical checking off by default.
+- Do not load `historical-consultant` for style-only words such as 国风, 古风, 唐风, 宋韵, 东方美学, 敦煌感, 新中式, or 仙侠感.
+- Plain `开启历史检查` applies to the current request/current visual-output chain. Project-level scope requires `本项目开启历史检查` or `全程开启历史检查`.
+- `关闭历史检查`, `不用历史检查`, or `恢复普通模式` disables current project-level historical checking. Permanent memory changes require explicit memory update/delete.
+- After the user confirms historical checking, route `historical-consultant` before visual production when period/civilization decisions affect clothing, architecture, props, patterns, or scene world.
+- If image generation is requested, route: `historical-consultant` -> affected Studio role -> `prompt-director` -> explicit tool skill if any -> `review-producer` or `historical-consultant` image QA.
+- For video projects, historical checking applies to storyboard first frames, still references, visual assets, and generated images. Do not claim video generation QA unless a video-generation module is actually integrated.
+
 For Banana Pro:
 
 - If the user asks for a direct image from an already complete prompt, route `prompt-director` -> `banana-pro`.

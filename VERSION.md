@@ -1,6 +1,6 @@
 # SW Version
 
-Current runtime version: V1.4.0
+Current runtime version: V1.5.4
 Stable invocation name: SW_V1.0
 Stable invocation aliases: `/SW_V1.0`, `@SW_V1.0`, `/sw_v1.0`, `/sw-v1-0`
 Version sync aliases: `@sw_update`, `SW_UPDATE`, `/sw_update`, `SW_REFRESH`
@@ -15,6 +15,8 @@ This includes changes to:
 - `SW_Runtime_Index.md`
 - `Project_Memory_Rules.md`
 - `Project_Memory_Templates/*`
+- `Feature_Trigger_Index.md`
+- `sw_help.md`
 - `Agent_Skill_Tech_Principles.md`
 - `Command_Aliases.md`
 - `README.md`
@@ -78,6 +80,11 @@ Each entry must include:
 
 | Version | Date | Change |
 | --- | --- | --- |
+| V1.5.4 | 2026-05-18 | Split startup and sync routing to reduce trigger competition: `sw-v1-0` no longer advertises `@sw_update` aliases, `sw-update` owns sync-only behavior and UI prompts, user/plugin loader skills use hot-path source guidance instead of long architecture-file lists, and garbled memory/historical help snippets in loader skills were repaired. |
+| V1.5.3 | 2026-05-18 | Fixed SW Help button latency: `agents/openai.yaml` now uses a direct embedded reply instead of a recursive `@sw_help` prompt, and hot-start rules explicitly forbid shell/file reads for normal help wake-up. |
+| V1.5.2 | 2026-05-18 | Added hot-start and maintenance cost controls: `@sw_help`, activation-only, and sync-only turns now use embedded fixed replies first; detailed trigger indexes, architecture logs, and full maintenance checks load only when the user asks for details, troubleshooting, publishing, or deep regression. |
+| V1.5.1 | 2026-05-18 | Clarified Historical Accuracy scope controls: plain enable applies to the current request/visual chain, project-level enable requires explicit wording, close commands disable current project-level checking, and persistent long-term scope requires explicit MEMORY approval. |
+| V1.5.0 | 2026-05-18 | Added optional historical/civilization accuracy checking and `sw-help`. Historical checking uses five trigger groups, gives only a low-cost reminder by default, loads `historical-consultant` only after user confirmation, and focuses on final visual output/image QA, including Banana-generated images and storyboard first frames. |
 | V1.4.0 | 2026-05-15 | Added the project-local `.sw/` memory layer for long-running projects, including lightweight read priority, short MEMORY.md suggestion wording after major confirmations, write-by-explicit-user-command rules, and reusable `.sw` templates. |
 | V1.3.5 | 2026-05-15 | Added Banana Pro no-bypass routing and draft-speed defaults: storyboard/poster/PPT/scene design must hand off through the responsible Studio role and `prompt-director` before Banana generation; Banana drafts now default to 1K, use organized output folders, prompt compression, inline markdown paths, no repeated key-check preflight, and one retry for no-image responses. |
 | V1.3.4 | 2026-05-15 | Added a Windows user-environment fallback for `OPENROUTER_API_KEY` in the Banana Pro runner so locally saved keys can be read without requiring a Codex restart. |

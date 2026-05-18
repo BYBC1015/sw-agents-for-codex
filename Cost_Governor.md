@@ -28,6 +28,10 @@ The cost gate decides:
 | Review/change | final review or feedback | primary first | short | 0-3, 5 if blocked | risks, S/M/L/XL, scoped fix |
 | Finishing | export/package handoff | finishing + review if needed | short | 0-3 | file/package checklist |
 | Memory | major durable confirmation or explicit "remember/save" request | project memory file only | one line or 1-3 bullets | 0 | suggest or append concise local memory |
+| Feature help | `@sw_help`, `/sw_help`, feature trigger questions | embedded `sw-help` answer first; `Feature_Trigger_Index.md` only for details/debug | short | 0 | feature list only |
+| Historical reminder | clear historical accuracy risk but not confirmed | `Feature_Trigger_Index.md` only | one line added to current route | 0-1 | ask whether to enable, do not load historical role |
+| Maintenance-lite | maintain, optimize, quick check, sync confidence | version strings, selected skill validation, plugin JSON, secret scan | short | 0 | find obvious breakage only |
+| Maintenance-full | publish/upload, deep regression, release audit, unexplained failure | regression suite plus affected files | medium | 0-2 | broad validation after lite path |
 
 ## Question Budget
 
@@ -67,6 +71,15 @@ The cost gate decides:
 - Keep one visible role/cost trace per project reply.
 - End each role output with concise recommendation and next role.
 - After major durable confirmations, use at most one short memory suggestion line. Do not add it for minor edits, temporary ideas, or rejected directions.
+- Historical accuracy scan is low-cost and current-message only. It may add a one-line reminder to the normal route, but it must not load `historical-consultant`, research, browse, or expand until the user confirms.
+
+## Hot Start Gate
+
+- `@sw_help` and the SW Help UI button default answer must come from the embedded short help. Do not use shell/file reads for normal help. Read `Feature_Trigger_Index.md` only when the user asks for detailed trigger words, a specific feature's full rules, troubleshooting, or a help-system audit.
+- Activation-only and sync-only turns must stop after the fixed English line. Do not read project files, role maps, or logs unless the same user message contains project work or a diagnostic request.
+- Keep startup and sync separate: do not let `sw-v1-0` handle `@sw_update`; route sync aliases to `sw-update` only.
+- For SW maintenance, run lite checks first. Escalate to full regression only when lite checks fail, the user asks to upload/publish, or the request says full/deep/regression.
+- Do not validate every Studio skill on every small wording patch unless the patch touches role dispatch, skill frontmatter, or plugin packaging.
 
 ## High-Cost Gate
 
@@ -118,6 +131,20 @@ Project memory is optional and low-token:
 - Suggested wording must stay short: `记忆建议：可写入 MEMORY.md：品牌调性=克制电影感。回复“记住”即可。`
 - Write only when the user explicitly says to remember/save/write it.
 - Never store API keys, passwords, private contacts, or sensitive asset paths unless the user explicitly asks and confirms the memory is private.
+
+## Historical Accuracy Gate
+
+Default behavior is low false-positive:
+
+- Do not trigger for style-only words: 国风, 古风, 唐风, 宋韵, 东方美学, 敦煌感, 新中式, 仙侠感.
+- If clear historical accuracy risk is detected, add this one line: `检测到历史准确性风险。是否开启历史准确性检查？默认不开启。`
+- If the project request is otherwise actionable, continue the normal low-cost route with historical checking off by default.
+- Load `historical-consultant` only after explicit user confirmation.
+- Default enable scope is current request/current visual-output chain only.
+- `本项目开启历史检查` or `全程开启历史检查` keeps it on for the current conversation/project until the user says `关闭历史检查`, `不用历史检查`, or `恢复普通模式`.
+- Long-term project persistence requires explicit memory approval; do not write a historical rule to `.sw/MEMORY.md` automatically.
+- Historical checking is a visual-output gate. When enabled, it applies to poster key visuals, storyboard first frames, Banana outputs, reference-image QA, and final still-image review.
+- Current video workflow has no video-generation module; do not pretend video-level historical QA exists beyond images/frames/assets.
 
 ## Stop Rules
 

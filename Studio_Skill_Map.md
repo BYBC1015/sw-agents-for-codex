@@ -17,6 +17,7 @@ For project work, load only the current needed role files and show the role trac
 | Video | `scriptwriter`, `storyboard-director`, `cinematographer`, `edit-director`, `motion-designer`, `sound-designer`, `colorist` |
 | Film | `film-director`, `scriptwriter`, `production-designer`, `cinematographer`, `storyboard-director`, `edit-director`, `sound-designer`, `colorist` |
 | Tools | `tool-integrator`, `prompt-director`, `asset-producer` |
+| Historical Accuracy | `historical-consultant`, `asset-producer`, `prompt-director`, `review-producer` |
 
 ## Default Chains
 
@@ -78,3 +79,5 @@ change-manager -> affected role -> review-producer
 - New tool: `tool-integrator`.
 - Final package: `finishing-producer`.
 - Risk review: `review-producer`.
+- Historical/civilization accuracy: `historical-consultant` only after explicit user confirmation; it checks final visual outputs and image-stage assets, not just prompt wording.
+- Historical video work currently means storyboard first frames, still references, visual asset choices, and generated images; do not imply that SW has a video-generation module.

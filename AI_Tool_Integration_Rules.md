@@ -101,3 +101,12 @@
 - 参数锁定项。
 - 可改参数。
 - 生成后质检项。
+
+## Historical Accuracy Tool Rule
+
+When historical accuracy is enabled:
+
+- Treat historical checking as a final visual-output QA gate for image tools, not only a prompt constraint.
+- For Banana Pro or future image generators, pass compact historical constraints into `prompt-director`, then check the generated still/image after output.
+- For video work, apply historical checking to still frames, reference images, storyboard images, and visual assets only until SW has a real video-generation module.
+- Do not auto-enable historical checking for style-only phrases.

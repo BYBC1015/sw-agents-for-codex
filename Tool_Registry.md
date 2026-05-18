@@ -108,3 +108,11 @@
 失败时替代方案：拆短镜头或改为实拍/剪辑方案
 归属岗位：prompt-director
 ```
+
+## Historical Accuracy Tool Note
+
+Historical accuracy is not a standalone external generator. It is an optional QA gate handled by `historical-consultant` after user confirmation.
+
+- Applies to image-stage outputs: poster key visuals, storyboard first frames, Banana Pro outputs, reference stills, prop/wardrobe/scene images, and final still review.
+- Does not imply that a video-generation module is available.
+- Future image/video tools should add a `Historical QA` field to their tool card when they can affect period/civilization accuracy.

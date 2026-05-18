@@ -22,6 +22,7 @@ Review Result:
 - Copyright/AI risk:
 - Platform/export risk:
 - Slide/story logic risk:
+- Historical/image accuracy risk:
 - Questions before delivery:
 - Recommendation:
 ```
@@ -34,5 +35,7 @@ Ask 0-3 by default; ask up to 5 only when delivery cannot be judged without miss
 
 - If must-fix items exist, do not mark as ready.
 - For presentations, check the `presentation-designer` outline against storyline, slide hierarchy, title takeaway, chart readability, accessibility, speaker flow, and export format.
+- If historical accuracy was enabled, review the final visible image/still output for period/civilization mistakes. Do not treat a historically worded prompt as enough.
+- For video deliverables, review still frames, storyboard images, visual assets, and references; do not claim final video-generation QA unless a video-generation tool is actually integrated.
 - Do not invent new directions unless the current work fails the brief.
 - Hand off to `change-manager` for revisions or `finishing-producer` for final packaging.

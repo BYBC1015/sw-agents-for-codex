@@ -164,3 +164,12 @@
 生成后质检：
 失败替代方案：
 ```
+
+## Historical Accuracy Add-On
+
+Use only when historical checking is explicitly enabled.
+
+- Image generation profile: include Period Lock Card constraints before generation and require post-generation still-image QA.
+- Image editing profile: define which historical elements must remain unchanged and which can be corrected.
+- Video generation profile: current SW support is limited to shot/still-frame prompt constraints unless a real video-generation module is integrated.
+- Output QA must inspect the actual visual result for anachronisms, not just the prompt text.

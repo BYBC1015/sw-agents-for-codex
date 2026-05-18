@@ -11,29 +11,37 @@ Judge these before every project reply:
 - user intent: start, continue, create, refine, prompt, tool, check, revise, deliver
 - cost mode: normal, low-token, detailed, company delivery
 - risk: copyright, brand, platform, tool, missing information
+- feature risk: Banana explicit generation, historical accuracy reminder, project memory
 
 ## Priority Routing
 
-1. Revision/feedback/change -> `change-manager`.
-2. New tool, connector, plugin, tool-specific prompt conversion -> `tool-integrator`.
+0. `@sw_help`, `/sw_help`, feature trigger questions -> use the embedded `sw-help` short answer first; read `Feature_Trigger_Index.md` only for detailed triggers/debug; do not start a project.
+1. Historical accuracy:
+   - Clear risk but no user confirmation -> add the one-line reminder, continue the normal low-cost route, and do not load `historical-consultant`.
+   - User confirms historical checking -> `historical-consultant` first, then affected visual role, then `prompt-director` if generating, then final image QA via `historical-consultant` or `review-producer`.
+   - Plain `开启历史检查` applies to the current request/visual chain. `本项目开启历史检查` or `全程开启历史检查` applies to the current conversation/project until closed.
+   - `关闭历史检查`, `不用历史检查`, or `恢复普通模式` disables current project-level historical checking. If the setting was saved in `.sw/MEMORY.md`, require explicit memory update/delete to persist the closure.
+   - For video, check storyboard first frames, still references, visual assets, and generated images only; do not route to a video-generation module that is not integrated.
+2. Revision/feedback/change -> `change-manager`.
+3. New tool, connector, plugin, tool-specific prompt conversion -> `tool-integrator`.
    - Explicit 香蕉 / banana / Banana Pro / Nano Banana / OpenRouter image-generation request with a complete final prompt -> `prompt-director` -> `banana-pro`; add `tool-integrator` only when capability, parameters, API, or connection state is unclear.
    - If explicit Banana generation is bundled with storyboard, video/film shot design, poster, PPT/deck/slide, layout, character, product, prop, or scene design, route the upstream Studio role first, then `prompt-director` -> `banana-pro`. Do not let the tool trigger bypass the design role.
-3. Final check/risk/delivery readiness -> `review-producer`.
-4. Export/package/naming/handoff -> `finishing-producer`.
-5. Image/video/AI prompt request -> `prompt-director`.
-6. Audio/music/SFX/voice/mix -> `sound-designer`.
-7. Color grade/LUT/shot matching/product color -> `colorist`.
-8. Motion graphics/titles/subtitle animation/transitions -> `motion-designer`.
-9. Camera/lens/lighting/shot language -> `cinematographer`.
-10. Script/voiceover/dialogue/narrative beats -> `scriptwriter`.
-11. Film/brand film/treatment/directing intent -> `film-director`.
-12. Presentation/PPT/deck/slide outline/storyline/section flow/speaker deck/pitch deck/client-facing proposal/government report/local tourism film proposal/city image film proposal -> `presentation-designer`.
-13. Poster copy/headline/CTA or slide wording/title takeaway -> `copywriter`.
-14. Poster or presentation layout/grid/type hierarchy -> `layout-designer`.
-15. Poster visual/art direction -> `poster-art-director`.
-16. Storyboard/shot table -> `storyboard-director`.
-17. New or unclear project -> `studio-orchestrator` + `brief-strategist`.
-18. Direction request -> `creative-director`.
+4. Final check/risk/delivery readiness -> `review-producer`.
+5. Export/package/naming/handoff -> `finishing-producer`.
+6. Image/video/AI prompt request -> `prompt-director`.
+7. Audio/music/SFX/voice/mix -> `sound-designer`.
+8. Color grade/LUT/shot matching/product color -> `colorist`.
+9. Motion graphics/titles/subtitle animation/transitions -> `motion-designer`.
+10. Camera/lens/lighting/shot language -> `cinematographer`.
+11. Script/voiceover/dialogue/narrative beats -> `scriptwriter`.
+12. Film/brand film/treatment/directing intent -> `film-director`.
+13. Presentation/PPT/deck/slide outline/storyline/section flow/speaker deck/pitch deck/client-facing proposal/government report/local tourism film proposal/city image film proposal -> `presentation-designer`.
+14. Poster copy/headline/CTA or slide wording/title takeaway -> `copywriter`.
+15. Poster or presentation layout/grid/type hierarchy -> `layout-designer`.
+16. Poster visual/art direction -> `poster-art-director`.
+17. Storyboard/shot table -> `storyboard-director`.
+18. New or unclear project -> `studio-orchestrator` + `brief-strategist`.
+19. Direction request -> `creative-director`.
 
 ## Project Type Defaults
 

@@ -338,3 +338,13 @@
 - 用户没有指定时，图片提示词默认输出中文主提示词；如果要给外部生成工具使用，可同时给英文版。
 - 视频提示词默认中文即可；如果用户要复制到英文模型，再补英文版。
 - 不要中英混杂在同一条主提示词里，避免语义重复和权重混乱。
+
+## Historical Accuracy Add-On
+
+Use this add-on only after the user explicitly enables historical accuracy checking.
+
+- Historical checking is not only prompt writing. The final image/still must be checked after generation or selection.
+- Before generation, include compact period/civilization constraints from `historical-consultant`: period, region, role/class, clothing, architecture, props, materials, colors/patterns, and must-avoid list.
+- After generation, review the visible result against the Period Lock Card. A good prompt does not make an inaccurate image acceptable.
+- For Banana Pro or any future image generator, add a post-generation QA note for anachronisms, wrong dynasty/civilization details, fantasy-TV conventions, modern objects, wrong materials, and incorrect symbols/text.
+- For video projects, apply these rules to storyboard first frames, still references, visual assets, and selected generated frames only. Do not claim final video-generation checking unless a video module is integrated.

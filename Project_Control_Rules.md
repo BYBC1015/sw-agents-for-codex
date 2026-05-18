@@ -144,3 +144,15 @@ Codex 先判断用户真正要的交付物，再决定阶段深度。
 风险：
 下一步：
 ```
+
+## V1.5 Historical Accuracy Controls
+
+- `开启历史检查`, `要考据`, `按历史准确做`: enable `historical-consultant` for the current request/current visual-output chain.
+- `本项目开启历史检查`, `全程开启历史检查`: keep historical checking on for the current conversation/project until closed.
+- `只检查这张`, `只检查这一帧`: use historical checking for one image/frame only.
+- `关闭历史检查`, `不用历史检查`, `恢复普通模式`, `只是古风`, `好看优先`: keep or turn historical checking off.
+- If the setting was saved in `.sw/MEMORY.md`, permanent closure requires an explicit memory update/delete command.
+- If clear historical risk appears but the user has not enabled it, add this line: `检测到历史准确性风险。是否开启历史准确性检查？默认不开启。`
+- Continue normal low-cost project work unless the user confirms historical checking.
+- Historical checking must judge final visible image/still results, not just the prompt.
+- For video projects, check storyboard images, still references, visual assets, and generated frames only until a real video-generation module is integrated.

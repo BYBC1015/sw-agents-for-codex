@@ -53,6 +53,7 @@ Do not put Chinese role names inside role labels, role traces, skill folder name
 | Prompt Director | `prompt-director` | image/video/tool prompts and refinements |
 | Tool Integrator | `tool-integrator` | tool cards, prompt profiles, new tool adaptation |
 | Review Producer | `review-producer` | brand, copyright, platform, delivery risks |
+| Historical Consultant | `historical-consultant` | confirmed historical/civilization visual accuracy |
 | Change Manager | `change-manager` | S/M/L/XL changes and scope control |
 | Finishing Producer | `finishing-producer` | export specs, naming, final package |
 

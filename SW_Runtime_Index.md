@@ -7,16 +7,24 @@ This is the compact runtime index for SW_V1.0. Read it before deeper project fil
 Activation reply:
 
 ```text
-SW loaded successfully. Current version: V1.4.0
+SW loaded successfully. Current version: V1.5.4
 ```
 
 Sync reply:
 
 ```text
-SW version synchronized. Current version: V1.4.0
+SW version synchronized. Current version: V1.5.4
 ```
 
 If the user only invokes SW or only invokes sync, reply with the matching fixed line and stop.
+
+## Hot Start Rules
+
+- `@sw_help`, `/sw_help`, `SW_HELP`, and the SW Help UI button use the embedded short help answer first. Do not use shell/file reads for normal help. Do not read `Feature_Trigger_Index.md` unless the user asks for detailed triggers, one feature's full rules, troubleshooting, or a feature audit.
+- Activation-only turns use the fixed activation reply only. Do not read `AGENTS.md`, role maps, project memory, or skill files until the user provides a project request.
+- Sync-only turns use the fixed sync reply only. Read version/log/recovery files only when the user asks for details, mismatch debugging, old-conversation recovery, or cross-folder entry repair.
+- Startup and sync are separate routes: `sw-v1-0` owns activation/project start; `sw-update` owns `@sw_update`, `SW_UPDATE`, `/sw_update`, and `SW_REFRESH`. Do not route sync through the startup loader.
+- Maintenance starts with lite checks: version consistency, skill validation, plugin JSON, and secret scan. Run full regression only for publish/upload/deep-debug or when lite checks fail.
 
 ## Minimal Load Order
 
@@ -90,6 +98,7 @@ Do not show role trace for activation-only or sync-only replies.
 - Review/change: concise risk list or S/M/L/XL decision before rewriting.
 - Finishing: export/package checklist; do not reopen creative unless blocked.
 - Memory suggestion: one short optional line; do not write files unless the user explicitly asks to remember/save it.
+- Feature help: `@sw_help` or `/sw_help`; use embedded short help first, do not run shell/file reads, read `Feature_Trigger_Index.md` only for detailed triggers or troubleshooting, and do not start a project.
 
 Before high-cost output, use:
 
@@ -112,6 +121,7 @@ Cost gate: high-cost output needs confirmation. I will generate one confirmed ve
   - Add `tool-integrator` only when capability, parameters, API, or connection state is unclear.
   Treat `banana-pro` like an `imagegen`-style image-generation member after prompt preparation. It includes `scripts/generate_openrouter_image.py`; real generation needs confirmation and `OPENROUTER_API_KEY`. If the key is missing, run dry-run or output the payload and do not claim an image was generated.
 - Revision: `change-manager` first, then affected role.
+- Historical accuracy: do not auto-load. Clear risk only adds one reminder line unless the user confirms. Plain enable applies to the current request/visual chain; `本项目开启历史检查` or `全程开启历史检查` applies to the current conversation/project until closed; `关闭历史检查`, `不用历史检查`, or `恢复普通模式` turns it off. If enabled and image generation happens, check the generated still/image after output, not only the prompt.
 
 Default role read budget: one primary plus up to one support role. Use up to three only for campaign or film complexity.
 

@@ -12,6 +12,18 @@ Default role budget:
 - complex campaign or film: up to 3 roles when needed
 - low-token mode: primary role only unless unsafe
 
+## Optional Historical Accuracy Gate
+
+Use only after explicit user confirmation. It is not part of every workflow.
+
+When enabled, insert `historical-consultant` before the affected visual decision and again after image generation/final still review when needed:
+
+```text
+historical-consultant -> affected visual role -> prompt-director if generating -> image tool if explicit -> historical image QA / review-producer
+```
+
+This gate protects final visual output quality: poster key visuals, storyboard first frames, scene/prop/wardrobe references, Banana-generated images, and final still images. Current video support is image-stage only.
+
 ## Poster Full Workflow
 
 ```text
@@ -87,6 +99,7 @@ Key gates:
 - structure before shot list
 - shot list before edit plan
 - selected AI shots only after specs are locked
+- historical accuracy, when enabled, checks storyboard first frames and still visual assets rather than a non-existent video-generation module
 - sound, motion, and color are separate from storyboard
 
 ## Film / Brand Film Workflow
@@ -114,6 +127,7 @@ Key gates:
 - directing intent before script
 - script/treatment before storyboard
 - cinematography and production design before AI video prompts
+- historical accuracy, when enabled, locks period/civilization choices before production design and checks still images after generation
 - edit before sound/color finalization
 
 ## Prompt-Only Workflow

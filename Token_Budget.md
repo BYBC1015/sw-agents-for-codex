@@ -14,6 +14,10 @@ This file supports `Cost_Governor.md`. `Cost_Governor.md` decides the runtime co
 | High-cost | detailed prompts, long scripts, full long decks, batch slide rewrites, batch variants, AI asset generation | one confirmed batch | yes, after gate |
 | Review/change | final check or revision | concise risk/change decision | no batch rewrite before classification |
 | Memory | major durable confirmation or explicit remember/save request | one short suggestion or 1-3 bullets | no |
+| Feature help | `@sw_help`, `/sw_help`, trigger-word questions | embedded short help first; detailed trigger index only on request | no |
+| Historical reminder | clear historical accuracy risk without user confirmation | one reminder line | no |
+| Maintenance-lite | routine SW maintenance, quick optimize, wake/sync check | short check result | no |
+| Maintenance-full | publish/upload, deep regression, unresolved failure | focused regression report | no generation |
 
 ## Question Budget
 
@@ -45,6 +49,10 @@ Treat these as high-cost:
 Project memory reads and one-line memory suggestions are low-cost. Writing to `.sw/MEMORY.md` requires explicit user approval and should append only 1-3 concise bullets.
 
 PPT/deck structure from `presentation-designer` stays low-to-medium by default; only full long decks, detailed speaker notes, broad research, PPTX generation, preview export, or batch slide rewrites become high-cost.
+
+Historical accuracy trigger scanning is low-cost and current-message only. Do not load historical references, browse, or run `historical-consultant` until the user confirms. Once enabled, strict period research, source notes, and post-generation image QA can become medium-to-high cost depending on depth.
+
+Help and wake-up hot paths are zero-project-read by default: `@sw_help` uses its embedded short answer, activation-only uses one fixed loaded line, and sync-only uses one fixed sync line. Detailed indexes/logs load only for explicit details or diagnostics.
 
 ## Required Gate Before High-Cost Work
 
@@ -93,3 +101,10 @@ Stop before expanding when:
 - the next output would be high-cost
 - the change is L or XL
 - the requested AI asset may create copyright, brand, logo, text, face, product, or platform risk
+
+## Historical Accuracy Gate
+
+- Style-only phrases such as 国风, 古风, 唐风, 宋韵, 东方美学, 敦煌感, 新中式, or 仙侠感 do not trigger historical checking.
+- Clear risk without confirmation produces only: `检测到历史准确性风险。是否开启历史准确性检查？默认不开启。`
+- After confirmation, historical checking must include final visual output/image QA when images are generated or reviewed.
+- Video-stage checking covers still frames, storyboard images, references, and visual assets only until a real video-generation module is integrated.

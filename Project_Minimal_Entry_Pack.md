@@ -25,19 +25,21 @@ Copy these when you want version history and troubleshooting available inside th
 - `VERSION.md`
 - `Architecture_Update_Log.md`
 - `Legacy_Conversation_Recovery.md`
+- `Feature_Trigger_Index.md`
+- `sw_help.md`
 
 ## Expected Replies
 
 Startup:
 
 ```text
-SW loaded successfully. Current version: V1.4.0
+SW loaded successfully. Current version: V1.5.4
 ```
 
 Version sync:
 
 ```text
-SW version synchronized. Current version: V1.4.0
+SW version synchronized. Current version: V1.5.4
 ```
 
 ## Optional Project Memory Pack
@@ -67,3 +69,4 @@ SW must not write `MEMORY.md` unless the user explicitly says to remember/save i
 
 Every future SW update must keep `SW_V1.0.md`, `sw_update.md`, the optional `SW_Runtime_Index.md`, and the project memory template guidance aligned, because other project folders may only copy the entry pack instead of the whole studio template.
 
+Default help and sync entries should use hot-start behavior: fixed short reply first, no shell/file reads for normal help, detailed files only when requested.

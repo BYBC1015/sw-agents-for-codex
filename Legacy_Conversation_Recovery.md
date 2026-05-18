@@ -15,7 +15,7 @@ In an old conversation, try:
 Expected reply:
 
 ```text
-SW version synchronized. Current version: V1.4.0
+SW version synchronized. Current version: V1.5.4
 ```
 
 If the old conversation still uses a cached version, send this fuller recovery message once:
@@ -35,4 +35,3 @@ Then execute @sw_update.
 - Old conversations may require `@sw_update` or the `SW_REFRESH` fallback.
 - Other project folders should include both `SW_V1.0.md` and `sw_update.md`; startup-only folders will not show the local update entry.
 - If an old conversation still answers with a previous version after `@sw_update`, start a new conversation to guarantee the latest SW runtime.
-

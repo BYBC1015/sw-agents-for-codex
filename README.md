@@ -8,7 +8,7 @@
 
 ## 当前版本
 
-- 当前运行版本：`V1.4.0`
+- 当前运行版本：`V1.5.4`
 - 稳定调用入口：`/SW_V1.0` 或 `@SW_V1.0`
 - 版本同步入口：`@sw_update`
 - 完整更新记录：[`VERSION.md`](VERSION.md) / [`Architecture_Update_Log.md`](Architecture_Update_Log.md)
@@ -19,6 +19,11 @@
 
 | 版本 | 日期 | 更新内容 |
 | --- | --- | --- |
+| V1.5.4 | 2026-05-18 | 拆分启动与同步路由，减少 skill 竞争触发；`sw-v1-0` 不再声明 `@sw_update`，`sw-update` 独立负责同步；loader skill 改为热路径来源说明并修复乱码片段。 |
+| V1.5.3 | 2026-05-18 | 修复 SW Help 按钮响应慢：按钮默认提示不再递归调用 `@sw_help`，而是直接携带短答，并禁止普通帮助唤醒时读文件或跑命令。 |
+| V1.5.2 | 2026-05-18 | 优化 SW 唤醒与维护成本：`@sw_help` 默认走内置短答，`@sw_update` 和纯启动只回固定短句；详细触发词、日志、全量回归改为按需读取。 |
+| V1.5.1 | 2026-05-18 | 明确历史准确性检查的作用范围：普通开启只作用于本次请求/当前视觉链路；本项目开启需要明确口令；关闭口令可恢复普通模式。 |
+| V1.5.0 | 2026-05-18 | 新增可选历史/文明准确性检查和 `@sw_help` 帮助入口；确认后重点检查最终视觉输出、Banana 生成图、分镜首帧和图片阶段资产。 |
 | V1.4.0 | 2026-05-15 | 新增长期项目 `.sw/` 本地记忆层：项目可保存 `PROJECT.md`、`RULES.md`、`MEMORY.md` 等小文件；重大确认后只给一句短建议，用户说“记住”才写入。 |
 | V1.3.5 | 2026-05-15 | 为 `banana-pro` 增加不可越级规则和草稿提速默认值：分镜/海报/PPT/场景等任务必须先走对应 Studio role 和 `prompt-director`，再生成选中画面；默认 1K 草稿、整理输出目录、提示词压缩、图片路径展示、减少重复 key 检查和无图重试。 |
 | V1.3.4 | 2026-05-15 | 为 `banana-pro` 增加 Windows 用户级 `OPENROUTER_API_KEY` fallback，方便本机写入 key 后无需重启也能读取。 |
@@ -62,7 +67,7 @@
 调用成功后，Codex 应回复：
 
 ```text
-SW loaded successfully. Current version: V1.4.0
+SW loaded successfully. Current version: V1.5.4
 ```
 
 Version synchronization uses a separate entry:
@@ -74,10 +79,20 @@ Version synchronization uses a separate entry:
 Expected reply:
 
 ```text
-SW version synchronized. Current version: V1.4.0
+SW version synchronized. Current version: V1.5.4
 ```
 
 For other project folders, copy both `SW_V1.0.md` and `sw_update.md`; copying only the startup file will not create the local update entry. For long-running projects, also copy `Project_Memory_Templates/.sw/` into that project folder.
+
+Feature help:
+
+```text
+@sw_help
+```
+
+Default `@sw_help` and the SW Help button now use a hot-start short answer. Detailed trigger indexes load only when you ask for full triggers or debugging.
+
+Historical Accuracy is optional. Plain `开启历史检查` applies only to the current request/visual chain; `本项目开启历史检查` or `全程开启历史检查` keeps it on for the current conversation/project; `关闭历史检查`, `不用历史检查`, or `恢复普通模式` turns it off.
 
 长期项目记忆层建议：
 

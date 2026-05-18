@@ -304,3 +304,12 @@ Codex 在每个项目开始和每次阶段切换时，内部维护一张状态�
 - 海报/分镜/剪辑：可中等长度，必须可执行。
 - 提示词：结构完整，但默认只给 1 版。
 - 终审/变更：短而明确，先结论后原因。
+
+## V1.5 Historical Accuracy Stage Note
+
+- Historical/civilization checking is optional and confirmation-gated.
+- Clear historical risk without confirmation only adds: `检测到历史准确性风险。是否开启历史准确性检查？默认不开启。`
+- If the request is otherwise actionable, continue the normal low-cost stage route with historical checking off by default.
+- After the user confirms, `historical-consultant` can enter before visual production and again after generated/selected images for image QA.
+- This applies to poster key visuals, storyboard first frames, reference stills, Banana-generated images, scene/prop/wardrobe concept images, and final still review.
+- Video support is currently image-stage only; do not route to a video-generation module that has not been integrated.

@@ -22,9 +22,16 @@ Get-ChildItem .\Studio_Skills -Directory | ForEach-Object {
 Check version consistency:
 
 ```powershell
-rg "Current version: V1.4.0|Current runtime version: V1.4.0" .
-rg "V1.4.0" .
+rg "Current version: V1.5.3|Current runtime version: V1.5.3|Current version: V1.5.2|Current runtime version: V1.5.2|Current version: V1.5.1|Current runtime version: V1.5.1|Current version: V1.5.0|Current runtime version: V1.5.0|Current version: V1.4.0|Current runtime version: V1.4.0" . --glob "!VERSION.md" --glob "!Architecture_Update_Log.md" --glob "!README.md" --glob "!Examples/Regression_Test_Suite.md"
+rg "SW loaded successfully. Current version: V1.5.4|SW version synchronized. Current version: V1.5.4|Current runtime version: V1.5.4" .
 rg "<previous-version>" . --glob "!VERSION.md" --glob "!Architecture_Update_Log.md"
+```
+
+Feature trigger checks:
+
+```powershell
+rg "Feature_Trigger_Index|sw_help|Historical Accuracy|historical-consultant" .
+rg "@sw_update|SW_UPDATE|/sw_update|SW_REFRESH" "$env:USERPROFILE\.codex\skills\sw-v1-0" "$env:USERPROFILE\plugins\sw-v1-0\skills\sw-v1-0"
 ```
 
 Check plugin manifest:
