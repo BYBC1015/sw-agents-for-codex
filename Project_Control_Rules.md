@@ -47,6 +47,7 @@ Default project replies ask 3 useful questions. Complex campaign, film, tool-ris
 | 出视频提示词 | 进入提示词专项，按视频镜头规则输出 |
 | 终审 | 进入终审，只找风险和必改项 |
 | 改成... | 进入变更处理，判断 S/M/L/XL |
+| 记住 / 写入 MEMORY / 保存项目规则 | 将上一条明确的重大确认简短追加到 `.sw/MEMORY.md`，不要扩写 |
 | 归档 | 整理项目摘要、最终方案、提示词和变更记录 |
 
 快捷口令只改变用户意图；具体岗位仍由 `Auto_Assignment_Rules.md` 根据项目类型、当前阶段和用户意图自动派单。

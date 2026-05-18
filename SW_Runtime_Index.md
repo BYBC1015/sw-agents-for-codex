@@ -7,13 +7,13 @@ This is the compact runtime index for SW_V1.0. Read it before deeper project fil
 Activation reply:
 
 ```text
-SW loaded successfully. Current version: V1.3.5
+SW loaded successfully. Current version: V1.4.0
 ```
 
 Sync reply:
 
 ```text
-SW version synchronized. Current version: V1.3.5
+SW version synchronized. Current version: V1.4.0
 ```
 
 If the user only invokes SW or only invokes sync, reply with the matching fixed line and stop.
@@ -30,6 +30,13 @@ Fast Path for normal project turns:
 4. `Studio_Role_Label_Protocol.md`
 5. `Studio_Skill_Dispatch_Protocol.md`
 6. Selected `Studio_Skills/<skill-id>/SKILL.md` files only
+
+Project memory check for long-running project folders:
+
+- If `.sw/MEMORY.md`, `.sw/RULES.md`, or `.sw/PROJECT.md` exists in the current project folder, read only the relevant small files before the selected role skill.
+- Priority: current user request > `.sw/MEMORY.md` > `.sw/RULES.md` > `.sw/PROJECT.md` > global SW rules.
+- If `.sw/` is missing, do not slow down the turn; continue normally.
+- Use `Project_Memory_Rules.md` only when creating, updating, auditing, or explaining the memory layer.
 
 Escalate only when needed:
 
@@ -70,6 +77,7 @@ Do not show role trace for activation-only or sync-only replies.
 - Prefer the Fast Path. Do not read full routing maps just to answer an obvious poster, PPT, video, prompt, review, or change request.
 - Do not generate detailed image/video prompts, long scripts, or batch variants until direction and specs are locked.
 - Use Chinese for normal project discussion unless fixed English reply text is required.
+- After a major durable confirmation, optionally add one short memory suggestion only, for example: `记忆建议：可写入 MEMORY.md：品牌调性=克制电影感。回复“记住”即可。`
 
 ## Cost Lanes
 
@@ -81,6 +89,7 @@ Do not show role trace for activation-only or sync-only replies.
 - High-cost: confirmation first, then one confirmed version or controlled batch.
 - Review/change: concise risk list or S/M/L/XL decision before rewriting.
 - Finishing: export/package checklist; do not reopen creative unless blocked.
+- Memory suggestion: one short optional line; do not write files unless the user explicitly asks to remember/save it.
 
 Before high-cost output, use:
 
@@ -164,5 +173,6 @@ Before replying, internally confirm:
 - questions are useful for the next role
 - high-cost work is confirmed before generation
 - confirmed decisions are preserved
+- if project memory exists, relevant `.sw/` rules were considered without overloading context
 
 For complex handoffs, tool integration, eval/debug, or architecture maintenance, apply the OpenAI Agents SDK-inspired pattern from `Agent_Skill_Tech_Principles.md`: compact ownership handoff, blocking guardrails before risky work, lightweight internal trace, and explicit tool-level safety checks. Do not imply a real SDK run unless one was actually used.

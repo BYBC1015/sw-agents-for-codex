@@ -13,6 +13,7 @@ This file supports `Cost_Governor.md`. `Cost_Governor.md` decides the runtime co
 | Production | task and direction are clear | one deliverable type | only if confirmed |
 | High-cost | detailed prompts, long scripts, full long decks, batch slide rewrites, batch variants, AI asset generation | one confirmed batch | yes, after gate |
 | Review/change | final check or revision | concise risk/change decision | no batch rewrite before classification |
+| Memory | major durable confirmation or explicit remember/save request | one short suggestion or 1-3 bullets | no |
 
 ## Question Budget
 
@@ -40,6 +41,8 @@ Treat these as high-cost:
 - full campaign expansion
 - broad rewrite after feedback
 - tool-specific prompt conversion when tool behavior is uncertain
+
+Project memory reads and one-line memory suggestions are low-cost. Writing to `.sw/MEMORY.md` requires explicit user approval and should append only 1-3 concise bullets.
 
 PPT/deck structure from `presentation-designer` stays low-to-medium by default; only full long decks, detailed speaker notes, broad research, PPTX generation, preview export, or batch slide rewrites become high-cost.
 

@@ -27,13 +27,13 @@ SW_REFRESH
 After synchronization, reply exactly:
 
 ```text
-SW version synchronized. Current version: V1.3.5
+SW version synchronized. Current version: V1.4.0
 ```
 
 ## Behavior
 
 - Read `VERSION.md` first.
-- Then read `SW_Runtime_Index.md`, `Architecture_Update_Log.md`, `SW_V1.0.md`, and `Legacy_Conversation_Recovery.md` when available.
+- Then read `SW_Runtime_Index.md`, `Architecture_Update_Log.md`, `SW_V1.0.md`, `Project_Memory_Rules.md`, and `Legacy_Conversation_Recovery.md` when available.
 - Do not start a new design project unless the same user message includes a project request.
 - If the current folder only has the startup entry, add or request `sw_update.md` so the local `@sw_update` entry can appear.
 - If an old conversation still returns an older version after `@sw_update`, tell the user that a new conversation is the reliable path because historical conversations can cache old skill/plugin snapshots.

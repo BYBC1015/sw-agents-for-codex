@@ -22,8 +22,8 @@ Get-ChildItem .\Studio_Skills -Directory | ForEach-Object {
 Check version consistency:
 
 ```powershell
-rg "Current version: V1.3.5|Current runtime version: V1.3.5" .
-rg "V1.3.5" .
+rg "Current version: V1.4.0|Current runtime version: V1.4.0" .
+rg "V1.4.0" .
 rg "<previous-version>" . --glob "!VERSION.md" --glob "!Architecture_Update_Log.md"
 ```
 
@@ -119,6 +119,19 @@ Expected:
 
 - `prompt-director`.
 - Translate vague words into controllable visual parameters.
+
+Project memory:
+
+```text
+在一个长期项目文件夹中创建 .sw/MEMORY.md 和 .sw/RULES.md 后，输入：继续做这套主视觉，客户确认品牌调性是克制电影感。
+```
+
+Expected:
+
+- Read only relevant `.sw/` files.
+- Current user request remains highest priority.
+- Output may include one short line only: `记忆建议：可写入 MEMORY.md：品牌调性=克制电影感。回复“记住”即可。`
+- Do not write `MEMORY.md` unless the user explicitly says `记住` or equivalent.
 
 Change:
 

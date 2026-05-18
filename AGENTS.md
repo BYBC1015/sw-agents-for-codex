@@ -13,6 +13,17 @@
 - 每次需求变化都先按变更处理，不直接推翻重做。
 - 最终视频剪辑和渲染可以由用户在剪辑软件完成；你负责脚本、分镜、剪辑表、字幕、音效、转场、镜头和交付检查。
 
+## 项目记忆层
+
+必须执行 `Project_Memory_Rules.md`：
+
+- SW 是通用工作室框架；长期项目可在项目文件夹放 `.sw/` 本地记忆包。
+- 如果当前项目文件夹存在 `.sw/PROJECT.md`、`.sw/RULES.md` 或 `.sw/MEMORY.md`，项目工作时优先轻量读取相关文件，再套用 SW 通用规则。
+- 读取优先级：当前用户需求 > `.sw/MEMORY.md` > `.sw/RULES.md` > `.sw/PROJECT.md` > SW 通用规则。
+- 不要自动写入项目记忆。只有用户说“记住”“写入 MEMORY”“保存项目规则”等明确指令时，才追加到 `.sw/MEMORY.md`。
+- 每次重大确认后，最多用一句短提示建议写入，例如：`记忆建议：可写入 MEMORY.md：品牌调性=克制电影感。回复“记住”即可。`
+- 不要为临时想法、被否方案、小改字、一次性导出或本轮草稿建议写入。
+
 ## 阶段运行规则
 
 必须优先执行 `Stage_Runbook.md`：
@@ -37,10 +48,10 @@
 
 必须执行 `Command_Aliases.md`：
 
-- 用户输入 `/SW_V1.0`、`@SW_V1.0`、`/sw_v1.0`、`/sw-v1-0`、`@sw-v1-0`、`调用 SW_V1.0` 或 `启用 SW_V1.0` 时，必须加载本项目架构，并先回复且只把成功语放在第一位：`SW loaded successfully. Current version: V1.3.5`。
+- 用户输入 `/SW_V1.0`、`@SW_V1.0`、`/sw_v1.0`、`/sw-v1-0`、`@sw-v1-0`、`调用 SW_V1.0` 或 `启用 SW_V1.0` 时，必须加载本项目架构，并先回复且只把成功语放在第一位：`SW loaded successfully. Current version: V1.4.0`。
 - 如果用户只输入 SW 调用命令，不要继续展开项目；等待用户输入诉求。
 - 如果用户在同一条消息里附带诉求，先回复成功语，再按本项目架构执行。
-- 如果用户输入 `@sw_update`、`SW_UPDATE`、`/sw_update`、`SW_REFRESH`、`/SW_REFRESH` 或要求刷新/同步 SW，必须读取 `VERSION.md`、`sw_update.md`、`Architecture_Update_Log.md`、`Legacy_Conversation_Recovery.md`，并先回复：`SW version synchronized. Current version: V1.3.5`。历史对话可能缓存旧 skill；若刷新后仍是旧版，提示用户新建对话是可靠路径。
+- 如果用户输入 `@sw_update`、`SW_UPDATE`、`/sw_update`、`SW_REFRESH`、`/SW_REFRESH` 或要求刷新/同步 SW，必须读取 `VERSION.md`、`sw_update.md`、`Architecture_Update_Log.md`、`Project_Memory_Rules.md`、`Legacy_Conversation_Recovery.md`，并先回复：`SW version synchronized. Current version: V1.4.0`。历史对话可能缓存旧 skill；若刷新后仍是旧版，提示用户新建对话是可靠路径。
 - 旧版工作室入口不再作为推荐入口；新项目统一使用 `/SW_V1.0` 或 `@SW_V1.0`。
 
 ## 版本更新规则
@@ -53,6 +64,7 @@
 - 每次版本更新必须记录到 `Architecture_Update_Log.md`，包括改了什么、为什么改、影响范围、调用方式是否变化、token/成本是否变化、旧用法是否兼容。
 - 历史对话兼容或刷新规则变更时，必须同步 `Legacy_Conversation_Recovery.md` 和 `sw_update.md`。
 - 跨项目文件夹入口规则变更时，必须同步 `Project_Minimal_Entry_Pack.md`。其他项目文件夹的最小入口包必须同时包含 `SW_V1.0.md` 和 `sw_update.md`，不能只放启动指令。
+- 项目记忆层规则变更时，必须同步 `Project_Memory_Rules.md`、`Project_Memory_Templates/`、`SW_Runtime_Index.md` 和 `Project_Minimal_Entry_Pack.md`。
 - Studio 子 skill 派单规则变更时，必须同步 `Studio_Skill_Dispatch_Protocol.md`。
 - 消耗、输出长度、高成本确认门或每轮预算规则变更时，必须同步 `Cost_Governor.md`、`Token_Budget.md` 和 `SW_Runtime_Index.md`。
 - 用户输入 `/poster`、`/video`、`/campaign`、`/ppt`、`/deck`、`/slides` 时，按对应项目类型启动新项目。
@@ -356,6 +368,8 @@ PPT 项目的阶段为：
 - `Studio_Skill_Map.md` 是小型工作室岗位路由表；Fast Path 无法判断边界或角色冲突时使用。
 - `Studio_Skill_Dispatch_Protocol.md` 是岗位 skill 必读、可见派单痕迹和 Fast Path 规则，项目推进时必须使用。
 - `SW_Runtime_Index.md` 是低消耗运行索引，项目启动、同步和编码异常时优先使用；PPT、presentation、deck、slides 按 presentation/deck 路由处理。
+- `Project_Memory_Rules.md` 是长期项目 `.sw/` 本地记忆层规则；在非 SW 长期项目中，优先读取 `.sw/MEMORY.md`、`.sw/RULES.md`、`.sw/PROJECT.md` 的相关内容。
+- `Project_Memory_Templates/` 是可复制到其他长期项目的 `.sw/` 记忆包模板。
 - `Agent_Skill_Tech_Principles.md` 是 agent/skill 技术原则，架构更新、复杂 handoff、工具集成和 eval/debug 时使用。
 - `Studio_Role_Label_Protocol.md` 是英文-only 岗位标注、role trace 和 skill-id 规则，项目推进时必须使用。
 - `Production_Pipeline_Map.md` 是海报、视频、电影/品牌片、提示词和改稿全流程岗位链路；多阶段交接、完整流程或复杂项目时使用。

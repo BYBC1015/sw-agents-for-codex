@@ -8,7 +8,7 @@
 
 ## 当前版本
 
-- 当前运行版本：`V1.3.5`
+- 当前运行版本：`V1.4.0`
 - 稳定调用入口：`/SW_V1.0` 或 `@SW_V1.0`
 - 版本同步入口：`@sw_update`
 - 完整更新记录：[`VERSION.md`](VERSION.md) / [`Architecture_Update_Log.md`](Architecture_Update_Log.md)
@@ -19,6 +19,7 @@
 
 | 版本 | 日期 | 更新内容 |
 | --- | --- | --- |
+| V1.4.0 | 2026-05-15 | 新增长期项目 `.sw/` 本地记忆层：项目可保存 `PROJECT.md`、`RULES.md`、`MEMORY.md` 等小文件；重大确认后只给一句短建议，用户说“记住”才写入。 |
 | V1.3.5 | 2026-05-15 | 为 `banana-pro` 增加不可越级规则和草稿提速默认值：分镜/海报/PPT/场景等任务必须先走对应 Studio role 和 `prompt-director`，再生成选中画面；默认 1K 草稿、整理输出目录、提示词压缩、图片路径展示、减少重复 key 检查和无图重试。 |
 | V1.3.4 | 2026-05-15 | 为 `banana-pro` 增加 Windows 用户级 `OPENROUTER_API_KEY` fallback，方便本机写入 key 后无需重启也能读取。 |
 | V1.3.3 | 2026-05-15 | 将 `banana-pro` 正式打包为可执行图像生成 skill，新增 OpenRouter API 脚本；配置 `OPENROUTER_API_KEY` 后可真实出图，未配置时只 dry-run/payload。 |
@@ -61,7 +62,7 @@
 调用成功后，Codex 应回复：
 
 ```text
-SW loaded successfully. Current version: V1.3.5
+SW loaded successfully. Current version: V1.4.0
 ```
 
 Version synchronization uses a separate entry:
@@ -73,10 +74,23 @@ Version synchronization uses a separate entry:
 Expected reply:
 
 ```text
-SW version synchronized. Current version: V1.3.5
+SW version synchronized. Current version: V1.4.0
 ```
 
-For other project folders, copy both `SW_V1.0.md` and `sw_update.md`; copying only the startup file will not create the local update entry.
+For other project folders, copy both `SW_V1.0.md` and `sw_update.md`; copying only the startup file will not create the local update entry. For long-running projects, also copy `Project_Memory_Templates/.sw/` into that project folder.
+
+长期项目记忆层建议：
+
+```text
+.sw/
+  PROJECT.md
+  RULES.md
+  MEMORY.md
+  CHANGELOG.md
+  ASSETS.md
+```
+
+重大确认后，SW 只会用一句短提示建议写入，例如：`记忆建议：可写入 MEMORY.md：品牌调性=克制电影感。回复“记住”即可。`
 
 Project work now uses visible Studio role dispatch. For real deliverables, SW should read the selected `Studio_Skills/<skill>/SKILL.md` files and include a compact trace such as:
 

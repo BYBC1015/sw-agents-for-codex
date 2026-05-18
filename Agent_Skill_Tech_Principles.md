@@ -75,8 +75,11 @@ Carry forward only the useful project state:
 - pending_approvals
 - next_role
 - cost_lane
+- local_project_memory_refs, when `.sw/` exists and is relevant
 
 Do not replay or summarize the entire conversation unless the user asks for archive, audit, or company handoff.
+
+For long-running project folders, persist only durable confirmed state to `.sw/MEMORY.md`, and only after explicit user approval. Keep memory entries short enough to load cheaply in future conversations.
 
 ### 6. Observability Trace
 
@@ -108,6 +111,7 @@ Before major SW updates, test at least:
 - prompt-only request -> precise image/video prompt
 - revision feedback -> S/M/L/XL decision
 - tool-specific request -> tool card before tool prompt
+- long-running project -> local `.sw/` memory read -> one-line memory suggestion -> explicit write only
 
 Track:
 

@@ -33,12 +33,14 @@ activate SW_V1.0
 After activation succeeds, reply exactly:
 
 ```text
-SW loaded successfully. Current version: V1.3.5
+SW loaded successfully. Current version: V1.4.0
 ```
 
 If the user only invokes SW, stop after the required reply and wait for the project request.
 
 If the same user message includes a project request, put the required reply first, then continue using `SW_Runtime_Index.md` and `AGENTS.md`.
+
+If the current project folder contains `.sw/PROJECT.md`, `.sw/RULES.md`, or `.sw/MEMORY.md`, read only the relevant local project memory files before producing project work.
 
 If the same request asks for upstream design work and Banana Pro output, do not jump straight to generation. Produce the responsible Studio role handoff first, convert it through `prompt-director`, then use `banana-pro` only for the selected image/frame.
 
@@ -55,7 +57,7 @@ For synchronization in historical conversations or other project folders, use:
 Expected sync reply:
 
 ```text
-SW version synchronized. Current version: V1.3.5
+SW version synchronized. Current version: V1.4.0
 ```
 
 ## Minimum Project Folder Package
@@ -71,6 +73,7 @@ Recommended:
 - `Agent_Skill_Tech_Principles.md` for researched agent/skill handoff, guardrail, and eval rules
 - `Studio_Role_Label_Protocol.md` for English-only role traces
 - `Production_Pipeline_Map.md` for poster, presentation/deck, video, and film pipeline routing
+- `Project_Memory_Rules.md` and `Project_Memory_Templates/.sw/` for long-running project memory
 
 If a project folder has only `SW_V1.0.md`, it may show only the startup entry and not the update entry.
 

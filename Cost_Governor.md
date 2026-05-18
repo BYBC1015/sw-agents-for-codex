@@ -9,6 +9,7 @@ Every project turn must pass a cost gate before producing the deliverable.
 The cost gate decides:
 
 - which roles to read
+- whether a small local `.sw/` project memory file is relevant
 - how many questions to ask
 - how much output to generate
 - whether high-cost prompt/script/variant work is allowed
@@ -26,6 +27,7 @@ The cost gate decides:
 | High-cost | detailed prompts, long scripts, full long decks, batch slide rewrites, batch variants, AI asset generation | selected roles after confirmation | controlled | 0-3 | one confirmed version/batch |
 | Review/change | final review or feedback | primary first | short | 0-3, 5 if blocked | risks, S/M/L/XL, scoped fix |
 | Finishing | export/package handoff | finishing + review if needed | short | 0-3 | file/package checklist |
+| Memory | major durable confirmation or explicit "remember/save" request | project memory file only | one line or 1-3 bullets | 0 | suggest or append concise local memory |
 
 ## Question Budget
 
@@ -64,6 +66,7 @@ The cost gate decides:
 - If feedback arrives, classify the change before rewriting.
 - Keep one visible role/cost trace per project reply.
 - End each role output with concise recommendation and next role.
+- After major durable confirmations, use at most one short memory suggestion line. Do not add it for minor edits, temporary ideas, or rejected directions.
 
 ## High-Cost Gate
 
@@ -105,6 +108,16 @@ Pause and ask for confirmation before:
 Explicit generation wording such as "use banana to generate one draft" counts as confirmation for one draft image only. It does not confirm batch generation, private reference uploads, or final-use brand/face/product output.
 
 If blocked, produce a preview, risk note, or one-question confirmation instead of executing.
+
+## Project Memory Gate
+
+Project memory is optional and low-token:
+
+- If `.sw/MEMORY.md`, `.sw/RULES.md`, or `.sw/PROJECT.md` exists, read only relevant local files.
+- Suggest writing only durable confirmations such as brand tone, locked direction, audience, channel, continuity, asset rules, or client review constraints.
+- Suggested wording must stay short: `记忆建议：可写入 MEMORY.md：品牌调性=克制电影感。回复“记住”即可。`
+- Write only when the user explicitly says to remember/save/write it.
+- Never store API keys, passwords, private contacts, or sensitive asset paths unless the user explicitly asks and confirms the memory is private.
 
 ## Stop Rules
 

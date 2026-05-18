@@ -27,9 +27,10 @@ Fast Path:
 2. Read `Cost_Governor.md`.
 3. Read `Studio_Role_Label_Protocol.md`.
 4. Use the routing summary in `SW_Runtime_Index.md` to choose the obvious role.
-5. Read selected `Studio_Skills/<skill-id>/SKILL.md` before producing the deliverable.
-6. Show one role trace using the label protocol.
-7. Produce only the current role's deliverable, plus questions and recommendation for the next step.
+5. If the current long-running project has `.sw/` memory files, read only the relevant `MEMORY.md`, `RULES.md`, or `PROJECT.md`.
+6. Read selected `Studio_Skills/<skill-id>/SKILL.md` before producing the deliverable.
+7. Show one role trace using the label protocol.
+8. Produce only the current role's deliverable, plus questions and recommendation for the next step.
 
 Escalate to full routing only when needed:
 
@@ -112,6 +113,7 @@ Tool skill: Banana Pro / `banana-pro` (loaded by explicit user request).
 - Use at most 1 question in low-token or "you decide" mode.
 - Questions must support the next role or unblock execution.
 - Every role should include a concise recommendation and next role.
+- After major durable confirmations, add at most one short project-memory suggestion line. Do not expand the memory system unless the user asks.
 
 ## Handoff Packet
 
@@ -165,6 +167,7 @@ If a historical conversation cannot read the latest local files, tell the user t
 ## Token Control
 
 - never paste full skill contents into the answer
+- never paste full project memory files into the answer
 - never show the full pipeline unless the user asks for structure
 - produce one deliverable type per turn
 - high-cost prompts/scripts/batches require confirmation
@@ -173,3 +176,4 @@ If a historical conversation cannot read the latest local files, tell the user t
 - `banana-pro` is a post-prompt image-generation member, similar to `imagegen`; route `prompt-director` -> `banana-pro` for explicit generation requests
 - if the request includes upstream design work, do not let `banana-pro` skip the relevant Studio role; generate only after the selected prompt handoff is ready
 - preserve locked decisions and pass only the useful handoff packet to the next role
+- project memory suggestions are optional one-liners and require explicit user approval before writing

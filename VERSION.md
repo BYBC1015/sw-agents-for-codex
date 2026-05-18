@@ -1,6 +1,6 @@
 # SW Version
 
-Current runtime version: V1.3.5
+Current runtime version: V1.4.0
 Stable invocation name: SW_V1.0
 Stable invocation aliases: `/SW_V1.0`, `@SW_V1.0`, `/sw_v1.0`, `/sw-v1-0`
 Version sync aliases: `@sw_update`, `SW_UPDATE`, `/sw_update`, `SW_REFRESH`
@@ -13,6 +13,8 @@ This includes changes to:
 - `AGENTS.md`
 - `SW_V1.0.md`
 - `SW_Runtime_Index.md`
+- `Project_Memory_Rules.md`
+- `Project_Memory_Templates/*`
 - `Agent_Skill_Tech_Principles.md`
 - `Command_Aliases.md`
 - `README.md`
@@ -76,6 +78,7 @@ Each entry must include:
 
 | Version | Date | Change |
 | --- | --- | --- |
+| V1.4.0 | 2026-05-15 | Added the project-local `.sw/` memory layer for long-running projects, including lightweight read priority, short MEMORY.md suggestion wording after major confirmations, write-by-explicit-user-command rules, and reusable `.sw` templates. |
 | V1.3.5 | 2026-05-15 | Added Banana Pro no-bypass routing and draft-speed defaults: storyboard/poster/PPT/scene design must hand off through the responsible Studio role and `prompt-director` before Banana generation; Banana drafts now default to 1K, use organized output folders, prompt compression, inline markdown paths, no repeated key-check preflight, and one retry for no-image responses. |
 | V1.3.4 | 2026-05-15 | Added a Windows user-environment fallback for `OPENROUTER_API_KEY` in the Banana Pro runner so locally saved keys can be read without requiring a Codex restart. |
 | V1.3.3 | 2026-05-15 | Packaged `banana-pro` as an executable OpenRouter image-generation skill with a bundled standard-library Python script; generation works after `OPENROUTER_API_KEY` is configured, while missing-key runs only create dry-run payloads. |

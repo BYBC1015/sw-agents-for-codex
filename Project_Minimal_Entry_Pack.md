@@ -31,16 +31,39 @@ Copy these when you want version history and troubleshooting available inside th
 Startup:
 
 ```text
-SW loaded successfully. Current version: V1.3.5
+SW loaded successfully. Current version: V1.4.0
 ```
 
 Version sync:
 
 ```text
-SW version synchronized. Current version: V1.3.5
+SW version synchronized. Current version: V1.4.0
 ```
+
+## Optional Project Memory Pack
+
+For long-running client/internal projects, add this folder inside that project root:
+
+```text
+.sw/
+  PROJECT.md
+  RULES.md
+  MEMORY.md
+  CHANGELOG.md
+  ASSETS.md
+```
+
+Use `Project_Memory_Templates/.sw/` as the copy source.
+
+SW will read only relevant local memory files. After major confirmations it may add one short suggestion, such as:
+
+```text
+记忆建议：可写入 MEMORY.md：品牌调性=克制电影感。回复“记住”即可。
+```
+
+SW must not write `MEMORY.md` unless the user explicitly says to remember/save it.
 
 ## Rule
 
-Every future SW update must keep `SW_V1.0.md`, `sw_update.md`, and the optional `SW_Runtime_Index.md` aligned, because other project folders may only copy the entry pack instead of the whole studio template.
+Every future SW update must keep `SW_V1.0.md`, `sw_update.md`, the optional `SW_Runtime_Index.md`, and the project memory template guidance aligned, because other project folders may only copy the entry pack instead of the whole studio template.
 
