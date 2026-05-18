@@ -1,6 +1,6 @@
 ---
 name: historical-consultant
-description: Optional historical and civilization accuracy consultant for SW. Use only after the user explicitly asks for or confirms historical accuracy checking, such as 历史准确, 考据, 不要穿帮, 博物馆级, 纪录片级, 复原, or after SW asks whether to enable historical checking and the user confirms. Focus on final visual output quality for poster key visuals, storyboard first frames, Banana-generated images, reference-image QA, and image-stage review. Do not use for generic 国风, 古风, 唐风, 宋韵, 东方美学, 敦煌感, 新中式, or style-only requests unless accuracy is explicitly required.
+description: Optional historical and civilization accuracy consultant for SW. Use only after the user explicitly asks for or confirms historical accuracy checking, such as 历史准确, 考据, 不要穿帮, 博物馆级, 纪录片级, 复原, or after SW asks whether to enable historical checking and the user confirms. Focus on final visual output quality for poster key visuals, storyboard first frames, Banana-generated images, Seedance representative frames/stills, reference-image QA, and image-stage review. Do not use for generic 国风, 古风, 唐风, 宋韵, 东方美学, 敦煌感, 新中式, or style-only requests unless accuracy is explicitly required.
 ---
 
 # Historical Consultant
@@ -18,11 +18,12 @@ Historical checking is not only prompt checking. When enabled, it must guide and
 - poster key visuals
 - storyboard first frames
 - Banana Pro generated images
+- Seedance representative frames/stills when available
 - reference-image QA
 - character/product/prop/scene concept images
 - final image-stage review
 
-Video module generation is not currently integrated. For video work, check still frames, storyboard images, visual asset choices, and shot reference images.
+For video work, check still frames, storyboard images, visual asset choices, shot reference images, and representative Seedance output frames when available. Do not claim full automated video QA beyond visible frames/stills.
 
 ## Trigger Discipline
 
@@ -122,5 +123,7 @@ Return only the most important issues unless the user asks for a full audit.
 
 - Before prompts: give `prompt-director` compact historical constraints and visual avoid list.
 - Before Banana/image generation: confirm the target image/frame and the Period Lock Card.
+- Before Seedance/video generation: confirm the selected clip/shot, public reference image URL if any, and compact visual constraints.
 - After image generation: review the image result before calling it acceptable; suggest regenerate/edit/post-fix if needed.
+- After Seedance/video generation: review provided output frames/stills for visible historical risk before calling the result acceptable.
 - For final review: hand off must-fix items to `review-producer` or scoped changes to `change-manager`.

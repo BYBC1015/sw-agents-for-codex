@@ -1,6 +1,6 @@
 # SW Version
 
-Current runtime version: V1.5.4
+Current runtime version: V1.6.0
 Stable invocation name: SW_V1.0
 Stable invocation aliases: `/SW_V1.0`, `@SW_V1.0`, `/sw_v1.0`, `/sw-v1-0`
 Version sync aliases: `@sw_update`, `SW_UPDATE`, `/sw_update`, `SW_REFRESH`
@@ -80,6 +80,7 @@ Each entry must include:
 
 | Version | Date | Change |
 | --- | --- | --- |
+| V1.6.0 | 2026-05-18 | Added `seedance-2-video` as an explicit-call Seedance 2.0 / 即梦2.0 video-generation tool skill with Ark dry-run/run/poll scripts, public-image-URL checks, no-key dry-run fallback, tool trace rules, and no-bypass routing after upstream Studio roles and `prompt-director`. |
 | V1.5.4 | 2026-05-18 | Split startup and sync routing to reduce trigger competition: `sw-v1-0` no longer advertises `@sw_update` aliases, `sw-update` owns sync-only behavior and UI prompts, user/plugin loader skills use hot-path source guidance instead of long architecture-file lists, and garbled memory/historical help snippets in loader skills were repaired. |
 | V1.5.3 | 2026-05-18 | Fixed SW Help button latency: `agents/openai.yaml` now uses a direct embedded reply instead of a recursive `@sw_help` prompt, and hot-start rules explicitly forbid shell/file reads for normal help wake-up. |
 | V1.5.2 | 2026-05-18 | Added hot-start and maintenance cost controls: `@sw_help`, activation-only, and sync-only turns now use embedded fixed replies first; detailed trigger indexes, architecture logs, and full maintenance checks load only when the user asks for details, troubleshooting, publishing, or deep regression. |

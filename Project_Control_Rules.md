@@ -155,4 +155,4 @@ Codex 先判断用户真正要的交付物，再决定阶段深度。
 - If clear historical risk appears but the user has not enabled it, add this line: `检测到历史准确性风险。是否开启历史准确性检查？默认不开启。`
 - Continue normal low-cost project work unless the user confirms historical checking.
 - Historical checking must judge final visible image/still results, not just the prompt.
-- For video projects, check storyboard images, still references, visual assets, and generated frames only until a real video-generation module is integrated.
+- For video projects, check storyboard images, still references, visual assets, and representative Seedance output frames when available. Do not claim full automated video QA beyond visible frames/stills.

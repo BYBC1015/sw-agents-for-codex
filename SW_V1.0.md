@@ -33,7 +33,7 @@ activate SW_V1.0
 After activation succeeds, reply exactly:
 
 ```text
-SW loaded successfully. Current version: V1.5.4
+SW loaded successfully. Current version: V1.6.0
 ```
 
 If the user only invokes SW, stop after the required reply and wait for the project request.
@@ -43,6 +43,8 @@ If the same user message includes a project request, put the required reply firs
 If the current project folder contains `.sw/PROJECT.md`, `.sw/RULES.md`, or `.sw/MEMORY.md`, read only the relevant local project memory files before producing project work.
 
 If the same request asks for upstream design work and Banana Pro output, do not jump straight to generation. Produce the responsible Studio role handoff first, convert it through `prompt-director`, then use `banana-pro` only for the selected image/frame.
+
+If the same request asks for upstream video/film work and Seedance/即梦 output, do not jump straight to generation. Produce the responsible Studio role handoff first, convert it through `prompt-director`, then use `seedance-2-video` only for the selected clip/shot.
 
 If the same request enables Historical Accuracy, default scope is the current request/visual chain only. Project-level scope requires explicit wording such as `本项目开启历史检查` or `全程开启历史检查`, and closes with `关闭历史检查`, `不用历史检查`, or `恢复普通模式`.
 
@@ -59,7 +61,7 @@ For synchronization in historical conversations or other project folders, use:
 Expected sync reply:
 
 ```text
-SW version synchronized. Current version: V1.5.4
+SW version synchronized. Current version: V1.6.0
 ```
 
 ## Minimum Project Folder Package

@@ -21,7 +21,7 @@
 调用成功后必须先回复：
 
 ```text
-SW loaded successfully. Current version: V1.5.4
+SW loaded successfully. Current version: V1.6.0
 ```
 
 如果只输入调用命令，回复成功语后停止等待诉求。如果调用命令后附带需求，先回复成功语，再继续执行项目流程。
@@ -35,7 +35,7 @@ Version sync:
 Required reply:
 
 ```text
-SW version synchronized. Current version: V1.5.4
+SW version synchronized. Current version: V1.6.0
 ```
 
 Historical conversation fallback:
@@ -52,7 +52,7 @@ Feature help:
 @sw_help
 ```
 
-Use this for optional feature triggers such as Banana Pro and Historical Accuracy. It should answer from embedded short help first, must not run shell/file reads for normal help, only read detailed trigger files when requested, and must not start a project.
+Use this for optional feature triggers such as Banana Pro, Seedance 2.0 Video, and Historical Accuracy. It should answer from embedded short help first, must not run shell/file reads for normal help, only read detailed trigger files when requested, and must not start a project.
 
 以下命令等价于：
 

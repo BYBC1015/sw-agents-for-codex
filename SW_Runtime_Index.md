@@ -7,13 +7,13 @@ This is the compact runtime index for SW_V1.0. Read it before deeper project fil
 Activation reply:
 
 ```text
-SW loaded successfully. Current version: V1.5.4
+SW loaded successfully. Current version: V1.6.0
 ```
 
 Sync reply:
 
 ```text
-SW version synchronized. Current version: V1.5.4
+SW version synchronized. Current version: V1.6.0
 ```
 
 If the user only invokes SW or only invokes sync, reply with the matching fixed line and stop.
@@ -120,16 +120,23 @@ Cost gate: high-cost output needs confirmation. I will generate one confirmed ve
   - If the same request includes storyboard, video, film, poster, PPT/deck/slide, layout, character, product, prop, or scene design work, do not jump directly to Banana Pro. First run the responsible Studio role for the upstream deliverable, then `prompt-director`, then `banana-pro` only for the selected frame/image.
   - Add `tool-integrator` only when capability, parameters, API, or connection state is unclear.
   Treat `banana-pro` like an `imagegen`-style image-generation member after prompt preparation. It includes `scripts/generate_openrouter_image.py`; real generation needs confirmation and `OPENROUTER_API_KEY`. If the key is missing, run dry-run or output the payload and do not claim an image was generated.
+- Explicit 即梦2.0生成 / 即梦生成 / Seedance 2.0 / Ark Seedance / 豆包 Seedance video generation:
+  - If the user already provides a complete final video prompt, use `prompt-director` -> `seedance-2-video`.
+  - If the same request includes script, storyboard, camera language, edit rhythm, motion, sound, color, scene design, or film treatment work, first run the responsible Studio role, then `prompt-director`, then `seedance-2-video` only for the selected clip/shot.
+  - Add `tool-integrator` only when capability, parameters, API, key state, or connection state is unclear.
+  Treat `seedance-2-video` as a video-generation execution member after prompt preparation. It includes `scripts/seedance_task.py`; real generation needs confirmation and `ARK_API_KEY` or the local private key file. If the key is missing, run dry-run/payload only and do not claim a video was generated.
 - Revision: `change-manager` first, then affected role.
-- Historical accuracy: do not auto-load. Clear risk only adds one reminder line unless the user confirms. Plain enable applies to the current request/visual chain; `本项目开启历史检查` or `全程开启历史检查` applies to the current conversation/project until closed; `关闭历史检查`, `不用历史检查`, or `恢复普通模式` turns it off. If enabled and image generation happens, check the generated still/image after output, not only the prompt.
+- Historical accuracy: do not auto-load. Clear risk only adds one reminder line unless the user confirms. Plain enable applies to the current request/visual chain; `本项目开启历史检查` or `全程开启历史检查` applies to the current conversation/project until closed; `关闭历史检查`, `不用历史检查`, or `恢复普通模式` turns it off. If enabled and image/video generation happens, check final visible stills/frames after output when available, not only the prompt.
 
 Default role read budget: one primary plus up to one support role. Use up to three only for campaign or film complexity.
 
 ## Tool Skill Loading
 
-`banana-pro` is a tool skill, not a Studio role. Do not look for `Studio_Skills/banana-pro/SKILL.md`.
+Tool skills are not Studio roles. Do not look for `Studio_Skills/banana-pro/SKILL.md` or `Studio_Skills/seedance-2-video/SKILL.md`.
 
 When the user explicitly asks for 香蕉 / banana / Banana Pro / Nano Banana / `@banana-pro`, first decide whether upstream Studio work is still needed. Load Banana Pro only after the current upstream deliverable and prompt are ready.
+
+When the user explicitly asks for 即梦2.0生成 / 即梦生成 / Seedance 2.0 / Ark Seedance / `@seedance-2-video`, first decide whether upstream Studio work is still needed. Load Seedance only after the selected clip/shot handoff and final video prompt are ready.
 
 Default upstream chains:
 
@@ -137,6 +144,8 @@ Default upstream chains:
 - poster visual request: `poster-art-director` or `layout-designer` -> `prompt-director` -> `banana-pro`
 - PPT/deck/slide visual request: `presentation-designer` or `layout-designer` -> `prompt-director` -> `banana-pro`
 - direct final prompt request: `prompt-director` -> `banana-pro`
+- Seedance video clip request: `storyboard-director`, `cinematographer`, or `edit-director` if needed -> `prompt-director` -> `seedance-2-video`
+- direct final Seedance prompt request: `prompt-director` -> `seedance-2-video`
 
 For Banana execution, load:
 
@@ -146,11 +155,26 @@ For Banana execution, load:
    - `C:\Users\Administrator\.codex\skills\banana-pro\SKILL.md`
    - `C:\Users\Administrator\plugins\sw-v1-0\skills\banana-pro\SKILL.md`
 
+For Seedance execution, load:
+
+1. `Studio_Skills/prompt-director/SKILL.md`
+2. the first available Seedance tool skill path:
+   - `seedance-2-video/SKILL.md`
+   - `C:\Users\Administrator\.codex\skills\seedance-2-video\SKILL.md`
+   - `C:\Users\Administrator\plugins\sw-v1-0\skills\seedance-2-video\SKILL.md`
+
 Use this visible trace:
 
 ```text
 Studio roles: Prompt Director / `prompt-director` (loaded). Cost lane: high-cost.
 Tool skill: Banana Pro / `banana-pro` (loaded by explicit user request).
+```
+
+Seedance trace:
+
+```text
+Studio roles: Prompt Director / `prompt-director` (loaded). Cost lane: high-cost.
+Tool skill: Seedance 2.0 Video / `seedance-2-video` (loaded by explicit user request).
 ```
 
 Execution rule:
@@ -160,6 +184,9 @@ Execution rule:
 - Default Banana output is draft `1K`; use `2K` or `4K` after user confirmation or final review.
 - Do not run a separate key-check command every time. Let the Banana runner check the key; after one successful key-readable check or generation in the same conversation, treat the key as available unless the runner reports otherwise.
 - If `OPENROUTER_API_KEY` is missing, run `--dry-run` or return the payload path/status; do not search for another imaginary executor.
+- If `ARK_API_KEY` or the Seedance local private key file is available and video generation is confirmed, run the Seedance script from the loaded skill folder.
+- Treat explicit "use 即梦2.0 to generate one draft clip" as confirmation for one draft clip only; still pause for private uploads, final-use brand/face/product assets, 1080p, long polling, or batch generation.
+- If the Seedance key is missing, run `dry-run` or return the sanitized payload; do not search for another imaginary video executor.
 
 ## Prompt Quality Rules
 

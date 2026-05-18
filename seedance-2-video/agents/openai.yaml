@@ -1,0 +1,4 @@
+interface:
+  display_name: "Seedance 2.0 Video"
+  short_description: "Generate video clips through Ark Seedance 2.0"
+default_prompt: "Use Seedance 2.0 Video only after an explicit 即梦/Seedance generation request. Prepare a dry-run unless ARK_API_KEY or the local key file is configured and real generation is confirmed."

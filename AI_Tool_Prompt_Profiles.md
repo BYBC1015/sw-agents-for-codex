@@ -101,6 +101,22 @@
 - 准确文字和 logo
 - 长时间稳定人物一致性
 
+### Seedance 2.0 / 即梦2.0 视频生成补充
+
+仅在用户明确要求即梦2.0生成、即梦生成、Seedance 2.0、Ark Seedance、豆包 Seedance 或 `@seedance-2-video` 时使用。它是 `prompt-director` 之后的视频生成/执行环节，不能替代脚本、分镜、镜头语言、剪辑节奏、动效、声音、调色或电影方案岗位。
+
+输出必须包含：
+
+- model：`doubao-seedance-2-0-260128`
+- ratio：默认 `9:16`，按平台可改为 `16:9`、`1:1` 等
+- duration：默认 `15`
+- resolution：草稿默认 `720p`，最终或明确要求再用 `1080p`
+- video-mode：`reference`、`firstFrame` 或 `firstLastFrame`
+- image-url：至少 1 个公共 `http(s)` URL；本地图片不能直接传给 Ark
+- QA checklist：主体稳定、动作合理、镜头连续、画幅、文字/logo 风险、历史/道具/服装风险、可剪辑性
+
+不要在普通视频提示词里自动切换到 Seedance；先保留通用 prompt，用户确认使用该成员后再进入 dry-run 或真实生成。若用户同时要求“设计分镜/镜头/剪辑并用即梦生成”，先产出对应设计 handoff，再转最终 prompt，再生成选中的一条镜头/片段。没有 `ARK_API_KEY` 或本地 key 时，只输出 dry-run payload，不声称已出视频。
+
 ## 视频编辑剖面
 
 适合：自动剪辑、字幕、节奏、音乐、转场、包装。

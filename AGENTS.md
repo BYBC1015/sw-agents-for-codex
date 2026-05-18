@@ -48,10 +48,10 @@
 
 必须执行 `Command_Aliases.md`：
 
-- 用户输入 `/SW_V1.0`、`@SW_V1.0`、`/sw_v1.0`、`/sw-v1-0`、`@sw-v1-0`、`调用 SW_V1.0` 或 `启用 SW_V1.0` 时，必须加载本项目架构，并先回复且只把成功语放在第一位：`SW loaded successfully. Current version: V1.5.4`。
+- 用户输入 `/SW_V1.0`、`@SW_V1.0`、`/sw_v1.0`、`/sw-v1-0`、`@sw-v1-0`、`调用 SW_V1.0` 或 `启用 SW_V1.0` 时，必须加载本项目架构，并先回复且只把成功语放在第一位：`SW loaded successfully. Current version: V1.6.0`。
 - 如果用户只输入 SW 调用命令，不要继续展开项目；等待用户输入诉求。
 - 如果用户在同一条消息里附带诉求，先回复成功语，再按本项目架构执行。
-- 如果用户输入 `@sw_update`、`SW_UPDATE`、`/sw_update`、`SW_REFRESH`、`/SW_REFRESH` 或要求刷新/同步 SW，先回复：`SW version synchronized. Current version: V1.5.4`。这些同步入口只归 `sw-update` 处理，不要让 `sw-v1-0` 同时竞争触发。只有用户要求详细更新、故障排查、旧对话恢复或跨文件夹入口修复时，才读取 `VERSION.md`、`sw_update.md`、`Architecture_Update_Log.md`、`Project_Memory_Rules.md`、`Legacy_Conversation_Recovery.md`。
+- 如果用户输入 `@sw_update`、`SW_UPDATE`、`/sw_update`、`SW_REFRESH`、`/SW_REFRESH` 或要求刷新/同步 SW，先回复：`SW version synchronized. Current version: V1.6.0`。这些同步入口只归 `sw-update` 处理，不要让 `sw-v1-0` 同时竞争触发。只有用户要求详细更新、故障排查、旧对话恢复或跨文件夹入口修复时，才读取 `VERSION.md`、`sw_update.md`、`Architecture_Update_Log.md`、`Project_Memory_Rules.md`、`Legacy_Conversation_Recovery.md`。
 - 如果用户输入 `@sw_help`、`/sw_help`、`SW_HELP`、点击 SW Help UI 按钮或询问功能触发词，优先使用内置短答，不运行 shell、不读取本地文件；只有用户要求详细触发词、单一功能深入或帮助系统排错时才读取 `Feature_Trigger_Index.md`，不启动项目、不加载高消耗岗位。
 - 维护、优化、自检默认先走 lite 检查：版本一致性、相关 skill 校验、plugin JSON、密钥泄露扫描。只有发布/上传/深度回归/排错失败时，才运行全量回归和大范围文件读取。
 - 旧版工作室入口不再作为推荐入口；新项目统一使用 `/SW_V1.0` 或 `@SW_V1.0`。
@@ -91,6 +91,10 @@
 - `banana-pro` 不能越过上游岗位：如果用户同时要求分镜、视频/电影镜头、海报、PPT/deck/slide、版式、角色、产品、道具或场景设计并要求用 banana 出图，必须先由对应 Studio role 产出设计 handoff，再由 `prompt-director` 转为最终视觉 prompt，最后只生成选中的一张/一帧；批量出图必须另行确认。
 - `banana-pro` 不是 Studio role，不在 `Studio_Skills/` 里查找，也不要放进 `Studio roles:` trace。它必须作为 Tool skill 单独显示，并优先读取当前项目的 `banana-pro/SKILL.md`；如果没有，再读用户级或插件级 `banana-pro/SKILL.md`。
 - `banana-pro` 已打包 OpenRouter API 执行脚本。真实出图需要用户明确要求、通过高消耗/上传 guardrail，并且环境存在 `OPENROUTER_API_KEY`；没有 key 时只做 dry-run 或 payload，不要声称已生成图片。
+- `seedance-2-video` 是显式调用的视频生成/出视频成员，位于 `prompt-director` 之后：只有用户明确要求即梦2.0生成、即梦生成、Seedance 2.0、Ark Seedance、豆包 Seedance、`@seedance-2-video` 或“用即梦/Seedance生成视频”时才加载；普通视频提示词、分镜和剪辑方案不要自动调用它。
+- `seedance-2-video` 不能越过上游岗位：如果用户同时要求脚本、分镜、镜头语言、剪辑节奏、动效、声音、调色、场景或电影方案并要求用即梦/Seedance生成，必须先由对应 Studio role 产出设计 handoff，再由 `prompt-director` 转为最终视频 prompt，最后只生成选中的一条镜头/片段；批量生成必须另行确认。
+- `seedance-2-video` 不是 Studio role，不在 `Studio_Skills/` 里查找，也不要放进 `Studio roles:` trace。它必须作为 Tool skill 单独显示，并优先读取当前项目的 `seedance-2-video/SKILL.md`；如果没有，再读用户级或插件级 `seedance-2-video/SKILL.md`。
+- `seedance-2-video` 已打包 Ark Seedance API 执行脚本。真实出视频需要用户明确要求、通过高消耗/上传 guardrail，并且环境存在 `ARK_API_KEY` 或本地私密 key 文件；没有 key 时只做 dry-run 或 payload，不要声称已生成视频。
 - 历史准确性检查是可选质量门，不默认开启。明确历史风险只追加一句提醒：`检测到历史准确性风险。是否开启历史准确性检查？默认不开启。`
 - 用户说 `开启历史检查`、`要考据` 或 `按历史准确做` 时，默认只对本次请求/当前视觉链路生效；用户说 `本项目开启历史检查` 或 `全程开启历史检查` 时，才在当前对话/项目中持续生效，直到 `关闭历史检查`、`不用历史检查` 或 `恢复普通模式`。
 - 历史检查不是只改提示词；如有图片生成或图片评审，必须在生成后检查可见服饰、建筑、道具、材质、纹样、文字和时代穿帮。当前没有视频生成模块，视频阶段只检查分镜首帧、参考图、视觉资产和生成图片。
@@ -387,6 +391,7 @@ PPT 项目的阶段为：
 - `AI_Tool_Prompt_Profiles.md` 是图像、视频、编辑、版式、音频等工具类型的提示词剖面，生成工具版 prompt 时必须使用。
 - `Tool_Registry.md` 是工具注册表，新增工具必须先登记工具卡。
 - `banana-pro/SKILL.md` 是显式调用的 Banana Pro 图像生成工具 skill；它不是 `Studio_Skills/` 下的岗位 skill。
+- `seedance-2-video/SKILL.md` 是显式调用的 Seedance 2.0 / 即梦2.0 视频生成工具 skill；它不是 `Studio_Skills/` 下的岗位 skill。
 - `Studio_Skills/*/SKILL.md` 是本项目的岗位 skill，按任务需要逐个调用。
 - `Prompts/Prompt_Library.md` 是备用提示词库，不要默认整段复制给用户。
 - `Prompts/Prompt_Spec_Rules.md` 是图片和视频提示词的生成规范，用户要提示词时必须使用。

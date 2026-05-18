@@ -12,6 +12,8 @@
 - 先输出通用提示词，再按 `Tool_Registry.md` 转成工具专用提示词；没有工具卡时，交给 `tool-integrator` 注册工具。
 - Banana Pro / `banana-pro` 是提示词后的图像生成成员，作用类似 `imagegen`；只在用户明确要求香蕉、banana、Banana Pro、Nano Banana 或 OpenRouter 图像生成时调用，普通图片提示词不要自动切换到 Banana Pro。
 - 用户同时要求“设计分镜/海报/PPT 页面/角色/产品/场景”和“使用 banana 出图”时，不能越过上游设计环节直接生成。先由对应 Studio 角色锁定分镜、版式、页面角色或视觉 brief，再由 `prompt-director` 转成可执行提示词，最后交给 `banana-pro` 生成选中的一张或一帧。
+- Seedance 2.0 / `seedance-2-video` 是提示词后的视频生成成员；只在用户明确要求即梦2.0生成、即梦生成、Seedance 2.0、Ark Seedance、豆包 Seedance 或 `@seedance-2-video` 时调用，普通视频提示词不要自动切换到 Seedance。
+- 用户同时要求“设计脚本/分镜/镜头/剪辑/调色”和“使用即梦/Seedance生成”时，不能越过上游设计环节直接生成。先由对应 Studio 角色锁定镜头和节奏，再由 `prompt-director` 转成可执行提示词，最后交给 `seedance-2-video` 生成选中的一条镜头/片段。
 
 ## 工具适配层
 
@@ -346,5 +348,5 @@ Use this add-on only after the user explicitly enables historical accuracy check
 - Historical checking is not only prompt writing. The final image/still must be checked after generation or selection.
 - Before generation, include compact period/civilization constraints from `historical-consultant`: period, region, role/class, clothing, architecture, props, materials, colors/patterns, and must-avoid list.
 - After generation, review the visible result against the Period Lock Card. A good prompt does not make an inaccurate image acceptable.
-- For Banana Pro or any future image generator, add a post-generation QA note for anachronisms, wrong dynasty/civilization details, fantasy-TV conventions, modern objects, wrong materials, and incorrect symbols/text.
-- For video projects, apply these rules to storyboard first frames, still references, visual assets, and selected generated frames only. Do not claim final video-generation checking unless a video module is integrated.
+- For Banana Pro or any image generator, add a post-generation QA note for anachronisms, wrong dynasty/civilization details, fantasy-TV conventions, modern objects, wrong materials, and incorrect symbols/text.
+- For Seedance or any video generator, apply these rules before generation to storyboard first frames, still references, public image URLs, and visual constraints; after generation, review representative output frames/stills when available. Do not claim full automated video QA beyond visible frames/stills.

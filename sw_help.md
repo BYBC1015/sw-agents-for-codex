@@ -22,6 +22,7 @@ Do not start a project. Do not load Studio roles. Do not run shell commands for 
 ```text
 SW Help:
 - Banana Pro: trigger with 香蕉 / banana / Banana Pro / Nano Banana / @banana-pro / 用 banana 出图.
+- Seedance 2.0 Video: trigger with 即梦2.0生成 / 即梦生成 / Seedance 2.0 / @seedance-2-video / 用即梦生成视频.
 - Historical Accuracy: reminder appears only for clear accuracy risk. Say "开启历史检查" for the current request/visual chain; "本项目开启历史检查" or "全程开启历史检查" for the current conversation/project; "关闭历史检查" / "不用历史检查" / "恢复普通模式" to turn it off.
 
 This only shows help and does not start a project.

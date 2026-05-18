@@ -24,9 +24,33 @@ upstream Studio role if needed -> prompt-director -> banana-pro
 
 Do not trigger for ordinary image prompt drafting.
 
+## Seedance 2.0 Video
+
+Purpose: explicit video generation after SW shot/prompt preparation.
+
+Trigger only when the user explicitly asks for:
+
+- `即梦2.0生成`
+- `即梦生成`
+- `Seedance 2.0`
+- `Ark Seedance`
+- `豆包 Seedance`
+- `@seedance-2-video`
+- use 即梦/Seedance to generate/output a video
+
+Default route:
+
+```text
+upstream Studio role if needed -> prompt-director -> seedance-2-video
+```
+
+Do not trigger for ordinary storyboard, edit-plan, or video prompt drafting.
+
+No key behavior: if `ARK_API_KEY` or a local Seedance key file is missing, run dry-run/payload only and do not claim a video was generated.
+
 ## Historical Accuracy
 
-Purpose: optional historical/civilization accuracy gate for visual outputs, especially poster key visuals, storyboard first frames, Banana-generated images, reference-image QA, and final image review.
+Purpose: optional historical/civilization accuracy gate for visual outputs, especially poster key visuals, storyboard first frames, Banana-generated images, Seedance representative frames/stills, reference-image QA, and final image review.
 
 Historical checking is not just prompt wording. When enabled, it checks the final visual asset/image for anachronism and credibility.
 
@@ -120,12 +144,13 @@ When enabled, historical accuracy applies to:
 - Period Lock Card before production
 - prompt constraints before image generation
 - Banana Pro generated image QA
+- Seedance representative frame/still QA when output is available
 - storyboard first-frame image QA
 - poster/key visual QA
 - reference-image review
 - final delivery review
 
-It does not assume any video-generation module exists. Video-stage historical quality currently focuses on still frames, storyboard images, and visual asset decisions.
+Seedance is available as an explicit video-generation tool, but historical QA remains visual-frame based. Review prompts, reference images, public first frames, and representative output frames/stills; do not claim full automated video QA.
 
 ## Help Entry
 

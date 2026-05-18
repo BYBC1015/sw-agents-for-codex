@@ -45,12 +45,15 @@ Treat these as high-cost:
 - full campaign expansion
 - broad rewrite after feedback
 - tool-specific prompt conversion when tool behavior is uncertain
+- real Banana Pro image generation or real Seedance/即梦2.0 video generation
 
 Project memory reads and one-line memory suggestions are low-cost. Writing to `.sw/MEMORY.md` requires explicit user approval and should append only 1-3 concise bullets.
 
 PPT/deck structure from `presentation-designer` stays low-to-medium by default; only full long decks, detailed speaker notes, broad research, PPTX generation, preview export, or batch slide rewrites become high-cost.
 
 Historical accuracy trigger scanning is low-cost and current-message only. Do not load historical references, browse, or run `historical-consultant` until the user confirms. Once enabled, strict period research, source notes, and post-generation image QA can become medium-to-high cost depending on depth.
+
+Seedance/即梦2.0 dry-run is low-cost because it only validates a sanitized payload. Real generation is high-cost because it can consume quota, require public image URLs, and wait in a long queue. Default to one selected clip/shot at `720p`; batch shots, multiple ratios, `1080p`, and long polling need explicit confirmation.
 
 Help and wake-up hot paths are zero-project-read by default: `@sw_help` uses its embedded short answer, activation-only uses one fixed loaded line, and sync-only uses one fixed sync line. Detailed indexes/logs load only for explicit details or diagnostics.
 
@@ -107,4 +110,4 @@ Stop before expanding when:
 - Style-only phrases such as 国风, 古风, 唐风, 宋韵, 东方美学, 敦煌感, 新中式, or 仙侠感 do not trigger historical checking.
 - Clear risk without confirmation produces only: `检测到历史准确性风险。是否开启历史准确性检查？默认不开启。`
 - After confirmation, historical checking must include final visual output/image QA when images are generated or reviewed.
-- Video-stage checking covers still frames, storyboard images, references, and visual assets only until a real video-generation module is integrated.
+- Video-stage checking covers still frames, storyboard images, references, visual assets, and representative Seedance output frames when available. Do not claim full automated video QA beyond visible frames/stills.

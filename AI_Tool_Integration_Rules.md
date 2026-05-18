@@ -13,6 +13,9 @@
 - Banana Pro / `banana-pro` 是显式调用的出图成员，作用类似 `imagegen`，位于 `prompt-director` 之后：只有用户明确提到香蕉、banana、Banana Pro、Nano Banana、OpenRouter 图像生成、`@banana-pro`，或明确要求用这个成员生成图片时才加载；普通图片提示词仍由 `prompt-director` 处理。
 - Banana Pro 不能越过上游设计岗位。若同一请求包含分镜、视频/电影镜头、海报、PPT/deck/slide、版式、角色、产品、道具或场景设计，先由对应 Studio role 产出设计 handoff，再由 `prompt-director` 转为最终视觉 prompt，最后才交给 Banana Pro 生成选中的一张/一帧。
 - Banana Pro 已包含 OpenRouter API 执行脚本；真实生成需要用户明确确认且环境存在 `OPENROUTER_API_KEY`。没有 key 时只做 dry-run/payload，不声称已出图。
+- Seedance 2.0 Video / `seedance-2-video` 是显式调用的视频生成成员，位于 `prompt-director` 之后：只有用户明确提到即梦2.0生成、即梦生成、Seedance 2.0、Ark Seedance、豆包 Seedance、`@seedance-2-video`，或明确要求用这个成员生成视频时才加载；普通视频提示词和分镜仍由 Studio roles 与 `prompt-director` 处理。
+- Seedance 不能越过上游视频设计岗位。若同一请求包含脚本、分镜、镜头语言、剪辑节奏、动效、声音、调色、场景或电影方案，先由对应 Studio role 产出 handoff，再由 `prompt-director` 转为最终视频 prompt，最后才交给 Seedance 生成选中的一条镜头/片段。
+- Seedance 已包含 Ark API dry-run/run/poll 脚本；真实生成需要用户明确确认且环境存在 `ARK_API_KEY` 或本地私密 key 文件。没有 key 时只做 dry-run/payload，不声称已出视频。
 
 ## 工具类型
 
@@ -67,6 +70,7 @@
 | 需要多镜头连续人物 | 先做分镜和一致性锁定，再用视频工具 |
 | 需要封面或海报主视觉 | 图像生成/图像编辑 + 后期排版 |
 | 用户明确要求香蕉 / banana / Banana Pro / Nano Banana / OpenRouter 图像生成 | 已有完整 prompt：`prompt-director` -> `banana-pro`；仍需设计：先上游 Studio role -> `prompt-director` -> `banana-pro`；`tool-integrator` 只在能力、参数或接入状态不清楚时介入 |
+| 用户明确要求即梦2.0生成 / 即梦生成 / Seedance 2.0 / Ark Seedance 视频生成 | 已有完整 prompt：`prompt-director` -> `seedance-2-video`；仍需设计：先上游 Studio role -> `prompt-director` -> `seedance-2-video`；`tool-integrator` 只在能力、参数、key 或接入状态不清楚时介入 |
 | 需要剪辑节奏 | 视频编辑工具或人工剪辑方案 |
 | 需要音效/BGM | 音频工具或授权素材库 |
 | 需要团队协作 | Canva/云盘/项目管理工具 |
@@ -108,5 +112,5 @@ When historical accuracy is enabled:
 
 - Treat historical checking as a final visual-output QA gate for image tools, not only a prompt constraint.
 - For Banana Pro or future image generators, pass compact historical constraints into `prompt-director`, then check the generated still/image after output.
-- For video work, apply historical checking to still frames, reference images, storyboard images, and visual assets only until SW has a real video-generation module.
+- For Seedance or future video generators, pass compact historical constraints into `prompt-director`, then review representative output frames/stills when available. Do not claim full automated video QA beyond visible frames/stills.
 - Do not auto-enable historical checking for style-only phrases.

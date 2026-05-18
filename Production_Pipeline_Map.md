@@ -16,13 +16,13 @@ Default role budget:
 
 Use only after explicit user confirmation. It is not part of every workflow.
 
-When enabled, insert `historical-consultant` before the affected visual decision and again after image generation/final still review when needed:
+When enabled, insert `historical-consultant` before the affected visual decision and again after image/video generation or final still review when needed:
 
 ```text
-historical-consultant -> affected visual role -> prompt-director if generating -> image tool if explicit -> historical image QA / review-producer
+historical-consultant -> affected visual role -> prompt-director if generating -> explicit tool if any -> historical frame/image QA / review-producer
 ```
 
-This gate protects final visual output quality: poster key visuals, storyboard first frames, scene/prop/wardrobe references, Banana-generated images, and final still images. Current video support is image-stage only.
+This gate protects final visual output quality: poster key visuals, storyboard first frames, scene/prop/wardrobe references, Banana-generated images, representative Seedance frames/stills when available, and final still images. It does not claim full automated video QA beyond visible frames/stills.
 
 ## Poster Full Workflow
 

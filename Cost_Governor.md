@@ -50,6 +50,9 @@ The cost gate decides:
 - Explicit 香蕉 / banana / Banana Pro / Nano Banana / OpenRouter image-generation requests can add `banana-pro` as the image-generation member after `prompt-director`; use `tool-integrator` only when capability, parameters, API, or connection state is unclear. Do not load it for generic image prompts.
 - Banana Pro is a post-prompt execution step, not a shortcut around Studio roles. If the request also asks for storyboard, video/film shot design, poster design, PPT/deck/slide layout, character/product/prop design, or scene planning, the responsible Studio role must produce the upstream handoff before `prompt-director` and `banana-pro`.
 - `banana-pro` is a tool skill, not a Studio role. It does not count as an extra Studio support role, but generation still uses the high-cost gate when quota, uploads, or final-use assets are involved.
+- Explicit 即梦2.0生成 / 即梦生成 / Seedance 2.0 / Ark Seedance video-generation requests can add `seedance-2-video` after `prompt-director`; use `tool-integrator` only when capability, parameters, API, key state, or connection state is unclear. Do not load it for generic video prompts or storyboard work.
+- Seedance is a post-prompt execution step, not a shortcut around Studio roles. If the request also asks for script, storyboard, camera, edit, motion, sound, color, scene design, or film treatment, the responsible Studio role must produce the upstream handoff before `prompt-director` and `seedance-2-video`.
+- `seedance-2-video` is a tool skill, not a Studio role. It does not count as an extra Studio support role, but real video generation still uses the high-cost gate when quota, public image URLs, long polling, or final-use assets are involved.
 - Presentation/deck structure requests go to `presentation-designer` first; full long decks or batch slide rewrites require the high-cost gate.
 - Proposal decks can load `presentation-designer` references only when the request mentions client-facing, government, local tourism, city image film, video production proposal, visual QA, or similar specialized needs.
 
@@ -115,10 +118,11 @@ Pause and ask for confirmation before:
 - irreversible tool actions
 - final-use AI output involving brand, face, product, logo, copyright, or exact text risk
 - Banana Pro / banana / OpenRouter image generation that may consume quota, requires `OPENROUTER_API_KEY`, or uploads reference images
+- Seedance / 即梦2.0 video generation that may consume quota, requires `ARK_API_KEY` or a local key file, uses public image URLs, or triggers long polling
 - unknown tool-specific prompt conversion
 - any action that consumes quota without a clear preview
 
-Explicit generation wording such as "use banana to generate one draft" counts as confirmation for one draft image only. It does not confirm batch generation, private reference uploads, or final-use brand/face/product output.
+Explicit generation wording such as "use banana to generate one draft" or "use 即梦2.0生成一条草稿" counts as confirmation for one draft asset only. It does not confirm batch generation, private reference uploads, 1080p/final delivery, long unattended polling, or final-use brand/face/product output.
 
 If blocked, produce a preview, risk note, or one-question confirmation instead of executing.
 
@@ -143,8 +147,8 @@ Default behavior is low false-positive:
 - Default enable scope is current request/current visual-output chain only.
 - `本项目开启历史检查` or `全程开启历史检查` keeps it on for the current conversation/project until the user says `关闭历史检查`, `不用历史检查`, or `恢复普通模式`.
 - Long-term project persistence requires explicit memory approval; do not write a historical rule to `.sw/MEMORY.md` automatically.
-- Historical checking is a visual-output gate. When enabled, it applies to poster key visuals, storyboard first frames, Banana outputs, reference-image QA, and final still-image review.
-- Current video workflow has no video-generation module; do not pretend video-level historical QA exists beyond images/frames/assets.
+- Historical checking is a visual-output gate. When enabled, it applies to poster key visuals, storyboard first frames, Banana outputs, Seedance representative frames/stills when available, reference-image QA, and final still-image review.
+- Seedance integration allows video-output visual review when the user provides generated output or representative frames. Do not pretend full automated video QA exists beyond visible frames/stills/assets.
 
 ## Stop Rules
 

@@ -11,7 +11,7 @@ Judge these before every project reply:
 - user intent: start, continue, create, refine, prompt, tool, check, revise, deliver
 - cost mode: normal, low-token, detailed, company delivery
 - risk: copyright, brand, platform, tool, missing information
-- feature risk: Banana explicit generation, historical accuracy reminder, project memory
+- feature risk: Banana explicit generation, Seedance/即梦 explicit video generation, historical accuracy reminder, project memory
 
 ## Priority Routing
 
@@ -21,11 +21,13 @@ Judge these before every project reply:
    - User confirms historical checking -> `historical-consultant` first, then affected visual role, then `prompt-director` if generating, then final image QA via `historical-consultant` or `review-producer`.
    - Plain `开启历史检查` applies to the current request/visual chain. `本项目开启历史检查` or `全程开启历史检查` applies to the current conversation/project until closed.
    - `关闭历史检查`, `不用历史检查`, or `恢复普通模式` disables current project-level historical checking. If the setting was saved in `.sw/MEMORY.md`, require explicit memory update/delete to persist the closure.
-   - For video, check storyboard first frames, still references, visual assets, and generated images only; do not route to a video-generation module that is not integrated.
+   - For video, check storyboard first frames, still references, visual assets, generated images, and representative Seedance output frames when available. Do not claim full automated video QA beyond visible frames/stills.
 2. Revision/feedback/change -> `change-manager`.
 3. New tool, connector, plugin, tool-specific prompt conversion -> `tool-integrator`.
    - Explicit 香蕉 / banana / Banana Pro / Nano Banana / OpenRouter image-generation request with a complete final prompt -> `prompt-director` -> `banana-pro`; add `tool-integrator` only when capability, parameters, API, or connection state is unclear.
    - If explicit Banana generation is bundled with storyboard, video/film shot design, poster, PPT/deck/slide, layout, character, product, prop, or scene design, route the upstream Studio role first, then `prompt-director` -> `banana-pro`. Do not let the tool trigger bypass the design role.
+   - Explicit 即梦2.0生成 / 即梦生成 / Seedance 2.0 / Ark Seedance video-generation request with a complete final prompt -> `prompt-director` -> `seedance-2-video`; add `tool-integrator` only when capability, parameters, API, key state, or connection state is unclear.
+   - If explicit Seedance generation is bundled with script, storyboard, video/film shot design, camera, edit rhythm, motion, sound, color, scene design, or film treatment, route the upstream Studio role first, then `prompt-director` -> `seedance-2-video`. Do not let the tool trigger bypass the design role.
 4. Final check/risk/delivery readiness -> `review-producer`.
 5. Export/package/naming/handoff -> `finishing-producer`.
 6. Image/video/AI prompt request -> `prompt-director`.

@@ -15,7 +15,7 @@ In an old conversation, try:
 Expected reply:
 
 ```text
-SW version synchronized. Current version: V1.5.4
+SW version synchronized. Current version: V1.6.0
 ```
 
 If the old conversation still uses a cached version, send this fuller recovery message once:

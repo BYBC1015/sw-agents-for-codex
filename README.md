@@ -8,7 +8,7 @@
 
 ## 当前版本
 
-- 当前运行版本：`V1.5.4`
+- 当前运行版本：`V1.6.0`
 - 稳定调用入口：`/SW_V1.0` 或 `@SW_V1.0`
 - 版本同步入口：`@sw_update`
 - 完整更新记录：[`VERSION.md`](VERSION.md) / [`Architecture_Update_Log.md`](Architecture_Update_Log.md)
@@ -19,6 +19,7 @@
 
 | 版本 | 日期 | 更新内容 |
 | --- | --- | --- |
+| V1.6.0 | 2026-05-18 | 新增 `seedance-2-video` 即梦2.0/Seedance 2.0 视频生成工具成员；支持 Ark dry-run/run/poll、无 key 模拟验证、显式触发、不可越级和高消耗确认。 |
 | V1.5.4 | 2026-05-18 | 拆分启动与同步路由，减少 skill 竞争触发；`sw-v1-0` 不再声明 `@sw_update`，`sw-update` 独立负责同步；loader skill 改为热路径来源说明并修复乱码片段。 |
 | V1.5.3 | 2026-05-18 | 修复 SW Help 按钮响应慢：按钮默认提示不再递归调用 `@sw_help`，而是直接携带短答，并禁止普通帮助唤醒时读文件或跑命令。 |
 | V1.5.2 | 2026-05-18 | 优化 SW 唤醒与维护成本：`@sw_help` 默认走内置短答，`@sw_update` 和纯启动只回固定短句；详细触发词、日志、全量回归改为按需读取。 |
@@ -67,7 +68,7 @@
 调用成功后，Codex 应回复：
 
 ```text
-SW loaded successfully. Current version: V1.5.4
+SW loaded successfully. Current version: V1.6.0
 ```
 
 Version synchronization uses a separate entry:
@@ -79,7 +80,7 @@ Version synchronization uses a separate entry:
 Expected reply:
 
 ```text
-SW version synchronized. Current version: V1.5.4
+SW version synchronized. Current version: V1.6.0
 ```
 
 For other project folders, copy both `SW_V1.0.md` and `sw_update.md`; copying only the startup file will not create the local update entry. For long-running projects, also copy `Project_Memory_Templates/.sw/` into that project folder.
@@ -91,6 +92,8 @@ Feature help:
 ```
 
 Default `@sw_help` and the SW Help button now use a hot-start short answer. Detailed trigger indexes load only when you ask for full triggers or debugging.
+
+Seedance 2.0 Video is optional and explicit-only. Trigger it with `即梦2.0生成`, `即梦生成`, `Seedance 2.0`, or `@seedance-2-video`; SW will still run storyboard/prompt work first when needed, then generate only the selected clip/shot.
 
 Historical Accuracy is optional. Plain `开启历史检查` applies only to the current request/visual chain; `本项目开启历史检查` or `全程开启历史检查` keeps it on for the current conversation/project; `关闭历史检查`, `不用历史检查`, or `恢复普通模式` turns it off.
 
@@ -179,6 +182,7 @@ Studio roles: Brief Strategist / `brief-strategist` + Storyboard Director / `sto
 - `AI_Tool_Prompt_Profiles.md`：不同 AI 工具类型的提示词剖面。
 - `Tool_Registry.md`：工具注册表，未来接入工具时先登记工具卡。
 - `banana-pro/`：显式调用的 Banana Pro / Nano Banana 图像生成 skill，包含 OpenRouter API 执行脚本；补齐 `OPENROUTER_API_KEY` 后可在提示词后真实生成图片。
+- `seedance-2-video/`：显式调用的 Seedance 2.0 / 即梦2.0 视频生成 skill，包含 Ark API dry-run/run/poll 脚本；补齐 `ARK_API_KEY` 或本地私密 key 后可在提示词后真实生成视频。
 - `Studio_Skills/`：每个岗位一个 project-local `SKILL.md`。
 - `Start_New_Project.md`：新项目启动语和最小输入示例。
 - `00_Brief/Brief.md`：项目需求入口。
