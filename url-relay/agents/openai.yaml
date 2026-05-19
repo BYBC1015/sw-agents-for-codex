@@ -1,0 +1,4 @@
+interface:
+  display_name: "URL Relay"
+  short_description: "Upload local media to a public relay URL"
+  default_prompt: "Use URL Relay when SW needs to convert local image or video files into public http(s) URLs for Seedance, Ark, Banana, or other AI tools. Try the configured SW media uploader first. If it is unreachable and the user/config allows temporary fallback, report that the SW server is unavailable, then use the selected Catbox/Litterbox fallback. Never call third-party relay output our server."

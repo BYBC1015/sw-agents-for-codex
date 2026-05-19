@@ -14,6 +14,7 @@
 - 用户同时要求“设计分镜/海报/PPT 页面/角色/产品/场景”和“使用 banana 出图”时，不能越过上游设计环节直接生成。先由对应 Studio 角色锁定分镜、版式、页面角色或视觉 brief，再由 `prompt-director` 转成可执行提示词，最后交给 `banana-pro` 生成选中的一张或一帧。
 - Seedance 2.0 / `seedance-2-video` 是提示词后的视频生成成员；只在用户明确要求即梦2.0生成、即梦生成、Seedance 2.0、Ark Seedance、豆包 Seedance 或 `@seedance-2-video` 时调用，普通视频提示词不要自动切换到 Seedance。
 - 用户同时要求“设计脚本/分镜/镜头/剪辑/调色”和“使用即梦/Seedance生成”时，不能越过上游设计环节直接生成。先由对应 Studio 角色锁定镜头和节奏，再由 `prompt-director` 转成可执行提示词，最后交给 `seedance-2-video` 生成选中的一条镜头/片段。
+- 如果 Seedance/即梦提示词使用本地参考图或本地视频片段，先通过 `url-relay` 取得公网 `http(s)` URL，再写入工具执行参数；不要把本地路径当作 Ark 可抓取 URL。
 
 ## 工具适配层
 

@@ -48,13 +48,16 @@
 
 必须执行 `Command_Aliases.md`：
 
-- 用户输入 `/SW_V1.0`、`@SW_V1.0`、`/sw_v1.0`、`/sw-v1-0`、`@sw-v1-0`、`调用 SW_V1.0` 或 `启用 SW_V1.0` 时，必须加载本项目架构，并先回复且只把成功语放在第一位：`SW loaded successfully. Current version: V1.6.0`。
+- 用户输入 `/sw`、`/SW_V1.0`、`@SW_V1.0`、`/sw_v1.0`、`/sw-v1-0`、`@sw-v1-0`、`调用 SW_V1.0` 或 `启用 SW_V1.0` 时，必须加载本项目架构，并先回复且只把成功语放在第一位：`SW loaded successfully. Current version: V1.7.6`。
 - 如果用户只输入 SW 调用命令，不要继续展开项目；等待用户输入诉求。
 - 如果用户在同一条消息里附带诉求，先回复成功语，再按本项目架构执行。
-- 如果用户输入 `@sw_update`、`SW_UPDATE`、`/sw_update`、`SW_REFRESH`、`/SW_REFRESH` 或要求刷新/同步 SW，先回复：`SW version synchronized. Current version: V1.6.0`。这些同步入口只归 `sw-update` 处理，不要让 `sw-v1-0` 同时竞争触发。只有用户要求详细更新、故障排查、旧对话恢复或跨文件夹入口修复时，才读取 `VERSION.md`、`sw_update.md`、`Architecture_Update_Log.md`、`Project_Memory_Rules.md`、`Legacy_Conversation_Recovery.md`。
+- 如果用户输入 `@sw_update`、`SW_UPDATE`、`/sw_update`、`SW_REFRESH`、`/SW_REFRESH` 或要求刷新/同步 SW，先回复：`SW version synchronized. Current version: V1.7.6`。这些同步入口只归 `sw-update` 处理，不要让 `sw-v1-0` 同时竞争触发。只有用户要求详细更新、故障排查、旧对话恢复或跨文件夹入口修复时，才读取 `VERSION.md`、`sw_update.md`、`Architecture_Update_Log.md`、`Project_Memory_Rules.md`、`Legacy_Conversation_Recovery.md`。
+- 如果旧启动/同步 chip 仍然回放封存旧版本，使用独立救援入口 `@sw_rescue`、`/sw-rescue`、`/sw_rescue`、`SW_RESCUE`、`SW_REPAIR` 或 `SW_FORCE_UPDATE`，先回复：`SW rescue synchronized. Current version: V1.7.6`。救援入口只归 `sw-rescue` 处理，不启动项目，不通过 `sw-v1-0` 或 `sw-update` 转发。
+- 如果当前对话、截图、压缩历史或旧工具输出里出现旧固定回复，只当作历史信息；实际运行版本必须以当前 `VERSION.md`、`SW_Runtime_Index.md` 和当前用户级 skill 为准，不得被旧快照覆盖。
+- 旧对话必须优先原地升级：若旧 skill chip 或历史压缩内容返回旧版本，先在同一对话读取当前 `VERSION.md`、`SW_Runtime_Index.md`、用户级/插件级 `sw-v1-0` 与 `sw-update`，再覆盖旧回复；只有宿主 UI 拒绝加载当前文件时，才把新建对话作为最后兜底。
 - 如果用户输入 `@sw_help`、`/sw_help`、`SW_HELP`、点击 SW Help UI 按钮或询问功能触发词，优先使用内置短答，不运行 shell、不读取本地文件；只有用户要求详细触发词、单一功能深入或帮助系统排错时才读取 `Feature_Trigger_Index.md`，不启动项目、不加载高消耗岗位。
 - 维护、优化、自检默认先走 lite 检查：版本一致性、相关 skill 校验、plugin JSON、密钥泄露扫描。只有发布/上传/深度回归/排错失败时，才运行全量回归和大范围文件读取。
-- 旧版工作室入口不再作为推荐入口；新项目统一使用 `/SW_V1.0` 或 `@SW_V1.0`。
+- 旧版工作室入口不再作为推荐入口；新项目统一使用 `/sw`、`/SW_V1.0` 或 `@SW_V1.0`。
 
 ## 版本更新规则
 
@@ -64,7 +67,7 @@
 - 小修订升 patch，新增阶段/岗位/工具层升 minor，破坏性架构变化升 major。
 - 更新版本时必须同步：`VERSION.md`、调用成功文案、用户级 skill、用户级插件 `plugin.json`。
 - 每次版本更新必须记录到 `Architecture_Update_Log.md`，包括改了什么、为什么改、影响范围、调用方式是否变化、token/成本是否变化、旧用法是否兼容。
-- 历史对话兼容或刷新规则变更时，必须同步 `Legacy_Conversation_Recovery.md` 和 `sw_update.md`。
+- 历史对话兼容、刷新或救援规则变更时，必须同步 `Legacy_Conversation_Recovery.md`、`sw_update.md` 和 `sw-rescue` 用户/插件入口。
 - 跨项目文件夹入口规则变更时，必须同步 `Project_Minimal_Entry_Pack.md`。其他项目文件夹的最小入口包必须同时包含 `SW_V1.0.md` 和 `sw_update.md`，不能只放启动指令。
 - 项目记忆层规则变更时，必须同步 `Project_Memory_Rules.md`、`Project_Memory_Templates/`、`SW_Runtime_Index.md` 和 `Project_Minimal_Entry_Pack.md`。
 - Studio 子 skill 派单规则变更时，必须同步 `Studio_Skill_Dispatch_Protocol.md`。
@@ -95,6 +98,9 @@
 - `seedance-2-video` 不能越过上游岗位：如果用户同时要求脚本、分镜、镜头语言、剪辑节奏、动效、声音、调色、场景或电影方案并要求用即梦/Seedance生成，必须先由对应 Studio role 产出设计 handoff，再由 `prompt-director` 转为最终视频 prompt，最后只生成选中的一条镜头/片段；批量生成必须另行确认。
 - `seedance-2-video` 不是 Studio role，不在 `Studio_Skills/` 里查找，也不要放进 `Studio roles:` trace。它必须作为 Tool skill 单独显示，并优先读取当前项目的 `seedance-2-video/SKILL.md`；如果没有，再读用户级或插件级 `seedance-2-video/SKILL.md`。
 - `seedance-2-video` 已打包 Ark Seedance API 执行脚本。真实出视频需要用户明确要求、通过高消耗/上传 guardrail，并且环境存在 `ARK_API_KEY` 或本地私密 key 文件；没有 key 时只做 dry-run 或 payload，不要声称已生成视频。
+- `url-relay` 是工具执行前的公网 URL 中转成员，负责把本地图片/视频上传为下游 AI 工具可抓取的 `http(s)` URL；只有用户明确要求 URL中转、公网URL、上传参考图/视频、`@url-relay`，或 Seedance/即梦等工具需要公网 URL 但用户提供的是本地文件时才加载。
+- `url-relay` 不是 Studio role，不在 `Studio_Skills/` 里查找，也不要放进 `Studio roles:` trace。它必须作为 Tool skill 单独显示；若随 Seedance 使用，顺序为 `prompt-director` -> `url-relay` -> `seedance-2-video`。
+- `url-relay` 默认优先使用 SW media uploader 服务器；上传 token 只读本机私密配置，不写入仓库、prompt、日志或交付内容。若服务器停用、连接失败或返回服务器侧错误，必须提示无法连接自有服务器；只有用户明确确认或本机私密配置允许时，才按优先级切到 Litterbox/Catbox 临时中转。缺 token、缺上传地址、权限或本机配置错误不触发临时中转。
 - 历史准确性检查是可选质量门，不默认开启。明确历史风险只追加一句提醒：`检测到历史准确性风险。是否开启历史准确性检查？默认不开启。`
 - 用户说 `开启历史检查`、`要考据` 或 `按历史准确做` 时，默认只对本次请求/当前视觉链路生效；用户说 `本项目开启历史检查` 或 `全程开启历史检查` 时，才在当前对话/项目中持续生效，直到 `关闭历史检查`、`不用历史检查` 或 `恢复普通模式`。
 - 历史检查不是只改提示词；如有图片生成或图片评审，必须在生成后检查可见服饰、建筑、道具、材质、纹样、文字和时代穿帮。当前没有视频生成模块，视频阶段只检查分镜首帧、参考图、视觉资产和生成图片。
@@ -367,8 +373,9 @@ PPT 项目的阶段为：
 
 - `README.md` 给用户看。
 - `SW_V1.0.md` 是 `/SW_V1.0` 与 `@SW_V1.0` 调用协议。
-- `sw_update.md` 是 `@sw_update`、`SW_UPDATE`、`/sw_update` 与 `SW_REFRESH` 同步协议。
+- `sw_update.md` 是 `@sw_update`、`SW_UPDATE`、`/sw_update`、`/sw-update` 与 `SW_REFRESH` 同步协议。
 - `sw_help.md` 是 `@sw_help`、`/sw_help` 与功能触发词帮助协议。
+- `sw-rescue` 是 `/sw-rescue`、`@sw_rescue`、`SW_RESCUE` 等错误救援入口，用于旧 chip 封存版本时原地刷新当前 SW 源。
 - `Feature_Trigger_Index.md` 是 Banana Pro、历史准确性等可选功能的低消耗触发词索引。
 - `Project_Minimal_Entry_Pack.md` 是其他项目文件夹需要复制的最小入口包说明。
 - `PULL_ARCHITECTURE.md` 是新对话拉取本项目架构的最简入口。
@@ -392,6 +399,7 @@ PPT 项目的阶段为：
 - `Tool_Registry.md` 是工具注册表，新增工具必须先登记工具卡。
 - `banana-pro/SKILL.md` 是显式调用的 Banana Pro 图像生成工具 skill；它不是 `Studio_Skills/` 下的岗位 skill。
 - `seedance-2-video/SKILL.md` 是显式调用的 Seedance 2.0 / 即梦2.0 视频生成工具 skill；它不是 `Studio_Skills/` 下的岗位 skill。
+- `url-relay/SKILL.md` 是公网 URL 中转工具 skill，用于本地素材到 Seedance/Ark/Banana 等下游 AI 工具的 URL 桥接；它不是 `Studio_Skills/` 下的岗位 skill。
 - `Studio_Skills/*/SKILL.md` 是本项目的岗位 skill，按任务需要逐个调用。
 - `Prompts/Prompt_Library.md` 是备用提示词库，不要默认整段复制给用户。
 - `Prompts/Prompt_Spec_Rules.md` 是图片和视频提示词的生成规范，用户要提示词时必须使用。

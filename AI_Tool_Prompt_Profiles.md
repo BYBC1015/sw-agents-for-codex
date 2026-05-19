@@ -105,6 +105,8 @@
 
 仅在用户明确要求即梦2.0生成、即梦生成、Seedance 2.0、Ark Seedance、豆包 Seedance 或 `@seedance-2-video` 时使用。它是 `prompt-director` 之后的视频生成/执行环节，不能替代脚本、分镜、镜头语言、剪辑节奏、动效、声音、调色或电影方案岗位。
 
+如果参考素材是本地文件，先用 `url-relay` 取得公网 `http(s)` URL，再进入 Seedance 参数。不要在工具提示词或 payload 中保留本地磁盘路径。
+
 输出必须包含：
 
 - model：`doubao-seedance-2-0-260128`

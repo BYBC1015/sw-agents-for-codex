@@ -16,6 +16,8 @@
 - Seedance 2.0 Video / `seedance-2-video` 是显式调用的视频生成成员，位于 `prompt-director` 之后：只有用户明确提到即梦2.0生成、即梦生成、Seedance 2.0、Ark Seedance、豆包 Seedance、`@seedance-2-video`，或明确要求用这个成员生成视频时才加载；普通视频提示词和分镜仍由 Studio roles 与 `prompt-director` 处理。
 - Seedance 不能越过上游视频设计岗位。若同一请求包含脚本、分镜、镜头语言、剪辑节奏、动效、声音、调色、场景或电影方案，先由对应 Studio role 产出 handoff，再由 `prompt-director` 转为最终视频 prompt，最后才交给 Seedance 生成选中的一条镜头/片段。
 - Seedance 已包含 Ark API dry-run/run/poll 脚本；真实生成需要用户明确确认且环境存在 `ARK_API_KEY` 或本地私密 key 文件。没有 key 时只做 dry-run/payload，不声称已出视频。
+- URL Relay / `url-relay` 是显式或工具需要时触发的公网素材中转层，位于下游生成工具之前：当 Seedance/即梦、Ark、图生视频或其他 AI 工具需要公共 `http(s)` URL，而用户只提供本地图片/视频路径时，优先使用已配置的 SW media uploader；若自有服务器连接失败或返回服务器侧错误，必须提示无法连接服务器，并且只有用户确认或本机私密配置允许时，才按优先级切到 Litterbox/Catbox 临时中转；缺 token、缺地址或权限错误不触发 fallback。
+- URL Relay 不参与创意、不改写提示词，也不是 Studio role。它只负责本地素材 -> 公网 URL；上传 token 和服务器配置必须留在本机私密配置，不进入仓库、prompt、日志或交付文件。
 
 ## 工具类型
 
@@ -71,6 +73,7 @@
 | 需要封面或海报主视觉 | 图像生成/图像编辑 + 后期排版 |
 | 用户明确要求香蕉 / banana / Banana Pro / Nano Banana / OpenRouter 图像生成 | 已有完整 prompt：`prompt-director` -> `banana-pro`；仍需设计：先上游 Studio role -> `prompt-director` -> `banana-pro`；`tool-integrator` 只在能力、参数或接入状态不清楚时介入 |
 | 用户明确要求即梦2.0生成 / 即梦生成 / Seedance 2.0 / Ark Seedance 视频生成 | 已有完整 prompt：`prompt-director` -> `seedance-2-video`；仍需设计：先上游 Studio role -> `prompt-director` -> `seedance-2-video`；`tool-integrator` 只在能力、参数、key 或接入状态不清楚时介入 |
+| 下游 AI 工具需要公网 URL，但用户提供本地图片/视频文件 | `url-relay` 将本地素材中转为 `http(s)` URL；随后回到 Banana/Seedance/其他工具；隐私不明时先确认 |
 | 需要剪辑节奏 | 视频编辑工具或人工剪辑方案 |
 | 需要音效/BGM | 音频工具或授权素材库 |
 | 需要团队协作 | Canva/云盘/项目管理工具 |

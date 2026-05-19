@@ -4,15 +4,17 @@ Use this when preparing another project folder for SW.
 
 ## Required Root Files
 
-Copy these two files into the root of each project folder:
+Copy these three files into the root of each project folder:
 
 - `SW_V1.0.md`
 - `sw_update.md`
+- `sw_rescue.md`
 
 These two files create the expected local entries:
 
 - `@SW_V1.0` starts or loads the SW design studio workflow.
 - `@sw_update` synchronizes the current conversation with the latest SW runtime version.
+- `@sw_rescue` or `/sw-rescue` force-refreshes stale/sealed startup or update chips.
 
 ## Optional Root Files
 
@@ -33,13 +35,19 @@ Copy these when you want version history and troubleshooting available inside th
 Startup:
 
 ```text
-SW loaded successfully. Current version: V1.6.0
+SW loaded successfully. Current version: V1.7.6
 ```
 
 Version sync:
 
 ```text
-SW version synchronized. Current version: V1.6.0
+SW version synchronized. Current version: V1.7.6
+```
+
+Rescue:
+
+```text
+SW rescue synchronized. Current version: V1.7.6
 ```
 
 ## Optional Project Memory Pack
@@ -67,6 +75,6 @@ SW must not write `MEMORY.md` unless the user explicitly says to remember/save i
 
 ## Rule
 
-Every future SW update must keep `SW_V1.0.md`, `sw_update.md`, the optional `SW_Runtime_Index.md`, and the project memory template guidance aligned, because other project folders may only copy the entry pack instead of the whole studio template.
+Every future SW update must keep `SW_V1.0.md`, `sw_update.md`, `sw_rescue.md`, the optional `SW_Runtime_Index.md`, and the project memory template guidance aligned, because other project folders may only copy the entry pack instead of the whole studio template.
 
 Default help and sync entries should use hot-start behavior: fixed short reply first, no shell/file reads for normal help, detailed files only when requested.

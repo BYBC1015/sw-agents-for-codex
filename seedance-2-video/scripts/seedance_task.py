@@ -11,7 +11,9 @@ import argparse
 import getpass
 import hashlib
 import json
+import mimetypes
 import os
+import secrets
 import ssl
 import sys
 import time
@@ -35,13 +37,43 @@ DEFAULT_POLL_MAX_SECONDS = 120
 ESTIMATED_WAIT_MIN_SECONDS = 30
 ESTIMATED_WAIT_MAX_SECONDS = 300
 DEFAULT_SECRET_FILE = "~/.config/codex-seedance-2-video/secrets.json"
+DEFAULT_RELAY_CONFIG_FILE = "~/.config/sw-media-uploader/config.json"
 VALID_RATIOS = {"21:9", "16:9", "4:3", "1:1", "3:4", "9:16", "adaptive"}
 VALID_RESOLUTIONS = {"480p", "720p", "1080p"}
 SOURCE_IMAGE_POLICY = "use_current_upload_only"
+TEMP_RELAY_HOSTS = {
+    "catbox.moe",
+    "files.catbox.moe",
+    "litterbox.catbox.moe",
+}
+CATBOX_API_URL = "https://catbox.moe/user/api.php"
+LITTERBOX_API_URL = "https://litterbox.catbox.moe/resources/internals/api.php"
+TEMPORARY_RELAY_FALLBACKS = {"none", "auto", "litterbox", "catbox"}
+VALID_LITTERBOX_TIMES = {"1h", "12h", "24h", "72h"}
+DEFAULT_LITTERBOX_TIME = "24h"
+ALLOWED_RELAY_EXTS = {
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".webp",
+    ".gif",
+    ".mp4",
+    ".mov",
+    ".webm",
+}
+DEFAULT_RELAY_MAX_BYTES = 200 * 1024 * 1024
 
 
 class SeedanceError(RuntimeError):
     pass
+
+
+class RelayUnavailableError(SeedanceError):
+    pass
+
+
+def is_server_unavailable_status(status_code: int) -> bool:
+    return status_code in {408, 429, 500, 502, 503, 504} or 520 <= status_code <= 524
 
 
 def now_iso_local() -> str:
@@ -62,10 +94,40 @@ def is_http_url(value: str) -> bool:
     return value.startswith("http://") or value.startswith("https://")
 
 
+def url_host(value: str) -> str:
+    try:
+        return (urllib.parse.urlparse(value).hostname or "").lower()
+    except ValueError:
+        return ""
+
+
+def is_temporary_relay_url(value: str) -> bool:
+    host = url_host(value)
+    return host in TEMP_RELAY_HOSTS or host.endswith(".catbox.moe")
+
+
+def normalize_temporary_fallback(value: Any) -> str:
+    raw = str(value or "none").strip().lower().replace("_", "-")
+    if raw in {"1", "true", "yes", "on", "enabled"}:
+        return "auto"
+    if raw not in TEMPORARY_RELAY_FALLBACKS:
+        raise SeedanceError(
+            f"temporary relay fallback must be one of {sorted(TEMPORARY_RELAY_FALLBACKS)}, got {raw}"
+        )
+    return raw
+
+
+def normalize_litterbox_time(value: Any) -> str:
+    raw = str(value or DEFAULT_LITTERBOX_TIME).strip().lower()
+    if raw not in VALID_LITTERBOX_TIMES:
+        raise SeedanceError(f"litterbox time must be one of {sorted(VALID_LITTERBOX_TIMES)}, got {raw}")
+    return raw
+
+
 def read_json(path: Path) -> dict[str, Any]:
     if not path.exists():
         return {}
-    return json.loads(path.read_text(encoding="utf-8"))
+    return json.loads(path.read_text(encoding="utf-8-sig"))
 
 
 def write_json(path: Path, data: dict[str, Any]) -> None:
@@ -142,6 +204,211 @@ def key_status(key_file_arg: str | None = None) -> tuple[str, str, Path]:
     if file_key:
         return redacted_key_state(file_key), "local_secret_file", key_file
     return "missing", "missing", key_file
+
+
+def default_relay_config_file(value: str | None = None) -> Path:
+    raw = value or os.environ.get("SW_RELAY_CONFIG") or DEFAULT_RELAY_CONFIG_FILE
+    return Path(raw).expanduser()
+
+
+def relay_config(relay_config_arg: str | None = None) -> tuple[dict[str, Any], Path]:
+    path = default_relay_config_file(relay_config_arg)
+    data = read_json(path)
+    upload_url = (os.environ.get("SW_RELAY_UPLOAD_URL") or data.get("upload_url") or "").strip()
+    public_base = (os.environ.get("SW_RELAY_PUBLIC_BASE") or data.get("public_base") or "").strip()
+    token = (os.environ.get("SW_RELAY_TOKEN") or data.get("token") or "").strip()
+    max_bytes = int(os.environ.get("SW_RELAY_MAX_BYTES") or data.get("max_bytes") or DEFAULT_RELAY_MAX_BYTES)
+    temporary_fallback = normalize_temporary_fallback(
+        os.environ.get("SW_RELAY_TEMPORARY_FALLBACK")
+        or data.get("temporary_fallback")
+        or data.get("temporary_relay_fallback")
+        or "none"
+    )
+    litterbox_time = normalize_litterbox_time(
+        os.environ.get("SW_RELAY_LITTERBOX_TIME") or data.get("litterbox_time") or DEFAULT_LITTERBOX_TIME
+    )
+    return {
+        "upload_url": upload_url,
+        "public_base": public_base,
+        "token": token,
+        "max_bytes": max_bytes,
+        "temporary_fallback": temporary_fallback,
+        "litterbox_time": litterbox_time,
+    }, path
+
+
+def effective_temporary_fallback(args: argparse.Namespace) -> str:
+    fallback_arg = getattr(args, "temporary_relay_fallback", None)
+    if fallback_arg is not None:
+        return normalize_temporary_fallback(fallback_arg)
+    cfg, _cfg_path = relay_config(getattr(args, "relay_config", None))
+    return normalize_temporary_fallback(cfg.get("temporary_fallback"))
+
+
+def validate_relay_file(path: Path, max_bytes: int) -> None:
+    if not path.exists() or not path.is_file():
+        raise SeedanceError(f"image file does not exist: {path}")
+    if path.stat().st_size <= 0:
+        raise SeedanceError(f"image file is empty: {path}")
+    if path.stat().st_size > max_bytes:
+        raise SeedanceError(f"image file exceeds relay max size: {path.stat().st_size} > {max_bytes}")
+    ext = path.suffix.lower()
+    if ext not in ALLOWED_RELAY_EXTS:
+        raise SeedanceError(f"unsupported relay file extension: {ext or '<none>'}")
+
+
+def relay_multipart_form(fields: dict[str, str], file_field_name: str, file_path: Path) -> tuple[bytes, str]:
+    boundary = "----swrelay" + secrets.token_hex(16)
+    content_type = mimetypes.guess_type(str(file_path))[0] or "application/octet-stream"
+    parts: list[bytes] = []
+    for name, value in fields.items():
+        parts.extend(
+            [
+                f"--{boundary}\r\n".encode("utf-8"),
+                f'Content-Disposition: form-data; name="{name}"\r\n\r\n'.encode("utf-8"),
+                str(value).encode("utf-8"),
+                b"\r\n",
+            ]
+        )
+    parts.extend(
+        [
+            f"--{boundary}\r\n".encode("utf-8"),
+            (
+                f'Content-Disposition: form-data; name="{file_field_name}"; '
+                f'filename="{file_path.name}"\r\n'
+            ).encode("utf-8"),
+            f"Content-Type: {content_type}\r\n\r\n".encode("utf-8"),
+            file_path.read_bytes(),
+            b"\r\n",
+            f"--{boundary}--\r\n".encode("utf-8"),
+        ]
+    )
+    return b"".join(parts), f"multipart/form-data; boundary={boundary}"
+
+
+def relay_multipart_body(file_path: Path) -> tuple[bytes, str]:
+    return relay_multipart_form({}, "file", file_path)
+
+
+def upload_to_sw_relay(file_path: Path, cfg: dict[str, Any], path: Path, timeout: int = 120) -> str:
+    if not cfg["upload_url"]:
+        raise SeedanceError(f"SW URL relay upload_url is missing in {path}")
+    if not cfg["token"]:
+        raise SeedanceError(f"SW URL relay token is missing in {path}")
+    body, content_type = relay_multipart_body(file_path)
+    req = urllib.request.Request(
+        cfg["upload_url"],
+        data=body,
+        headers={
+            "Content-Type": content_type,
+            "Content-Length": str(len(body)),
+            "X-Upload-Token": cfg["token"],
+            "Accept": "application/json",
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout, context=ssl_context()) as resp:
+            raw = resp.read()
+    except urllib.error.HTTPError as exc:
+        detail = exc.read().decode("utf-8", errors="replace")[:300]
+        err_cls = RelayUnavailableError if is_server_unavailable_status(exc.code) else SeedanceError
+        raise err_cls(f"SW URL relay upload failed: HTTP {exc.code}: {detail}") from exc
+    except urllib.error.URLError as exc:
+        raise RelayUnavailableError(f"SW URL relay upload failed: {exc.reason}") from exc
+    except (TimeoutError, OSError) as exc:
+        raise RelayUnavailableError(f"SW URL relay upload failed: {exc}") from exc
+    data = json.loads(raw.decode("utf-8"))
+    url = data.get("url")
+    if not data.get("ok") or not isinstance(url, str) or not is_http_url(url):
+        raise RelayUnavailableError(f"SW URL relay returned invalid upload response: {json.dumps(data, ensure_ascii=False)[:300]}")
+    return url
+
+
+def upload_to_litterbox(file_path: Path, litterbox_time: str, timeout: int = 120) -> str:
+    expiry = normalize_litterbox_time(litterbox_time)
+    body, content_type = relay_multipart_form({"reqtype": "fileupload", "time": expiry}, "fileToUpload", file_path)
+    req = urllib.request.Request(
+        LITTERBOX_API_URL,
+        data=body,
+        headers={"Content-Type": content_type, "Content-Length": str(len(body))},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout, context=ssl_context()) as resp:
+            raw = resp.read().decode("utf-8", errors="replace").strip()
+    except urllib.error.HTTPError as exc:
+        detail = exc.read().decode("utf-8", errors="replace")[:300]
+        raise SeedanceError(f"Litterbox fallback upload failed: HTTP {exc.code}: {detail}") from exc
+    except urllib.error.URLError as exc:
+        raise SeedanceError(f"Litterbox fallback upload failed: {exc.reason}") from exc
+    except (TimeoutError, OSError) as exc:
+        raise SeedanceError(f"Litterbox fallback upload failed: {exc}") from exc
+    if not is_http_url(raw):
+        raise SeedanceError(f"Litterbox fallback returned invalid response: {raw[:300]}")
+    return raw
+
+
+def upload_to_catbox(file_path: Path, timeout: int = 120) -> str:
+    body, content_type = relay_multipart_form({"reqtype": "fileupload"}, "fileToUpload", file_path)
+    req = urllib.request.Request(
+        CATBOX_API_URL,
+        data=body,
+        headers={"Content-Type": content_type, "Content-Length": str(len(body))},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout, context=ssl_context()) as resp:
+            raw = resp.read().decode("utf-8", errors="replace").strip()
+    except urllib.error.HTTPError as exc:
+        detail = exc.read().decode("utf-8", errors="replace")[:300]
+        raise SeedanceError(f"Catbox fallback upload failed: HTTP {exc.code}: {detail}") from exc
+    except urllib.error.URLError as exc:
+        raise SeedanceError(f"Catbox fallback upload failed: {exc.reason}") from exc
+    except (TimeoutError, OSError) as exc:
+        raise SeedanceError(f"Catbox fallback upload failed: {exc}") from exc
+    if not is_http_url(raw):
+        raise SeedanceError(f"Catbox fallback returned invalid response: {raw[:300]}")
+    return raw
+
+
+def upload_to_temporary_relay(file_path: Path, fallback: str, litterbox_time: str, timeout: int = 120) -> tuple[str, str]:
+    relay = "litterbox" if fallback == "auto" else fallback
+    if relay == "litterbox":
+        return upload_to_litterbox(file_path, litterbox_time, timeout), "litterbox"
+    if relay == "catbox":
+        return upload_to_catbox(file_path, timeout), "catbox"
+    raise SeedanceError("temporary relay fallback is not enabled")
+
+
+def upload_file_to_relay(
+    file_path: Path,
+    relay_config_arg: str | None = None,
+    timeout: int = 120,
+    temporary_fallback: str | None = None,
+    litterbox_time: str | None = None,
+) -> str:
+    cfg, path = relay_config(relay_config_arg)
+    validate_relay_file(file_path, int(cfg["max_bytes"]))
+    fallback = normalize_temporary_fallback(temporary_fallback or cfg["temporary_fallback"])
+    expiry = normalize_litterbox_time(litterbox_time or cfg["litterbox_time"])
+    try:
+        return upload_to_sw_relay(file_path, cfg, path, timeout)
+    except RelayUnavailableError as exc:
+        primary_error = str(exc)
+        if fallback == "none":
+            raise SeedanceError(
+                "SW URL relay unavailable; temporary relay fallback is not enabled. "
+                f"Primary error: {primary_error}"
+            ) from exc
+        url, relay = upload_to_temporary_relay(file_path, fallback, expiry, timeout)
+        print(
+            f"WARNING: SW URL relay unavailable; used confirmed temporary relay fallback ({relay}). "
+            f"Primary error: {primary_error}",
+            file=sys.stderr,
+            flush=True,
+        )
+        return url
 
 
 def write_key_file(path: Path, api_key: str, force: bool = False) -> None:
@@ -396,7 +663,7 @@ def read_prompt(args: argparse.Namespace) -> tuple[str, str]:
     raise SeedanceError("Provide --prompt or --prompt-file")
 
 
-def validate_image_urls(urls: list[str]) -> list[str]:
+def validate_image_urls(urls: list[str], allow_temporary_relay: bool = False) -> list[str]:
     clean = [url.strip() for url in urls if url and url.strip()]
     if not clean:
         raise SeedanceError("Provide at least one --image-url")
@@ -405,7 +672,34 @@ def validate_image_urls(urls: list[str]) -> list[str]:
     for url in clean:
         if not is_http_url(url):
             raise SeedanceError(f"Seedance direct Ark input must be a public http(s) URL, got: {url}")
+        if is_temporary_relay_url(url) and not allow_temporary_relay:
+            raise SeedanceError(
+                "Temporary Catbox/Litterbox relay URLs are not allowed by default. "
+                "Use --image-file so SW URL Relay uploads to the configured SW media uploader, "
+                "or pass --allow-temporary-relay-url / --temporary-relay-fallback only after user confirmation."
+            )
     return clean
+
+
+def resolve_image_inputs(args: argparse.Namespace) -> list[str]:
+    image_urls = list(args.image_url or [])
+    temporary_fallback = effective_temporary_fallback(args)
+    for image_file in getattr(args, "image_file", []) or []:
+        file_path = Path(image_file).expanduser().resolve()
+        uploaded_url = upload_file_to_relay(
+            file_path,
+            getattr(args, "relay_config", None),
+            temporary_fallback=temporary_fallback,
+            litterbox_time=getattr(args, "litterbox_time", None),
+        )
+        image_urls.append(uploaded_url)
+    return validate_image_urls(
+        image_urls,
+        allow_temporary_relay=(
+            bool(getattr(args, "allow_temporary_relay_url", False))
+            or temporary_fallback != "none"
+        ),
+    )
 
 
 def validate_generation_args(args: argparse.Namespace) -> None:
@@ -692,10 +986,55 @@ def command_doctor(args: argparse.Namespace) -> int:
             problems.append(f"output directory parent is not writable: {parent}")
 
     for url in args.image_url or []:
+        temporary_fallback = effective_temporary_fallback(args)
+        if (
+            is_temporary_relay_url(url)
+            and not getattr(args, "allow_temporary_relay_url", False)
+            and temporary_fallback == "none"
+        ):
+            problems.append("temporary Catbox/Litterbox image URL is not allowed by default; use SW URL Relay or pass --allow-temporary-relay-url / --temporary-relay-fallback after confirmation")
         ok, detail = head_or_range_check(url)
         report["checks"].append({"name": "image_url", "url": url, "ok": ok, "detail": detail})
         if not ok:
             problems.append(f"image URL is not reachable: {url} ({detail})")
+
+    if args.image_file:
+        cfg, cfg_path = relay_config(args.relay_config)
+        relay_ok = bool(cfg.get("upload_url")) and bool(cfg.get("token"))
+        report["checks"].append(
+            {
+                "name": "url_relay",
+                "config_file": str(cfg_path),
+                "ok": relay_ok,
+                "upload_url": cfg.get("upload_url") or None,
+                "token": redacted_key_state(cfg.get("token")),
+                "temporary_fallback": normalize_temporary_fallback(
+                    getattr(args, "temporary_relay_fallback", None) or cfg.get("temporary_fallback")
+                ),
+                "litterbox_time": normalize_litterbox_time(
+                    getattr(args, "litterbox_time", None) or cfg.get("litterbox_time")
+                ),
+            }
+        )
+        if not relay_ok and normalize_temporary_fallback(
+            getattr(args, "temporary_relay_fallback", None) or cfg.get("temporary_fallback")
+        ) == "none":
+            problems.append(f"URL relay config is incomplete: {cfg_path}")
+        for image_file in args.image_file:
+            file_path = Path(image_file).expanduser()
+            try:
+                validate_relay_file(file_path, int(cfg.get("max_bytes") or DEFAULT_RELAY_MAX_BYTES))
+                report["checks"].append(
+                    {
+                        "name": "image_file",
+                        "path": str(file_path),
+                        "ok": True,
+                        "bytes": file_path.stat().st_size,
+                    }
+                )
+            except SeedanceError as exc:
+                report["checks"].append({"name": "image_file", "path": str(file_path), "ok": False, "detail": str(exc)})
+                problems.append(str(exc))
 
     report["ok"] = not problems
     report["problems"] = problems
@@ -731,7 +1070,7 @@ def command_setup_key(args: argparse.Namespace) -> int:
 def command_dry_run(args: argparse.Namespace) -> int:
     args = apply_run_dir_defaults(args)
     prompt, prompt_source = read_prompt(args)
-    image_urls = validate_image_urls(args.image_url or [])
+    image_urls = resolve_image_inputs(args)
     payload = build_payload(prompt, image_urls, args)
     base_url = base_url_from_args(args.api_base_url)
     dry = {
@@ -752,7 +1091,7 @@ def command_dry_run(args: argparse.Namespace) -> int:
 def command_run(args: argparse.Namespace) -> int:
     args = apply_run_dir_defaults(args)
     prompt, prompt_source = read_prompt(args)
-    image_urls = validate_image_urls(args.image_url or [])
+    image_urls = resolve_image_inputs(args)
     payload = build_payload(prompt, image_urls, args)
     base_url = base_url_from_args(args.api_base_url)
     api_key, key_source = api_key_from_env_or_file(args.key_file)
@@ -800,6 +1139,16 @@ def add_prompt_image_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--prompt", default=None, help="Prompt text. Prefer --prompt-file for long prompts.")
     parser.add_argument("--prompt-file", default=None, help="UTF-8 prompt file.")
     parser.add_argument("--image-url", action="append", default=[], help="Public http(s) image URL. Repeat up to 9 times.")
+    parser.add_argument("--image-file", action="append", default=[], help="Local image/video file to upload through SW URL Relay before sending to Ark. Repeat up to 9 total inputs.")
+    parser.add_argument("--relay-config", default=None, help=f"SW URL Relay config file. Defaults to SW_RELAY_CONFIG or {DEFAULT_RELAY_CONFIG_FILE}.")
+    parser.add_argument("--allow-temporary-relay-url", action="store_true", help="Allow Catbox/Litterbox-style temporary relay URLs. Use only after explicit user confirmation.")
+    parser.add_argument(
+        "--temporary-relay-fallback",
+        choices=sorted(TEMPORARY_RELAY_FALLBACKS),
+        default=None,
+        help="Use only after SW URL Relay upload fails. 'auto' currently chooses Litterbox.",
+    )
+    parser.add_argument("--litterbox-time", choices=sorted(VALID_LITTERBOX_TIMES), default=None)
     parser.add_argument("--run-dir", default=None, help="IP Video Factory story dir. Reads video_prompt.txt and luna_public_url.")
 
 
@@ -825,6 +1174,16 @@ def build_parser() -> argparse.ArgumentParser:
     doctor.add_argument("--api-base-url", default=None)
     doctor.add_argument("--key-file", default=None, help=f"Local private key file. Defaults to {DEFAULT_SECRET_FILE}.")
     doctor.add_argument("--image-url", action="append", default=[])
+    doctor.add_argument("--image-file", action="append", default=[], help="Local image/video file to validate for SW URL Relay upload.")
+    doctor.add_argument("--relay-config", default=None, help=f"SW URL Relay config file. Defaults to {DEFAULT_RELAY_CONFIG_FILE}.")
+    doctor.add_argument("--allow-temporary-relay-url", action="store_true", help="Allow Catbox/Litterbox-style temporary relay URLs after explicit confirmation.")
+    doctor.add_argument(
+        "--temporary-relay-fallback",
+        choices=sorted(TEMPORARY_RELAY_FALLBACKS),
+        default=None,
+        help="Use only after SW URL Relay upload fails. 'auto' currently chooses Litterbox.",
+    )
+    doctor.add_argument("--litterbox-time", choices=sorted(VALID_LITTERBOX_TIMES), default=None)
     doctor.add_argument("--output-dir", default=None)
     doctor.set_defaults(func=command_doctor)
 

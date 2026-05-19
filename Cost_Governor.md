@@ -20,6 +20,7 @@ The cost gate decides:
 | Lane | Trigger | Role Reads | Output Size | Questions | Allowed Work |
 | --- | --- | --- | --- | --- | --- |
 | Sync | `@sw_update`, `SW_UPDATE`, `/sw_update`, `SW_REFRESH` | `sw-update` only | one line | 0 | version sync only |
+| Rescue | `/sw-rescue`, `@sw_rescue`, `SW_RESCUE`, `SW_REPAIR`, `SW_FORCE_UPDATE` | `sw-rescue` only | one line | 0 | stale-chip rescue only |
 | Activation | `/SW_V1.0`, `@SW_V1.0` with no request | `sw-v1-0` only | one line | 0 | load only |
 | Intake | new or unclear request | orchestrator + brief | short | 3 default, 5 max | brief, assumptions, next role |
 | Direction | brief is usable | primary + support | medium | 3 default | up to 3 directions, recommendation |
@@ -28,7 +29,7 @@ The cost gate decides:
 | Review/change | final review or feedback | primary first | short | 0-3, 5 if blocked | risks, S/M/L/XL, scoped fix |
 | Finishing | export/package handoff | finishing + review if needed | short | 0-3 | file/package checklist |
 | Memory | major durable confirmation or explicit "remember/save" request | project memory file only | one line or 1-3 bullets | 0 | suggest or append concise local memory |
-| Feature help | `@sw_help`, `/sw_help`, feature trigger questions | embedded `sw-help` answer first; `Feature_Trigger_Index.md` only for details/debug | short | 0 | feature list only |
+| Feature help | `@sw_help`, `/sw_help`, `/sw-help`, feature trigger questions | embedded `sw-help` answer first; `Feature_Trigger_Index.md` only for details/debug | short | 0 | feature list only |
 | Historical reminder | clear historical accuracy risk but not confirmed | `Feature_Trigger_Index.md` only | one line added to current route | 0-1 | ask whether to enable, do not load historical role |
 | Maintenance-lite | maintain, optimize, quick check, sync confidence | version strings, selected skill validation, plugin JSON, secret scan | short | 0 | find obvious breakage only |
 | Maintenance-full | publish/upload, deep regression, release audit, unexplained failure | regression suite plus affected files | medium | 0-2 | broad validation after lite path |
@@ -53,6 +54,8 @@ The cost gate decides:
 - Explicit 即梦2.0生成 / 即梦生成 / Seedance 2.0 / Ark Seedance video-generation requests can add `seedance-2-video` after `prompt-director`; use `tool-integrator` only when capability, parameters, API, key state, or connection state is unclear. Do not load it for generic video prompts or storyboard work.
 - Seedance is a post-prompt execution step, not a shortcut around Studio roles. If the request also asks for script, storyboard, camera, edit, motion, sound, color, scene design, or film treatment, the responsible Studio role must produce the upstream handoff before `prompt-director` and `seedance-2-video`.
 - `seedance-2-video` is a tool skill, not a Studio role. It does not count as an extra Studio support role, but real video generation still uses the high-cost gate when quota, public image URLs, long polling, or final-use assets are involved.
+- `url-relay` is a tool skill, not a Studio role. It may be loaded before `seedance-2-video` when local media needs a public URL. Relay upload is not model-token cost, but it can expose files publicly and use server bandwidth, so apply the upload/privacy guardrail before private or client assets.
+- If URL Relay fails or the SW uploader is unavailable, do not submit high-cost video generation until the media URL is resolved. First report that the SW uploader is unavailable; then use an already-public user URL or a confirmed/configured Litterbox/Catbox fallback only for unreachable/server-side relay failures. Missing token/address or permission errors must stop for config repair. Without a valid path, keep the prompt/payload.
 - Presentation/deck structure requests go to `presentation-designer` first; full long decks or batch slide rewrites require the high-cost gate.
 - Proposal decks can load `presentation-designer` references only when the request mentions client-facing, government, local tourism, city image film, video production proposal, visual QA, or similar specialized needs.
 

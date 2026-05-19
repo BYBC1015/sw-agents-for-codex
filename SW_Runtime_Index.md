@@ -7,23 +7,45 @@ This is the compact runtime index for SW_V1.0. Read it before deeper project fil
 Activation reply:
 
 ```text
-SW loaded successfully. Current version: V1.6.0
+SW loaded successfully. Current version: V1.7.6
 ```
 
 Sync reply:
 
 ```text
-SW version synchronized. Current version: V1.6.0
+SW version synchronized. Current version: V1.7.6
 ```
 
-If the user only invokes SW or only invokes sync, reply with the matching fixed line and stop.
+Rescue reply:
+
+```text
+SW rescue synchronized. Current version: V1.7.6
+```
+
+If the user only invokes SW, sync, or rescue, reply with the matching fixed line and stop.
+
+## Stale Snapshot Guard
+
+- `VERSION.md` and the current loaded `SKILL.md` are the source of truth for the runtime version.
+- If compacted history, old screenshots, previous tool output, or old conversation text contains a lower SW version, treat it as historical context only.
+- Never answer activation or sync with any older cached value when this index is present.
+- This guard does not add file reads to normal startup or sync; it only resolves conflicts already visible in the current context.
+
+## Old Conversation Self-Heal
+
+- Old conversations are expected to upgrade in place when they can read the current project files.
+- If activation or sync conflicts with older history, first read current `VERSION.md`, this index, and the current user/plugin `sw-v1-0` or `sw-update` skill, then answer with the current fixed reply.
+- Do not recommend a new conversation as the first response to a version mismatch.
+- If the desktop app keeps replaying a sealed old startup/update chip snapshot, use the standalone `sw-rescue` entry (`/sw-rescue`, `@sw_rescue`, `SW_RESCUE`) before recommending a new conversation.
+- Recommend a new conversation only when the desktop app refuses both same-thread text refresh and the standalone rescue entry.
 
 ## Hot Start Rules
 
-- `@sw_help`, `/sw_help`, `SW_HELP`, and the SW Help UI button use the embedded short help answer first. Do not use shell/file reads for normal help. Do not read `Feature_Trigger_Index.md` unless the user asks for detailed triggers, one feature's full rules, troubleshooting, or a feature audit.
+- `@sw_help`, `/sw_help`, `/sw-help`, `SW_HELP`, and the SW Help UI button use the embedded short help answer first. Do not use shell/file reads for normal help. Do not read `Feature_Trigger_Index.md` unless the user asks for detailed triggers, one feature's full rules, troubleshooting, or a feature audit.
 - Activation-only turns use the fixed activation reply only. Do not read `AGENTS.md`, role maps, project memory, or skill files until the user provides a project request.
 - Sync-only turns use the fixed sync reply only. Read version/log/recovery files only when the user asks for details, mismatch debugging, old-conversation recovery, or cross-folder entry repair.
 - Startup and sync are separate routes: `sw-v1-0` owns activation/project start; `sw-update` owns `@sw_update`, `SW_UPDATE`, `/sw_update`, and `SW_REFRESH`. Do not route sync through the startup loader.
+- Rescue-only turns use the fixed rescue reply only. `sw-rescue` owns `@sw_rescue`, `/sw-rescue`, `/sw_rescue`, `SW_RESCUE`, `SW_REPAIR`, and `SW_FORCE_UPDATE`; do not route rescue through startup or sync.
 - Maintenance starts with lite checks: version consistency, skill validation, plugin JSON, and secret scan. Run full regression only for publish/upload/deep-debug or when lite checks fail.
 
 ## Minimal Load Order
@@ -91,6 +113,7 @@ Do not show role trace for activation-only or sync-only replies.
 
 - Activation: one fixed line only.
 - Sync: one fixed line only.
+- Rescue: one fixed line only.
 - Intake: brief, assumptions, 3 questions, recommendation.
 - Direction: up to 3 directions, recommendation, key risks.
 - Production: one role deliverable with questions and next role.
@@ -98,7 +121,7 @@ Do not show role trace for activation-only or sync-only replies.
 - Review/change: concise risk list or S/M/L/XL decision before rewriting.
 - Finishing: export/package checklist; do not reopen creative unless blocked.
 - Memory suggestion: one short optional line; do not write files unless the user explicitly asks to remember/save it.
-- Feature help: `@sw_help` or `/sw_help`; use embedded short help first, do not run shell/file reads, read `Feature_Trigger_Index.md` only for detailed triggers or troubleshooting, and do not start a project.
+- Feature help: `@sw_help` or `/sw_help` or `/sw-help`; use embedded short help first, do not run shell/file reads, read `Feature_Trigger_Index.md` only for detailed triggers or troubleshooting, and do not start a project.
 
 Before high-cost output, use:
 
@@ -125,6 +148,10 @@ Cost gate: high-cost output needs confirmation. I will generate one confirmed ve
   - If the same request includes script, storyboard, camera language, edit rhythm, motion, sound, color, scene design, or film treatment work, first run the responsible Studio role, then `prompt-director`, then `seedance-2-video` only for the selected clip/shot.
   - Add `tool-integrator` only when capability, parameters, API, key state, or connection state is unclear.
   Treat `seedance-2-video` as a video-generation execution member after prompt preparation. It includes `scripts/seedance_task.py`; real generation needs confirmation and `ARK_API_KEY` or the local private key file. If the key is missing, run dry-run/payload only and do not claim a video was generated.
+- Explicit URL中转 / 公网URL / 上传参考图 / 上传参考视频 / `@url-relay`, or a Seedance request with local image/video files:
+  - Use `url-relay` to turn local media into public `http(s)` URLs before the downstream generator.
+  - For Seedance local files, route `prompt-director` -> `url-relay` -> `seedance-2-video`.
+  - If the configured SW uploader is unreachable or returns a server-side failure, report `SW media uploader unavailable`; then use Litterbox/Catbox only when the user confirms fallback or local private config enables it. Missing token/address or permission errors do not trigger fallback. Otherwise keep the prompt/payload and ask for a public URL.
 - Revision: `change-manager` first, then affected role.
 - Historical accuracy: do not auto-load. Clear risk only adds one reminder line unless the user confirms. Plain enable applies to the current request/visual chain; `本项目开启历史检查` or `全程开启历史检查` applies to the current conversation/project until closed; `关闭历史检查`, `不用历史检查`, or `恢复普通模式` turns it off. If enabled and image/video generation happens, check final visible stills/frames after output when available, not only the prompt.
 
@@ -132,11 +159,13 @@ Default role read budget: one primary plus up to one support role. Use up to thr
 
 ## Tool Skill Loading
 
-Tool skills are not Studio roles. Do not look for `Studio_Skills/banana-pro/SKILL.md` or `Studio_Skills/seedance-2-video/SKILL.md`.
+Tool skills are not Studio roles. Do not look for `Studio_Skills/banana-pro/SKILL.md`, `Studio_Skills/seedance-2-video/SKILL.md`, or `Studio_Skills/url-relay/SKILL.md`.
 
 When the user explicitly asks for 香蕉 / banana / Banana Pro / Nano Banana / `@banana-pro`, first decide whether upstream Studio work is still needed. Load Banana Pro only after the current upstream deliverable and prompt are ready.
 
 When the user explicitly asks for 即梦2.0生成 / 即梦生成 / Seedance 2.0 / Ark Seedance / `@seedance-2-video`, first decide whether upstream Studio work is still needed. Load Seedance only after the selected clip/shot handoff and final video prompt are ready.
+
+When the user explicitly asks for URL中转 / 公网URL / 上传参考图 / 上传参考视频 / `@url-relay`, or a Seedance request contains local media files, load URL Relay only for the media handoff. Do not let URL Relay bypass the upstream Studio role or `prompt-director`.
 
 Default upstream chains:
 
@@ -145,7 +174,9 @@ Default upstream chains:
 - PPT/deck/slide visual request: `presentation-designer` or `layout-designer` -> `prompt-director` -> `banana-pro`
 - direct final prompt request: `prompt-director` -> `banana-pro`
 - Seedance video clip request: `storyboard-director`, `cinematographer`, or `edit-director` if needed -> `prompt-director` -> `seedance-2-video`
+- Seedance video clip request with local reference files: `storyboard-director`, `cinematographer`, or `edit-director` if needed -> `prompt-director` -> `url-relay` -> `seedance-2-video`
 - direct final Seedance prompt request: `prompt-director` -> `seedance-2-video`
+- direct final Seedance prompt request with local reference files: `prompt-director` -> `url-relay` -> `seedance-2-video`
 
 For Banana execution, load:
 
@@ -163,6 +194,13 @@ For Seedance execution, load:
    - `C:\Users\Administrator\.codex\skills\seedance-2-video\SKILL.md`
    - `C:\Users\Administrator\plugins\sw-v1-0\skills\seedance-2-video\SKILL.md`
 
+For URL Relay execution, load:
+
+1. the first available URL Relay tool skill path:
+   - `url-relay/SKILL.md`
+   - `C:\Users\Administrator\.codex\skills\url-relay\SKILL.md`
+   - `C:\Users\Administrator\plugins\sw-v1-0\skills\url-relay\SKILL.md`
+
 Use this visible trace:
 
 ```text
@@ -177,6 +215,14 @@ Studio roles: Prompt Director / `prompt-director` (loaded). Cost lane: high-cost
 Tool skill: Seedance 2.0 Video / `seedance-2-video` (loaded by explicit user request).
 ```
 
+Seedance with local media trace:
+
+```text
+Studio roles: Prompt Director / `prompt-director` (loaded). Cost lane: high-cost.
+Tool skill: URL Relay / `url-relay` (loaded for local media public URL handoff).
+Tool skill: Seedance 2.0 Video / `seedance-2-video` (loaded by explicit user request).
+```
+
 Execution rule:
 
 - If `OPENROUTER_API_KEY` is set and generation is confirmed, run the Banana Pro script from the loaded skill folder.
@@ -186,6 +232,8 @@ Execution rule:
 - If `OPENROUTER_API_KEY` is missing, run `--dry-run` or return the payload path/status; do not search for another imaginary executor.
 - If `ARK_API_KEY` or the Seedance local private key file is available and video generation is confirmed, run the Seedance script from the loaded skill folder.
 - Treat explicit "use 即梦2.0 to generate one draft clip" as confirmation for one draft clip only; still pause for private uploads, final-use brand/face/product assets, 1080p, long polling, or batch generation.
+- If Seedance input is local media, use URL Relay first and pass the returned public URL with `--image-url`, or use Seedance runner `--image-file` after the privacy/upload guardrail is satisfied.
+- If URL Relay fails, do not submit real Seedance generation. First try the SW media uploader; if it is unreachable/server-failing and confirmed/configured fallback exists, use the temporary relay and say so. Otherwise keep the prompt/payload and ask for a public URL.
 - If the Seedance key is missing, run `dry-run` or return the sanitized payload; do not search for another imaginary video executor.
 
 ## Prompt Quality Rules

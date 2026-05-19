@@ -1,9 +1,10 @@
 # SW Version
 
-Current runtime version: V1.6.0
+Current runtime version: V1.7.5
 Stable invocation name: SW_V1.0
-Stable invocation aliases: `/SW_V1.0`, `@SW_V1.0`, `/sw_v1.0`, `/sw-v1-0`
-Version sync aliases: `@sw_update`, `SW_UPDATE`, `/sw_update`, `SW_REFRESH`
+Stable invocation aliases: `/sw`, `/SW_V1.0`, `@SW_V1.0`, `/sw_v1.0`, `/sw-v1-0`
+Version sync aliases: `@sw_update`, `SW_UPDATE`, `/sw_update`, `/sw-update`, `SW_REFRESH`
+Rescue aliases: `@sw_rescue`, `/sw-rescue`, `/sw_rescue`, `SW_RESCUE`, `SW_REPAIR`, `SW_FORCE_UPDATE`
 
 ## Version Rule
 
@@ -17,6 +18,8 @@ This includes changes to:
 - `Project_Memory_Templates/*`
 - `Feature_Trigger_Index.md`
 - `sw_help.md`
+- `sw_rescue.md`
+- `sw-rescue` entries when stale-chat rescue behavior changes
 - `Agent_Skill_Tech_Principles.md`
 - `Command_Aliases.md`
 - `README.md`
@@ -37,6 +40,7 @@ This includes changes to:
 - `Studio_Skills/*/SKILL.md`
 - user-level skill: `C:\Users\Administrator\.codex\skills\sw-v1-0\SKILL.md`
 - user-level sync skill: `C:\Users\Administrator\.codex\skills\sw-update\SKILL.md`
+- user-level rescue skill: `C:\Users\Administrator\.codex\skills\sw-rescue\SKILL.md`
 - user-level plugin: `C:\Users\Administrator\plugins\sw-v1-0`
 
 ## Bump Policy
@@ -55,6 +59,7 @@ When the version changes, update:
 - `Architecture_Update_Log.md` detailed update entry
 - `Legacy_Conversation_Recovery.md` when historical conversation compatibility changes
 - `sw_update.md` when version sync behavior changes
+- `sw-rescue` user/plugin skill and command when stale-chip rescue behavior changes
 - `Project_Minimal_Entry_Pack.md` when cross-project entry behavior changes
 - `Studio_Skill_Dispatch_Protocol.md` when studio skill dispatch behavior changes
 - `Studio_Role_Label_Protocol.md` when role label, trace, or title behavior changes
@@ -80,6 +85,13 @@ Each entry must include:
 
 | Version | Date | Change |
 | --- | --- | --- |
+| V1.7.6 | 2026-05-19 | Changed URL Relay from a hard self-host-only stop to a priority fallback chain: try the configured SW media uploader first, report when it is unreachable or server-failing, then use Litterbox/Catbox only when the user confirms fallback or local private config enables it; config/auth errors do not fallback. Added relay fallback CLI options to URL Relay and Seedance local-file upload while keeping paid generation blocked until a public URL exists. |
+| V1.7.5 | 2026-05-19 | Locked URL Relay to the configured SW media uploader by default. Seedance now rejects Catbox/Litterbox-style temporary relay URLs unless the user explicitly confirms that fallback, and SW rules now stop before paid generation when the self-owned relay is unavailable. |
+| V1.7.4 | 2026-05-19 | Added a standalone `sw-rescue` entry (`/sw-rescue`, `@sw_rescue`, `SW_RESCUE`) for stale or sealed SW chips. It reports the current runtime from a separate skill id, bypasses old startup/update snapshots, does not start projects, keeps normal startup/sync hot paths unchanged, and replaces a Seedance key-assignment example with a non-secret local-config reminder. |
+| V1.7.3 | 2026-05-19 | Changed legacy-conversation recovery from "new conversation is reliable" to same-thread self-heal first: old conversations must read current `VERSION.md`, `SW_Runtime_Index.md`, and current loader/sync skills, override stale fixed replies in place, and recommend a new conversation only if the desktop app refuses current files. |
+| V1.7.2 | 2026-05-19 | Added stale snapshot guards for old conversations and UI skill chips so current `VERSION.md` / `SKILL.md` values override cached `V1.6.0` / `V1.5.3` replies without adding normal startup or sync cost. |
+| V1.7.1 | 2026-05-19 | Restored plugin slash-command discoverability by adding local `/sw`, `/sw-v1-0`, `/sw-update`, and `/sw-help` command files, expanding plugin default prompts, and rewriting the local plugin manifest as UTF-8 without BOM so the desktop loader can parse it reliably. |
+| V1.7.0 | 2026-05-19 | Added `url-relay` as a public URL handoff tool for local media, integrated Seedance with `--image-file` relay uploads, documented fallback-to-temporary-relay behavior, and updated routing so local files go `prompt-director` -> `url-relay` -> downstream generator instead of blocking on missing public URLs. Relay and Seedance runners now also accept UTF-8-BOM JSON configs for Windows compatibility. |
 | V1.6.0 | 2026-05-18 | Added `seedance-2-video` as an explicit-call Seedance 2.0 / 即梦2.0 video-generation tool skill with Ark dry-run/run/poll scripts, public-image-URL checks, no-key dry-run fallback, tool trace rules, and no-bypass routing after upstream Studio roles and `prompt-director`. |
 | V1.5.4 | 2026-05-18 | Split startup and sync routing to reduce trigger competition: `sw-v1-0` no longer advertises `@sw_update` aliases, `sw-update` owns sync-only behavior and UI prompts, user/plugin loader skills use hot-path source guidance instead of long architecture-file lists, and garbled memory/historical help snippets in loader skills were repaired. |
 | V1.5.3 | 2026-05-18 | Fixed SW Help button latency: `agents/openai.yaml` now uses a direct embedded reply instead of a recursive `@sw_help` prompt, and hot-start rules explicitly forbid shell/file reads for normal help wake-up. |
@@ -106,7 +118,7 @@ Each entry must include:
 | V1.0.7 | 2026-05-11 | Added runtime cost governor, English role trace, high-cost gate, and self-check rules for smoother low-consumption use. |
 | V1.0.6 | 2026-05-11 | Added mandatory scoped Studio sub-skill dispatch protocol with visible role trace; clarified minimum project-folder entry pack behavior. |
 | V1.0.5 | 2026-05-11 | Added `@sw_update` version synchronization entry, separate user-level `sw-update` skill, and minimum project-folder entry pack; kept project invocation unchanged. |
-| V1.0.4 | 2026-05-11 | Added legacy conversation recovery guidance and `SW_REFRESH`; clarified that new conversations are the reliable path after updates. |
+| V1.0.4 | 2026-05-11 | Added legacy conversation recovery guidance and `SW_REFRESH`; this early strategy favored new conversations, then V1.7.3 changed recovery to same-thread self-heal first. |
 | V1.0.3 | 2026-05-11 | Changed the required invocation success reply from Chinese to ASCII English to prevent mojibake; no invocation change. |
 | V1.0.2 | 2026-05-11 | Added detailed update content recording rule and `Architecture_Update_Log.md`; no invocation change. |
 | V1.0.1 | 2026-05-11 | Added automatic version bump rule; clarified stable invocation name stays `SW_V1.0` while runtime version can increment. |

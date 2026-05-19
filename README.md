@@ -8,8 +8,8 @@
 
 ## 当前版本
 
-- 当前运行版本：`V1.6.0`
-- 稳定调用入口：`/SW_V1.0` 或 `@SW_V1.0`
+- 当前运行版本：`V1.7.6`
+- 稳定调用入口：`/sw`、`/SW_V1.0` 或 `@SW_V1.0`
 - 版本同步入口：`@sw_update`
 - 完整更新记录：[`VERSION.md`](VERSION.md) / [`Architecture_Update_Log.md`](Architecture_Update_Log.md)
 
@@ -19,6 +19,13 @@
 
 | 版本 | 日期 | 更新内容 |
 | --- | --- | --- |
+| V1.7.6 | 2026-05-19 | URL Relay now uses a clear priority chain: SW media uploader first; if unreachable/server-failing, report the failure and use Litterbox/Catbox only when fallback is confirmed or enabled in private local config. Config/auth errors do not fallback. Added fallback flags to URL Relay and Seedance local-file uploads. |
+| V1.7.5 | 2026-05-19 | Locked URL Relay to the configured SW media uploader by default. Seedance now rejects Catbox/Litterbox temporary relay URLs unless the user explicitly confirms that fallback, and SW stops before paid generation when the self-owned relay is unavailable. |
+| V1.7.4 | 2026-05-19 | Added independent `sw-rescue` rescue entry: when old `SW_V1.0` or `SW Update` chips keep replaying stale versions, use `/sw-rescue`, `@sw_rescue`, or `SW_RESCUE` in the same conversation. It does not start projects, does not add cost to normal startup/sync, and includes a Seedance key-example cleanup to avoid false-positive secret scans. |
+| V1.7.3 | 2026-05-19 | 将旧对话恢复策略改为“原地自愈优先”：旧对话遇到旧版本回复时，先在同一线程读取当前 `VERSION.md`、`SW_Runtime_Index.md` 和当前 loader/sync skill 覆盖旧快照；只有桌面端拒绝加载当前文件时才建议新建对话。 |
+| V1.7.2 | 2026-05-19 | 新增旧快照防呆：当历史对话、压缩上下文或 UI skill 芯片混入 `V1.6.0` / `V1.5.3` 等旧回复时，强制以当前 `VERSION.md` / `SKILL.md` 为准；正常启动、同步仍保持一行热路径，不增加消耗。 |
+| V1.7.1 | 2026-05-19 | 修复本地插件斜杠命令不可见问题：新增 `/sw`、`/sw-v1-0`、`/sw-update`、`/sw-help` 命令文件，补充插件默认入口，并将本地插件清单重写为无 BOM 的 UTF-8，便于桌面端稳定识别。 |
+| V1.7.0 | 2026-05-19 | 新增 `url-relay` 公网 URL 中转工具层；本地图片/视频可先上传到 SW media uploader，再交给 Seedance/即梦2.0、Ark 或未来图生视频工具使用；服务器不可用时保留 prompt/payload，可切到安全临时中转或用户提供的公网 URL；脚本兼容 Windows UTF-8-BOM 配置文件。 |
 | V1.6.0 | 2026-05-18 | 新增 `seedance-2-video` 即梦2.0/Seedance 2.0 视频生成工具成员；支持 Ark dry-run/run/poll、无 key 模拟验证、显式触发、不可越级和高消耗确认。 |
 | V1.5.4 | 2026-05-18 | 拆分启动与同步路由，减少 skill 竞争触发；`sw-v1-0` 不再声明 `@sw_update`，`sw-update` 独立负责同步；loader skill 改为热路径来源说明并修复乱码片段。 |
 | V1.5.3 | 2026-05-18 | 修复 SW Help 按钮响应慢：按钮默认提示不再递归调用 `@sw_help`，而是直接携带短答，并禁止普通帮助唤醒时读文件或跑命令。 |
@@ -45,7 +52,7 @@
 | V1.0.7 | 2026-05-11 | 增加 runtime cost governor、英文 role trace、高消耗确认门和自检规则，让低消耗使用更稳定。 |
 | V1.0.6 | 2026-05-11 | 增加强制 Studio 子 skill 派单协议，要求真实项目读取对应岗位 skill，并显示轻量岗位痕迹。 |
 | V1.0.5 | 2026-05-11 | 增加 `@sw_update` 版本同步入口、独立 `sw-update` skill 和跨项目最小入口包。 |
-| V1.0.4 | 2026-05-11 | 增加历史对话恢复指南和 `SW_REFRESH`，说明新对话是更新后的可靠路径。 |
+| V1.0.4 | 2026-05-11 | 增加历史对话恢复指南和 `SW_REFRESH`；早期以新对话为可靠路径，已在 V1.7.3 改为旧对话原地自愈优先。 |
 | V1.0.3 | 2026-05-11 | 将调用成功回复改为 ASCII 英文，避免新对话出现中文乱码。 |
 | V1.0.2 | 2026-05-11 | 增加详细更新内容记录规则和 `Architecture_Update_Log.md`。 |
 | V1.0.1 | 2026-05-11 | 增加自动版本号升级规则，并明确入口名 `SW_V1.0` 保持稳定。 |
@@ -68,7 +75,7 @@
 调用成功后，Codex 应回复：
 
 ```text
-SW loaded successfully. Current version: V1.6.0
+SW loaded successfully. Current version: V1.7.6
 ```
 
 Version synchronization uses a separate entry:
@@ -80,10 +87,28 @@ Version synchronization uses a separate entry:
 Expected reply:
 
 ```text
-SW version synchronized. Current version: V1.6.0
+SW version synchronized. Current version: V1.7.6
 ```
 
-For other project folders, copy both `SW_V1.0.md` and `sw_update.md`; copying only the startup file will not create the local update entry. For long-running projects, also copy `Project_Memory_Templates/.sw/` into that project folder.
+If old startup/update chips keep replaying stale versions, use the standalone rescue entry:
+
+```text
+/sw-rescue
+```
+
+or:
+
+```text
+@sw_rescue
+```
+
+Expected reply:
+
+```text
+SW rescue synchronized. Current version: V1.7.6
+```
+
+For other project folders, copy `SW_V1.0.md`, `sw_update.md`, and `sw_rescue.md`; copying only the startup file will not create the local update/rescue entries. For long-running projects, also copy `Project_Memory_Templates/.sw/` into that project folder.
 
 Feature help:
 
@@ -94,6 +119,8 @@ Feature help:
 Default `@sw_help` and the SW Help button now use a hot-start short answer. Detailed trigger indexes load only when you ask for full triggers or debugging.
 
 Seedance 2.0 Video is optional and explicit-only. Trigger it with `即梦2.0生成`, `即梦生成`, `Seedance 2.0`, or `@seedance-2-video`; SW will still run storyboard/prompt work first when needed, then generate only the selected clip/shot.
+
+URL Relay is the media bridge for tools that need public URLs. Trigger it with `URL中转`, `公网URL`, `上传参考图`, `上传参考视频`, or `@url-relay`; Seedance can use it automatically when a local reference file needs a public `http(s)` URL. The priority is SW media uploader first, then confirmed/configured temporary fallback only if the SW server is unreachable.
 
 Historical Accuracy is optional. Plain `开启历史检查` applies only to the current request/visual chain; `本项目开启历史检查` or `全程开启历史检查` keeps it on for the current conversation/project; `关闭历史检查`, `不用历史检查`, or `恢复普通模式` turns it off.
 
@@ -172,7 +199,7 @@ Studio roles: Brief Strategist / `brief-strategist` + Storyboard Director / `sto
 - `AGENTS.md`：Codex 自动运行的对话规则，每个新对话按它启动项目。
 - `SW_V1.0.md`：`/SW_V1.0` 与 `@SW_V1.0` 调用协议。
 - `PULL_ARCHITECTURE.md`：新对话拉取本项目架构的最简入口。
-- `Command_Aliases.md`：备用文本快捷调用入口；日常优先使用 `/SW_V1.0` 或 `@SW_V1.0`。
+- `Command_Aliases.md`：备用文本快捷调用入口；日常优先使用 `/sw`、`/SW_V1.0` 或 `@SW_V1.0`。
 - `Studio_Professional_Standards.md`：专业设计工作室输出标准。
 - `Stage_Runbook.md`：每个阶段的进入条件、输出、退出条件和消耗等级。
 - `Project_Control_Rules.md`：对话快捷口令、工作模式、质量门和平台默认规则。
@@ -183,6 +210,7 @@ Studio roles: Brief Strategist / `brief-strategist` + Storyboard Director / `sto
 - `Tool_Registry.md`：工具注册表，未来接入工具时先登记工具卡。
 - `banana-pro/`：显式调用的 Banana Pro / Nano Banana 图像生成 skill，包含 OpenRouter API 执行脚本；补齐 `OPENROUTER_API_KEY` 后可在提示词后真实生成图片。
 - `seedance-2-video/`：显式调用的 Seedance 2.0 / 即梦2.0 视频生成 skill，包含 Ark API dry-run/run/poll 脚本；补齐 `ARK_API_KEY` 或本地私密 key 后可在提示词后真实生成视频。
+- `url-relay/`：公网 URL 中转 skill，优先使用 SW media uploader 服务器把本地图片/视频上传成下游 AI 工具可抓取的 `http(s)` URL；自有服务器不可用时可按确认/配置切到临时中转；上传 token 只存本机私密配置，不进入仓库。
 - `Studio_Skills/`：每个岗位一个 project-local `SKILL.md`。
 - `Start_New_Project.md`：新项目启动语和最小输入示例。
 - `00_Brief/Brief.md`：项目需求入口。

@@ -7,6 +7,7 @@ This file supports `Cost_Governor.md`. `Cost_Governor.md` decides the runtime co
 | Lane | Use When | Default Output | High-Cost Allowed |
 | --- | --- | --- | --- |
 | Sync | `@sw_update`, `SW_UPDATE`, `/sw_update`, `SW_REFRESH` | one English sync line | no |
+| Rescue | `/sw-rescue`, `@sw_rescue`, `SW_RESCUE`, `SW_REPAIR`, `SW_FORCE_UPDATE` | one English rescue line | no |
 | Activation | `/SW_V1.0`, `@SW_V1.0` with no project request | one English loaded line | no |
 | Intake | new or unclear request | brief, assumptions, max 3 questions | no |
 | Direction | brief is usable | up to 3 directions | no detailed prompt batch |
@@ -46,6 +47,7 @@ Treat these as high-cost:
 - broad rewrite after feedback
 - tool-specific prompt conversion when tool behavior is uncertain
 - real Banana Pro image generation or real Seedance/即梦2.0 video generation
+- URL Relay upload when it involves private/client assets or directly precedes real paid generation
 
 Project memory reads and one-line memory suggestions are low-cost. Writing to `.sw/MEMORY.md` requires explicit user approval and should append only 1-3 concise bullets.
 
@@ -54,6 +56,8 @@ PPT/deck structure from `presentation-designer` stays low-to-medium by default; 
 Historical accuracy trigger scanning is low-cost and current-message only. Do not load historical references, browse, or run `historical-consultant` until the user confirms. Once enabled, strict period research, source notes, and post-generation image QA can become medium-to-high cost depending on depth.
 
 Seedance/即梦2.0 dry-run is low-cost because it only validates a sanitized payload. Real generation is high-cost because it can consume quota, require public image URLs, and wait in a long queue. Default to one selected clip/shot at `720p`; batch shots, multiple ratios, `1080p`, and long polling need explicit confirmation.
+
+URL Relay itself does not consume model tokens. Treat it as low-cost for public/test files, but require an upload/privacy guardrail for client-sensitive, face, unreleased product, or brand assets. If the SW relay is unreachable or server-failing, report the outage and use only an already-public URL or confirmed/configured temporary fallback before paid generation; config/auth errors do not fallback.
 
 Help and wake-up hot paths are zero-project-read by default: `@sw_help` uses its embedded short answer, activation-only uses one fixed loaded line, and sync-only uses one fixed sync line. Detailed indexes/logs load only for explicit details or diagnostics.
 

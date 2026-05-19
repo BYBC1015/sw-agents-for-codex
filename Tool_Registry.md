@@ -48,13 +48,13 @@
 触发说法：即梦2.0生成、即梦生成、Seedance 2.0、Ark Seedance、豆包 Seedance、@seedance-2-video、用即梦生成视频、用 Seedance 生成视频
 最适合：单条短镜头生成、分镜验证、产品动态氛围、文旅/品牌片镜头草稿、已有首帧/参考图的视频化
 不适合：普通视频提示词的默认处理、复杂多镜头长剧情、准确字幕/文字/logo、没有公共图片 URL 的本地图片直接传入、未确认额度消耗、未配置 `ARK_API_KEY` 时假装已生成视频
-输入需要：用途、选中镜头、中文视频 prompt、画幅 ratio、时长 duration、分辨率 resolution、video-mode、至少 1 个公共 `http(s)` image-url、输出目录
+输入需要：用途、选中镜头、中文视频 prompt、画幅 ratio、时长 duration、分辨率 resolution、video-mode、至少 1 个公共 `http(s)` image-url 或可经 `url-relay` 上传的本地 image-file、输出目录
 输出格式：dry-run payload；真实生成后的 `final.mp4`、`run_manifest.json`、任务状态和下载路径
 提示词格式：由 `prompt-director` 先产出通用逐镜头视频 prompt，再交给 Seedance 作为生成/出视频环节
 不可越级：若同一需求包含脚本、分镜、视频/电影镜头、剪辑、动效、声音、调色、场景或方案设计，先由对应 Studio role 产出 handoff，再由 `prompt-director` 生成最终 prompt，最后交给 Seedance；默认只生成选中的一条镜头/片段
 提示词剖面：视频生成 / 图生视频 / 参考图视频化
 关键参数：model `doubao-seedance-2-0-260128`、ratio、duration、resolution、seed、watermark、video-mode、public image URLs、`ARK_API_KEY`
-限制与风险：真实生成可能消耗额度并排队较久；Ark 必须能访问公共图片 URL；本地私有素材不能直接传；长片、多镜头和 1080p 成本更高；文字/logo/字幕不稳定
+限制与风险：真实生成可能消耗额度并排队较久；Ark 必须能访问公共图片 URL；本地私有素材需先经 `url-relay` 中转并满足隐私授权；长片、多镜头和 1080p 成本更高；文字/logo/字幕不稳定
 成本等级：dry-run 为低；真实生成/长轮询为高
 隐私注意：不要把客户未公开图片传到公共 URL；不要把 API key 写入 skill、仓库、日志或示例
 质检方式：主体稳定、动作合理、镜头连续、画幅、可剪辑性、文字/logo 风险、历史/服装/道具/建筑风险、是否符合分镜意图
@@ -63,6 +63,29 @@
 派单显示：`prompt-director` 放在 `Studio roles:`；`seedance-2-video` 必须单独显示为 `Tool skill:`，不要写成 Studio role
 读取路径：优先 `seedance-2-video/SKILL.md`，其次用户级 `C:\Users\Administrator\.codex\skills\seedance-2-video\SKILL.md`，最后插件级 `C:\Users\Administrator\plugins\sw-v1-0\skills\seedance-2-video\SKILL.md`
 执行脚本：`scripts/seedance_task.py`，从 skill 根目录相对解析；无 key 时用 `dry-run` 或返回 missing-key，不进行真实提交
+```
+
+```text
+工具名：URL Relay
+工具类型：公网 URL 中转 / 本地素材上传 / AI 工具参考图桥接
+接入状态：本地 skill 已接入；默认使用 SW media uploader 服务器；配置文件保存在用户本机 `~/.config/sw-media-uploader/config.json`，上传 token 不进入仓库
+触发说法：URL中转、公网URL、上传参考图、上传参考视频、中转上传、@url-relay、给即梦用的公网图、把本地素材转成 URL
+最适合：Seedance/即梦2.0 需要公网参考图时上传本地图片；未来视频工具、图生视频工具或多参考图工具需要 `http(s)` URL 时做桥接
+不适合：创意策划、提示词撰写、长期公开素材托管、客户敏感素材未确认上传、需要永久 CDN 或权限管理的交付场景
+输入需要：本地文件路径、用途、下游工具、是否允许上传外部服务器；可选 relay config 路径
+输出格式：公网 `http(s)` URL、过期/清理提示、失败原因；不得输出上传 token
+提示词格式：无；它只服务于工具执行，不改写 prompt
+提示词剖面：素材/资产桥接 / 工具执行支持
+关键参数：`upload_url`、`public_base`、`token`、`max_bytes`、允许扩展名、清理周期、`temporary_fallback`、`litterbox_time`
+限制与风险：拥有链接者可访问中转文件；服务器停用、网络失败或 token 失效时不能保证上传；上传消耗服务器带宽和存储；不等于 AI 模型 token 消耗
+成本等级：低到中；上传本身不是模型费用，但可能触发后续高成本生成
+隐私注意：客户未公开素材、人物照片、产品机密、品牌资产上传前必须确认；不把 token 写入 prompt、日志、skill、仓库或示例
+质检方式：上传后检查 URL 可访问、文件类型正确、下游工具可抓取；失败时先停在 payload/提示词，不提交高成本生成
+失败时替代方案：连接失败或服务器侧错误时先提示自有 SW media uploader 不可用；优先使用用户提供的已有公网 URL；若用户确认或本机私密配置允许，则按优先级使用 Litterbox/Catbox 临时中转；缺 token、缺地址或权限错误不触发 fallback；否则请求用户提供公网链接并保留 prompt/payload
+归属岗位：prompt-director -> url-relay -> downstream tool；tool-integrator 仅在中转能力、服务器状态或隐私策略不清楚时介入
+派单显示：`url-relay` 必须单独显示为 `Tool skill:`，不要写成 Studio role；若随 Seedance 使用，显示在 `seedance-2-video` 之前
+读取路径：优先 `url-relay/SKILL.md`，其次用户级 `C:\Users\Administrator\.codex\skills\url-relay\SKILL.md`，最后插件级 `C:\Users\Administrator\plugins\sw-v1-0\skills\url-relay\SKILL.md`
+执行脚本：`scripts/url_relay.py`；Seedance runner 也可用 `--image-file` 自动调用同一配置完成上传
 ```
 
 ## 工具卡模板

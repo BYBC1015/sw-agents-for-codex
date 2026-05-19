@@ -21,7 +21,7 @@
 调用成功后必须先回复：
 
 ```text
-SW loaded successfully. Current version: V1.6.0
+SW loaded successfully. Current version: V1.7.6
 ```
 
 如果只输入调用命令，回复成功语后停止等待诉求。如果调用命令后附带需求，先回复成功语，再继续执行项目流程。
@@ -35,7 +35,7 @@ Version sync:
 Required reply:
 
 ```text
-SW version synchronized. Current version: V1.6.0
+SW version synchronized. Current version: V1.7.6
 ```
 
 Historical conversation fallback:
@@ -44,7 +44,31 @@ Historical conversation fallback:
 SW_REFRESH
 ```
 
-Use this only when an old conversation is stuck on a previous cached SW version. New conversations are the reliable path after updates.
+Use this when an old conversation is stuck on a previous cached SW version. It should refresh the same thread from current SW files before any new-conversation fallback.
+
+If an old thread or UI chip contains previous fixed replies, treat those as stale snapshot text. Current `VERSION.md`, `SW_Runtime_Index.md`, and current user/plugin skills override older cached values.
+
+Old conversation rule: refresh in place first. Use `@sw_update`, `/sw-update`, or `SW_REFRESH` in the same thread before recommending a new conversation. New conversations are only the last fallback when the desktop UI refuses to reload current files.
+
+Standalone rescue entry:
+
+```text
+/sw-rescue
+```
+
+or:
+
+```text
+@sw_rescue
+```
+
+Required reply:
+
+```text
+SW rescue synchronized. Current version: V1.7.6
+```
+
+Use this when startup/update chips keep replaying old sealed snapshots. It must not start a project and must not route through `sw-v1-0` or `sw-update`.
 
 Feature help:
 
@@ -52,7 +76,7 @@ Feature help:
 @sw_help
 ```
 
-Use this for optional feature triggers such as Banana Pro, Seedance 2.0 Video, and Historical Accuracy. It should answer from embedded short help first, must not run shell/file reads for normal help, only read detailed trigger files when requested, and must not start a project.
+Use this for optional feature triggers such as Banana Pro, Seedance 2.0 Video, URL Relay, and Historical Accuracy. It should answer from embedded short help first, must not run shell/file reads for normal help, only read detailed trigger files when requested, and must not start a project.
 
 以下命令等价于：
 
@@ -155,7 +179,7 @@ Use this for optional feature triggers such as Banana Pro, Seedance 2.0 Video, a
 ## 解析规则
 
 - 命令后的全部内容都视为用户原始需求，不要求用户再填表。
-- 新项目统一使用 `/SW_V1.0` 或 `@SW_V1.0`；旧入口不再推荐，避免插件列表出现多个工作室入口。
+- 新项目统一使用 `/sw`、`/SW_V1.0` 或 `@SW_V1.0`；旧入口不再推荐，避免插件列表出现多个工作室入口。
 - `/poster`、`/video`、`/campaign`、`/ppt`、`/deck`、`/slides` 会预设项目类型，但仍按 `Auto_Assignment_Rules.md` 自动派单。
 - 如果命令和上下文冲突，以用户命令为准。
 - 如果用户只输入命令、没有需求，Codex 默认问 3 个关键问题；复杂整案、电影、工具风险或交付阻塞最多问 5 个；若用户同时写“少问/省 token/你定”，最多问 1 个。

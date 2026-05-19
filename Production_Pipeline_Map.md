@@ -99,7 +99,8 @@ Key gates:
 - structure before shot list
 - shot list before edit plan
 - selected AI shots only after specs are locked
-- historical accuracy, when enabled, checks storyboard first frames and still visual assets rather than a non-existent video-generation module
+- when a selected AI video shot uses local reference media, use `url-relay` after `prompt-director` and before `seedance-2-video`
+- historical accuracy, when enabled, checks storyboard first frames, still visual assets, and representative Seedance frames/stills when available
 - sound, motion, and color are separate from storyboard
 
 ## Film / Brand Film Workflow
@@ -144,6 +145,7 @@ Key gates:
 - purpose, subject, ratio/duration, and tool known or assumed
 - universal prompt first
 - tool-specific conversion second
+- local media public URL handoff uses `url-relay` before the downstream tool; use SW media uploader first, then confirmed/configured temporary fallback, and do not submit paid generation if no public URL is available
 
 ## Revision Workflow
 

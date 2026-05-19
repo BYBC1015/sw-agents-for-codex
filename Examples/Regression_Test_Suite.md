@@ -22,8 +22,8 @@ Get-ChildItem .\Studio_Skills -Directory | ForEach-Object {
 Check version consistency:
 
 ```powershell
-rg "Current version: V1.5.4|Current runtime version: V1.5.4|Current version: V1.5.3|Current runtime version: V1.5.3|Current version: V1.5.2|Current runtime version: V1.5.2|Current version: V1.5.1|Current runtime version: V1.5.1|Current version: V1.5.0|Current runtime version: V1.5.0|Current version: V1.4.0|Current runtime version: V1.4.0" . --glob "!VERSION.md" --glob "!Architecture_Update_Log.md" --glob "!README.md" --glob "!Examples/Regression_Test_Suite.md"
-rg "SW loaded successfully. Current version: V1.6.0|SW version synchronized. Current version: V1.6.0|Current runtime version: V1.6.0" .
+rg "Current version: V1.7.5|Current runtime version: V1.7.5|Current version: V1.7.4|Current runtime version: V1.7.4|Current version: V1.7.3|Current runtime version: V1.7.3|Current version: V1.7.2|Current runtime version: V1.7.2|Current version: V1.7.1|Current runtime version: V1.7.1|Current version: V1.7.0|Current runtime version: V1.7.0|Current version: V1.6.0|Current runtime version: V1.6.0|Current version: V1.5.4|Current runtime version: V1.5.4|Current version: V1.5.3|Current runtime version: V1.5.3|Current version: V1.5.2|Current runtime version: V1.5.2|Current version: V1.5.1|Current runtime version: V1.5.1|Current version: V1.5.0|Current runtime version: V1.5.0|Current version: V1.4.0|Current runtime version: V1.4.0" . --glob "!VERSION.md" --glob "!Architecture_Update_Log.md" --glob "!README.md" --glob "!Examples/Regression_Test_Suite.md"
+rg "SW loaded successfully. Current version: V1.7.6|SW version synchronized. Current version: V1.7.6|SW rescue synchronized. Current version: V1.7.6|Current runtime version: V1.7.6" .
 rg "<previous-version>" . --glob "!VERSION.md" --glob "!Architecture_Update_Log.md"
 ```
 
@@ -32,6 +32,7 @@ Feature trigger checks:
 ```powershell
 rg "Feature_Trigger_Index|sw_help|Historical Accuracy|historical-consultant" .
 rg "@sw_update|SW_UPDATE|/sw_update|SW_REFRESH" "$env:USERPROFILE\.codex\skills\sw-v1-0" "$env:USERPROFILE\plugins\sw-v1-0\skills\sw-v1-0"
+rg "sw-rescue|@sw_rescue|SW_RESCUE|SW rescue synchronized" . "$env:USERPROFILE\.codex\skills\sw-rescue" "$env:USERPROFILE\plugins\sw-v1-0\skills\sw-rescue"
 ```
 
 Check plugin manifest:
@@ -61,6 +62,10 @@ Seedance 2.0 runner checks:
 python .\seedance-2-video\scripts\seedance_task.py --help
 python .\seedance-2-video\scripts\seedance_task.py dry-run --prompt "15秒，电影感文旅镜头，晨光中古城街巷缓慢推进，石板路反光，人物自然穿行，暖色低对比，无文字，无logo。" --ratio 16:9 --duration 15 --resolution 720p --image-url https://example.com/source.png
 Remove-Item Env:ARK_API_KEY -ErrorAction SilentlyContinue; python .\seedance-2-video\scripts\seedance_task.py doctor
+python .\url-relay\scripts\url_relay.py doctor
+python .\seedance-2-video\scripts\seedance_task.py dry-run --prompt "relay policy test" --image-url https://litterbox.catbox.moe/example.png
+$env:SW_RELAY_TEMPORARY_FALLBACK='none'; python .\seedance-2-video\scripts\seedance_task.py dry-run --prompt "relay policy test" --image-url https://litterbox.catbox.moe/example.png; Remove-Item Env:SW_RELAY_TEMPORARY_FALLBACK -ErrorAction SilentlyContinue
+$tmpRelay = Join-Path $env:TEMP "sw-relay-regression.png"; Set-Content -LiteralPath $tmpRelay -Value "relay-regression" -Encoding ASCII; python .\seedance-2-video\scripts\seedance_task.py doctor --image-file $tmpRelay; Remove-Item -LiteralPath $tmpRelay -Force
 ```
 
 Expected:
@@ -68,6 +73,7 @@ Expected:
 - help exits cleanly
 - dry-run prints a sanitized Ark payload without submitting
 - missing-key doctor reports no usable key without exposing secrets or claiming generation
+- temporary relay URL is accepted only when fallback is configured/confirmed, and rejected when fallback is forced to `none`
 
 ## Behavior Cases
 
