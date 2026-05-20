@@ -1,4 +1,4 @@
-# SW Regression Test Suite
+﻿# SW Regression Test Suite
 
 Use this suite after SW architecture, routing, cost, prompt, or skill updates.
 
@@ -22,8 +22,10 @@ Get-ChildItem .\Studio_Skills -Directory | ForEach-Object {
 Check version consistency:
 
 ```powershell
-python .\tools\sw_consistency_check.py
-rg "SW loaded successfully. Current version: V1.7.7|SW version synchronized. Current version: V1.7.7|SW rescue synchronized. Current version: V1.7.7|Current runtime version: V1.7.7" .
+python .\tools\sw_consistency_check.py --scope repo
+python .\tools\sw_sync_installed.py --dry-run
+python .\tools\sw_doctor.py
+rg "SW loaded successfully. Current version: V1.8.0|SW version synchronized. Current version: V1.8.0|SW rescue synchronized. Current version: V1.8.0|Current runtime version: V1.8.0" .
 rg "<previous-version>" . --glob "!VERSION.md" --glob "!Architecture_Update_Log.md"
 ```
 
@@ -46,9 +48,33 @@ Prompt reference checks:
 ```powershell
 Test-Path .\Prompts\Image_Aesthetic_Prompt_Reference.md
 Test-Path .\Prompts\Video_Motion_Edit_Prompt_Rules.md
+Test-Path .\Prompts\Visual_Development_Board_Rules.md
 Test-Path .\01_Research\Oscar_Best_Picture_Visual_Reference.md
-rg "Image_Aesthetic_Prompt_Reference|Video_Motion_Edit_Prompt_Rules|Oscar_Best_Picture_Visual_Reference" .\Prompts\Prompt_Spec_Rules.md .\Studio_Skills\prompt-director\SKILL.md
+rg "Image_Aesthetic_Prompt_Reference|Video_Motion_Edit_Prompt_Rules|Visual_Development_Board_Rules|Oscar_Best_Picture_Visual_Reference" .\Prompts\Prompt_Spec_Rules.md .\Studio_Skills\prompt-director\SKILL.md
 ```
+
+Visual development board checks:
+
+```text
+做一个角色设定图：现代女性书店店员，后面要用于 4 个镜头，先不要出图。
+```
+
+Expected:
+
+- `production-designer` leads.
+- Output is a compact Character Sheet Handoff.
+- No Banana generation unless explicitly requested.
+
+```text
+把这个 30 秒脚本做成一体式分镜板，先给分组表。
+```
+
+Expected:
+
+- `storyboard-director` leads.
+- Group A covers 0-15s and Group B starts after 15s.
+- Each group has at most 9 shots.
+- No prompt/image generation until a group is selected.
 
 Banana Pro runner checks:
 

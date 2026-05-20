@@ -1,4 +1,4 @@
-# SW Runtime Index
+﻿# SW Runtime Index
 
 This is the compact runtime index for SW_V1.0. Read it before deeper project files when the user starts or resumes a design studio project.
 
@@ -7,19 +7,19 @@ This is the compact runtime index for SW_V1.0. Read it before deeper project fil
 Activation reply:
 
 ```text
-SW loaded successfully. Current version: V1.7.7
+SW loaded successfully. Current version: V1.8.0
 ```
 
 Sync reply:
 
 ```text
-SW version synchronized. Current version: V1.7.7
+SW version synchronized. Current version: V1.8.0
 ```
 
 Rescue reply:
 
 ```text
-SW rescue synchronized. Current version: V1.7.7
+SW rescue synchronized. Current version: V1.8.0
 ```
 
 If the user only invokes SW, sync, or rescue, reply with the matching fixed line and stop.
@@ -137,6 +137,9 @@ Cost gate: high-cost output needs confirmation. I will generate one confirmed ve
 - Client-facing proposal, government report, local tourism film proposal, and city image film PPT requests still route to `presentation-designer`; load its references only when needed.
 - Video: `brief-strategist` -> `creative-director` -> `scriptwriter` -> `storyboard-director` -> `cinematographer` -> `edit-director` -> `motion-designer` -> `sound-designer` -> `colorist` -> `review-producer` -> `finishing-producer`.
 - Film/brand film: `brief-strategist` -> `creative-director` -> `film-director` -> `scriptwriter` -> `production-designer` -> `cinematographer` -> `storyboard-director` -> `edit-director` -> `sound-designer` -> `colorist` -> `review-producer` -> `finishing-producer`.
+- Character setting sheet / role reference board: `production-designer` -> `asset-producer` if source/risk matters -> `prompt-director` if generating.
+- Scene setting sheet / production-design board: `production-designer` -> `prompt-director` if generating.
+- Integrated storyboard sheet / one-image storyboard board: `storyboard-director`; add `cinematographer` only when shot language or continuity is weak; then `prompt-director` if generating.
 - Prompt-only: `prompt-director`; add `tool-integrator` only for a specific or new tool.
 - Explicit 香蕉 / banana / Banana Pro / Nano Banana / OpenRouter image generation:
   - If the user already provides a complete final image prompt, use `prompt-director` -> `banana-pro`.
@@ -243,9 +246,17 @@ Execution rule:
 - Video parameters: shot goal, duration, start frame, end frame, camera movement, subject action, transition, sound cue, continuity constraints.
 - Read `Prompts/Image_Aesthetic_Prompt_Reference.md` only for stronger visual taste, anti-AI look, or filmic image prompt refinement.
 - Read `Prompts/Video_Motion_Edit_Prompt_Rules.md` only for one-take, bullet-time, hero-shot, complex motion, edit-technique, or Seedance/AI-video execution prompts.
+- Read `Prompts/Visual_Development_Board_Rules.md` only for character setting sheets, scene setting sheets, integrated storyboard sheets, or production-design board prompts.
 - Read `01_Research/Oscar_Best_Picture_Visual_Reference.md` only when the user asks for Oscar/classic film visual references; extract grammar only, never copied frames.
 - Poster text, logo, price, QR code, and exact Chinese copy should usually be added in post-production.
 - For revisions, change only affected parameters to reduce result drift.
+
+## Visual Development Boards
+
+- Character setting sheets lock recurring characters before storyboard/image/video generation. Include a large full-body hero, neutral front/back/profile views, expression studies, detail crops, silhouette study, signature prop, and color palette.
+- Scene setting sheets lock recurring locations before storyboard/image/video generation. Include an establishing view, secondary angles, prop/material details, lighting study, and palette.
+- Integrated storyboard sheets are grouped review boards. Default one group is 15 seconds and at most 9 shots. If duration exceeds 15 seconds or shot count exceeds 9, continue in the next group.
+- For Banana generation, a request to generate a character sheet or storyboard sheet confirms one draft board only, not a batch.
 
 ## Self-Check
 

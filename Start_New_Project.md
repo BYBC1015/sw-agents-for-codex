@@ -1,4 +1,4 @@
-# 新项目启动语
+﻿# 新项目启动语
 
 以后每次新建对话，先调用：
 
@@ -15,7 +15,7 @@
 调用成功后，Codex 应只回复：
 
 ```text
-SW loaded successfully. Current version: V1.7.7
+SW loaded successfully. Current version: V1.8.0
 ```
 
 然后你再输入项目诉求即可。Codex 会自动判断这是海报、PPT/deck、视频，还是海报+视频，并按本项目的设计工作室架构执行。

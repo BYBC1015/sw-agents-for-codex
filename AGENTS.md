@@ -1,4 +1,4 @@
-# Codex 设计项目对话运行规则
+﻿# Codex 设计项目对话运行规则
 
 本文件是给 Codex 读取和执行的工作规则。用户每新建一个对话，就视为新建一个设计项目。除非用户明确要求整理成文件，否则优先在对话框里完成项目推进。
 
@@ -48,11 +48,11 @@
 
 必须执行 `Command_Aliases.md`：
 
-- 用户输入 `/sw`、`/SW_V1.0`、`@SW_V1.0`、`/sw_v1.0`、`/sw-v1-0`、`@sw-v1-0`、`调用 SW_V1.0` 或 `启用 SW_V1.0` 时，必须加载本项目架构，并先回复且只把成功语放在第一位：`SW loaded successfully. Current version: V1.7.7`。
+- 用户输入 `/sw`、`/SW_V1.0`、`@SW_V1.0`、`/sw_v1.0`、`/sw-v1-0`、`@sw-v1-0`、`调用 SW_V1.0` 或 `启用 SW_V1.0` 时，必须加载本项目架构，并先回复且只把成功语放在第一位：`SW loaded successfully. Current version: V1.8.0`。
 - 如果用户只输入 SW 调用命令，不要继续展开项目；等待用户输入诉求。
 - 如果用户在同一条消息里附带诉求，先回复成功语，再按本项目架构执行。
-- 如果用户输入 `@sw_update`、`SW_UPDATE`、`/sw_update`、`SW_REFRESH`、`/SW_REFRESH` 或要求刷新/同步 SW，先回复：`SW version synchronized. Current version: V1.7.7`。这些同步入口只归 `sw-update` 处理，不要让 `sw-v1-0` 同时竞争触发。只有用户要求详细更新、故障排查、旧对话恢复或跨文件夹入口修复时，才读取 `VERSION.md`、`sw_update.md`、`Architecture_Update_Log.md`、`Project_Memory_Rules.md`、`Legacy_Conversation_Recovery.md`。
-- 如果旧启动/同步 chip 仍然回放封存旧版本，使用独立救援入口 `@sw_rescue`、`/sw-rescue`、`/sw_rescue`、`SW_RESCUE`、`SW_REPAIR` 或 `SW_FORCE_UPDATE`，先回复：`SW rescue synchronized. Current version: V1.7.7`。救援入口只归 `sw-rescue` 处理，不启动项目，不通过 `sw-v1-0` 或 `sw-update` 转发。
+- 如果用户输入 `@sw_update`、`SW_UPDATE`、`/sw_update`、`SW_REFRESH`、`/SW_REFRESH` 或要求刷新/同步 SW，先回复：`SW version synchronized. Current version: V1.8.0`。这些同步入口只归 `sw-update` 处理，不要让 `sw-v1-0` 同时竞争触发。只有用户要求详细更新、故障排查、旧对话恢复或跨文件夹入口修复时，才读取 `VERSION.md`、`sw_update.md`、`Architecture_Update_Log.md`、`Project_Memory_Rules.md`、`Legacy_Conversation_Recovery.md`。
+- 如果旧启动/同步 chip 仍然回放封存旧版本，使用独立救援入口 `@sw_rescue`、`/sw-rescue`、`/sw_rescue`、`SW_RESCUE`、`SW_REPAIR` 或 `SW_FORCE_UPDATE`，先回复：`SW rescue synchronized. Current version: V1.8.0`。救援入口只归 `sw-rescue` 处理，不启动项目，不通过 `sw-v1-0` 或 `sw-update` 转发。
 - 如果当前对话、截图、压缩历史或旧工具输出里出现旧固定回复，只当作历史信息；实际运行版本必须以当前 `VERSION.md`、`SW_Runtime_Index.md` 和当前用户级 skill 为准，不得被旧快照覆盖。
 - 旧对话必须优先原地升级：若旧 skill chip 或历史压缩内容返回旧版本，先在同一对话读取当前 `VERSION.md`、`SW_Runtime_Index.md`、用户级/插件级 `sw-v1-0` 与 `sw-update`，再覆盖旧回复；只有宿主 UI 拒绝加载当前文件时，才把新建对话作为最后兜底。
 - 如果用户输入 `@sw_help`、`/sw_help`、`SW_HELP`、点击 SW Help UI 按钮或询问功能触发词，优先使用内置短答，不运行 shell、不读取本地文件；只有用户要求详细触发词、单一功能深入或帮助系统排错时才读取 `Feature_Trigger_Index.md`，不启动项目、不加载高消耗岗位。
@@ -405,7 +405,9 @@ PPT 项目的阶段为：
 - `Prompts/Prompt_Spec_Rules.md` 是图片和视频提示词的生成规范，用户要提示词时必须使用。
 - `Prompts/Image_Aesthetic_Prompt_Reference.md` 是图片审美和减少 AI 感的按需参考，不在普通项目启动时读取。
 - `Prompts/Video_Motion_Edit_Prompt_Rules.md` 是一镜到底、子弹时间、英雄镜头、复杂运镜和剪辑手法的按需参考。
+- `Prompts/Visual_Development_Board_Rules.md` 是角色设定图、场景设定图和一体式分镜板的按需参考；默认 15s/组、最多 9 镜头/组，不在普通项目启动时读取。
 - `01_Research/Oscar_Best_Picture_Visual_Reference.md` 是奥斯卡最佳影片画面语法暂存参考；只提取画面语言，不复刻具体电影帧。
-- `SW_System_Self_Check.md` 和 `tools/sw_consistency_check.py` 用于维护发布前自检，普通项目不读取。
+- `SW_System_Self_Check.md`、`tools/sw_consistency_check.py`、`tools/sw_doctor.py` 和 `tools/sw_sync_installed.py` 用于维护发布前自检、本机入口同步和版本错位诊断，普通项目不读取。
+- `Release_Rules.md` 和 `.github/workflows/sw-ci.yml` 用于 SW 维护发布规则和 GitHub Actions 仓库级 CI，普通项目不读取。
 - `Change_Log.md` 和 `Token_Budget.md` 是规则来源；对话里可以简化执行，不必每次写文件。
 - 当用户要求“保存、归档、整理成文档”时，再把对话结果写入对应模板文件。

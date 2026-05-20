@@ -8,7 +8,7 @@
 
 ## 当前版本
 
-- 当前运行版本：`V1.7.7`
+- 当前运行版本：`V1.8.0`
 - 稳定调用入口：`/sw`、`/SW_V1.0` 或 `@SW_V1.0`
 - 版本同步入口：`@sw_update`
 - 完整更新记录：[`VERSION.md`](VERSION.md) / [`Architecture_Update_Log.md`](Architecture_Update_Log.md)
@@ -19,6 +19,8 @@
 
 | 版本 | 日期 | 更新内容 |
 | --- | --- | --- |
+| V1.8.0 | 2026-05-20 | 新增视觉开发板流程：角色设定图、场景设定图和一体式分镜板。角色设定支持大人设、正背侧、表情、细节、剪影和色卡；一体式分镜默认 15s 一组、最多 9 镜头一张，超过即自动拆组，并保持 Banana/Seedance 不越级规则。 |
+| V1.7.8 | 2026-05-20 | 增加轻量发布基础设施：GitHub Actions 仓库级 CI、本机 installed-entry 同步脚本、SW doctor 诊断、Release 规则、更多入口覆盖检查和 relay token 泄露扫描，降低版本错位和入口丢失风险。 |
 | V1.7.7 | 2026-05-20 | 增加发布一致性检查脚本和系统自检记录，修复版本源漂移风险；新增图片审美提示词备用库、奥斯卡最佳影片画面语法参考（不保存版权截图），并强化一镜到底、子弹时间、英雄镜头、蒙太奇、match cut、speed ramp 等视频运镜/剪辑提示词规则。 |
 | V1.7.6 | 2026-05-19 | URL Relay now uses a clear priority chain: SW media uploader first; if unreachable/server-failing, report the failure and use Litterbox/Catbox only when fallback is confirmed or enabled in private local config. Config/auth errors do not fallback. Added fallback flags to URL Relay and Seedance local-file uploads. |
 | V1.7.5 | 2026-05-19 | Locked URL Relay to the configured SW media uploader by default. Seedance now rejects Catbox/Litterbox temporary relay URLs unless the user explicitly confirms that fallback, and SW stops before paid generation when the self-owned relay is unavailable. |
@@ -76,7 +78,7 @@
 调用成功后，Codex 应回复：
 
 ```text
-SW loaded successfully. Current version: V1.7.7
+SW loaded successfully. Current version: V1.8.0
 ```
 
 Version synchronization uses a separate entry:
@@ -88,7 +90,7 @@ Version synchronization uses a separate entry:
 Expected reply:
 
 ```text
-SW version synchronized. Current version: V1.7.7
+SW version synchronized. Current version: V1.8.0
 ```
 
 If old startup/update chips keep replaying stale versions, use the standalone rescue entry:
@@ -106,7 +108,7 @@ or:
 Expected reply:
 
 ```text
-SW rescue synchronized. Current version: V1.7.7
+SW rescue synchronized. Current version: V1.8.0
 ```
 
 For other project folders, copy `SW_V1.0.md`, `sw_update.md`, and `sw_rescue.md`; copying only the startup file will not create the local update/rescue entries. For long-running projects, also copy `Project_Memory_Templates/.sw/` into that project folder.
@@ -227,8 +229,11 @@ Studio roles: Brief Strategist / `brief-strategist` + Storyboard Director / `sto
 - `Prompts/Prompt_Library.md`：日常可复制的提示词库。
 - `Prompts/Image_Aesthetic_Prompt_Reference.md`：图片审美、减少 AI 感、电影画面语言的按需参考。
 - `Prompts/Video_Motion_Edit_Prompt_Rules.md`：一镜到底、子弹时间、英雄镜头、复杂运镜和剪辑手法的按需参考。
+- `Prompts/Visual_Development_Board_Rules.md`：角色设定图、场景设定图和一体式分镜板的按需参考。
 - `01_Research/Oscar_Best_Picture_Visual_Reference.md`：奥斯卡最佳影片画面语法暂存参考，不保存版权截图。
-- `SW_System_Self_Check.md` / `tools/sw_consistency_check.py`：维护发布前检查入口、版本一致性和密钥泄露预检。
+- `SW_System_Self_Check.md` / `tools/sw_consistency_check.py` / `tools/sw_doctor.py`：维护发布前检查入口、版本一致性、安装入口同步诊断和密钥泄露预检。
+- `tools/sw_sync_installed.py`：把仓库里的 SW 入口、工具 skill 和插件命令同步到本机 Codex 用户级 skill 与本地插件。
+- `Release_Rules.md` / `.github/workflows/sw-ci.yml`：轻量发布规则和 GitHub Actions 仓库级自检。
 - `Examples/`：海报、视频、PPT/deck 和改稿测试样例。
 - `Examples/Regression_Test_Suite.md`：维护和升级后用于检查路由、版本、UTF-8 校验和高成本门的回归测试。
 

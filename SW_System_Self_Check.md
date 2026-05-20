@@ -1,7 +1,7 @@
-# SW System Self-Check
+﻿# SW System Self-Check
 
 Date: 2026-05-20  
-Target runtime: V1.7.7
+Target runtime: V1.8.0
 
 This file records the maintenance diagnosis for entry loss, version mismatch, stale chips, and likely future failure points. It is a working audit, not a user-facing startup file.
 
@@ -39,10 +39,16 @@ This file records the maintenance diagnosis for entry loss, version mismatch, st
 - `tools/sw_consistency_check.py` verifies:
   - root `VERSION.md` runtime version
   - active fixed replies in project docs
-  - installed user-level `sw-v1-0`, `sw-update`, and `sw-rescue` skills
+  - installed user-level `sw-v1-0`, `sw-update`, `sw-rescue`, `sw-help`, and tool skills
   - plugin command files and `plugin.json`
   - prompt reference files
-  - obvious API-key leakage patterns inside the repo
+  - obvious API-key and SW relay-token leakage patterns inside the repo
+
+- `tools/sw_consistency_check.py --scope repo` is safe for GitHub Actions because it does not depend on local Codex user/plugin folders.
+
+- `tools/sw_sync_installed.py` updates local user-level and plugin-level SW entries from the repository source.
+
+- `tools/sw_doctor.py` prints the current version, git state, and the selected consistency check result in one compact maintenance pass.
 
 - `Examples/Regression_Test_Suite.md` now points maintenance work to this checker before publish.
 
@@ -65,7 +71,8 @@ Before every SW publish:
 
 ```powershell
 $env:PYTHONUTF8='1'
-python .\tools\sw_consistency_check.py
+python .\tools\sw_sync_installed.py
+python .\tools\sw_doctor.py
 ```
 
 If it fails, fix the listed surfaces before commit/push. Do not rely on manual grep alone for release readiness.

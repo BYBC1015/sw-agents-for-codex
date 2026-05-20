@@ -33,20 +33,22 @@ Judge these before every project reply:
    - Explicit URL中转 / 公网URL / 上传参考图 / 上传参考视频 / `@url-relay` -> `url-relay`; if a downstream generation tool is named, return to that tool after the relay URL is ready.
 4. Final check/risk/delivery readiness -> `review-producer`.
 5. Export/package/naming/handoff -> `finishing-producer`.
-6. Image/video/AI prompt request -> `prompt-director`.
-7. Audio/music/SFX/voice/mix -> `sound-designer`.
-8. Color grade/LUT/shot matching/product color -> `colorist`.
-9. Motion graphics/titles/subtitle animation/transitions -> `motion-designer`.
-10. Camera/lens/lighting/shot language -> `cinematographer`.
-11. Script/voiceover/dialogue/narrative beats -> `scriptwriter`.
-12. Film/brand film/treatment/directing intent -> `film-director`.
-13. Presentation/PPT/deck/slide outline/storyline/section flow/speaker deck/pitch deck/client-facing proposal/government report/local tourism film proposal/city image film proposal -> `presentation-designer`.
-14. Poster copy/headline/CTA or slide wording/title takeaway -> `copywriter`.
-15. Poster or presentation layout/grid/type hierarchy -> `layout-designer`.
-16. Poster visual/art direction -> `poster-art-director`.
-17. Storyboard/shot table -> `storyboard-director`.
-18. New or unclear project -> `studio-orchestrator` + `brief-strategist`.
-19. Direction request -> `creative-director`.
+6. Character setting sheet, role reference board, scene setting sheet, production-design board -> `production-designer`; add `asset-producer` only when source/risk/asset priority matters.
+7. Integrated storyboard sheet, one-image storyboard board, storyboard contact sheet -> `storyboard-director`; add `cinematographer` only when camera continuity is weak.
+8. Image/video/AI prompt request -> `prompt-director`.
+9. Audio/music/SFX/voice/mix -> `sound-designer`.
+10. Color grade/LUT/shot matching/product color -> `colorist`.
+11. Motion graphics/titles/subtitle animation/transitions -> `motion-designer`.
+12. Camera/lens/lighting/shot language -> `cinematographer`.
+13. Script/voiceover/dialogue/narrative beats -> `scriptwriter`.
+14. Film/brand film/treatment/directing intent -> `film-director`.
+15. Presentation/PPT/deck/slide outline/storyline/section flow/speaker deck/pitch deck/client-facing proposal/government report/local tourism film proposal/city image film proposal -> `presentation-designer`.
+16. Poster copy/headline/CTA or slide wording/title takeaway -> `copywriter`.
+17. Poster or presentation layout/grid/type hierarchy -> `layout-designer`.
+18. Poster visual/art direction -> `poster-art-director`.
+19. Storyboard/shot table -> `storyboard-director`.
+20. New or unclear project -> `studio-orchestrator` + `brief-strategist`.
+21. Direction request -> `creative-director`.
 
 ## Project Type Defaults
 
@@ -87,6 +89,8 @@ prompt-director -> tool-integrator if needed -> review-producer if final-use
 - Poster production: primary `poster-art-director`, support `copywriter` or `layout-designer`.
 - Presentation/deck production: primary `presentation-designer` for structure/storyline/client-facing proposal logic; support `research-scout`, `copywriter`, `layout-designer`, `asset-producer`, or `review-producer` depending on request.
 - Video production: primary `storyboard-director`, support `scriptwriter` or `cinematographer`.
+- Character/scene setting sheet: primary `production-designer`, support `asset-producer` only when source, copyright, or asset priority matters.
+- Integrated storyboard sheet: primary `storyboard-director`, support `cinematographer` only when camera language or continuity needs strengthening.
 - Edit production: primary `edit-director`, support `motion-designer`, `sound-designer`, or `colorist` depending on request.
 - Film production: primary depends on stage; support can be `film-director`, `scriptwriter`, `production-designer`, or `cinematographer`.
 - Prompt production: primary `prompt-director`, support `tool-integrator` only when specific tool behavior matters.

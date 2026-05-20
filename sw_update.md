@@ -1,4 +1,4 @@
-# sw_update
+﻿# sw_update
 
 `@sw_update` synchronizes the current conversation with the latest SW runtime version.
 
@@ -29,7 +29,7 @@ SW_REFRESH
 After synchronization, reply exactly:
 
 ```text
-SW version synchronized. Current version: V1.7.7
+SW version synchronized. Current version: V1.8.0
 ```
 
 ## Hot Path

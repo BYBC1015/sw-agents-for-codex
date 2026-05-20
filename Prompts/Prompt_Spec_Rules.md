@@ -363,3 +363,14 @@ Use this add-on only after the user explicitly enables historical accuracy check
 - After generation, review the visible result against the Period Lock Card. A good prompt does not make an inaccurate image acceptable.
 - For Banana Pro or any image generator, add a post-generation QA note for anachronisms, wrong dynasty/civilization details, fantasy-TV conventions, modern objects, wrong materials, and incorrect symbols/text.
 - For Seedance or any video generator, apply these rules before generation to storyboard first frames, still references, public image URLs, and visual constraints; after generation, review representative output frames/stills when available. Do not claim full automated video QA beyond visible frames/stills.
+
+## Visual Development Board Add-On
+
+Use `Prompts/Visual_Development_Board_Rules.md` only when the user asks for character setting sheets, scene setting sheets, production-design boards, integrated storyboard sheets, or one-image storyboard contact sheets.
+
+- Character sheets should lock identity before multi-shot work: full-body hero pose, neutral front/back/profile turnarounds, 4-6 expression studies, detail crops, silhouette study, signature prop, and color palette.
+- Scene sheets should lock location continuity before multi-shot work: establishing view, secondary angles, material/detail crops, practical lighting, key props, and color/material palette.
+- Integrated storyboard sheets should be one image board per group. Default group duration is 15 seconds, with at most 9 shots per board. If the duration exceeds 15 seconds or the shot count exceeds 9, start the next group.
+- Do not jump straight to image generation. First output the sheet/board handoff or storyboard group table, then generate one selected board prompt.
+- If the user says to use Banana Pro for a character sheet or storyboard sheet, treat it as confirmation for one draft board only. Batch boards require separate confirmation.
+- Exact labels, Chinese text, logos, and final typography should be added after generation unless the user explicitly accepts model text risk.

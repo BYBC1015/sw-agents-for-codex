@@ -68,6 +68,7 @@ The cost gate decides:
 - Add role `references/` only when the selected role's `SKILL.md` names a matching reference condition.
 - Add `Prompts/Image_Aesthetic_Prompt_Reference.md` only for visual taste, anti-AI look, or filmic image prompt refinement.
 - Add `Prompts/Video_Motion_Edit_Prompt_Rules.md` only for one-take, bullet-time, hero-shot, complex movement, edit-technique, or execution-level AI video prompts.
+- Add `Prompts/Visual_Development_Board_Rules.md` only for character setting sheets, scene setting sheets, production-design boards, or integrated storyboard sheets.
 - Add `01_Research/Oscar_Best_Picture_Visual_Reference.md` only when the user asks for Oscar/classic film visual references.
 
 ## Comfortable-Use Rules
@@ -107,6 +108,14 @@ For presentations, also lock the use setting, slide count range, source material
 
 For client-facing proposal decks, also lock or assume the client decision outcome before generating full page copy.
 
+For visual development boards, lock the board type and scope before generation:
+
+- character sheet: character identity, wardrobe, signature prop, expression range, and sheet format
+- scene sheet: location, key props, material/light, and continuity locks
+- integrated storyboard sheet: selected group, time range, total duration, shot count, and board layout
+
+Default storyboard board generation covers one group only: 15 seconds maximum and 9 shots maximum.
+
 If these are not locked, output a low-cost preflight instead of the high-cost result.
 
 Use this line before high-cost work:
@@ -123,6 +132,7 @@ Pause and ask for confirmation before:
 - privacy-sensitive uploads
 - irreversible tool actions
 - final-use AI output involving brand, face, product, logo, copyright, or exact text risk
+- character setting sheets, scene setting sheets, or storyboard boards intended for final/client use
 - Banana Pro / banana / OpenRouter image generation that may consume quota, requires `OPENROUTER_API_KEY`, or uploads reference images
 - Seedance / 即梦2.0 video generation that may consume quota, requires `ARK_API_KEY` or a local key file, uses public image URLs, or triggers long polling
 - unknown tool-specific prompt conversion

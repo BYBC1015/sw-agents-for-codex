@@ -131,6 +131,45 @@ Key gates:
 - historical accuracy, when enabled, locks period/civilization choices before production design and checks still images after generation
 - edit before sound/color finalization
 
+## Visual Development Board Workflow
+
+Use this only when the user asks for character setting sheets, scene setting sheets, production-design boards, or one-image storyboard boards.
+
+Character setting sheet:
+
+```text
+production-designer
+-> asset-producer (only if source/risk/asset priority matters)
+-> prompt-director (only if generating a prompt/image)
+-> banana-pro (only if explicitly requested)
+```
+
+Scene setting sheet:
+
+```text
+production-designer
+-> prompt-director (only if generating a prompt/image)
+-> banana-pro (only if explicitly requested)
+```
+
+Integrated storyboard sheet:
+
+```text
+storyboard-director
+-> cinematographer (only if camera continuity needs help)
+-> prompt-director (only if generating a prompt/image)
+-> banana-pro (only if explicitly requested)
+```
+
+Key gates:
+
+- one storyboard board group = one image board
+- default group duration = 15 seconds
+- maximum shots per board = 9
+- exceeding 15 seconds or 9 shots starts the next group
+- generate Group A first unless the user explicitly confirms batch generation
+- exact labels, logos, and final typography stay in post-production unless the user accepts model text risk
+
 ## Prompt-Only Workflow
 
 ```text

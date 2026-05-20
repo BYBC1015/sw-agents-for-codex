@@ -1,4 +1,4 @@
-# Feature Trigger Index
+﻿# Feature Trigger Index
 
 This is SW's compact feature trigger index. Use it for `@sw_help`, `/sw_help`, `/sw-help`, feature discovery, and low-cost trigger checks.
 
@@ -203,7 +203,7 @@ Trigger words:
 Required reply:
 
 ```text
-SW rescue synchronized. Current version: V1.7.7
+SW rescue synchronized. Current version: V1.8.0
 ```
 
 This is not a project start, not a normal sync replacement, and not a tool-generation step. It exists to bypass stale `sw-v1-0` or `sw-update` skill chips with a separate skill id.

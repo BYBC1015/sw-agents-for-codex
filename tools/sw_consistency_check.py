@@ -11,6 +11,7 @@ import json
 import os
 import re
 import sys
+import argparse
 from pathlib import Path
 
 
@@ -36,31 +37,53 @@ USER_SKILL_FILES = [
     USERPROFILE / ".codex" / "skills" / "sw-v1-0" / "SKILL.md",
     USERPROFILE / ".codex" / "skills" / "sw-update" / "SKILL.md",
     USERPROFILE / ".codex" / "skills" / "sw-rescue" / "SKILL.md",
+    USERPROFILE / ".codex" / "skills" / "sw-help" / "SKILL.md",
     USERPROFILE / ".codex" / "skills" / "sw-update" / "agents" / "openai.yaml",
     USERPROFILE / ".codex" / "skills" / "sw-rescue" / "agents" / "openai.yaml",
+    USERPROFILE / ".codex" / "skills" / "sw-help" / "agents" / "openai.yaml",
+    USERPROFILE / ".codex" / "skills" / "banana-pro" / "SKILL.md",
+    USERPROFILE / ".codex" / "skills" / "seedance-2-video" / "SKILL.md",
+    USERPROFILE / ".codex" / "skills" / "url-relay" / "SKILL.md",
 ]
 
 PLUGIN_FILES = [
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "sw-v1-0" / "SKILL.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "sw-update" / "SKILL.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "sw-rescue" / "SKILL.md",
+    USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "sw-help" / "SKILL.md",
+    USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "banana-pro" / "SKILL.md",
+    USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "seedance-2-video" / "SKILL.md",
+    USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "url-relay" / "SKILL.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "sw-update" / "agents" / "openai.yaml",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "sw-rescue" / "agents" / "openai.yaml",
+    USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "sw-help" / "agents" / "openai.yaml",
     USERPROFILE / "plugins" / "sw-v1-0" / "commands" / "sw.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "commands" / "sw-v1-0.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "commands" / "sw-update.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "commands" / "sw-rescue.md",
+    USERPROFILE / "plugins" / "sw-v1-0" / "commands" / "sw-help.md",
 ]
 
 PROMPT_REFERENCE_FILES = [
     ROOT / "Prompts" / "Image_Aesthetic_Prompt_Reference.md",
     ROOT / "Prompts" / "Video_Motion_Edit_Prompt_Rules.md",
+    ROOT / "Prompts" / "Visual_Development_Board_Rules.md",
     ROOT / "01_Research" / "Oscar_Best_Picture_Visual_Reference.md",
+]
+
+REPO_TOOL_SKILL_FILES = [
+    ROOT / "banana-pro" / "SKILL.md",
+    ROOT / "banana-pro" / "scripts" / "generate_openrouter_image.py",
+    ROOT / "seedance-2-video" / "SKILL.md",
+    ROOT / "seedance-2-video" / "scripts" / "seedance_task.py",
+    ROOT / "url-relay" / "SKILL.md",
+    ROOT / "url-relay" / "scripts" / "url_relay.py",
 ]
 
 SECRET_PATTERNS = [
     re.compile(r"sk-or-v1-[A-Za-z0-9]{24,}"),
     re.compile(r"ark-[0-9a-fA-F]{8}-[0-9a-fA-F-]{20,}"),
+    re.compile(r"swrel_[A-Za-z0-9_-]{32,}"),
 ]
 
 
@@ -144,9 +167,23 @@ def check_prompt_references(issues: list[str]) -> None:
         for required in [
             "Image_Aesthetic_Prompt_Reference.md",
             "Video_Motion_Edit_Prompt_Rules.md",
+            "Visual_Development_Board_Rules.md",
         ]:
             if required not in text:
                 fail(issues, f"Prompt_Spec_Rules.md does not reference {required}")
+
+
+def check_repo_tool_skills(issues: list[str]) -> None:
+    for path in REPO_TOOL_SKILL_FILES:
+        if not path.exists():
+            fail(issues, f"missing repo tool skill file: {path.relative_to(ROOT)}")
+
+    registry = ROOT / "Tool_Registry.md"
+    if registry.exists():
+        text = read_text(registry)
+        for required in ["Banana Pro", "Seedance", "URL Relay"]:
+            if required not in text:
+                fail(issues, f"Tool_Registry.md does not mention {required}")
 
 
 def check_secret_leaks(issues: list[str]) -> None:
@@ -165,21 +202,41 @@ def check_secret_leaks(issues: list[str]) -> None:
                 fail(issues, f"possible secret leaked in repo file: {path.relative_to(ROOT)}")
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Check SW release consistency.")
+    parser.add_argument(
+        "--scope",
+        choices=["repo", "installed", "all"],
+        default="all",
+        help=(
+            "repo checks only repository files for CI; installed checks local "
+            "user/plugin copies; all does both."
+        ),
+    )
+    return parser.parse_args()
+
+
 def main() -> int:
+    args = parse_args()
     issues: list[str] = []
     version = parse_version(issues)
-    check_fixed_replies(issues, version)
-    check_external_copies(issues, version)
-    check_prompt_references(issues)
-    check_secret_leaks(issues)
+
+    if args.scope in {"repo", "all"}:
+        check_fixed_replies(issues, version)
+        check_prompt_references(issues)
+        check_repo_tool_skills(issues)
+        check_secret_leaks(issues)
+
+    if args.scope in {"installed", "all"}:
+        check_external_copies(issues, version)
 
     if issues:
-        print("SW consistency check failed:")
+        print(f"SW consistency check failed for scope={args.scope}:")
         for issue in issues:
             print(f"- {issue}")
         return 1
 
-    print(f"SW consistency check passed for {version}.")
+    print(f"SW consistency check passed for {version} (scope={args.scope}).")
     return 0
 
 

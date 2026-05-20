@@ -1,4 +1,4 @@
-# SW_V1.0 Activation
+﻿# SW_V1.0 Activation
 
 This is the stable project-start entry for the SW design studio workflow.
 
@@ -33,7 +33,7 @@ activate SW_V1.0
 After activation succeeds, reply exactly:
 
 ```text
-SW loaded successfully. Current version: V1.7.7
+SW loaded successfully. Current version: V1.8.0
 ```
 
 If the user only invokes SW, stop after the required reply and wait for the project request.
@@ -71,7 +71,7 @@ For synchronization in historical conversations or other project folders, use:
 Expected sync reply:
 
 ```text
-SW version synchronized. Current version: V1.7.7
+SW version synchronized. Current version: V1.8.0
 ```
 
 If normal sync still returns a stale sealed chip, use the standalone rescue entry:
@@ -83,7 +83,7 @@ If normal sync still returns a stale sealed chip, use the standalone rescue entr
 Expected rescue reply:
 
 ```text
-SW rescue synchronized. Current version: V1.7.7
+SW rescue synchronized. Current version: V1.8.0
 ```
 
 ## Minimum Project Folder Package

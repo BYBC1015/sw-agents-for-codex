@@ -1,6 +1,6 @@
-# SW Version
+﻿# SW Version
 
-Current runtime version: V1.7.7
+Current runtime version: V1.8.0
 Stable invocation name: SW_V1.0
 Stable invocation aliases: `/sw`, `/SW_V1.0`, `@SW_V1.0`, `/sw_v1.0`, `/sw-v1-0`
 Version sync aliases: `@sw_update`, `SW_UPDATE`, `/sw_update`, `/sw-update`, `SW_REFRESH`
@@ -68,6 +68,7 @@ When the version changes, update:
 - `Cost_Governor.md` when cost, token, output-depth, or high-cost gate behavior changes
 - `SW_Runtime_Index.md` when compact runtime behavior changes
 - the version log below
+- release maintenance files when infrastructure changes: `SW_System_Self_Check.md`, `Release_Rules.md`, `tools/sw_consistency_check.py`, `tools/sw_sync_installed.py`, `tools/sw_doctor.py`, and `.github/workflows/sw-ci.yml`
 
 ## Update Content Recording
 
@@ -85,6 +86,8 @@ Each entry must include:
 
 | Version | Date | Change |
 | --- | --- | --- |
+| V1.8.0 | 2026-05-20 | Added visual-development board workflow for character setting sheets, scene setting sheets, and integrated storyboard sheets. Storyboard boards now default to 15 seconds per group, maximum 9 shots per board, with upstream handoff before Banana/Seedance generation. |
+| V1.7.8 | 2026-05-20 | Added lightweight release infrastructure: repository-only CI checks for GitHub Actions, local installed-entry sync, compact SW doctor diagnostics, release rules, broader installed skill coverage, and relay-token leak scanning. |
 | V1.7.7 | 2026-05-20 | Added a release consistency checker, documented root causes for entry/version mismatches, added low-token aesthetic image prompt references, added Oscar Best Picture visual-language study notes without storing copyrighted frames, and upgraded video motion/edit prompt rules for one-take, bullet-time, hero-shot, montage, match cuts, and Seedance-ready single-clip handoffs. |
 | V1.7.6 | 2026-05-19 | Changed URL Relay from a hard self-host-only stop to a priority fallback chain: try the configured SW media uploader first, report when it is unreachable or server-failing, then use Litterbox/Catbox only when the user confirms fallback or local private config enables it; config/auth errors do not fallback. Added relay fallback CLI options to URL Relay and Seedance local-file upload while keeping paid generation blocked until a public URL exists. |
 | V1.7.5 | 2026-05-19 | Locked URL Relay to the configured SW media uploader by default. Seedance now rejects Catbox/Litterbox-style temporary relay URLs unless the user explicitly confirms that fallback, and SW rules now stop before paid generation when the self-owned relay is unavailable. |
