@@ -1,6 +1,6 @@
 # SW Version
 
-Current runtime version: V1.7.5
+Current runtime version: V1.7.7
 Stable invocation name: SW_V1.0
 Stable invocation aliases: `/sw`, `/SW_V1.0`, `@SW_V1.0`, `/sw_v1.0`, `/sw-v1-0`
 Version sync aliases: `@sw_update`, `SW_UPDATE`, `/sw_update`, `/sw-update`, `SW_REFRESH`
@@ -85,6 +85,7 @@ Each entry must include:
 
 | Version | Date | Change |
 | --- | --- | --- |
+| V1.7.7 | 2026-05-20 | Added a release consistency checker, documented root causes for entry/version mismatches, added low-token aesthetic image prompt references, added Oscar Best Picture visual-language study notes without storing copyrighted frames, and upgraded video motion/edit prompt rules for one-take, bullet-time, hero-shot, montage, match cuts, and Seedance-ready single-clip handoffs. |
 | V1.7.6 | 2026-05-19 | Changed URL Relay from a hard self-host-only stop to a priority fallback chain: try the configured SW media uploader first, report when it is unreachable or server-failing, then use Litterbox/Catbox only when the user confirms fallback or local private config enables it; config/auth errors do not fallback. Added relay fallback CLI options to URL Relay and Seedance local-file upload while keeping paid generation blocked until a public URL exists. |
 | V1.7.5 | 2026-05-19 | Locked URL Relay to the configured SW media uploader by default. Seedance now rejects Catbox/Litterbox-style temporary relay URLs unless the user explicitly confirms that fallback, and SW rules now stop before paid generation when the self-owned relay is unavailable. |
 | V1.7.4 | 2026-05-19 | Added a standalone `sw-rescue` entry (`/sw-rescue`, `@sw_rescue`, `SW_RESCUE`) for stale or sealed SW chips. It reports the current runtime from a separate skill id, bypasses old startup/update snapshots, does not start projects, keeps normal startup/sync hot paths unchanged, and replaces a Seedance key-assignment example with a non-secret local-config reminder. |

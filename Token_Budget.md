@@ -61,6 +61,8 @@ URL Relay itself does not consume model tokens. Treat it as low-cost for public/
 
 Help and wake-up hot paths are zero-project-read by default: `@sw_help` uses its embedded short answer, activation-only uses one fixed loaded line, and sync-only uses one fixed sync line. Detailed indexes/logs load only for explicit details or diagnostics.
 
+Image aesthetic, Oscar/classic-film, and detailed video-motion references are progressive-disclosure files. They are not loaded during normal routing. Load them only when the user asks for stronger image taste, anti-AI look, filmic references, one-take/bullet-time/hero-shot language, edit techniques, or execution-level AI video prompts.
+
 ## Required Gate Before High-Cost Work
 
 Before high-cost work, confirm:

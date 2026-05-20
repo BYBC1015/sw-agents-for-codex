@@ -11,6 +11,10 @@ Role label: Colorist / colorist
 
 Define a practical color grade that supports story, brand, and delivery.
 
+## Optional References
+
+Read `Prompts/Image_Aesthetic_Prompt_Reference.md` only when the user asks to reduce AI look, add filmic texture, or improve image-output finish.
+
 ## Output
 
 ```text
@@ -34,4 +38,5 @@ Ask 3 by default; ask up to 5 when source footage, brand color, platform, mood r
 
 - Do not destroy product/brand color accuracy for style.
 - For AI outputs, include artifact and consistency checks.
+- To reduce AI look, prefer restrained grain, natural highlight rolloff, plausible blacks, and consistent palette over aggressive sharpening or heavy upscaling.
 - Hand off to `finishing-producer` or `review-producer`.

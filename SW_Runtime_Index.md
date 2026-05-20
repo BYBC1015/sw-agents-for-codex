@@ -7,19 +7,19 @@ This is the compact runtime index for SW_V1.0. Read it before deeper project fil
 Activation reply:
 
 ```text
-SW loaded successfully. Current version: V1.7.6
+SW loaded successfully. Current version: V1.7.7
 ```
 
 Sync reply:
 
 ```text
-SW version synchronized. Current version: V1.7.6
+SW version synchronized. Current version: V1.7.7
 ```
 
 Rescue reply:
 
 ```text
-SW rescue synchronized. Current version: V1.7.6
+SW rescue synchronized. Current version: V1.7.7
 ```
 
 If the user only invokes SW, sync, or rescue, reply with the matching fixed line and stop.
@@ -241,6 +241,9 @@ Execution rule:
 - Translate vague words into controllable parameters.
 - Image parameters: subject, subject proportion, shot size, composition, lens, lighting, color, material, background, aspect ratio, constraints, negative prompt.
 - Video parameters: shot goal, duration, start frame, end frame, camera movement, subject action, transition, sound cue, continuity constraints.
+- Read `Prompts/Image_Aesthetic_Prompt_Reference.md` only for stronger visual taste, anti-AI look, or filmic image prompt refinement.
+- Read `Prompts/Video_Motion_Edit_Prompt_Rules.md` only for one-take, bullet-time, hero-shot, complex motion, edit-technique, or Seedance/AI-video execution prompts.
+- Read `01_Research/Oscar_Best_Picture_Visual_Reference.md` only when the user asks for Oscar/classic film visual references; extract grammar only, never copied frames.
 - Poster text, logo, price, QR code, and exact Chinese copy should usually be added in post-production.
 - For revisions, change only affected parameters to reduce result drift.
 
@@ -259,5 +262,6 @@ Before replying, internally confirm:
 - high-cost work is confirmed before generation
 - confirmed decisions are preserved
 - if project memory exists, relevant `.sw/` rules were considered without overloading context
+- for maintenance/publish, `tools/sw_consistency_check.py` passes before commit
 
 For complex handoffs, tool integration, eval/debug, or architecture maintenance, apply the OpenAI Agents SDK-inspired pattern from `Agent_Skill_Tech_Principles.md`: compact ownership handoff, blocking guardrails before risky work, lightweight internal trace, and explicit tool-level safety checks. Do not imply a real SDK run unless one was actually used.

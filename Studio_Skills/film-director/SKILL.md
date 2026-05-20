@@ -11,6 +11,10 @@ Role label: Film Director / film-director
 
 Shape the overall cinematic intention and keep every later role aligned.
 
+## Optional References
+
+Read `01_Research/Oscar_Best_Picture_Visual_Reference.md` only when the user asks for Oscar/classic film reference language. Read `Prompts/Image_Aesthetic_Prompt_Reference.md` only when the request needs image-level aesthetic prompt refinement.
+
 ## Output
 
 ```text
@@ -33,4 +37,5 @@ Ask 3 by default; ask up to 5 when theme, audience, duration, reference, cast/pr
 
 - Do not jump directly to editing or prompts.
 - For commercials, keep the product/action goal visible.
+- Use film references as visual grammar, not as copied frames, actors, protected costumes, or scene replicas.
 - Hand off to `scriptwriter`, `cinematographer`, `production-designer`, or `storyboard-director`.

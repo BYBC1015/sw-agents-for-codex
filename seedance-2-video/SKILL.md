@@ -89,6 +89,8 @@ Seedance prompts should be compact and concrete:
 - One clip per prompt.
 - Specify subject, action, scene, camera movement, composition, lighting, color, atmosphere, duration, and constraints.
 - Replace vague wording such as "更电影感" with controllable choices: lens feel, camera path, light direction, contrast, depth of field, color temperature, pace, and frame size.
+- For one-take, bullet-time, hero-shot, montage, match cut, speed ramp, or complex movement requests, read the current SW root's `Prompts/Video_Motion_Edit_Prompt_Rules.md` first when available; if this skill is used from an installed copy, fall back to `C:\Users\Administrator\Documents\New project\Prompts\Video_Motion_Edit_Prompt_Rules.md`. Keep each generated clip to one continuous camera path.
+- Multi-cut ideas should be split into separate clip prompts plus an edit plan; do not submit one overloaded multi-scene prompt as a single Seedance task.
 - Avoid asking the model to create accurate small text, logos, QR codes, legal copy, or exact subtitles. Add those in editing/post.
 - For historical projects, if Historical Accuracy is enabled, check visible costume, architecture, props, symbols, materials, and anachronisms before generation and again when reviewing stills or output frames.
 

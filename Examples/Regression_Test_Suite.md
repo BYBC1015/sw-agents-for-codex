@@ -22,8 +22,8 @@ Get-ChildItem .\Studio_Skills -Directory | ForEach-Object {
 Check version consistency:
 
 ```powershell
-rg "Current version: V1.7.5|Current runtime version: V1.7.5|Current version: V1.7.4|Current runtime version: V1.7.4|Current version: V1.7.3|Current runtime version: V1.7.3|Current version: V1.7.2|Current runtime version: V1.7.2|Current version: V1.7.1|Current runtime version: V1.7.1|Current version: V1.7.0|Current runtime version: V1.7.0|Current version: V1.6.0|Current runtime version: V1.6.0|Current version: V1.5.4|Current runtime version: V1.5.4|Current version: V1.5.3|Current runtime version: V1.5.3|Current version: V1.5.2|Current runtime version: V1.5.2|Current version: V1.5.1|Current runtime version: V1.5.1|Current version: V1.5.0|Current runtime version: V1.5.0|Current version: V1.4.0|Current runtime version: V1.4.0" . --glob "!VERSION.md" --glob "!Architecture_Update_Log.md" --glob "!README.md" --glob "!Examples/Regression_Test_Suite.md"
-rg "SW loaded successfully. Current version: V1.7.6|SW version synchronized. Current version: V1.7.6|SW rescue synchronized. Current version: V1.7.6|Current runtime version: V1.7.6" .
+python .\tools\sw_consistency_check.py
+rg "SW loaded successfully. Current version: V1.7.7|SW version synchronized. Current version: V1.7.7|SW rescue synchronized. Current version: V1.7.7|Current runtime version: V1.7.7" .
 rg "<previous-version>" . --glob "!VERSION.md" --glob "!Architecture_Update_Log.md"
 ```
 
@@ -39,6 +39,15 @@ Check plugin manifest:
 
 ```powershell
 Get-Content "$env:USERPROFILE\plugins\sw-v1-0\.codex-plugin\plugin.json" -Raw | ConvertFrom-Json
+```
+
+Prompt reference checks:
+
+```powershell
+Test-Path .\Prompts\Image_Aesthetic_Prompt_Reference.md
+Test-Path .\Prompts\Video_Motion_Edit_Prompt_Rules.md
+Test-Path .\01_Research\Oscar_Best_Picture_Visual_Reference.md
+rg "Image_Aesthetic_Prompt_Reference|Video_Motion_Edit_Prompt_Rules|Oscar_Best_Picture_Visual_Reference" .\Prompts\Prompt_Spec_Rules.md .\Studio_Skills\prompt-director\SKILL.md
 ```
 
 Banana Pro runner checks:
@@ -160,6 +169,31 @@ Expected:
 
 - `prompt-director`.
 - Translate vague words into controllable visual parameters.
+
+One-take video prompt:
+
+```text
+/prompt-video 做一个 8 秒一镜到底英雄镜头，产品从暗处被灯光扫出来，准备用即梦2.0生成。
+```
+
+Expected:
+
+- `prompt-director` plus motion/camera support if needed.
+- Read `Prompts/Video_Motion_Edit_Prompt_Rules.md`.
+- Output one continuous clip prompt with start frame, 2-4 beats, camera path, end frame, continuity locks, and no visible cuts.
+- Do not submit Seedance until the selected prompt/public reference URL/key/cost gate is satisfied.
+
+Oscar/classic film visual reference:
+
+```text
+/prompt-image 给我一张电影感主视觉，参考奥斯卡最佳影片的画面语言，但不要复刻具体电影。
+```
+
+Expected:
+
+- Read `Prompts/Image_Aesthetic_Prompt_Reference.md`.
+- Read `01_Research/Oscar_Best_Picture_Visual_Reference.md` only if the answer needs a specific reference family.
+- Extract visual grammar only; no copied actors, frames, logos, costumes, or protected scene replicas.
 
 Project memory:
 

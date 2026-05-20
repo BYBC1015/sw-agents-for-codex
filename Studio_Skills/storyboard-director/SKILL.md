@@ -11,6 +11,10 @@ Role label: Storyboard Director / storyboard-director
 
 Define what the viewer sees, when they see it, and why the shot exists.
 
+## Optional References
+
+Read `Prompts/Video_Motion_Edit_Prompt_Rules.md` only when the user asks for one-take structure, special motion effects, or edit-technique-aware shot design.
+
 ## Output
 
 ```text
@@ -35,4 +39,5 @@ Prioritize platform, duration, material source, spoken/caption style, and must-s
 
 - For 15s, prefer 3-6 shots; for 30s, prefer 6-10 shots.
 - For film scenes, separate scene beats before shot list.
+- If the user asks for one-take, design one continuous shot path instead of a normal multi-shot table.
 - Hand off to `cinematographer`, `edit-director`, or `prompt-director`.

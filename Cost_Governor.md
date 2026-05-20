@@ -66,6 +66,9 @@ The cost gate decides:
 - Add `Production_Pipeline_Map.md` only for multi-stage handoff, full pipeline explanation, campaign/film complexity, or SOP output.
 - Add `Studio_Skill_Map.md` only when role boundaries conflict.
 - Add role `references/` only when the selected role's `SKILL.md` names a matching reference condition.
+- Add `Prompts/Image_Aesthetic_Prompt_Reference.md` only for visual taste, anti-AI look, or filmic image prompt refinement.
+- Add `Prompts/Video_Motion_Edit_Prompt_Rules.md` only for one-take, bullet-time, hero-shot, complex movement, edit-technique, or execution-level AI video prompts.
+- Add `01_Research/Oscar_Best_Picture_Visual_Reference.md` only when the user asks for Oscar/classic film visual references.
 
 ## Comfortable-Use Rules
 

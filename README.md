@@ -8,7 +8,7 @@
 
 ## 当前版本
 
-- 当前运行版本：`V1.7.6`
+- 当前运行版本：`V1.7.7`
 - 稳定调用入口：`/sw`、`/SW_V1.0` 或 `@SW_V1.0`
 - 版本同步入口：`@sw_update`
 - 完整更新记录：[`VERSION.md`](VERSION.md) / [`Architecture_Update_Log.md`](Architecture_Update_Log.md)
@@ -19,6 +19,7 @@
 
 | 版本 | 日期 | 更新内容 |
 | --- | --- | --- |
+| V1.7.7 | 2026-05-20 | 增加发布一致性检查脚本和系统自检记录，修复版本源漂移风险；新增图片审美提示词备用库、奥斯卡最佳影片画面语法参考（不保存版权截图），并强化一镜到底、子弹时间、英雄镜头、蒙太奇、match cut、speed ramp 等视频运镜/剪辑提示词规则。 |
 | V1.7.6 | 2026-05-19 | URL Relay now uses a clear priority chain: SW media uploader first; if unreachable/server-failing, report the failure and use Litterbox/Catbox only when fallback is confirmed or enabled in private local config. Config/auth errors do not fallback. Added fallback flags to URL Relay and Seedance local-file uploads. |
 | V1.7.5 | 2026-05-19 | Locked URL Relay to the configured SW media uploader by default. Seedance now rejects Catbox/Litterbox temporary relay URLs unless the user explicitly confirms that fallback, and SW stops before paid generation when the self-owned relay is unavailable. |
 | V1.7.4 | 2026-05-19 | Added independent `sw-rescue` rescue entry: when old `SW_V1.0` or `SW Update` chips keep replaying stale versions, use `/sw-rescue`, `@sw_rescue`, or `SW_RESCUE` in the same conversation. It does not start projects, does not add cost to normal startup/sync, and includes a Seedance key-example cleanup to avoid false-positive secret scans. |
@@ -75,7 +76,7 @@
 调用成功后，Codex 应回复：
 
 ```text
-SW loaded successfully. Current version: V1.7.6
+SW loaded successfully. Current version: V1.7.7
 ```
 
 Version synchronization uses a separate entry:
@@ -87,7 +88,7 @@ Version synchronization uses a separate entry:
 Expected reply:
 
 ```text
-SW version synchronized. Current version: V1.7.6
+SW version synchronized. Current version: V1.7.7
 ```
 
 If old startup/update chips keep replaying stale versions, use the standalone rescue entry:
@@ -105,7 +106,7 @@ or:
 Expected reply:
 
 ```text
-SW rescue synchronized. Current version: V1.7.6
+SW rescue synchronized. Current version: V1.7.7
 ```
 
 For other project folders, copy `SW_V1.0.md`, `sw_update.md`, and `sw_rescue.md`; copying only the startup file will not create the local update/rescue entries. For long-running projects, also copy `Project_Memory_Templates/.sw/` into that project folder.
@@ -211,6 +212,7 @@ Studio roles: Brief Strategist / `brief-strategist` + Storyboard Director / `sto
 - `banana-pro/`：显式调用的 Banana Pro / Nano Banana 图像生成 skill，包含 OpenRouter API 执行脚本；补齐 `OPENROUTER_API_KEY` 后可在提示词后真实生成图片。
 - `seedance-2-video/`：显式调用的 Seedance 2.0 / 即梦2.0 视频生成 skill，包含 Ark API dry-run/run/poll 脚本；补齐 `ARK_API_KEY` 或本地私密 key 后可在提示词后真实生成视频。
 - `url-relay/`：公网 URL 中转 skill，优先使用 SW media uploader 服务器把本地图片/视频上传成下游 AI 工具可抓取的 `http(s)` URL；自有服务器不可用时可按确认/配置切到临时中转；上传 token 只存本机私密配置，不进入仓库。
+- `Seedance_URL_Relay_Codex_Handoff.md`：只迁移即梦2.0与 URL Relay 中转策略的标准接入指令，不包含完整 SW 框架。
 - `Studio_Skills/`：每个岗位一个 project-local `SKILL.md`。
 - `Start_New_Project.md`：新项目启动语和最小输入示例。
 - `00_Brief/Brief.md`：项目需求入口。
@@ -223,6 +225,10 @@ Studio roles: Brief Strategist / `brief-strategist` + Storyboard Director / `sto
 - `Change_Log.md`：需求变化和改稿记录的唯一入口。
 - `Token_Budget.md`：AI 消耗分级、确认点和预算记录。
 - `Prompts/Prompt_Library.md`：日常可复制的提示词库。
+- `Prompts/Image_Aesthetic_Prompt_Reference.md`：图片审美、减少 AI 感、电影画面语言的按需参考。
+- `Prompts/Video_Motion_Edit_Prompt_Rules.md`：一镜到底、子弹时间、英雄镜头、复杂运镜和剪辑手法的按需参考。
+- `01_Research/Oscar_Best_Picture_Visual_Reference.md`：奥斯卡最佳影片画面语法暂存参考，不保存版权截图。
+- `SW_System_Self_Check.md` / `tools/sw_consistency_check.py`：维护发布前检查入口、版本一致性和密钥泄露预检。
 - `Examples/`：海报、视频、PPT/deck 和改稿测试样例。
 - `Examples/Regression_Test_Suite.md`：维护和升级后用于检查路由、版本、UTF-8 校验和高成本门的回归测试。
 

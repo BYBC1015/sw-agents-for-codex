@@ -11,6 +11,10 @@ Role label: Edit Director / edit-director
 
 Turn shots into a time-based cut plan. Do not claim the final rendered video is complete.
 
+## Optional References
+
+Read `Prompts/Video_Motion_Edit_Prompt_Rules.md` only when the request needs named edit techniques, one-take continuity, montage, match cuts, speed ramps, or AI-video prompt handoff constraints.
+
 ## Output
 
 ```text
@@ -36,4 +40,6 @@ Ask 3 by default; ask up to 5 when edit tool, length, source footage, voice/capt
 
 - Make rhythm, subtitles, and sound time-based.
 - Use transitions for meaning, not decoration.
+- Keep generation prompts and edit plans separate: multi-cut ideas become separate shot prompts plus this edit plan.
+- For one-take work, decide whether hidden cuts are acceptable; if not, preserve one continuous visible camera path.
 - Hand off to `motion-designer`, `sound-designer`, `colorist`, or `review-producer`.

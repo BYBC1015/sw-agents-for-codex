@@ -35,19 +35,19 @@ Copy these when you want version history and troubleshooting available inside th
 Startup:
 
 ```text
-SW loaded successfully. Current version: V1.7.6
+SW loaded successfully. Current version: V1.7.7
 ```
 
 Version sync:
 
 ```text
-SW version synchronized. Current version: V1.7.6
+SW version synchronized. Current version: V1.7.7
 ```
 
 Rescue:
 
 ```text
-SW rescue synchronized. Current version: V1.7.6
+SW rescue synchronized. Current version: V1.7.7
 ```
 
 ## Optional Project Memory Pack
