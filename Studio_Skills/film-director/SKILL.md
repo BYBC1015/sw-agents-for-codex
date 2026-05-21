@@ -13,7 +13,7 @@ Shape the overall cinematic intention and keep every later role aligned.
 
 ## Optional References
 
-Read `01_Research/Oscar_Best_Picture_Visual_Reference.md` only when the user asks for Oscar/classic film reference language. Read `Prompts/Image_Aesthetic_Prompt_Reference.md` only when the request needs image-level aesthetic prompt refinement.
+Read `01_Research/Oscar_Best_Picture_Visual_Reference.md` only when the user asks for Oscar/classic film reference language. Read `01_Research/Aesthetic_Daily_Selected/Daily_Selected_Index.md` only when the user asks to use daily selected/local moodboard materials. Read `Prompts/Image_Aesthetic_Prompt_Reference.md` only when the request needs image-level aesthetic prompt refinement.
 
 ## Output
 

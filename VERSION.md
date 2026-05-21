@@ -1,6 +1,6 @@
 ﻿# SW Version
 
-Current runtime version: V1.8.0
+Current runtime version: V1.8.1
 Stable invocation name: SW_V1.0
 Stable invocation aliases: `/sw`, `/SW_V1.0`, `@SW_V1.0`, `/sw_v1.0`, `/sw-v1-0`
 Version sync aliases: `@sw_update`, `SW_UPDATE`, `/sw_update`, `/sw-update`, `SW_REFRESH`
@@ -86,6 +86,7 @@ Each entry must include:
 
 | Version | Date | Change |
 | --- | --- | --- |
+| V1.8.1 | 2026-05-21 | Expanded the Oscar Best Picture visual-language reference from 20 to 30 films and added a local Daily Selected aesthetic index for user-supplied PDFs. Extracted images/contact sheets stay ignored locally; tracked files store only prompt-safe usage rules and compact indexes. |
 | V1.8.0 | 2026-05-20 | Added visual-development board workflow for character setting sheets, scene setting sheets, and integrated storyboard sheets. Storyboard boards now default to 15 seconds per group, maximum 9 shots per board, with upstream handoff before Banana/Seedance generation. |
 | V1.7.8 | 2026-05-20 | Added lightweight release infrastructure: repository-only CI checks for GitHub Actions, local installed-entry sync, compact SW doctor diagnostics, release rules, broader installed skill coverage, and relay-token leak scanning. |
 | V1.7.7 | 2026-05-20 | Added a release consistency checker, documented root causes for entry/version mismatches, added low-token aesthetic image prompt references, added Oscar Best Picture visual-language study notes without storing copyrighted frames, and upgraded video motion/edit prompt rules for one-take, bullet-time, hero-shot, montage, match cuts, and Seedance-ready single-clip handoffs. |

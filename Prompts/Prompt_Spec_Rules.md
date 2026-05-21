@@ -23,6 +23,7 @@
 - `Prompts/Image_Aesthetic_Prompt_Reference.md`：当用户要求更强审美、减少 AI 感、电影画面语言、图片提示词精修时读取。
 - `Prompts/Video_Motion_Edit_Prompt_Rules.md`：当用户要求一镜到底、子弹时间、英雄镜头、复杂运镜、剪辑手法或 Seedance/即梦执行级视频 prompt 时读取。
 - `01_Research/Oscar_Best_Picture_Visual_Reference.md`：当用户要求奥斯卡/经典电影画面参考时读取；只提取画面语法，不复刻具体电影画面。
+- `01_Research/Aesthetic_Daily_Selected/Daily_Selected_Index.md`：当用户要求每日精选、审美资料、今天补充的资料、moodboard 或 visual reference 时读取；只读索引和相关联系表，不默认汇总全部图片。
 
 ## 工具适配层
 

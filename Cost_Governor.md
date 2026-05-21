@@ -70,6 +70,7 @@ The cost gate decides:
 - Add `Prompts/Video_Motion_Edit_Prompt_Rules.md` only for one-take, bullet-time, hero-shot, complex movement, edit-technique, or execution-level AI video prompts.
 - Add `Prompts/Visual_Development_Board_Rules.md` only for character setting sheets, scene setting sheets, production-design boards, or integrated storyboard sheets.
 - Add `01_Research/Oscar_Best_Picture_Visual_Reference.md` only when the user asks for Oscar/classic film visual references.
+- Add `01_Research/Aesthetic_Daily_Selected/Daily_Selected_Index.md` only when the user asks for daily selected references, local moodboards, or newly supplied aesthetic PDFs; do not load all extracted images by default.
 
 ## Comfortable-Use Rules
 

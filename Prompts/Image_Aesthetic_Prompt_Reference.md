@@ -92,6 +92,14 @@ When using `01_Research/Oscar_Best_Picture_Visual_Reference.md`:
 3. Keep the user's brand/project subject primary.
 4. Add a copyright-safe note if the prompt risks copying a recognizable frame.
 
+When using `01_Research/Aesthetic_Daily_Selected/Daily_Selected_Index.md`:
+
+1. Treat the daily selected PDFs as a local moodboard, not as final assets.
+2. Read the date-level contact sheet only when the user asks for that day's references.
+3. Extract one or two useful levers: composition, palette, surface, lighting, type-space, or object styling.
+4. Do not copy the exact layout, text, logo, person, product, or proprietary graphic.
+5. Convert the selected lever into compact prompt language before any image/video generation step.
+
 Bad:
 
 ```text

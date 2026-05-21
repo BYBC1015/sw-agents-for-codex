@@ -7,19 +7,19 @@ This is the compact runtime index for SW_V1.0. Read it before deeper project fil
 Activation reply:
 
 ```text
-SW loaded successfully. Current version: V1.8.0
+SW loaded successfully. Current version: V1.8.1
 ```
 
 Sync reply:
 
 ```text
-SW version synchronized. Current version: V1.8.0
+SW version synchronized. Current version: V1.8.1
 ```
 
 Rescue reply:
 
 ```text
-SW rescue synchronized. Current version: V1.8.0
+SW rescue synchronized. Current version: V1.8.1
 ```
 
 If the user only invokes SW, sync, or rescue, reply with the matching fixed line and stop.
@@ -248,6 +248,7 @@ Execution rule:
 - Read `Prompts/Video_Motion_Edit_Prompt_Rules.md` only for one-take, bullet-time, hero-shot, complex motion, edit-technique, or Seedance/AI-video execution prompts.
 - Read `Prompts/Visual_Development_Board_Rules.md` only for character setting sheets, scene setting sheets, integrated storyboard sheets, or production-design board prompts.
 - Read `01_Research/Oscar_Best_Picture_Visual_Reference.md` only when the user asks for Oscar/classic film visual references; extract grammar only, never copied frames.
+- Read `01_Research/Aesthetic_Daily_Selected/Daily_Selected_Index.md` only when the user asks for daily selected references, user-supplied aesthetic materials, moodboards, or today's supplemental visual references; read only the relevant date/contact sheet.
 - Poster text, logo, price, QR code, and exact Chinese copy should usually be added in post-production.
 - For revisions, change only affected parameters to reduce result drift.
 

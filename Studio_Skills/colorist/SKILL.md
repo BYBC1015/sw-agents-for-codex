@@ -13,7 +13,7 @@ Define a practical color grade that supports story, brand, and delivery.
 
 ## Optional References
 
-Read `Prompts/Image_Aesthetic_Prompt_Reference.md` only when the user asks to reduce AI look, add filmic texture, or improve image-output finish.
+Read `Prompts/Image_Aesthetic_Prompt_Reference.md` only when the user asks to reduce AI look, add filmic texture, or improve image-output finish. Read `01_Research/Aesthetic_Daily_Selected/Daily_Selected_Index.md` only when the user asks to grade against daily selected/local moodboard references.
 
 ## Output
 

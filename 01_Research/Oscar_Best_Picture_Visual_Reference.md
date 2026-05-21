@@ -13,7 +13,7 @@ Source basis: Academy Award for Best Picture winner lists and public film-histor
 3. Do not copy actors, costumes, protected designs, logos, exact frames, or identifiable scene arrangements.
 4. Keep the user's product, brand, client, or story subject primary.
 
-## 20-Film Visual Study Set
+## 30-Film Visual Study Set
 
 ### 1. Gone with the Wind
 
@@ -175,6 +175,86 @@ Source basis: Academy Award for Best Picture winner lists and public film-histor
 - Rain sequence: water, darkness, practical city light, collapse of domestic order.
 - Party lawn contrast: bright controlled surface with buried violence underneath.
 
+### 21. The Best Years of Our Lives
+
+- Homecoming doorway: subject framed by domestic architecture, emotional distance before reunion.
+- Bar counter triangle: seated figures arranged by eye-line, quiet postwar tension in ordinary space.
+- Aircraft graveyard: industrial scale, rows of abandoned machines, human figure dwarfed by history.
+- Bedroom/private close-up: restrained face, practical lamp, emotional injury shown through stillness.
+- Family table pressure: everyday objects, layered bodies, unresolved silence held in medium framing.
+
+### 22. All About Eve
+
+- Dressing-room mirror: theatrical bulbs, reflected faces, ambition doubled by glass.
+- Backstage corridor: vertical curtains, shallow depth, bodies crossing power thresholds.
+- Banquet table: social hierarchy arranged by seated positions, controlled smiles, sharp overhead light.
+- Staircase entrance: subject isolated above the crowd, architecture creates status reveal.
+- Close-up intrigue: face held in half-shadow, polished surface, dialogue as invisible weapon.
+
+### 23. West Side Story
+
+- Urban playground wide: hard geometry, painted court lines, bodies grouped by color and stance.
+- Gang dance blocking: diagonal movement, synchronized silhouettes, tension expressed as choreography.
+- Fire escape verticals: romance separated by railings, city grid, night color contrast.
+- Gym color collision: saturated costumes, circular movement, two figures found inside crowd energy.
+- Street night confrontation: wet pavement, hard practical light, wide frame before violence.
+
+### 24. The Sound of Music
+
+- Mountain scale: tiny moving subject inside vast green landscape, open sky as emotional release.
+- Abbey symmetry: stone corridors, disciplined central framing, quiet spiritual order.
+- Family performance line: staged bodies, warm interior light, readable group hierarchy.
+- Curtain/playroom transformation: domestic texture, improvised props, rhythm through repeated children.
+- Night escape landscape: low-key exterior, silhouettes, danger softened by mist and distance.
+
+### 25. Annie Hall
+
+- City street two-shot: casual body distance, real sidewalk depth, conversation over spectacle.
+- Apartment conversation frame: neutral wall, everyday furniture, emotional awkwardness in negative space.
+- Tennis whites: bright outdoor light, relaxed posture, social comedy through clean blocking.
+- Split social space: two people present but psychologically separated by composition.
+- Direct-address plainness: centered subject, minimal production design, wit carried by timing.
+
+### 26. Platoon
+
+- Jungle patrol depth: layered foliage, narrow visibility, bodies half-swallowed by environment.
+- Night flare chaos: colored smoke and backlight, silhouettes moving through fear.
+- Mud-sweat close-up: skin texture, exhaustion, moral pressure without beauty lighting.
+- Village moral split: bodies arranged in opposing diagonals, violence implied by blocking.
+- Helicopter extraction: low angle, dust, wind, wounded bodies and machine scale.
+
+### 27. The Silence of the Lambs
+
+- Institutional corridor: cold green-gray palette, hard perspective, subject small inside system.
+- Glass barrier two-shot: faces close yet separated, reflection and transparency as tension.
+- Centered gaze close-up: direct eye-line, shallow background, psychological confrontation.
+- Evidence-object macro: clue isolated by clean focus, forensic texture over decoration.
+- Basement low-light maze: flashlight-driven visibility, occluded corners, threat outside the frame.
+
+### 28. American Beauty
+
+- Suburban facade symmetry: manicured exterior, centered composition, controlled surface hiding fracture.
+- Red accent motif: one saturated color against neutral domestic space, desire as visual interruption.
+- Dinner table tension: rigid seated triangle, polished table reflection, emotional coldness.
+- Ordinary object beauty: floating/lightweight subject, plain background, attention given to the overlooked.
+- Garage/body isolation: fluorescent practical light, hard surfaces, private rebellion in banal space.
+
+### 29. The Lord of the Rings: The Return of the King
+
+- Mountain beacon chain: tiny fire points across giant landscape, scale communicated by distance.
+- Battlefield mass: layered armies, dust, flags, foreground chaos against monumental architecture.
+- Throne hall symmetry: stone verticals, ceremonial depth, figure framed by inherited power.
+- Volcanic orange darkness: hot rim light, ash atmosphere, silhouettes under impossible weight.
+- Fellowship smallness: human-scale bodies placed inside mythic terrain, emotion through scale contrast.
+
+### 30. Moonlight
+
+- Blue night skin light: cool monochrome atmosphere, face and water reflecting each other.
+- Shoreline mentorship: two bodies in gentle wide frame, ocean horizon as emotional permission.
+- Corridor isolation: subject centered in institutional space, distance held around the body.
+- Diner warmth: amber practical light, restrained two-shot, intimacy built from silence.
+- Close face in darkness: shallow depth, saturated shadow, identity revealed through tiny expression shifts.
+
 ## Prompt Extraction Examples
 
 Reference idea: `Lawrence of Arabia desert horizon`.
@@ -199,6 +279,14 @@ Prompt-safe extraction:
 
 ```text
 clean architectural lines, glass and concrete surfaces, controlled negative space, social distance expressed through levels and doorways, cool daylight, precise blocking, no copied house design
+```
+
+Reference idea: `Moonlight blue night portrait`.
+
+Prompt-safe extraction:
+
+```text
+cool blue night palette, soft side light on skin, shallow dark background, quiet close framing, reflective water-like highlights, emotional restraint, no copied actor or recognizable scene
 ```
 
 ## Source Links

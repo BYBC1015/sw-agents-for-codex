@@ -25,7 +25,7 @@ Check version consistency:
 python .\tools\sw_consistency_check.py --scope repo
 python .\tools\sw_sync_installed.py --dry-run
 python .\tools\sw_doctor.py
-rg "SW loaded successfully. Current version: V1.8.0|SW version synchronized. Current version: V1.8.0|SW rescue synchronized. Current version: V1.8.0|Current runtime version: V1.8.0" .
+rg "SW loaded successfully. Current version: V1.8.1|SW version synchronized. Current version: V1.8.1|SW rescue synchronized. Current version: V1.8.1|Current runtime version: V1.8.1" .
 rg "<previous-version>" . --glob "!VERSION.md" --glob "!Architecture_Update_Log.md"
 ```
 
@@ -50,7 +50,8 @@ Test-Path .\Prompts\Image_Aesthetic_Prompt_Reference.md
 Test-Path .\Prompts\Video_Motion_Edit_Prompt_Rules.md
 Test-Path .\Prompts\Visual_Development_Board_Rules.md
 Test-Path .\01_Research\Oscar_Best_Picture_Visual_Reference.md
-rg "Image_Aesthetic_Prompt_Reference|Video_Motion_Edit_Prompt_Rules|Visual_Development_Board_Rules|Oscar_Best_Picture_Visual_Reference" .\Prompts\Prompt_Spec_Rules.md .\Studio_Skills\prompt-director\SKILL.md
+Test-Path .\01_Research\Aesthetic_Daily_Selected\Daily_Selected_Index.md
+rg "Image_Aesthetic_Prompt_Reference|Video_Motion_Edit_Prompt_Rules|Visual_Development_Board_Rules|Oscar_Best_Picture_Visual_Reference|Daily_Selected_Index" .\Prompts\Prompt_Spec_Rules.md .\Studio_Skills\prompt-director\SKILL.md
 ```
 
 Visual development board checks:

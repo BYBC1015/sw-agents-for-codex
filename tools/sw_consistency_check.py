@@ -69,6 +69,8 @@ PROMPT_REFERENCE_FILES = [
     ROOT / "Prompts" / "Video_Motion_Edit_Prompt_Rules.md",
     ROOT / "Prompts" / "Visual_Development_Board_Rules.md",
     ROOT / "01_Research" / "Oscar_Best_Picture_Visual_Reference.md",
+    ROOT / "01_Research" / "Aesthetic_Daily_Selected" / "README.md",
+    ROOT / "01_Research" / "Aesthetic_Daily_Selected" / "Daily_Selected_Index.md",
 ]
 
 REPO_TOOL_SKILL_FILES = [
@@ -168,6 +170,7 @@ def check_prompt_references(issues: list[str]) -> None:
             "Image_Aesthetic_Prompt_Reference.md",
             "Video_Motion_Edit_Prompt_Rules.md",
             "Visual_Development_Board_Rules.md",
+            "Daily_Selected_Index.md",
         ]:
             if required not in text:
                 fail(issues, f"Prompt_Spec_Rules.md does not reference {required}")
