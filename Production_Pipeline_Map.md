@@ -170,6 +170,35 @@ Key gates:
 - generate Group A first unless the user explicitly confirms batch generation
 - exact labels, logos, and final typography stay in post-production unless the user accepts model text risk
 
+## Visual方案文件 / Word Handoff Workflow
+
+Use this only when the user asks for a 视觉方案文件, 视觉导演方案, Word视觉方案, DOCX视觉方案, 分镜视觉方案文件, or client-facing visual bible.
+
+If visuals are already selected:
+
+```text
+finishing-producer
+-> storyboard-visual-word
+```
+
+If storyboard/scene visuals still need to be made:
+
+```text
+storyboard-director or production-designer
+-> asset-producer (if source/risk/selection matters)
+-> prompt-director (if prompt/image generation is needed)
+-> banana-pro or other explicit image tool (only if requested)
+-> finishing-producer
+-> storyboard-visual-word
+```
+
+Key gates:
+
+- it is a downstream packaging step, not a complete storyboard generator
+- each scene/group needs one selected image before DOCX generation
+- formal Word should embed images and hide local paths, raw prompts, generation-result tables, and tool parameters
+- internal production appendix with prompts/parameters requires explicit user request
+
 ## Prompt-Only Workflow
 
 ```text

@@ -44,6 +44,7 @@ USER_SKILL_FILES = [
     USERPROFILE / ".codex" / "skills" / "banana-pro" / "SKILL.md",
     USERPROFILE / ".codex" / "skills" / "seedance-2-video" / "SKILL.md",
     USERPROFILE / ".codex" / "skills" / "url-relay" / "SKILL.md",
+    USERPROFILE / ".codex" / "skills" / "storyboard-visual-word" / "SKILL.md",
 ]
 
 PLUGIN_FILES = [
@@ -54,6 +55,7 @@ PLUGIN_FILES = [
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "banana-pro" / "SKILL.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "seedance-2-video" / "SKILL.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "url-relay" / "SKILL.md",
+    USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "storyboard-visual-word" / "SKILL.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "sw-update" / "agents" / "openai.yaml",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "sw-rescue" / "agents" / "openai.yaml",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "sw-help" / "agents" / "openai.yaml",
@@ -76,10 +78,13 @@ PROMPT_REFERENCE_FILES = [
 REPO_TOOL_SKILL_FILES = [
     ROOT / "banana-pro" / "SKILL.md",
     ROOT / "banana-pro" / "scripts" / "generate_openrouter_image.py",
+    ROOT / "banana-pro" / "bin" / "banana-pro",
     ROOT / "seedance-2-video" / "SKILL.md",
     ROOT / "seedance-2-video" / "scripts" / "seedance_task.py",
     ROOT / "url-relay" / "SKILL.md",
     ROOT / "url-relay" / "scripts" / "url_relay.py",
+    ROOT / "storyboard-visual-word" / "SKILL.md",
+    ROOT / "storyboard-visual-word" / "scripts" / "build_scene_visual_docx.py",
 ]
 
 SECRET_PATTERNS = [
@@ -184,7 +189,7 @@ def check_repo_tool_skills(issues: list[str]) -> None:
     registry = ROOT / "Tool_Registry.md"
     if registry.exists():
         text = read_text(registry)
-        for required in ["Banana Pro", "Seedance", "URL Relay"]:
+        for required in ["Banana Pro", "Seedance", "URL Relay", "Storyboard Visual Word"]:
             if required not in text:
                 fail(issues, f"Tool_Registry.md does not mention {required}")
 

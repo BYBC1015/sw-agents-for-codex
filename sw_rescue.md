@@ -28,7 +28,7 @@ SW_FORCE_UPDATE
 Reply exactly:
 
 ```text
-SW rescue synchronized. Current version: V1.8.1
+SW rescue synchronized. Current version: V1.9.1
 ```
 
 ## Rule

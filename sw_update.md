@@ -29,7 +29,7 @@ SW_REFRESH
 After synchronization, reply exactly:
 
 ```text
-SW version synchronized. Current version: V1.8.1
+SW version synchronized. Current version: V1.9.1
 ```
 
 ## Hot Path

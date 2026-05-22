@@ -7,19 +7,19 @@ This is the compact runtime index for SW_V1.0. Read it before deeper project fil
 Activation reply:
 
 ```text
-SW loaded successfully. Current version: V1.8.1
+SW loaded successfully. Current version: V1.9.1
 ```
 
 Sync reply:
 
 ```text
-SW version synchronized. Current version: V1.8.1
+SW version synchronized. Current version: V1.9.1
 ```
 
 Rescue reply:
 
 ```text
-SW rescue synchronized. Current version: V1.8.1
+SW rescue synchronized. Current version: V1.9.1
 ```
 
 If the user only invokes SW, sync, or rescue, reply with the matching fixed line and stop.
@@ -145,7 +145,7 @@ Cost gate: high-cost output needs confirmation. I will generate one confirmed ve
   - If the user already provides a complete final image prompt, use `prompt-director` -> `banana-pro`.
   - If the same request includes storyboard, video, film, poster, PPT/deck/slide, layout, character, product, prop, or scene design work, do not jump directly to Banana Pro. First run the responsible Studio role for the upstream deliverable, then `prompt-director`, then `banana-pro` only for the selected frame/image.
   - Add `tool-integrator` only when capability, parameters, API, or connection state is unclear.
-  Treat `banana-pro` like an `imagegen`-style image-generation member after prompt preparation. It includes `scripts/generate_openrouter_image.py`; real generation needs confirmation and `OPENROUTER_API_KEY`. If the key is missing, run dry-run or output the payload and do not claim an image was generated.
+  Treat `banana-pro` like an `imagegen`-style image-generation member after prompt preparation. It includes `scripts/generate_openrouter_image.py`; real generation needs confirmation and `OPENROUTER_API_KEY` from the environment or private `~/.config/banana-pro/openrouter.env`. If the key is missing, run dry-run or output the payload and do not claim an image was generated.
 - Explicit 即梦2.0生成 / 即梦生成 / Seedance 2.0 / Ark Seedance / 豆包 Seedance video generation:
   - If the user already provides a complete final video prompt, use `prompt-director` -> `seedance-2-video`.
   - If the same request includes script, storyboard, camera language, edit rhythm, motion, sound, color, scene design, or film treatment work, first run the responsible Studio role, then `prompt-director`, then `seedance-2-video` only for the selected clip/shot.
@@ -155,6 +155,10 @@ Cost gate: high-cost output needs confirmation. I will generate one confirmed ve
   - Use `url-relay` to turn local media into public `http(s)` URLs before the downstream generator.
   - For Seedance local files, route `prompt-director` -> `url-relay` -> `seedance-2-video`.
   - If the configured SW uploader is unreachable or returns a server-side failure, report `SW media uploader unavailable`; then use Litterbox/Catbox only when the user confirms fallback or local private config enables it. Missing token/address or permission errors do not trigger fallback. Otherwise keep the prompt/payload and ask for a public URL.
+- Explicit 视觉方案文件 / 视觉导演方案 / Word视觉方案 / DOCX视觉方案 / 分镜视觉方案文件 / `@storyboard-visual-word`:
+  - If selected storyboard/scene/concept images and rationale already exist, use `finishing-producer` -> `storyboard-visual-word`.
+  - If the request still needs storyboard, scene/character setting, image generation, or image selection, route upstream first, then package the selected visuals into DOCX.
+  - Do not expose raw prompts, local paths, generation-result tables, or tool parameters in the formal Word unless the user asks for an internal production appendix.
 - Revision: `change-manager` first, then affected role.
 - Historical accuracy: do not auto-load. Clear risk only adds one reminder line unless the user confirms. Plain enable applies to the current request/visual chain; `本项目开启历史检查` or `全程开启历史检查` applies to the current conversation/project until closed; `关闭历史检查`, `不用历史检查`, or `恢复普通模式` turns it off. If enabled and image/video generation happens, check final visible stills/frames after output when available, not only the prompt.
 
@@ -162,13 +166,15 @@ Default role read budget: one primary plus up to one support role. Use up to thr
 
 ## Tool Skill Loading
 
-Tool skills are not Studio roles. Do not look for `Studio_Skills/banana-pro/SKILL.md`, `Studio_Skills/seedance-2-video/SKILL.md`, or `Studio_Skills/url-relay/SKILL.md`.
+Tool skills are not Studio roles. Do not look for `Studio_Skills/banana-pro/SKILL.md`, `Studio_Skills/seedance-2-video/SKILL.md`, `Studio_Skills/url-relay/SKILL.md`, or `Studio_Skills/storyboard-visual-word/SKILL.md`.
 
 When the user explicitly asks for 香蕉 / banana / Banana Pro / Nano Banana / `@banana-pro`, first decide whether upstream Studio work is still needed. Load Banana Pro only after the current upstream deliverable and prompt are ready.
 
 When the user explicitly asks for 即梦2.0生成 / 即梦生成 / Seedance 2.0 / Ark Seedance / `@seedance-2-video`, first decide whether upstream Studio work is still needed. Load Seedance only after the selected clip/shot handoff and final video prompt are ready.
 
 When the user explicitly asks for URL中转 / 公网URL / 上传参考图 / 上传参考视频 / `@url-relay`, or a Seedance request contains local media files, load URL Relay only for the media handoff. Do not let URL Relay bypass the upstream Studio role or `prompt-director`.
+
+When the user explicitly asks for 视觉方案文件 / 视觉导演方案 / Word视觉方案 / DOCX视觉方案 / 分镜视觉方案文件 / `@storyboard-visual-word`, load Storyboard Visual Word only after selected visuals and scene rationale are ready. It packages a DOCX handoff; it does not create the full storyboard.
 
 Default upstream chains:
 
@@ -180,6 +186,8 @@ Default upstream chains:
 - Seedance video clip request with local reference files: `storyboard-director`, `cinematographer`, or `edit-director` if needed -> `prompt-director` -> `url-relay` -> `seedance-2-video`
 - direct final Seedance prompt request: `prompt-director` -> `seedance-2-video`
 - direct final Seedance prompt request with local reference files: `prompt-director` -> `url-relay` -> `seedance-2-video`
+- visual方案文件 with selected images: `finishing-producer` -> `storyboard-visual-word`
+- visual方案文件 still needing visuals: upstream visual role -> optional tool generation/selection -> `finishing-producer` -> `storyboard-visual-word`
 
 For Banana execution, load:
 
@@ -204,6 +212,14 @@ For URL Relay execution, load:
    - `C:\Users\Administrator\.codex\skills\url-relay\SKILL.md`
    - `C:\Users\Administrator\plugins\sw-v1-0\skills\url-relay\SKILL.md`
 
+For Storyboard Visual Word execution, load:
+
+1. `Studio_Skills/finishing-producer/SKILL.md` when delivery naming, file package, or client handoff context matters
+2. the first available Storyboard Visual Word tool skill path:
+   - `storyboard-visual-word/SKILL.md`
+   - `C:\Users\Administrator\.codex\skills\storyboard-visual-word\SKILL.md`
+   - `C:\Users\Administrator\plugins\sw-v1-0\skills\storyboard-visual-word\SKILL.md`
+
 Use this visible trace:
 
 ```text
@@ -226,18 +242,27 @@ Tool skill: URL Relay / `url-relay` (loaded for local media public URL handoff).
 Tool skill: Seedance 2.0 Video / `seedance-2-video` (loaded by explicit user request).
 ```
 
+Storyboard Visual Word trace:
+
+```text
+Studio roles: Finishing Producer / `finishing-producer` (loaded). Cost lane: production.
+Tool skill: Storyboard Visual Word / `storyboard-visual-word` (loaded for visual方案文件/DOCX handoff).
+```
+
 Execution rule:
 
-- If `OPENROUTER_API_KEY` is set and generation is confirmed, run the Banana Pro script from the loaded skill folder.
+- If `OPENROUTER_API_KEY` is set or the private Banana Pro env file is configured and generation is confirmed, run the Banana Pro script from the loaded skill folder.
 - Treat explicit "use banana to generate one draft" as confirmation for one draft image only; still pause for private uploads, final-use brand/face/product assets, or batch generation.
-- Default Banana output is draft `1K`; use `2K` or `4K` after user confirmation or final review.
+- Default Banana Pro output is `2K`; use `1K` only for explicit fast drafts and `4K` after user confirmation or final review.
 - Do not run a separate key-check command every time. Let the Banana runner check the key; after one successful key-readable check or generation in the same conversation, treat the key as available unless the runner reports otherwise.
-- If `OPENROUTER_API_KEY` is missing, run `--dry-run` or return the payload path/status; do not search for another imaginary executor.
+- If the Banana Pro key is missing, run `--dry-run` or return the payload path/status; do not search for another imaginary executor.
 - If `ARK_API_KEY` or the Seedance local private key file is available and video generation is confirmed, run the Seedance script from the loaded skill folder.
 - Treat explicit "use 即梦2.0 to generate one draft clip" as confirmation for one draft clip only; still pause for private uploads, final-use brand/face/product assets, 1080p, long polling, or batch generation.
 - If Seedance input is local media, use URL Relay first and pass the returned public URL with `--image-url`, or use Seedance runner `--image-file` after the privacy/upload guardrail is satisfied.
 - If URL Relay fails, do not submit real Seedance generation. First try the SW media uploader; if it is unreachable/server-failing and confirmed/configured fallback exists, use the temporary relay and say so. Otherwise keep the prompt/payload and ask for a public URL.
 - If the Seedance key is missing, run `dry-run` or return the sanitized payload; do not search for another imaginary video executor.
+- If the user asks for a visual方案文件, 视觉导演方案, Word视觉方案, DOCX视觉方案, 分镜视觉方案文件, or `@storyboard-visual-word`, load Storyboard Visual Word only after selected storyboard/scene/concept images and concise rationale exist.
+- Storyboard Visual Word is a downstream DOCX handoff tool, not a full storyboard generator. If the visuals are not ready, route upstream first; do not fabricate images or Word pages.
 
 ## Prompt Quality Rules
 

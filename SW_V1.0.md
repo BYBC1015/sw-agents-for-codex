@@ -33,7 +33,7 @@ activate SW_V1.0
 After activation succeeds, reply exactly:
 
 ```text
-SW loaded successfully. Current version: V1.8.1
+SW loaded successfully. Current version: V1.9.1
 ```
 
 If the user only invokes SW, stop after the required reply and wait for the project request.
@@ -56,6 +56,8 @@ If the same request asks for upstream video/film work and Seedance/即梦 output
 
 If Seedance/即梦 or another AI tool needs a public media URL and the user provides a local file, use `url-relay` before the downstream tool. Do not submit real generation until the relay upload succeeds.
 
+If the same request asks for a visual方案文件, 视觉导演方案, Word视觉方案, DOCX视觉方案, or 分镜视觉方案文件, treat it as a downstream handoff. Do not let `storyboard-visual-word` replace storyboard, scene design, image generation, or image selection. Package the DOCX only after selected visuals and concise scene rationale exist.
+
 If the same request enables Historical Accuracy, default scope is the current request/visual chain only. Project-level scope requires explicit wording such as `本项目开启历史检查` or `全程开启历史检查`, and closes with `关闭历史检查`, `不用历史检查`, or `恢复普通模式`.
 
 ## Version Sync Is Separate
@@ -71,7 +73,7 @@ For synchronization in historical conversations or other project folders, use:
 Expected sync reply:
 
 ```text
-SW version synchronized. Current version: V1.8.1
+SW version synchronized. Current version: V1.9.1
 ```
 
 If normal sync still returns a stale sealed chip, use the standalone rescue entry:
@@ -83,7 +85,7 @@ If normal sync still returns a stale sealed chip, use the standalone rescue entr
 Expected rescue reply:
 
 ```text
-SW rescue synchronized. Current version: V1.8.1
+SW rescue synchronized. Current version: V1.9.1
 ```
 
 ## Minimum Project Folder Package

@@ -87,6 +87,10 @@ Tool skill: Seedance 2.0 Video / `seedance-2-video` (loaded by explicit user req
 Tool skill: URL Relay / `url-relay` (loaded for local media public URL handoff).
 ```
 
+```text
+Tool skill: Storyboard Visual Word / `storyboard-visual-word` (loaded for visual方案文件/DOCX handoff).
+```
+
 Do not put external tool skills inside the `Studio roles:` trace. For Banana Pro, the correct trace is:
 
 ```text
@@ -95,6 +99,7 @@ Tool skill: Banana Pro / `banana-pro` (loaded by explicit user request).
 ```
 
 Never combine Banana Pro, Seedance, or URL Relay into the Studio role trace.
+Never combine Storyboard Visual Word into the Studio role trace.
 
 ## Tool No-Bypass Rule
 
@@ -148,6 +153,19 @@ Example for a selected video-shot request with local media:
 Studio roles: Storyboard Director / `storyboard-director` + Prompt Director / `prompt-director` (loaded). Cost lane: high-cost.
 Tool skill: URL Relay / `url-relay` (loaded for local media public URL handoff).
 Tool skill: Seedance 2.0 Video / `seedance-2-video` (loaded by explicit user request).
+```
+
+For Storyboard Visual Word:
+
+- If the user asks for a visual方案文件, 视觉导演方案, Word视觉方案, DOCX视觉方案, 分镜视觉方案文件, or `@storyboard-visual-word`, load it only after selected storyboard/scene/concept images and concise visual-setting rationale exist.
+- If the request still needs storyboard design, scene/character setting, image generation, or visual selection, first route the upstream Studio role and any explicit generation tool. Then package the selected visuals into DOCX.
+- Do not include prompt bodies, local image paths, generation-result tables, or Midjourney/Banana/Seedance parameters in the formal Word unless the user explicitly asks for an internal production appendix.
+
+Example for a visual director Word handoff:
+
+```text
+Studio roles: Finishing Producer / `finishing-producer` (loaded). Cost lane: production.
+Tool skill: Storyboard Visual Word / `storyboard-visual-word` (loaded for visual方案文件/DOCX handoff).
 ```
 
 ## Questions And Suggestions
@@ -218,6 +236,12 @@ For `url-relay`, do not search for `Studio_Skills/url-relay/SKILL.md`; it is not
 2. `C:\Users\Administrator\.codex\skills\url-relay\SKILL.md`
 3. `C:\Users\Administrator\plugins\sw-v1-0\skills\url-relay\SKILL.md`
 
+For `storyboard-visual-word`, do not search for `Studio_Skills/storyboard-visual-word/SKILL.md`; it is not a Studio role. Load it as a tool skill from the first available path:
+
+1. `storyboard-visual-word/SKILL.md` in the current project folder
+2. `C:\Users\Administrator\.codex\skills\storyboard-visual-word\SKILL.md`
+3. `C:\Users\Administrator\plugins\sw-v1-0\skills\storyboard-visual-word\SKILL.md`
+
 If a historical conversation cannot read the latest local files, tell the user to run `@sw_update` or start a new conversation.
 
 ## Token Control
@@ -237,5 +261,7 @@ If a historical conversation cannot read the latest local files, tell the user t
 - `url-relay` loads only when the user explicitly asks for URL中转, 公网URL, 上传参考图/视频, `@url-relay`, or a downstream tool such as Seedance needs a public URL but the user provided a local file
 - `url-relay` is a public URL handoff member; route it after prompt/design handoff and before the downstream tool
 - if relay upload fails, do not spend generation credits until a public URL exists. First report that the SW media uploader is unavailable; then use an already-public URL or a confirmed/configured Litterbox/Catbox fallback only for unreachable/server-side relay failures. Missing token/address or permission errors stop for config repair. Otherwise keep the prompt/payload and ask for a public URL.
+- `storyboard-visual-word` loads only when the user explicitly asks for 视觉方案文件, 视觉导演方案, Word视觉方案, DOCX视觉方案, 分镜视觉方案文件, or `@storyboard-visual-word`
+- `storyboard-visual-word` is a downstream DOCX handoff member; route it after selected visuals and scene rationale are ready, not during ordinary storyboard planning
 - preserve locked decisions and pass only the useful handoff packet to the next role
 - project memory suggestions are optional one-liners and require explicit user approval before writing

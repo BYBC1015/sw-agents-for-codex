@@ -31,6 +31,7 @@ Judge these before every project reply:
    - If explicit Seedance generation is bundled with script, storyboard, video/film shot design, camera, edit rhythm, motion, sound, color, scene design, or film treatment, route the upstream Studio role first, then `prompt-director` -> `seedance-2-video`. Do not let the tool trigger bypass the design role.
    - If explicit Seedance generation uses local image/video files instead of public URLs, insert `url-relay` between `prompt-director` and `seedance-2-video`; use SW media uploader first, then only a confirmed/configured temporary fallback, and stop before real generation if no public URL is available.
    - Explicit URL中转 / 公网URL / 上传参考图 / 上传参考视频 / `@url-relay` -> `url-relay`; if a downstream generation tool is named, return to that tool after the relay URL is ready.
+   - Explicit 视觉方案文件 / 视觉导演方案 / Word视觉方案 / DOCX视觉方案 / 分镜视觉方案文件 / `@storyboard-visual-word` with selected images and rationale -> `finishing-producer` -> `storyboard-visual-word`; if storyboard/scene visuals still need creation or selection, route the upstream Studio role first.
 4. Final check/risk/delivery readiness -> `review-producer`.
 5. Export/package/naming/handoff -> `finishing-producer`.
 6. Character setting sheet, role reference board, scene setting sheet, production-design board -> `production-designer`; add `asset-producer` only when source/risk/asset priority matters.

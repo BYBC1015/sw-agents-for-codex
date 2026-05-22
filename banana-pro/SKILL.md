@@ -1,6 +1,6 @@
 ---
 name: banana-pro
-description: Generate images with Banana Pro / Nano Banana 2 through OpenRouter after SW prompt preparation, including text-to-image, image-to-image, multi-reference images, character sheets, clean scene plates, product or prop design images, and storyboard first frames. Use only when the user explicitly asks for 香蕉, banana, Banana Pro, Nano Banana, OpenRouter image generation, @banana-pro, or asks SW to use this image-generation member. Do not trigger for generic image prompt requests unless the user asks to generate or execute them with Banana Pro.
+description: Generate images with Banana Pro through OpenRouter after SW prompt preparation, including text-to-image, image-to-image, multi-reference image workflows, character sheets, clean scene plates, product or prop design images, and storyboard first frames. Use only when the user explicitly asks for 香蕉, banana, Banana Pro, Nano Banana, OpenRouter image generation, @banana-pro, or asks SW to use this image-generation member. Do not trigger for generic image prompt requests unless the user asks to generate or execute them with Banana Pro.
 ---
 
 # Banana Pro
@@ -14,10 +14,10 @@ Use `scripts/generate_openrouter_image.py` to generate images through OpenRouter
 - the user explicitly asks for 香蕉 / banana / Banana Pro / Nano Banana / `@banana-pro`
 - the user wants actual image generation, not only a prompt
 - the needed upstream deliverable already exists, such as a locked poster visual direction, slide/page visual brief, storyboard shot, character sheet, product/prop brief, or final visual prompt
-- `OPENROUTER_API_KEY` is available in the environment
+- `OPENROUTER_API_KEY` is available in the environment or in the private env file
 - high-cost and upload/privacy guardrails are satisfied
 
-The script reads `OPENROUTER_API_KEY` from the process environment and, on Windows, also falls back to the current user's environment variable registry value. If the key is missing, run dry-run or provide the ready payload; do not claim an image was generated.
+The script reads `OPENROUTER_API_KEY` from the process environment, then from `~/.config/banana-pro/openrouter.env`, and on Windows also falls back to the current user's environment variable registry value. If the key is missing, run dry-run or provide the ready payload; do not claim an image was generated.
 
 For speed, do not run a separate key-check command before every generation. Let the runner check the key; after one successful key-readable check or one successful generation in the current conversation, treat the key as available unless the runner reports otherwise.
 
@@ -27,17 +27,17 @@ Default model and settings:
 
 ```json
 {
-  "model": "google/gemini-3.1-flash-image-preview",
+  "model": "google/gemini-3-pro-image-preview",
   "modalities": ["image", "text"],
   "stream": false,
   "image_config": {
     "aspect_ratio": "16:9",
-    "image_size": "1K"
+    "image_size": "2K"
   }
 }
 ```
 
-Prefer `16:9` for storyboard frames, cinematic frames, product demos, UI references, and video first frames. Use user-specified aspect ratio and image size when provided. Default to `1K` for draft speed and cost control; use `2K` or `4K` only when the user asks for final/high-resolution output or the project already passed review.
+Prefer `16:9` for storyboard frames, cinematic frames, product demos, UI references, and video first frames. Use user-specified aspect ratio and image size when provided. Default to `2K` for Banana Pro quality; use `1K` only for faster/lower-cost drafts and `4K` only when the user asks for final/high-resolution output or the project already passed review.
 
 ## No-Bypass Rule
 
@@ -68,16 +68,17 @@ Banana Pro must not skip SW's design pipeline.
    - Read `references/openrouter-direct.md` only for raw payload/API details or troubleshooting.
 
 5. Generate or dry-run.
-   - If generation is confirmed and `OPENROUTER_API_KEY` exists, resolve the script relative to the loaded `banana-pro/SKILL.md`, then run:
+   - If generation is confirmed and `OPENROUTER_API_KEY` or the private env file exists, resolve the script relative to the loaded `banana-pro/SKILL.md`, then run:
 
 ```powershell
-python <banana-pro-skill-dir>\scripts\generate_openrouter_image.py --prompt "<final prompt>" --aspect-ratio "16:9" --image-size "1K"
+python <banana-pro-skill-dir>\scripts\generate_openrouter_image.py --prompt "<final prompt>" --aspect-ratio "16:9" --image-size "2K"
 ```
 
    - For references, add `--reference-image <local-path>` or `--reference-url <url>`.
-   - For final-quality output, set `--image-size "2K"` or `--image-size "4K"` only after the user has confirmed the draft direction.
+   - For quick drafts, set `--image-size "1K"`; for final-quality output, set `--image-size "4K"` only after the user has confirmed the draft direction.
    - If key is missing or user only wants setup, run with `--dry-run` and provide the payload path.
    - The script stores outputs under `banana_outputs/<topic>-<timestamp>` unless `--output-dir` is provided, saves both full and compressed prompts, and retries once with a simpler prompt if the API returns no image.
+   - `bin/banana-pro` is included from the Banana Pro package for direct CLI compatibility, but SW should prefer the `scripts/generate_openrouter_image.py` wrapper because it preserves existing SW output folders, dry-run status JSON, prompt compression, missing-key behavior, and regression compatibility.
 
 6. Return concise result.
    - If generated: show the image inline when possible, saved image path(s), settings, and one-line QA.

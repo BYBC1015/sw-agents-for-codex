@@ -20,8 +20,8 @@
 ```text
 工具名：Banana Pro
 工具类型：图像生成 / 出图执行 / OpenRouter image generation
-接入状态：本地 skill 已接入；定位等同 `imagegen` 类出图成员；已打包 OpenRouter API 执行脚本；补齐 `OPENROUTER_API_KEY` 后可在确认后真实生成图片
-触发说法：香蕉、banana、@banana-pro、Banana Pro、Nano Banana、Nano Banana 2、google/gemini-3.1-flash-image-preview、OpenRouter 图像生成、用 banana-pro 生成/出图/转换
+接入状态：本地 skill 已接入；定位等同 `imagegen` 类出图成员；已打包 OpenRouter API 执行脚本；补齐 `OPENROUTER_API_KEY` 或本机私密 `~/.config/banana-pro/openrouter.env` 后可在确认后真实生成图片
+触发说法：香蕉、banana、@banana-pro、Banana Pro、Nano Banana、google/gemini-3-pro-image-preview、OpenRouter 图像生成、用 banana-pro 生成/出图/转换
 最适合：海报主视觉、分镜首帧、产品或道具概念图、角色设定图、场景底图、多参考图像提示词包
 不适合：普通图片提示词的默认处理、准确中文文字、logo/二维码、未确认版权或客户敏感素材的自动上传、未经确认的额度消耗、未配置 `OPENROUTER_API_KEY` 时假装已生成图片
 输入需要：用途、主体、画幅、image_size、参考图角色、风格、连续性锁定、必须避免项
@@ -29,7 +29,7 @@
 提示词格式：由 `prompt-director` 先产出通用视觉 prompt，再交给 Banana Pro 作为生成/出图环节
 不可越级：若同一需求包含分镜、视频/电影镜头、海报、PPT/deck/slide、版式、角色、产品、道具或场景设计，先由对应 Studio role 产出 handoff，再由 `prompt-director` 生成最终 prompt，最后交给 Banana Pro；默认只生成选中的一张/一帧
 提示词剖面：图像生成 / 图像编辑 / 多参考图像
-关键参数：model `google/gemini-3.1-flash-image-preview`、modalities `["image", "text"]`、aspect_ratio、image_size、reference image roles、`OPENROUTER_API_KEY`
+关键参数：model `google/gemini-3-pro-image-preview`、modalities `["image", "text"]`、aspect_ratio、image_size、reference image roles、`OPENROUTER_API_KEY` 或本机私密 `~/.config/banana-pro/openrouter.env`
 限制与风险：模型、参数或 OpenRouter 行为可能更新；可能消耗额度；参考图可能涉及隐私、版权、客户未公开素材；未配置 key 时只能 dry-run，不能声称已出图
 成本等级：真实生成为高；仅准备设置为中
 隐私注意：生成前确认是否允许上传客户素材、人物照片、未公开产品图或品牌资产
@@ -86,6 +86,29 @@
 派单显示：`url-relay` 必须单独显示为 `Tool skill:`，不要写成 Studio role；若随 Seedance 使用，显示在 `seedance-2-video` 之前
 读取路径：优先 `url-relay/SKILL.md`，其次用户级 `C:\Users\Administrator\.codex\skills\url-relay\SKILL.md`，最后插件级 `C:\Users\Administrator\plugins\sw-v1-0\skills\url-relay\SKILL.md`
 执行脚本：`scripts/url_relay.py`；Seedance runner 也可用 `--image-file` 自动调用同一配置完成上传
+```
+
+```text
+工具名：Storyboard Visual Word
+工具类型：DOCX视觉方案交付 / Word视觉导演方案 / storyboard visual bible packaging
+接入状态：本地 skill 已接入；定位为下游交付工具成员；已打包 DOCX 生成与结构检查脚本
+触发说法：视觉方案文件、视觉导演方案、Word视觉方案、DOCX视觉方案、分镜视觉方案文件、视觉方案docx、@storyboard-visual-word、把这些分镜/场景图整理成 Word
+最适合：已选定分镜图、场景概念图、角色/场景视觉图后，生成客户/导演/团队可读的正式 Word 视觉方案；每场一图或每组一图的视觉导演 handoff
+不适合：普通分镜创作、脚本拆解、镜头设计、提示词生成、图片生成、未选图时强行做正式 Word、需要完整 PPT/deck 的汇报包装
+输入需要：片名/项目名、场景标题、镜头/时间范围、每场选定图片绝对路径、叙事功能、色调/光线、视觉符号、视觉设定、为什么这样设定、QA notes
+输出格式：`[片名]_视觉导演方案.docx`；可选 inspection JSON；最终回复优先给 DOCX 文件链接
+提示词格式：无；它不生成 prompt，不把 Midjourney/Banana/Seedance prompt 放进正式 Word
+提示词剖面：文档交付 / 视觉方案包装 / DOCX handoff
+关键参数：JSON spec、absolute image paths、output docx path、embedded media count、forbidden visible text scan
+限制与风险：依赖已选图片；不替代上游 storyboard/production design/prompt/image generation；没有 LibreOffice/预览渲染时只能做结构检查；若用户需要内部复盘版，需另行确认是否保留 prompt/参数
+成本等级：中；生成 DOCX 本身不是模型高消耗，但整理大量场景文字会增加输出/编辑成本
+隐私注意：图片会嵌入 Word；不要把客户未公开素材、人物照片、敏感项目图打包给外部，除非用户确认交付对象和权限
+质检方式：图片嵌入数量不少于场景数；不可见本地路径；无 `Midjourney Prompt`、`--ar`、生成结果表或路径表；文案只保留视觉设定和理由；必要时进行 DOCX 渲染预览
+失败时替代方案：若缺图片，返回所需 spec 清单并请求选图；若脚本/依赖失败，输出结构化 Word 大纲或简版 handoff；若渲染不可用，说明只完成结构检查
+归属岗位：上游 Studio role 完成设计/选图 -> storyboard-visual-word；`finishing-producer` 可协作定义交付命名和收件人，但不替代该工具
+派单显示：`storyboard-visual-word` 必须单独显示为 `Tool skill:`，不要写成 Studio role；只有用户要求视觉方案文件/DOCX/Word 交付时加载
+读取路径：优先 `storyboard-visual-word/SKILL.md`，其次用户级 `C:\Users\Administrator\.codex\skills\storyboard-visual-word\SKILL.md`，最后插件级 `C:\Users\Administrator\plugins\sw-v1-0\skills\storyboard-visual-word\SKILL.md`
+执行脚本：`scripts/build_scene_visual_docx.py`，从 skill 根目录相对解析；输入 JSON spec 后生成 DOCX 并输出结构检查报告
 ```
 
 ## 工具卡模板

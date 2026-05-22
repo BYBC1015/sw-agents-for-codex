@@ -21,11 +21,12 @@ from urllib import request, error
 
 
 ENDPOINT = "https://openrouter.ai/api/v1/chat/completions"
-DEFAULT_MODEL = "google/gemini-3.1-flash-image-preview"
+DEFAULT_MODEL = "google/gemini-3-pro-image-preview"
 DEFAULT_ASPECT_RATIO = "16:9"
-DEFAULT_IMAGE_SIZE = "1K"
+DEFAULT_IMAGE_SIZE = "2K"
 DEFAULT_OUTPUT_ROOT = "banana_outputs"
 DEFAULT_COMPRESS_LIMIT = 1600
+DEFAULT_ENV_FILE = Path.home() / ".config" / "banana-pro" / "openrouter.env"
 
 
 def _read_prompt(args: argparse.Namespace) -> str:
@@ -147,8 +148,37 @@ def _headers(api_key: str) -> dict[str, str]:
     return headers
 
 
+def _read_env_file_key() -> str | None:
+    if os.environ.get("BANANA_PRO_DISABLE_USER_ENV_FALLBACK") == "1":
+        return None
+
+    env_path = Path(os.environ.get("BANANA_PRO_ENV", str(DEFAULT_ENV_FILE))).expanduser()
+    if not env_path.exists():
+        return None
+
+    try:
+        lines = env_path.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return None
+
+    for raw_line in lines:
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        if key.strip() == "OPENROUTER_API_KEY":
+            cleaned = value.strip().strip('"').strip("'")
+            if cleaned:
+                return cleaned
+    return None
+
+
 def _read_api_key() -> str | None:
     key = os.environ.get("OPENROUTER_API_KEY")
+    if key:
+        return key
+
+    key = _read_env_file_key()
     if key:
         return key
 
@@ -224,6 +254,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--model", default=DEFAULT_MODEL)
     parser.add_argument("--aspect-ratio", default=DEFAULT_ASPECT_RATIO)
     parser.add_argument("--image-size", default=DEFAULT_IMAGE_SIZE, choices=["0.5K", "1K", "2K", "4K"])
+    parser.add_argument("--env-file", default=str(DEFAULT_ENV_FILE), help="Private env file containing OPENROUTER_API_KEY.")
     parser.add_argument("--reference-image", action="append", default=[], help="Local reference image path. Repeatable.")
     parser.add_argument("--reference-url", action="append", default=[], help="Remote or data URL reference image. Repeatable.")
     parser.add_argument("--no-compress", dest="compress_prompt", action="store_false", help="Send the full prompt without deterministic compression.")
@@ -237,6 +268,8 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
+    if args.env_file:
+        os.environ["BANANA_PRO_ENV"] = args.env_file
     prompt = _read_prompt(args).strip()
     if not prompt:
         raise SystemExit("Prompt is empty.")

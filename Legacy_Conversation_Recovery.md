@@ -24,7 +24,7 @@ In an old conversation, try:
 Expected reply:
 
 ```text
-SW version synchronized. Current version: V1.8.1
+SW version synchronized. Current version: V1.9.1
 ```
 
 If the old conversation still uses a cached version, execute this fuller recovery instruction once in the same thread:
@@ -53,7 +53,7 @@ If startup or update chips keep returning a sealed older version, use the separa
 Expected rescue reply:
 
 ```text
-SW rescue synchronized. Current version: V1.8.1
+SW rescue synchronized. Current version: V1.9.1
 ```
 
 ## Rule

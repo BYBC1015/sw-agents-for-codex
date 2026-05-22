@@ -71,6 +71,7 @@ The cost gate decides:
 - Add `Prompts/Visual_Development_Board_Rules.md` only for character setting sheets, scene setting sheets, production-design boards, or integrated storyboard sheets.
 - Add `01_Research/Oscar_Best_Picture_Visual_Reference.md` only when the user asks for Oscar/classic film visual references.
 - Add `01_Research/Aesthetic_Daily_Selected/Daily_Selected_Index.md` only when the user asks for daily selected references, local moodboards, or newly supplied aesthetic PDFs; do not load all extracted images by default.
+- Add `storyboard-visual-word/SKILL.md` only when the user asks for a 视觉方案文件, 视觉导演方案, Word视觉方案, DOCX视觉方案, 分镜视觉方案文件, or `@storyboard-visual-word`; do not load it for ordinary storyboard planning.
 
 ## Comfortable-Use Rules
 

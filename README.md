@@ -8,7 +8,7 @@
 
 ## 当前版本
 
-- 当前运行版本：`V1.8.1`
+- 当前运行版本：`V1.9.1`
 - 稳定调用入口：`/sw`、`/SW_V1.0` 或 `@SW_V1.0`
 - 版本同步入口：`@sw_update`
 - 完整更新记录：[`VERSION.md`](VERSION.md) / [`Architecture_Update_Log.md`](Architecture_Update_Log.md)
@@ -19,6 +19,8 @@
 
 | 版本 | 日期 | 更新内容 |
 | --- | --- | --- |
+| V1.9.1 | 2026-05-21 | 替换 Banana 图像生成后端为 Banana Pro：模型切到 `google/gemini-3-pro-image-preview`，默认 2K，本机私密 env 文件读取 OpenRouter key；保留原 `generate_openrouter_image.py --prompt ...` 调用方式和 SW 不越级规则。 |
+| V1.9.0 | 2026-05-21 | 新增 `storyboard-visual-word` 显式工具：当用户要求视觉方案文件、视觉导演方案、Word视觉方案或分镜视觉方案文件时，把已选分镜/场景/概念图整理成正式 Word/DOCX 视觉交付文件；不会替代分镜、提示词、出图或选图流程。 |
 | V1.8.1 | 2026-05-21 | 扩展审美资料层：奥斯卡最佳影片画面语法从 20 部扩到 30 部；新增每日精选本地索引，已处理三份 PDF 共 60 张。图片和联系表仅本地忽略保存，仓库只保留可调用索引与安全使用规则。 |
 | V1.8.0 | 2026-05-20 | 新增视觉开发板流程：角色设定图、场景设定图和一体式分镜板。角色设定支持大人设、正背侧、表情、细节、剪影和色卡；一体式分镜默认 15s 一组、最多 9 镜头一张，超过即自动拆组，并保持 Banana/Seedance 不越级规则。 |
 | V1.7.8 | 2026-05-20 | 增加轻量发布基础设施：GitHub Actions 仓库级 CI、本机 installed-entry 同步脚本、SW doctor 诊断、Release 规则、更多入口覆盖检查和 relay token 泄露扫描，降低版本错位和入口丢失风险。 |
@@ -79,7 +81,7 @@
 调用成功后，Codex 应回复：
 
 ```text
-SW loaded successfully. Current version: V1.8.1
+SW loaded successfully. Current version: V1.9.1
 ```
 
 Version synchronization uses a separate entry:
@@ -91,7 +93,7 @@ Version synchronization uses a separate entry:
 Expected reply:
 
 ```text
-SW version synchronized. Current version: V1.8.1
+SW version synchronized. Current version: V1.9.1
 ```
 
 If old startup/update chips keep replaying stale versions, use the standalone rescue entry:
@@ -109,7 +111,7 @@ or:
 Expected reply:
 
 ```text
-SW rescue synchronized. Current version: V1.8.1
+SW rescue synchronized. Current version: V1.9.1
 ```
 
 For other project folders, copy `SW_V1.0.md`, `sw_update.md`, and `sw_rescue.md`; copying only the startup file will not create the local update/rescue entries. For long-running projects, also copy `Project_Memory_Templates/.sw/` into that project folder.
@@ -125,6 +127,8 @@ Default `@sw_help` and the SW Help button now use a hot-start short answer. Deta
 Seedance 2.0 Video is optional and explicit-only. Trigger it with `即梦2.0生成`, `即梦生成`, `Seedance 2.0`, or `@seedance-2-video`; SW will still run storyboard/prompt work first when needed, then generate only the selected clip/shot.
 
 URL Relay is the media bridge for tools that need public URLs. Trigger it with `URL中转`, `公网URL`, `上传参考图`, `上传参考视频`, or `@url-relay`; Seedance can use it automatically when a local reference file needs a public `http(s)` URL. The priority is SW media uploader first, then confirmed/configured temporary fallback only if the SW server is unreachable.
+
+Storyboard Visual Word is an optional downstream DOCX handoff tool. Trigger it with `视觉方案文件`, `视觉导演方案`, `Word视觉方案`, `DOCX视觉方案`, or `@storyboard-visual-word` after selected storyboard/scene/concept images are ready.
 
 Historical Accuracy is optional. Plain `开启历史检查` applies only to the current request/visual chain; `本项目开启历史检查` or `全程开启历史检查` keeps it on for the current conversation/project; `关闭历史检查`, `不用历史检查`, or `恢复普通模式` turns it off.
 
@@ -212,9 +216,10 @@ Studio roles: Brief Strategist / `brief-strategist` + Storyboard Director / `sto
 - `AI_Tool_Integration_Rules.md`：AI/设计工具适配、工具版 prompt 转换和新增工具流程。
 - `AI_Tool_Prompt_Profiles.md`：不同 AI 工具类型的提示词剖面。
 - `Tool_Registry.md`：工具注册表，未来接入工具时先登记工具卡。
-- `banana-pro/`：显式调用的 Banana Pro / Nano Banana 图像生成 skill，包含 OpenRouter API 执行脚本；补齐 `OPENROUTER_API_KEY` 后可在提示词后真实生成图片。
+- `banana-pro/`：显式调用的 Banana Pro 图像生成 skill，包含 OpenRouter API 执行脚本；补齐 `OPENROUTER_API_KEY` 或本机私密 env 文件后可在提示词后真实生成图片。
 - `seedance-2-video/`：显式调用的 Seedance 2.0 / 即梦2.0 视频生成 skill，包含 Ark API dry-run/run/poll 脚本；补齐 `ARK_API_KEY` 或本地私密 key 后可在提示词后真实生成视频。
 - `url-relay/`：公网 URL 中转 skill，优先使用 SW media uploader 服务器把本地图片/视频上传成下游 AI 工具可抓取的 `http(s)` URL；自有服务器不可用时可按确认/配置切到临时中转；上传 token 只存本机私密配置，不进入仓库。
+- `storyboard-visual-word/`：视觉方案文件 / Word/DOCX 视觉导演方案工具 skill，用于把已选分镜、场景或概念图整理成正式交付文件。
 - `Seedance_URL_Relay_Codex_Handoff.md`：只迁移即梦2.0与 URL Relay 中转策略的标准接入指令，不包含完整 SW 框架。
 - `Studio_Skills/`：每个岗位一个 project-local `SKILL.md`。
 - `Start_New_Project.md`：新项目启动语和最小输入示例。

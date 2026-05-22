@@ -1,0 +1,6 @@
+interface:
+  display_name: "Storyboard Visual Word"
+  short_description: "Build clean visual director DOCX handoffs."
+  default_prompt: "Use $storyboard-visual-word only when I ask for a 视觉方案文件 / 视觉导演方案 / Word visual bible from already-selected storyboard or scene images."
+policy:
+  allow_implicit_invocation: true

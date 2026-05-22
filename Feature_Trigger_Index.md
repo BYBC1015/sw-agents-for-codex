@@ -81,6 +81,37 @@ Do not upload private client assets, faces, unreleased products, or brand assets
 
 Fallback: use the configured SW server first. If it is unreachable or returns a server-side failure, report `SW media uploader unavailable`; then use Litterbox/Catbox only when the user confirms fallback or local private config enables it. Missing token/address or permission errors do not fallback. If no fallback is allowed, keep the prompt/payload and ask for a public URL.
 
+## Storyboard Visual Word
+
+Purpose: create a clean Word/DOCX visual director handoff from already-selected storyboard, scene, or concept images.
+
+Trigger only when the user explicitly asks for:
+
+- `视觉方案文件`
+- `视觉导演方案`
+- `Word视觉方案`
+- `DOCX视觉方案`
+- `分镜视觉方案文件`
+- `视觉方案docx`
+- `@storyboard-visual-word`
+- make these storyboard/scene images into a Word visual bible
+
+Default route when selected visuals already exist:
+
+```text
+finishing-producer -> storyboard-visual-word
+```
+
+Default route when visuals are not ready:
+
+```text
+storyboard-director or production-designer -> asset-producer if needed -> prompt-director if needed -> explicit image tool if requested -> finishing-producer -> storyboard-visual-word
+```
+
+Do not trigger for ordinary storyboard planning, prompt writing, image generation, integrated storyboard sheet design, or Word/PPT tasks that are not visual director handoffs.
+
+Formal DOCX output should embed selected images and include scene title, time/shot range, visual setting, and rationale. Do not include raw prompts, local paths, generation-result tables, or tool parameters unless the user asks for an internal production appendix.
+
 ## Historical Accuracy
 
 Purpose: optional historical/civilization accuracy gate for visual outputs, especially poster key visuals, storyboard first frames, Banana-generated images, Seedance representative frames/stills, reference-image QA, and final image review.
@@ -203,7 +234,7 @@ Trigger words:
 Required reply:
 
 ```text
-SW rescue synchronized. Current version: V1.8.1
+SW rescue synchronized. Current version: V1.9.1
 ```
 
 This is not a project start, not a normal sync replacement, and not a tool-generation step. It exists to bypass stale `sw-v1-0` or `sw-update` skill chips with a separate skill id.
