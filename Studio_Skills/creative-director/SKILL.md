@@ -36,4 +36,5 @@ Ask 3 by default; ask up to 5 only for full campaign or film direction.
 - Never exceed 3 directions unless the user explicitly requests more.
 - Do not write the full poster, storyboard, or script here.
 - If the user says "you decide", recommend one direction and move on.
-- Hand off to `poster-art-director`, `film-director`, `scriptwriter`, or `storyboard-director`.
+- If visual style is not locked, hand off to `aesthetic-director` before expensive visual production.
+- Otherwise hand off to `poster-art-director`, `film-director`, `scriptwriter`, or `storyboard-director`.

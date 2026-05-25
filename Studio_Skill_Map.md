@@ -11,7 +11,7 @@ For project work, load only the current needed role files and show the role trac
 | Group | Roles |
 | --- | --- |
 | Control | `studio-orchestrator`, `brief-strategist`, `change-manager`, `review-producer`, `finishing-producer` |
-| Strategy | `research-scout`, `creative-director`, `presentation-designer`, `copywriter` |
+| Strategy | `research-scout`, `creative-director`, `aesthetic-director`, `presentation-designer`, `copywriter` |
 | Poster | `poster-art-director`, `layout-designer`, `asset-producer`, `prompt-director` |
 | Presentation | `presentation-designer`, `copywriter`, `layout-designer`, `asset-producer`, `review-producer`, `finishing-producer` |
 | Video | `scriptwriter`, `storyboard-director`, `cinematographer`, `edit-director`, `motion-designer`, `sound-designer`, `colorist` |
@@ -24,25 +24,25 @@ For project work, load only the current needed role files and show the role trac
 Poster:
 
 ```text
-brief-strategist -> creative-director -> copywriter -> poster-art-director -> layout-designer -> asset-producer -> prompt-director -> review-producer -> finishing-producer
+brief-strategist -> creative-director -> aesthetic-director (when visual style is not locked) -> copywriter -> poster-art-director -> layout-designer -> asset-producer -> prompt-director -> review-producer -> finishing-producer
 ```
 
 Presentation/deck:
 
 ```text
-brief-strategist -> creative-director -> presentation-designer -> copywriter -> layout-designer -> asset-producer -> review-producer -> finishing-producer
+brief-strategist -> creative-director -> aesthetic-director (when deck look is not locked) -> presentation-designer -> copywriter -> layout-designer -> asset-producer -> review-producer -> finishing-producer
 ```
 
 Video:
 
 ```text
-brief-strategist -> creative-director -> scriptwriter -> storyboard-director -> cinematographer -> edit-director -> motion-designer -> sound-designer -> colorist -> review-producer -> finishing-producer
+brief-strategist -> creative-director -> aesthetic-director (when visual language is not locked) -> scriptwriter -> storyboard-director -> cinematographer -> edit-director -> motion-designer -> sound-designer -> colorist -> review-producer -> finishing-producer
 ```
 
 Film / brand film:
 
 ```text
-brief-strategist -> creative-director -> film-director -> scriptwriter -> production-designer -> cinematographer -> storyboard-director -> edit-director -> sound-designer -> colorist -> review-producer -> finishing-producer
+brief-strategist -> creative-director -> film-director -> aesthetic-director (when look/world grammar is not locked) -> scriptwriter -> production-designer -> cinematographer -> storyboard-director -> edit-director -> sound-designer -> colorist -> review-producer -> finishing-producer
 ```
 
 Prompt-only:
@@ -61,6 +61,7 @@ change-manager -> affected role -> review-producer
 
 - New project: `studio-orchestrator` + `brief-strategist`.
 - Direction request: `creative-director`.
+- Unspecified visual style, moodboard decision, taste calibration, or "you decide the look": `aesthetic-director`; project-local `.sw` visual references override global references.
 - Poster wording: `copywriter`.
 - Poster layout: `layout-designer`.
 - Poster visual direction: `poster-art-director`.

@@ -36,6 +36,7 @@ Do not put Chinese role names inside role labels, role traces, skill folder name
 | Brief Strategist | `brief-strategist` | brief compression and missing decisions |
 | Research Scout | `research-scout` | references, market cues, copyright risks |
 | Creative Director | `creative-director` | up to 3 directions and recommendation |
+| Aesthetic Director | `aesthetic-director` | visual-taste selection, mood profile, aesthetic library handoff |
 | Presentation Designer | `presentation-designer` | deck storyline, slide structure, PPT planning |
 | Copywriter | `copywriter` | headlines, captions, CTA, VO copy |
 | Poster Art Director | `poster-art-director` | poster concept, visual center, art direction |

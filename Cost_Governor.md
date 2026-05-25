@@ -29,9 +29,11 @@ The cost gate decides:
 | Review/change | final review or feedback | primary first | short | 0-3, 5 if blocked | risks, S/M/L/XL, scoped fix |
 | Finishing | export/package handoff | finishing + review if needed | short | 0-3 | file/package checklist |
 | Memory | major durable confirmation or explicit "remember/save" request | project memory file only | one line or 1-3 bullets | 0 | suggest or append concise local memory |
+| Aesthetic decision | visual style not locked, moodboard decision, SW decides the look | `aesthetic-director` + compact decision index | short/medium | 0-3 | one recommended profile plus one fallback at most |
 | Feature help | `@sw_help`, `/sw_help`, `/sw-help`, feature trigger questions | embedded `sw-help` answer first; `Feature_Trigger_Index.md` only for details/debug | short | 0 | feature list only |
 | Historical reminder | clear historical accuracy risk but not confirmed | `Feature_Trigger_Index.md` only | one line added to current route | 0-1 | ask whether to enable, do not load historical role |
 | Maintenance-lite | maintain, optimize, quick check, sync confidence | version strings, selected skill validation, plugin JSON, secret scan | short | 0 | find obvious breakage only |
+| Poster quick edit | existing poster/image, simple repair, export variants, title treatment | affected visual decision + output-first QA | short | 0-1 | do not rerun full poster pipeline |
 | Maintenance-full | publish/upload, deep regression, release audit, unexplained failure | regression suite plus affected files | medium | 0-2 | broad validation after lite path |
 
 ## Question Budget
@@ -47,9 +49,13 @@ The cost gate decides:
 - Default to one primary role plus up to one support role.
 - Use up to three roles only for complex campaign/film turns.
 - Never read all studio skills by default.
+- Aesthetic auto-selection uses `aesthetic-director` and `Aesthetic_Decision_Index.md` only. Do not load raw images, contact sheets, or broad research indexes unless the user asks for reference inspection or moodboard comparison.
+- Project-local visual references in `.sw/ASSETS.md`, `.sw/RULES.md`, `.sw/MEMORY.md`, or user-provided references override global aesthetic defaults.
 - Prompt-only requests go directly to `prompt-director`.
 - Explicit 香蕉 / banana / Banana Pro / Nano Banana / OpenRouter image-generation requests can add `banana-pro` as the image-generation member after `prompt-director`; use `tool-integrator` only when capability, parameters, API, or connection state is unclear. Do not load it for generic image prompts.
 - Banana Pro is a post-prompt execution step, not a shortcut around Studio roles. If the request also asks for storyboard, video/film shot design, poster design, PPT/deck/slide layout, character/product/prop design, or scene planning, the responsible Studio role must produce the upstream handoff before `prompt-director` and `banana-pro`.
+- Poster quick edits are a low/mid-cost exception to full project routing: if the user already has the poster/image and asks for a local fix or variants, keep the role chain short and output the visual first.
+- Do not spend model context explaining routine image-edit iterations. Mention only the changed visual layer, the export result, and any QA risk.
 - `banana-pro` is a tool skill, not a Studio role. It does not count as an extra Studio support role, but generation still uses the high-cost gate when quota, uploads, or final-use assets are involved.
 - Explicit 即梦2.0生成 / 即梦生成 / Seedance 2.0 / Ark Seedance video-generation requests can add `seedance-2-video` after `prompt-director`; use `tool-integrator` only when capability, parameters, API, key state, or connection state is unclear. Do not load it for generic video prompts or storyboard work.
 - Seedance is a post-prompt execution step, not a shortcut around Studio roles. If the request also asks for script, storyboard, camera, edit, motion, sound, color, scene design, or film treatment, the responsible Studio role must produce the upstream handoff before `prompt-director` and `seedance-2-video`.
@@ -66,6 +72,9 @@ The cost gate decides:
 - Add `Production_Pipeline_Map.md` only for multi-stage handoff, full pipeline explanation, campaign/film complexity, or SOP output.
 - Add `Studio_Skill_Map.md` only when role boundaries conflict.
 - Add role `references/` only when the selected role's `SKILL.md` names a matching reference condition.
+- Add `01_Research/HQ_Aesthetic_References/Aesthetic_Decision_Index.md` only when the visual style is not locked, the user asks SW to decide the look, or project-local visual references need interpretation.
+- Add `01_Research/HQ_Aesthetic_References/HQ_Aesthetic_Master_Index.md` only for HQ aesthetic references, source lanes, contact sheets, or moodboard calibration.
+- Add `01_Research/HQ_Aesthetic_References/Aesthetic_Library_Config.md` and run `tools/aesthetic_library_doctor.py` only for storage relocation, missing-image debugging, or aesthetic-library maintenance.
 - Add `Prompts/Image_Aesthetic_Prompt_Reference.md` only for visual taste, anti-AI look, or filmic image prompt refinement.
 - Add `Prompts/Video_Motion_Edit_Prompt_Rules.md` only for one-take, bullet-time, hero-shot, complex movement, edit-technique, or execution-level AI video prompts.
 - Add `Prompts/Visual_Development_Board_Rules.md` only for character setting sheets, scene setting sheets, production-design boards, or integrated storyboard sheets.
@@ -134,6 +143,7 @@ Pause and ask for confirmation before:
 - privacy-sensitive uploads
 - irreversible tool actions
 - final-use AI output involving brand, face, product, logo, copyright, or exact text risk
+- replacing display lettering/title effects with plain system fonts when the poster relies on stylized typography
 - character setting sheets, scene setting sheets, or storyboard boards intended for final/client use
 - Banana Pro / banana / OpenRouter image generation that may consume quota, requires `OPENROUTER_API_KEY`, or uploads reference images
 - Seedance / 即梦2.0 video generation that may consume quota, requires `ARK_API_KEY` or a local key file, uses public image URLs, or triggers long polling

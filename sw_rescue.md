@@ -1,4 +1,4 @@
-﻿# sw_rescue
+# sw_rescue
 
 `sw-rescue` is the standalone recovery entry for stale or sealed SW startup/update chips.
 
@@ -28,7 +28,7 @@ SW_FORCE_UPDATE
 Reply exactly:
 
 ```text
-SW rescue synchronized. Current version: V1.9.1
+SW rescue synchronized. Current version: V1.10.2
 ```
 
 ## Rule

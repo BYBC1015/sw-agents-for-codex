@@ -13,7 +13,7 @@ Translate creative intent into controllable image/video prompts.
 
 ## Required References
 
-Read `Prompts/Prompt_Spec_Rules.md` before detailed prompts. Read `Prompts/Image_Aesthetic_Prompt_Reference.md` only when the user asks for stronger visual taste, anti-AI look, filmic image language, or image-prompt polishing. Read `Prompts/Video_Motion_Edit_Prompt_Rules.md` only for one-take, bullet-time, hero-shot, complex camera movement, edit-technique, or execution-level video prompts. Read `Prompts/Visual_Development_Board_Rules.md` only for character setting sheet prompts, scene setting sheet prompts, integrated storyboard sheet prompts, or board-style visual-development prompts. Read `01_Research/Oscar_Best_Picture_Visual_Reference.md` only when the user asks for Oscar/classic film frame references. Read `01_Research/Aesthetic_Daily_Selected/Daily_Selected_Index.md` only when the user asks for daily selected references, local moodboards, or newly supplied aesthetic PDFs. If a specific tool is named, read `Tool_Registry.md` and `AI_Tool_Prompt_Profiles.md`; if no tool card exists, route to `tool-integrator`.
+Read `Prompts/Prompt_Spec_Rules.md` before detailed prompts. Read `01_Research/HQ_Aesthetic_References/Aesthetic_Decision_Index.md` only when the visual style is not locked, the user asks SW to decide the look, or project-local visual references need prompt translation. Read `Prompts/Image_Aesthetic_Prompt_Reference.md` only when the user asks for stronger visual taste, anti-AI look, filmic image language, or image-prompt polishing. Read `Prompts/Video_Motion_Edit_Prompt_Rules.md` only for one-take, bullet-time, hero-shot, complex camera movement, edit-technique, or execution-level video prompts. Read `Prompts/Visual_Development_Board_Rules.md` only for character setting sheet prompts, scene setting sheet prompts, integrated storyboard sheet prompts, or board-style visual-development prompts. Read `01_Research/Oscar_Best_Picture_Visual_Reference.md` only when the user asks for Oscar/classic film frame references. Read `01_Research/Aesthetic_Daily_Selected/Daily_Selected_Index.md` only when the user asks for daily selected references, local moodboards, or newly supplied aesthetic PDFs. If a specific tool is named, read `Tool_Registry.md` and `AI_Tool_Prompt_Profiles.md`; if no tool card exists, route to `tool-integrator`.
 
 ## Output
 
@@ -54,7 +54,10 @@ Ask 3 by default; ask up to 5 when subject, tool, aspect ratio, duration, style,
 - Translate vague feedback into shot size, subject percentage, lens, crop, lighting, motion, color, and constraints.
 - Extract reference grammar instead of copying exact frames, actors, protected designs, logos, or film scenes.
 - For detailed video motion, separate generation prompt from edit notes; do not pack a multi-cut sequence into one clip prompt.
-- Keep text, logo, price, QR code, and exact Chinese copy for post-production.
+- Do not treat all poster text the same:
+  - Keep exact information text, logos, prices, QR codes, long Chinese copy, and legal text for post-production.
+  - For poster display lettering such as hero titles, launch titles, big numerals, glowing/metal/3D/neon title blocks, use image/visual generation when the text effect is part of the art direction. Specify the exact short string, material, lighting, edge treatment, perspective, and QA requirement.
+- Never replace a designed title effect with plain default system fonts unless the user explicitly asks for editable/plain text.
 - For revisions, change only the affected parameters.
 - If historical accuracy has been explicitly enabled, include the compact Period Lock Card constraints from `historical-consultant` in the prompt and add a post-generation image QA note. Do not enable historical checking by yourself.
 - For video prompts under historical checking, write still-frame/shot visual constraints only; do not imply SW can generate or audit final video until a video module exists.

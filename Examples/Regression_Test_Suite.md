@@ -1,4 +1,4 @@
-﻿# SW Regression Test Suite
+# SW Regression Test Suite
 
 Use this suite after SW architecture, routing, cost, prompt, or skill updates.
 
@@ -25,7 +25,7 @@ Check version consistency:
 python .\tools\sw_consistency_check.py --scope repo
 python .\tools\sw_sync_installed.py --dry-run
 python .\tools\sw_doctor.py
-rg "SW loaded successfully. Current version: V1.9.1|SW version synchronized. Current version: V1.9.1|SW rescue synchronized. Current version: V1.9.1|Current runtime version: V1.9.1" .
+rg "SW loaded successfully. Current version: V1.10.2|SW version synchronized. Current version: V1.10.2|SW rescue synchronized. Current version: V1.10.2|Current runtime version: V1.10.2" .
 rg "<previous-version>" . --glob "!VERSION.md" --glob "!Architecture_Update_Log.md"
 ```
 
@@ -49,9 +49,23 @@ Prompt reference checks:
 Test-Path .\Prompts\Image_Aesthetic_Prompt_Reference.md
 Test-Path .\Prompts\Video_Motion_Edit_Prompt_Rules.md
 Test-Path .\Prompts\Visual_Development_Board_Rules.md
+Test-Path .\01_Research\HQ_Aesthetic_References\Aesthetic_Decision_Index.md
+Test-Path .\01_Research\HQ_Aesthetic_References\Aesthetic_Library_Config.md
 Test-Path .\01_Research\Oscar_Best_Picture_Visual_Reference.md
 Test-Path .\01_Research\Aesthetic_Daily_Selected\Daily_Selected_Index.md
-rg "Image_Aesthetic_Prompt_Reference|Video_Motion_Edit_Prompt_Rules|Visual_Development_Board_Rules|Oscar_Best_Picture_Visual_Reference|Daily_Selected_Index" .\Prompts\Prompt_Spec_Rules.md .\Studio_Skills\prompt-director\SKILL.md
+rg "Aesthetic_Decision_Index|Image_Aesthetic_Prompt_Reference|Video_Motion_Edit_Prompt_Rules|Visual_Development_Board_Rules|Oscar_Best_Picture_Visual_Reference|Daily_Selected_Index" .\Prompts\Prompt_Spec_Rules.md .\Studio_Skills\prompt-director\SKILL.md
+rg "视觉文字|display lettering|系统字体|Poster Quick Edit|海报快速改稿" .\Prompts\Prompt_Spec_Rules.md .\Stage_Runbook.md .\SW_Runtime_Index.md .\Studio_Skills\poster-art-director\SKILL.md
+```
+
+Aesthetic decision checks:
+
+```powershell
+Test-Path .\Studio_Skills\aesthetic-director\SKILL.md
+Test-Path .\Project_Memory_Templates\.sw\ASSETS.md
+python "$env:USERPROFILE\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\Studio_Skills\aesthetic-director
+python .\tools\aesthetic_library_doctor.py
+rg "aesthetic-director|Aesthetic_Decision_Index|Aesthetic_Library_Config" .\SW_Runtime_Index.md .\Cost_Governor.md .\Auto_Assignment_Rules.md .\Production_Pipeline_Map.md
+rg "Visual References|Extract|Do not copy" .\Project_Memory_Templates\.sw\ASSETS.md
 ```
 
 Storyboard Visual Word checks:
@@ -111,6 +125,7 @@ Seedance 2.0 runner checks:
 
 ```powershell
 python .\seedance-2-video\scripts\seedance_task.py --help
+python .\seedance-2-video\scripts\seedance_task.py dry-run --prompt "10秒，电影感产品发布镜头，深色舞台中央一束轮廓光扫过金属质感标题牌，镜头缓慢前推，蓝白高光，轻微粒子漂浮，无文字细节，无logo。" --ratio 16:9 --duration 10 --resolution 720p
 python .\seedance-2-video\scripts\seedance_task.py dry-run --prompt "15秒，电影感文旅镜头，晨光中古城街巷缓慢推进，石板路反光，人物自然穿行，暖色低对比，无文字，无logo。" --ratio 16:9 --duration 15 --resolution 720p --image-url https://example.com/source.png
 Remove-Item Env:ARK_API_KEY -ErrorAction SilentlyContinue; python .\seedance-2-video\scripts\seedance_task.py doctor
 python .\url-relay\scripts\url_relay.py doctor

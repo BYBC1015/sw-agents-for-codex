@@ -36,5 +36,5 @@ Ask 3 by default; ask up to 5 when format, copy length, brand grid, slide count,
 
 - Prioritize first-glance readability.
 - For presentations, inherit the structure from `presentation-designer`; focus on visual hierarchy, readable charts, font size, contrast, spacing, and template execution.
-- Keep exact text/logo/QR editable in post-production.
+- Keep exact information text/logo/QR editable in post-production, but do not flatten poster hero titles or launch numerals into plain system fonts when they function as visual lettering. Match the original title treatment with weight, glow, gradient, depth, shadow, perspective, and color before final character QA.
 - Do not generate visual assets here; hand off to `asset-producer` or `prompt-director`.

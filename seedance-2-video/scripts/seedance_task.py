@@ -665,8 +665,6 @@ def read_prompt(args: argparse.Namespace) -> tuple[str, str]:
 
 def validate_image_urls(urls: list[str], allow_temporary_relay: bool = False) -> list[str]:
     clean = [url.strip() for url in urls if url and url.strip()]
-    if not clean:
-        raise SeedanceError("Provide at least one --image-url")
     if len(clean) > 9:
         raise SeedanceError("Seedance supports at most 9 image URLs")
     for url in clean:
@@ -715,6 +713,8 @@ def validate_generation_args(args: argparse.Namespace) -> None:
 
 def content_for_images(image_urls: list[str], video_mode: str) -> list[dict[str, Any]]:
     if video_mode == "firstFrame":
+        if not image_urls:
+            raise SeedanceError("videoMode firstFrame requires at least 1 image URL")
         return [{"type": "image_url", "image_url": {"url": image_urls[0]}, "role": "first_frame"}]
     if video_mode == "firstLastFrame":
         if len(image_urls) < 2:

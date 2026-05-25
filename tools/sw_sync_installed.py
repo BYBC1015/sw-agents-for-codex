@@ -28,7 +28,7 @@ ENTRY_SKILLS = {
         "description": (
             "Load the SW_V1.0 design studio workflow. Use for /sw, /SW_V1.0, "
             "@SW_V1.0, poster, presentation, video, storyboard, edit-plan, "
-            "AI prompt, review, revision, and tool-integration projects."
+            "aesthetic direction, AI prompt, review, revision, and tool-integration projects."
         ),
     },
     "sw-update": {
@@ -109,6 +109,7 @@ def fixed_help_reply() -> str:
 - Seedance 2.0 Video: trigger with 即梦2.0生成 / 即梦生成 / Seedance 2.0 / @seedance-2-video / 用即梦生成视频.
 - URL Relay: trigger with URL中转 / 公网URL / 上传参考图 / 上传参考视频 / @url-relay. Used before Seedance when local files need public URLs.
 - Storyboard Visual Word: trigger with 视觉方案文件 / 视觉导演方案 / Word视觉方案 / DOCX视觉方案 / @storyboard-visual-word after selected storyboard or scene images are ready.
+- Aesthetic Decision: trigger with /aesthetic, "SW decide the look", 自动选择审美, 审美画像, or moodboard direction. Reads the compact decision index first and does not load raw images by default.
 - SW Rescue: trigger with /sw-rescue / @sw_rescue / SW_RESCUE when old SW chips keep returning stale versions.
 - Historical Accuracy: reminder appears only for clear accuracy risk. Say "开启历史检查" for the current request/visual chain; "本项目开启历史检查" or "全程开启历史检查" for the current conversation/project; "关闭历史检查" / "不用历史检查" / "恢复普通模式" to turn it off.
 
@@ -219,6 +220,17 @@ description: Show concise SW feature triggers without starting a project.
 {fixed_help_reply()}
 ```
 """
+    if name == "aesthetic":
+        return """---
+description: Select a compact SW aesthetic profile for the current design project.
+---
+
+# /aesthetic
+
+Use the SW aesthetic decision route.
+
+Load `aesthetic-director` and read `01_Research/HQ_Aesthetic_References/Aesthetic_Decision_Index.md` first. Project-local `.sw` visual references override the global library. Do not load raw images or contact sheets unless the user asks for moodboard/reference inspection.
+"""
     raise ValueError(name)
 
 
@@ -259,7 +271,7 @@ def plugin_manifest(version: str) -> dict:
         "description": (
             "SW_V1.0 design studio workflow loader for poster, presentation, "
             "video, storyboard, edit plan, AI prompt, review, revision, tool "
-            "integration, URL relay handoff, slash command entry, and stale-chat rescue."
+            "integration, aesthetic direction, URL relay handoff, slash command entry, and stale-chat rescue."
         ),
         "author": {
             "name": "Local Design Studio",
@@ -289,6 +301,8 @@ def plugin_manifest(version: str) -> dict:
             "storyboard-visual-word",
             "docx",
             "visual-bible",
+            "aesthetic",
+            "moodboard",
         ],
         "skills": "./skills/",
         "interface": {
@@ -316,6 +330,7 @@ def plugin_manifest(version: str) -> dict:
                 "@sw_rescue",
                 "/sw-help",
                 "@sw_help",
+                "/aesthetic",
                 "@url-relay",
                 "@seedance-2-video",
                 "@banana-pro",
@@ -338,7 +353,7 @@ def sync_plugin(version: str, dry_run: bool) -> None:
         sync_entry_skill(PLUGIN_ROOT / "skills", skill_id, version, dry_run)
     for skill_id in TOOL_SKILLS:
         copy_skill_dir(ROOT / skill_id, PLUGIN_ROOT / "skills" / skill_id, dry_run)
-    for command in ["sw", "sw-v1-0", "sw-update", "sw-rescue", "sw-help"]:
+    for command in ["sw", "sw-v1-0", "sw-update", "sw-rescue", "sw-help", "aesthetic"]:
         write_text(PLUGIN_ROOT / "commands" / f"{command}.md", command_text(command, version), dry_run)
     write_json(PLUGIN_ROOT / ".codex-plugin" / "plugin.json", plugin_manifest(version), dry_run)
 

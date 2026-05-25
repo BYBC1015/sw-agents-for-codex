@@ -11,6 +11,7 @@ Judge these before every project reply:
 - user intent: start, continue, create, refine, prompt, tool, check, revise, deliver
 - cost mode: normal, low-token, detailed, company delivery
 - risk: copyright, brand, platform, tool, missing information
+- aesthetic auto-selection: use when visual style is missing, SW should decide the look, or project-local references need interpretation
 - feature risk: Banana explicit generation, Seedance/即梦 explicit video generation, historical accuracy reminder, project memory
 
 ## Priority Routing
@@ -23,8 +24,13 @@ Judge these before every project reply:
    - Plain `开启历史检查` applies to the current request/visual chain. `本项目开启历史检查` or `全程开启历史检查` applies to the current conversation/project until closed.
    - `关闭历史检查`, `不用历史检查`, or `恢复普通模式` disables current project-level historical checking. If the setting was saved in `.sw/MEMORY.md`, require explicit memory update/delete to persist the closure.
    - For video, check storyboard first frames, still references, visual assets, generated images, and representative Seedance output frames when available. Do not claim full automated video QA beyond visible frames/stills.
-2. Revision/feedback/change -> `change-manager`.
-3. New tool, connector, plugin, tool-specific prompt conversion -> `tool-integrator`.
+2. Existing poster/image quick edit:
+   - If the user provides or refers to an existing poster/image and asks to modify, repair, export variants, improve title treatment, match a reference, or says the output is too plain, route to Poster Quick Edit instead of the full poster pipeline.
+   - Use `poster-art-director` or `layout-designer` for the affected visual decision; add `prompt-director` and an image-generation/editing tool only when visual rendering is needed.
+   - Ask at most one blocking question. Prefer image/output first, then no more than three short notes.
+   - Display lettering (hero title, launch title, big numerals, glowing/metal/3D/neon title blocks) should keep or regain image-model/design effects. Do not downgrade it to plain system fonts.
+3. Revision/feedback/change -> `change-manager`.
+4. New tool, connector, plugin, tool-specific prompt conversion -> `tool-integrator`.
    - Explicit 香蕉 / banana / Banana Pro / Nano Banana / OpenRouter image-generation request with a complete final prompt -> `prompt-director` -> `banana-pro`; add `tool-integrator` only when capability, parameters, API, or connection state is unclear.
    - If explicit Banana generation is bundled with storyboard, video/film shot design, poster, PPT/deck/slide, layout, character, product, prop, or scene design, route the upstream Studio role first, then `prompt-director` -> `banana-pro`. Do not let the tool trigger bypass the design role.
    - Explicit 即梦2.0生成 / 即梦生成 / Seedance 2.0 / Ark Seedance video-generation request with a complete final prompt -> `prompt-director` -> `seedance-2-video`; add `tool-integrator` only when capability, parameters, API, key state, or connection state is unclear.
@@ -32,49 +38,50 @@ Judge these before every project reply:
    - If explicit Seedance generation uses local image/video files instead of public URLs, insert `url-relay` between `prompt-director` and `seedance-2-video`; use SW media uploader first, then only a confirmed/configured temporary fallback, and stop before real generation if no public URL is available.
    - Explicit URL中转 / 公网URL / 上传参考图 / 上传参考视频 / `@url-relay` -> `url-relay`; if a downstream generation tool is named, return to that tool after the relay URL is ready.
    - Explicit 视觉方案文件 / 视觉导演方案 / Word视觉方案 / DOCX视觉方案 / 分镜视觉方案文件 / `@storyboard-visual-word` with selected images and rationale -> `finishing-producer` -> `storyboard-visual-word`; if storyboard/scene visuals still need creation or selection, route the upstream Studio role first.
-4. Final check/risk/delivery readiness -> `review-producer`.
-5. Export/package/naming/handoff -> `finishing-producer`.
-6. Character setting sheet, role reference board, scene setting sheet, production-design board -> `production-designer`; add `asset-producer` only when source/risk/asset priority matters.
-7. Integrated storyboard sheet, one-image storyboard board, storyboard contact sheet -> `storyboard-director`; add `cinematographer` only when camera continuity is weak.
-8. Image/video/AI prompt request -> `prompt-director`.
-9. Audio/music/SFX/voice/mix -> `sound-designer`.
-10. Color grade/LUT/shot matching/product color -> `colorist`.
-11. Motion graphics/titles/subtitle animation/transitions -> `motion-designer`.
-12. Camera/lens/lighting/shot language -> `cinematographer`.
-13. Script/voiceover/dialogue/narrative beats -> `scriptwriter`.
-14. Film/brand film/treatment/directing intent -> `film-director`.
-15. Presentation/PPT/deck/slide outline/storyline/section flow/speaker deck/pitch deck/client-facing proposal/government report/local tourism film proposal/city image film proposal -> `presentation-designer`.
-16. Poster copy/headline/CTA or slide wording/title takeaway -> `copywriter`.
-17. Poster or presentation layout/grid/type hierarchy -> `layout-designer`.
-18. Poster visual/art direction -> `poster-art-director`.
-19. Storyboard/shot table -> `storyboard-director`.
-20. New or unclear project -> `studio-orchestrator` + `brief-strategist`.
-21. Direction request -> `creative-director`.
+5. Final check/risk/delivery readiness -> `review-producer`.
+6. Export/package/naming/handoff -> `finishing-producer`.
+7. Unspecified visual style, moodboard decision, taste calibration, global aesthetic library use, "SW decide the look", or user-provided visual reference interpretation -> `aesthetic-director`.
+8. Character setting sheet, role reference board, scene setting sheet, production-design board -> `production-designer`; add `asset-producer` only when source/risk/asset priority matters.
+9. Integrated storyboard sheet, one-image storyboard board, storyboard contact sheet -> `storyboard-director`; add `cinematographer` only when camera continuity is weak.
+10. Image/video/AI prompt request -> `prompt-director`.
+11. Audio/music/SFX/voice/mix -> `sound-designer`.
+12. Color grade/LUT/shot matching/product color -> `colorist`.
+13. Motion graphics/titles/subtitle animation/transitions -> `motion-designer`.
+14. Camera/lens/lighting/shot language -> `cinematographer`.
+15. Script/voiceover/dialogue/narrative beats -> `scriptwriter`.
+16. Film/brand film/treatment/directing intent -> `film-director`.
+17. Presentation/PPT/deck/slide outline/storyline/section flow/speaker deck/pitch deck/client-facing proposal/government report/local tourism film proposal/city image film proposal -> `presentation-designer`.
+18. Poster copy/headline/CTA or slide wording/title takeaway -> `copywriter`.
+19. Poster or presentation layout/grid/type hierarchy -> `layout-designer`.
+20. Poster visual/art direction -> `poster-art-director`.
+21. Storyboard/shot table -> `storyboard-director`.
+22. New or unclear project -> `studio-orchestrator` + `brief-strategist`.
+23. Direction request -> `creative-director`.
 
 ## Project Type Defaults
 
 Poster:
 
 ```text
-brief-strategist -> creative-director -> copywriter -> poster-art-director -> layout-designer -> asset-producer -> prompt-director -> review-producer -> finishing-producer
+brief-strategist -> creative-director -> aesthetic-director when look is not locked -> copywriter -> poster-art-director -> layout-designer -> asset-producer -> prompt-director -> review-producer -> finishing-producer
 ```
 
 Presentation/deck:
 
 ```text
-brief-strategist -> creative-director -> presentation-designer -> copywriter -> layout-designer -> asset-producer -> review-producer -> finishing-producer
+brief-strategist -> creative-director -> aesthetic-director when deck look is not locked -> presentation-designer -> copywriter -> layout-designer -> asset-producer -> review-producer -> finishing-producer
 ```
 
 Video:
 
 ```text
-brief-strategist -> creative-director -> scriptwriter -> storyboard-director -> cinematographer -> edit-director -> motion-designer -> sound-designer -> colorist -> review-producer -> finishing-producer
+brief-strategist -> creative-director -> aesthetic-director when visual language is not locked -> scriptwriter -> storyboard-director -> cinematographer -> edit-director -> motion-designer -> sound-designer -> colorist -> review-producer -> finishing-producer
 ```
 
 Film / brand film:
 
 ```text
-brief-strategist -> creative-director -> film-director -> scriptwriter -> production-designer -> cinematographer -> storyboard-director -> edit-director -> sound-designer -> colorist -> review-producer -> finishing-producer
+brief-strategist -> creative-director -> film-director -> aesthetic-director when look/world grammar is not locked -> scriptwriter -> production-designer -> cinematographer -> storyboard-director -> edit-director -> sound-designer -> colorist -> review-producer -> finishing-producer
 ```
 
 Prompt-only:
@@ -87,6 +94,7 @@ prompt-director -> tool-integrator if needed -> review-producer if final-use
 
 - New project: `studio-orchestrator` + `brief-strategist`.
 - Direction after brief: `creative-director` + relevant next production role.
+- Visual direction when the look is not locked: primary `aesthetic-director`, support the next production role only if an immediate handoff is needed.
 - Poster production: primary `poster-art-director`, support `copywriter` or `layout-designer`.
 - Presentation/deck production: primary `presentation-designer` for structure/storyline/client-facing proposal logic; support `research-scout`, `copywriter`, `layout-designer`, `asset-producer`, or `review-producer` depending on request.
 - Video production: primary `storyboard-director`, support `scriptwriter` or `cinematographer`.

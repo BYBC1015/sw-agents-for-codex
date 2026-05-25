@@ -26,6 +26,7 @@ Recommended local memory pack:
 - `MEMORY.md`: confirmed decisions only. Keep it short and durable.
 - `CHANGELOG.md`: important project-level changes, not every chat turn.
 - `ASSETS.md`: asset sources, logo/font/material notes, license/copyright status, and sensitive material warnings.
+- Project-local visual references in `.sw/ASSETS.md`, `.sw/RULES.md`, or user-provided reference folders override SW's global aesthetic library for that project.
 
 ## Read Order
 
@@ -34,10 +35,13 @@ For a real project turn, use this priority:
 1. current user request
 2. `.sw/MEMORY.md`
 3. `.sw/RULES.md`
-4. `.sw/PROJECT.md`
-5. global SW rules
+4. `.sw/ASSETS.md` when visual, asset, copyright, or reference constraints are relevant
+5. `.sw/PROJECT.md`
+6. global SW rules
 
-Only read `.sw/CHANGELOG.md` or `.sw/ASSETS.md` when the task involves revisions, asset use, copyright, delivery, or audit.
+Only read `.sw/CHANGELOG.md` when the task involves revisions, delivery, or audit.
+
+Also read `.sw/ASSETS.md` when the task involves visual direction, moodboards, character/scene references, recurring style, or user-provided visual reference packs. Keep this read selective; do not load large images by default.
 
 If `.sw/` is missing, continue with normal SW behavior and do not ask the user to create it unless the project is long-running or the user asks for persistent project memory.
 

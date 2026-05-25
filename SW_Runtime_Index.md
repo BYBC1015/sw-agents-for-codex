@@ -1,4 +1,4 @@
-﻿# SW Runtime Index
+# SW Runtime Index
 
 This is the compact runtime index for SW_V1.0. Read it before deeper project files when the user starts or resumes a design studio project.
 
@@ -7,19 +7,19 @@ This is the compact runtime index for SW_V1.0. Read it before deeper project fil
 Activation reply:
 
 ```text
-SW loaded successfully. Current version: V1.9.1
+SW loaded successfully. Current version: V1.10.2
 ```
 
 Sync reply:
 
 ```text
-SW version synchronized. Current version: V1.9.1
+SW version synchronized. Current version: V1.10.2
 ```
 
 Rescue reply:
 
 ```text
-SW rescue synchronized. Current version: V1.9.1
+SW rescue synchronized. Current version: V1.10.2
 ```
 
 If the user only invokes SW, sync, or rescue, reply with the matching fixed line and stop.
@@ -66,6 +66,7 @@ Project memory check for long-running project folders:
 - If `.sw/MEMORY.md`, `.sw/RULES.md`, or `.sw/PROJECT.md` exists in the current project folder, read only the relevant small files before the selected role skill.
 - Priority: current user request > `.sw/MEMORY.md` > `.sw/RULES.md` > `.sw/PROJECT.md` > global SW rules.
 - If `.sw/` is missing, do not slow down the turn; continue normally.
+- If `.sw/ASSETS.md`, `.sw/RULES.md`, `.sw/MEMORY.md`, or the current request includes visual references, prefer those project-local visual cues before the global aesthetic library.
 - Use `Project_Memory_Rules.md` only when creating, updating, auditing, or explaining the memory layer.
 
 Escalate only when needed:
@@ -103,6 +104,7 @@ Do not show role trace for activation-only or sync-only replies.
 - Ask at most 1 in low-token mode, speed mode, or "you decide" mode.
 - If enough information exists, proceed with assumptions and label them.
 - Give one practical recommendation and the next role.
+- If the user has not specified visual style, use `aesthetic-director` with the compact `Aesthetic_Decision_Index.md`; do not load raw images by default.
 - Generate one deliverable type per turn by default.
 - Prefer the Fast Path. Do not read full routing maps just to answer an obvious poster, PPT, video, prompt, review, or change request.
 - Do not generate detailed image/video prompts, long scripts, or batch variants until direction and specs are locked.
@@ -132,11 +134,13 @@ Cost gate: high-cost output needs confirmation. I will generate one confirmed ve
 ## Routing Summary
 
 - New/unclear request: `studio-orchestrator` + `brief-strategist`.
-- Poster: `brief-strategist` -> `creative-director` -> `copywriter` -> `poster-art-director` -> `layout-designer` -> `asset-producer` -> `prompt-director` -> `review-producer` -> `finishing-producer`.
-- Presentation/deck/PPT/slides: `brief-strategist` -> `creative-director` -> `presentation-designer` -> `copywriter` -> `layout-designer` -> `asset-producer` -> `review-producer` -> `finishing-producer`.
+- Poster quick edit: if the user already has a poster/image and asks to modify, repair, export variants, improve title treatment, match a reference, or says the output is too plain, skip the full poster pipeline. Use `poster-art-director` or `layout-designer` for the affected visual decision, then `prompt-director`/image tool only if image rendering is needed. Ask at most one blocking question and show the edited visual/output first.
+- Poster: `brief-strategist` -> `creative-director` -> `aesthetic-director` when look is not locked -> `copywriter` -> `poster-art-director` -> `layout-designer` -> `asset-producer` -> `prompt-director` -> `review-producer` -> `finishing-producer`.
+- Presentation/deck/PPT/slides: `brief-strategist` -> `creative-director` -> `aesthetic-director` when deck look is not locked -> `presentation-designer` -> `copywriter` -> `layout-designer` -> `asset-producer` -> `review-producer` -> `finishing-producer`.
 - Client-facing proposal, government report, local tourism film proposal, and city image film PPT requests still route to `presentation-designer`; load its references only when needed.
-- Video: `brief-strategist` -> `creative-director` -> `scriptwriter` -> `storyboard-director` -> `cinematographer` -> `edit-director` -> `motion-designer` -> `sound-designer` -> `colorist` -> `review-producer` -> `finishing-producer`.
-- Film/brand film: `brief-strategist` -> `creative-director` -> `film-director` -> `scriptwriter` -> `production-designer` -> `cinematographer` -> `storyboard-director` -> `edit-director` -> `sound-designer` -> `colorist` -> `review-producer` -> `finishing-producer`.
+- Video: `brief-strategist` -> `creative-director` -> `aesthetic-director` when visual language is not locked -> `scriptwriter` -> `storyboard-director` -> `cinematographer` -> `edit-director` -> `motion-designer` -> `sound-designer` -> `colorist` -> `review-producer` -> `finishing-producer`.
+- Film/brand film: `brief-strategist` -> `creative-director` -> `film-director` -> `aesthetic-director` when look/world grammar is not locked -> `scriptwriter` -> `production-designer` -> `cinematographer` -> `storyboard-director` -> `edit-director` -> `sound-designer` -> `colorist` -> `review-producer` -> `finishing-producer`.
+- Aesthetic decision / moodboard selection / "SW decide the look": `aesthetic-director`; read `Aesthetic_Decision_Index.md` first, then only deeper reference indexes if asked.
 - Character setting sheet / role reference board: `production-designer` -> `asset-producer` if source/risk matters -> `prompt-director` if generating.
 - Scene setting sheet / production-design board: `production-designer` -> `prompt-director` if generating.
 - Integrated storyboard sheet / one-image storyboard board: `storyboard-director`; add `cinematographer` only when shot language or continuity is weak; then `prompt-director` if generating.
@@ -270,11 +274,14 @@ Execution rule:
 - Image parameters: subject, subject proportion, shot size, composition, lens, lighting, color, material, background, aspect ratio, constraints, negative prompt.
 - Video parameters: shot goal, duration, start frame, end frame, camera movement, subject action, transition, sound cue, continuity constraints.
 - Read `Prompts/Image_Aesthetic_Prompt_Reference.md` only for stronger visual taste, anti-AI look, or filmic image prompt refinement.
+- Read `01_Research/HQ_Aesthetic_References/Aesthetic_Decision_Index.md` only when the visual style is not locked, the user asks SW to decide the look, or project-local visual references need interpretation.
+- Read `01_Research/HQ_Aesthetic_References/HQ_Aesthetic_Master_Index.md` only when the user asks for HQ aesthetic references, source lanes, contact sheets, or moodboard calibration.
+- Read `01_Research/HQ_Aesthetic_References/Aesthetic_Library_Config.md` and run `tools/aesthetic_library_doctor.py` only for storage relocation, missing-image debugging, or aesthetic-library maintenance.
 - Read `Prompts/Video_Motion_Edit_Prompt_Rules.md` only for one-take, bullet-time, hero-shot, complex motion, edit-technique, or Seedance/AI-video execution prompts.
 - Read `Prompts/Visual_Development_Board_Rules.md` only for character setting sheets, scene setting sheets, integrated storyboard sheets, or production-design board prompts.
 - Read `01_Research/Oscar_Best_Picture_Visual_Reference.md` only when the user asks for Oscar/classic film visual references; extract grammar only, never copied frames.
 - Read `01_Research/Aesthetic_Daily_Selected/Daily_Selected_Index.md` only when the user asks for daily selected references, user-supplied aesthetic materials, moodboards, or today's supplemental visual references; read only the relevant date/contact sheet.
-- Poster text, logo, price, QR code, and exact Chinese copy should usually be added in post-production.
+- Separate poster text into two lanes. Display lettering (hero headline, launch title, large numerals, glowing/metal/3D/neon title blocks) is visual art and should preserve image-model/design effects; do not replace it with plain default system fonts. Exact information text (date, price, parameters, small copy, logo, QR, legal text) should usually be added or QA'd in post-production.
 - For revisions, change only affected parameters to reduce result drift.
 
 ## Visual Development Boards

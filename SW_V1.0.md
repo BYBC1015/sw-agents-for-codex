@@ -1,4 +1,4 @@
-﻿# SW_V1.0 Activation
+# SW_V1.0 Activation
 
 This is the stable project-start entry for the SW design studio workflow.
 
@@ -33,7 +33,7 @@ activate SW_V1.0
 After activation succeeds, reply exactly:
 
 ```text
-SW loaded successfully. Current version: V1.9.1
+SW loaded successfully. Current version: V1.10.2
 ```
 
 If the user only invokes SW, stop after the required reply and wait for the project request.
@@ -49,6 +49,8 @@ If an old conversation, compacted history, prior screenshot, or earlier tool out
 If this activation happens inside an old conversation, upgrade in place: read the current `VERSION.md`, `SW_Runtime_Index.md`, and current loader/sync skill files when there is a version conflict, then use the current fixed reply. If old startup/update chips keep replaying sealed snapshots, use `@sw_rescue` or `/sw-rescue`. A new conversation is only a last fallback when the desktop app refuses to load the current files and rescue entry.
 
 If the current project folder contains `.sw/PROJECT.md`, `.sw/RULES.md`, or `.sw/MEMORY.md`, read only the relevant local project memory files before producing project work.
+
+If the project has local visual references in `.sw/ASSETS.md`, `.sw/RULES.md`, `.sw/MEMORY.md`, or the current user message, use them before the global aesthetic library. When visual style is missing, use `aesthetic-director` and `Aesthetic_Decision_Index.md` before expensive visual production.
 
 If the same request asks for upstream design work and Banana Pro output, do not jump straight to generation. Produce the responsible Studio role handoff first, convert it through `prompt-director`, then use `banana-pro` only for the selected image/frame.
 
@@ -73,7 +75,7 @@ For synchronization in historical conversations or other project folders, use:
 Expected sync reply:
 
 ```text
-SW version synchronized. Current version: V1.9.1
+SW version synchronized. Current version: V1.10.2
 ```
 
 If normal sync still returns a stale sealed chip, use the standalone rescue entry:
@@ -85,7 +87,7 @@ If normal sync still returns a stale sealed chip, use the standalone rescue entr
 Expected rescue reply:
 
 ```text
-SW rescue synchronized. Current version: V1.9.1
+SW rescue synchronized. Current version: V1.10.2
 ```
 
 ## Minimum Project Folder Package
@@ -102,6 +104,7 @@ Recommended:
 - `Agent_Skill_Tech_Principles.md` for researched agent/skill handoff, guardrail, and eval rules
 - `Studio_Role_Label_Protocol.md` for English-only role traces
 - `Production_Pipeline_Map.md` for poster, presentation/deck, video, and film pipeline routing
+- `01_Research/HQ_Aesthetic_References/Aesthetic_Decision_Index.md` for low-cost visual-taste selection when the look is not locked
 - `Project_Memory_Rules.md` and `Project_Memory_Templates/.sw/` for long-running project memory
 
 If a project folder has only `SW_V1.0.md`, it may show only the startup entry and not the update entry.

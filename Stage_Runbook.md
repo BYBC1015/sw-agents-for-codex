@@ -111,7 +111,21 @@ Codex 在每个项目开始和每次阶段切换时，内部维护一张状态�
 
 如果用户说“你定”，Codex 选择最稳妥方向并说明原因。
 
-## 阶段 4A：海报方案
+## Stage 3B: Aesthetic Decision
+
+Use this stage when the creative direction is usable but the visual style is not locked, the user says SW should decide the look, or project-local visual references need interpretation.
+
+| Item | Rule |
+| --- | --- |
+| Lead skill | `aesthetic-director` |
+| Input | brief, direction, user references, optional `.sw/ASSETS.md` or `.sw/RULES.md` |
+| Default cost | low to medium |
+| Output | one recommended aesthetic profile, visual levers, avoid list, reference lane, next role |
+| Forbidden | loading raw image folders/contact sheets by default, copying exact film frames or layouts |
+
+Exit when one aesthetic profile is selected or when the user explicitly says to skip visual taste selection.
+
+## Stage 4A: Poster Plan
 
 | 项目 | 规则 |
 | --- | --- |
@@ -120,8 +134,19 @@ Codex 在每个项目开始和每次阶段切换时，内部维护一张状态�
 | 最多提问 | 2 个；优先问尺寸和必须文案 |
 | 默认消耗 | 中 |
 | 输出 | 文案、版式、主视觉、色彩、字体、素材、后期执行注意 |
-| 禁止 | 让 AI 直接生成准确中文标题/logo/二维码 |
+| 禁止 | 把海报主标题/数字字效降级成普通系统字体；让 AI 直接生成 logo/二维码或大段必须准确的小字 |
 | 退出条件 | 文案、主视觉、版式和导出要求明确 |
+
+### 海报快速改稿触发
+
+当用户已经有海报/截图/参考图，并要求“改一下、换文字、修残影、出单张/四版、照图二、让它更好看、别那么素”时，默认进入海报快速改稿，而不是重跑完整项目：
+
+- 最多问 1 个阻塞问题；能从图和用户话里判断的直接执行。
+- 先判断问题属于构图、层级、字效、素材、瑕疵、尺寸还是导出。
+- 输出优先给改后图/预览/文件，再给不超过 3 条改动说明。
+- 主标题、发布会标题、核心数字、发光字、金属字、3D 字、霓虹字属于视觉文字，优先保留或用 image/视觉模型重绘质感；不要用普通系统字体替代。
+- 日期、参数、小字、logo、二维码属于精确信息，走可控排版和字符 QA。
+- 如果需要同时保证字效和准确文字，先用视觉模型做字效，再用可控排版校准文字。
 
 ### 海报提示词触发
 

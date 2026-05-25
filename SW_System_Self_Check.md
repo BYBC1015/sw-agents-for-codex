@@ -1,7 +1,7 @@
-﻿# SW System Self-Check
+# SW System Self-Check
 
-Date: 2026-05-20  
-Target runtime: V1.9.1
+Date: 2026-05-25
+Target runtime: V1.10.2
 
 This file records the maintenance diagnosis for entry loss, version mismatch, stale chips, and likely future failure points. It is a working audit, not a user-facing startup file.
 
@@ -43,12 +43,16 @@ This file records the maintenance diagnosis for entry loss, version mismatch, st
   - plugin command files and `plugin.json`
   - prompt reference files
   - obvious API-key and SW relay-token leakage patterns inside the repo
+  - real mojibake/private-use character leaks in repo, user-skill, and plugin text files
+  - HQ aesthetic image/video files are not accidentally tracked by Git
 
 - `tools/sw_consistency_check.py --scope repo` is safe for GitHub Actions because it does not depend on local Codex user/plugin folders.
 
 - `tools/sw_sync_installed.py` updates local user-level and plugin-level SW entries from the repository source.
 
 - `tools/sw_doctor.py` prints the current version, git state, and the selected consistency check result in one compact maintenance pass.
+
+- `tools/aesthetic_library_doctor.py` checks portable aesthetic-library roots after library moves or missing-image reports.
 
 - `Examples/Regression_Test_Suite.md` now points maintenance work to this checker before publish.
 
@@ -63,6 +67,8 @@ This file records the maintenance diagnosis for entry loss, version mismatch, st
 | UTF-8 false alarm | Chinese docs look garbled in shell | Re-read with explicit UTF-8 before editing |
 | Tool route bypass | Banana/Seedance generates before storyboard/prompt | Enforce upstream Studio role -> `prompt-director` -> tool skill |
 | Relay fallback surprise | Third-party temporary URL used without intent | Try SW media uploader first; fallback only on server failure plus confirmation/config |
+| Aesthetic library bloat | Normal projects read too many references/images | Use `aesthetic-director` + `Aesthetic_Decision_Index.md` first; inspect images only on explicit moodboard/reference requests |
+| Moved image library | Indexes point to missing local images | Set `SW_AESTHETIC_LIBRARY_ROOT` or related variables, then run `python tools/aesthetic_library_doctor.py` |
 | Secret leakage | API key appears in repo docs/logs | Stop publish; remove key; rotate if already pushed |
 
 ## Maintenance Rule

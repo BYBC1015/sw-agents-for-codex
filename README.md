@@ -8,7 +8,7 @@
 
 ## 当前版本
 
-- 当前运行版本：`V1.9.1`
+- 当前运行版本：`V1.10.2`
 - 稳定调用入口：`/sw`、`/SW_V1.0` 或 `@SW_V1.0`
 - 版本同步入口：`@sw_update`
 - 完整更新记录：[`VERSION.md`](VERSION.md) / [`Architecture_Update_Log.md`](Architecture_Update_Log.md)
@@ -19,6 +19,9 @@
 
 | 版本 | 日期 | 更新内容 |
 | --- | --- | --- |
+| V1.10.2 | 2026-05-25 | 修正海报快速改稿：已有海报修改不再重跑完整 Brief/方向流程，优先出图和短 QA；主标题、发布标题、大数字、发光/金属/3D/霓虹字等视觉文字不再默认降级为普通系统字体，而是优先保留或用 image/视觉模型生成字效。 |
+| V1.10.1 | 2026-05-25 | 深度维护：新增真实乱码/私用字符扫描、审美图库媒体文件防误提交检查、UTF-8 模式全 skill 验证，修复 Seedance 纯文字 dry-run 被 image-url 误挡的问题，并扩展 74 个高质量审美候选目标和未来交互式图库技术笔记；普通启动和项目流程不增消耗。 |
+| V1.10.0 | 2026-05-25 | Added `aesthetic-director`, compact aesthetic auto-selection, portable HQ aesthetic-library config, library doctor, and top-tier collection queue. Normal projects read the tiny decision index first; raw HQ images/contact sheets load only for explicit reference, moodboard, or library-maintenance requests. |
 | V1.9.1 | 2026-05-21 | 替换 Banana 图像生成后端为 Banana Pro：模型切到 `google/gemini-3-pro-image-preview`，默认 2K，本机私密 env 文件读取 OpenRouter key；保留原 `generate_openrouter_image.py --prompt ...` 调用方式和 SW 不越级规则。 |
 | V1.9.0 | 2026-05-21 | 新增 `storyboard-visual-word` 显式工具：当用户要求视觉方案文件、视觉导演方案、Word视觉方案或分镜视觉方案文件时，把已选分镜/场景/概念图整理成正式 Word/DOCX 视觉交付文件；不会替代分镜、提示词、出图或选图流程。 |
 | V1.8.1 | 2026-05-21 | 扩展审美资料层：奥斯卡最佳影片画面语法从 20 部扩到 30 部；新增每日精选本地索引，已处理三份 PDF 共 60 张。图片和联系表仅本地忽略保存，仓库只保留可调用索引与安全使用规则。 |
@@ -81,7 +84,7 @@
 调用成功后，Codex 应回复：
 
 ```text
-SW loaded successfully. Current version: V1.9.1
+SW loaded successfully. Current version: V1.10.2
 ```
 
 Version synchronization uses a separate entry:
@@ -93,7 +96,7 @@ Version synchronization uses a separate entry:
 Expected reply:
 
 ```text
-SW version synchronized. Current version: V1.9.1
+SW version synchronized. Current version: V1.10.2
 ```
 
 If old startup/update chips keep replaying stale versions, use the standalone rescue entry:
@@ -111,7 +114,7 @@ or:
 Expected reply:
 
 ```text
-SW rescue synchronized. Current version: V1.9.1
+SW rescue synchronized. Current version: V1.10.2
 ```
 
 For other project folders, copy `SW_V1.0.md`, `sw_update.md`, and `sw_rescue.md`; copying only the startup file will not create the local update/rescue entries. For long-running projects, also copy `Project_Memory_Templates/.sw/` into that project folder.
@@ -236,6 +239,9 @@ Studio roles: Brief Strategist / `brief-strategist` + Storyboard Director / `sto
 - `Prompts/Image_Aesthetic_Prompt_Reference.md`：图片审美、减少 AI 感、电影画面语言的按需参考。
 - `Prompts/Video_Motion_Edit_Prompt_Rules.md`：一镜到底、子弹时间、英雄镜头、复杂运镜和剪辑手法的按需参考。
 - `Prompts/Visual_Development_Board_Rules.md`：角色设定图、场景设定图和一体式分镜板的按需参考。
+- `01_Research/HQ_Aesthetic_References/Aesthetic_Decision_Index.md`：低消耗审美决策画像，用于用户未指定视觉风格时自动选择方向。
+- `01_Research/HQ_Aesthetic_References/Aesthetic_Library_Config.md`：高清审美图库换盘、迁移和环境变量配置规则。
+- `01_Research/HQ_Aesthetic_References/Top_Tier_Collection_Queue.md`：后续顶级审美资料收集队列。
 - `01_Research/Oscar_Best_Picture_Visual_Reference.md`：奥斯卡最佳影片画面语法暂存参考，不保存版权截图。
 - `01_Research/Aesthetic_Daily_Selected/Daily_Selected_Index.md`：每日精选/用户补充审美资料索引，图片素材本体不默认入库。
 - `SW_System_Self_Check.md` / `tools/sw_consistency_check.py` / `tools/sw_doctor.py`：维护发布前检查入口、版本一致性、安装入口同步诊断和密钥泄露预检。

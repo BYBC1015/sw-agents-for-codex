@@ -118,7 +118,9 @@ Result URL paths to check, in order:
 - `data.output`
 - `data.result_url`
 
-## Image URL Rules
+## Prompt-Only and Image URL Rules
+
+Pure text-to-video requests may use a `content` array with only the text item. Image URLs are optional unless the workflow needs a reference, first frame, or first/last frame control.
 
 Ark must be able to fetch the media itself. Use public `http` or `https` URLs only.
 For local files, upload through the configured SW media uploader first. If the SW server is unreachable or returns a server-side failure and the user/config allows fallback, report the outage and then use the selected Catbox/Litterbox temporary relay. Missing token, missing upload URL, or permission errors do not trigger fallback.

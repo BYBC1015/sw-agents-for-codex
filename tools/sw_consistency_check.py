@@ -12,6 +12,7 @@ import os
 import re
 import sys
 import argparse
+import subprocess
 from pathlib import Path
 
 
@@ -64,15 +65,32 @@ PLUGIN_FILES = [
     USERPROFILE / "plugins" / "sw-v1-0" / "commands" / "sw-update.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "commands" / "sw-rescue.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "commands" / "sw-help.md",
+    USERPROFILE / "plugins" / "sw-v1-0" / "commands" / "aesthetic.md",
 ]
 
 PROMPT_REFERENCE_FILES = [
     ROOT / "Prompts" / "Image_Aesthetic_Prompt_Reference.md",
     ROOT / "Prompts" / "Video_Motion_Edit_Prompt_Rules.md",
     ROOT / "Prompts" / "Visual_Development_Board_Rules.md",
+    ROOT / "01_Research" / "HQ_Aesthetic_References" / "Aesthetic_Decision_Index.md",
+    ROOT / "01_Research" / "HQ_Aesthetic_References" / "Aesthetic_Library_Config.md",
+    ROOT / "01_Research" / "HQ_Aesthetic_References" / "HQ_Aesthetic_Master_Index.md",
+    ROOT / "01_Research" / "HQ_Aesthetic_References" / "Top_Tier_Collection_Queue.md",
     ROOT / "01_Research" / "Oscar_Best_Picture_Visual_Reference.md",
     ROOT / "01_Research" / "Aesthetic_Daily_Selected" / "README.md",
     ROOT / "01_Research" / "Aesthetic_Daily_Selected" / "Daily_Selected_Index.md",
+]
+
+STUDIO_SKILL_FILES = [
+    ROOT / "Studio_Skills" / "aesthetic-director" / "SKILL.md",
+]
+
+PROJECT_MEMORY_TEMPLATE_FILES = [
+    ROOT / "Project_Memory_Templates" / ".sw" / "PROJECT.md",
+    ROOT / "Project_Memory_Templates" / ".sw" / "RULES.md",
+    ROOT / "Project_Memory_Templates" / ".sw" / "MEMORY.md",
+    ROOT / "Project_Memory_Templates" / ".sw" / "ASSETS.md",
+    ROOT / "Project_Memory_Templates" / ".sw" / "CHANGELOG.md",
 ]
 
 REPO_TOOL_SKILL_FILES = [
@@ -92,6 +110,39 @@ SECRET_PATTERNS = [
     re.compile(r"ark-[0-9a-fA-F]{8}-[0-9a-fA-F-]{20,}"),
     re.compile(r"swrel_[A-Za-z0-9_-]{32,}"),
 ]
+
+TEXT_SUFFIXES = {".md", ".yaml", ".yml", ".json", ".py", ".toml", ".txt"}
+MEDIA_SUFFIXES = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".mp4", ".mov", ".avi"}
+AESTHETIC_MEDIA_ROOTS = [
+    ROOT / "01_Research" / "HQ_Aesthetic_References",
+    ROOT / "01_Research" / "Aesthetic_Daily_Selected",
+    ROOT / "01_Research" / "Aesthetic_Reference_Archive",
+    ROOT / "01_Research" / "Oscar_Frame_References",
+]
+
+MOJIBAKE_SEQUENCE_ESCAPES = [
+    r"\u9357\u866b",
+    r"\u93c2\u89c4",
+    r"\u7459\u55da",
+    r"\u6d93\ue161",
+    r"\u6d93\u5a41",
+    r"\u68e3\u6b12",
+    r"\u7ef1\u72b3",
+    r"\u93c8\ue104",
+    r"\u934f\u3127",
+    r"\u934f\u62bd",
+    r"\u93ad\u3220",
+    r"\u9422\u71b8",
+    r"\u9359\u509d",
+    r"\u93cd\u714e",
+    r"\u9225",
+    r"\u9239",
+    r"\ufffd",
+]
+MOJIBAKE_SEQUENCES = [
+    item.encode("ascii").decode("unicode_escape") for item in MOJIBAKE_SEQUENCE_ESCAPES
+]
+PRIVATE_USE_RE = re.compile(r"[\ue000-\uf8ff]")
 
 
 def read_text(path: Path) -> str:
@@ -167,11 +218,15 @@ def check_prompt_references(issues: list[str]) -> None:
     for path in PROMPT_REFERENCE_FILES:
         if not path.exists():
             fail(issues, f"missing prompt/reference file: {path.relative_to(ROOT)}")
+    for path in STUDIO_SKILL_FILES:
+        if not path.exists():
+            fail(issues, f"missing studio skill file: {path.relative_to(ROOT)}")
 
     spec = ROOT / "Prompts" / "Prompt_Spec_Rules.md"
     if spec.exists():
         text = read_text(spec)
         for required in [
+            "Aesthetic_Decision_Index.md",
             "Image_Aesthetic_Prompt_Reference.md",
             "Video_Motion_Edit_Prompt_Rules.md",
             "Visual_Development_Board_Rules.md",
@@ -179,6 +234,38 @@ def check_prompt_references(issues: list[str]) -> None:
         ]:
             if required not in text:
                 fail(issues, f"Prompt_Spec_Rules.md does not reference {required}")
+
+    role_registry = ROOT / "Studio_Role_Label_Protocol.md"
+    if role_registry.exists() and "aesthetic-director" not in read_text(role_registry):
+        fail(issues, "Studio_Role_Label_Protocol.md does not mention aesthetic-director")
+
+    poster_text_rules = {
+        ROOT / "Prompts" / "Prompt_Spec_Rules.md": ["视觉文字", "系统字体"],
+        ROOT / "Stage_Runbook.md": ["海报快速改稿", "系统字体"],
+        ROOT / "SW_Runtime_Index.md": ["Poster quick edit", "Display lettering"],
+        ROOT / "Studio_Skills" / "poster-art-director" / "SKILL.md": ["Display lettering", "plain system fonts"],
+    }
+    for path, required_terms in poster_text_rules.items():
+        if not path.exists():
+            fail(issues, f"missing poster text-rule file: {path.relative_to(ROOT)}")
+            continue
+        text = read_text(path)
+        for term in required_terms:
+            if term not in text:
+                fail(issues, f"{path.relative_to(ROOT)} does not mention poster text rule: {term}")
+
+
+def check_project_memory_templates(issues: list[str]) -> None:
+    for path in PROJECT_MEMORY_TEMPLATE_FILES:
+        if not path.exists():
+            fail(issues, f"missing project memory template: {path.relative_to(ROOT)}")
+
+    assets = ROOT / "Project_Memory_Templates" / ".sw" / "ASSETS.md"
+    if assets.exists():
+        text = read_text(assets)
+        for required in ["Visual References", "Extract", "Do not copy"]:
+            if required not in text:
+                fail(issues, f"ASSETS.md template does not mention {required}")
 
 
 def check_repo_tool_skills(issues: list[str]) -> None:
@@ -210,6 +297,77 @@ def check_secret_leaks(issues: list[str]) -> None:
                 fail(issues, f"possible secret leaked in repo file: {path.relative_to(ROOT)}")
 
 
+def iter_text_files(paths: list[Path]) -> list[Path]:
+    files: list[Path] = []
+    ignored_dirs = {".git", "__pycache__", "banana_outputs", "seedance_outputs"}
+    for base in paths:
+        if not base.exists():
+            continue
+        candidates = base.rglob("*") if base.is_dir() else [base]
+        for path in candidates:
+            if not path.is_file():
+                continue
+            if path.suffix.lower() not in TEXT_SUFFIXES:
+                continue
+            if any(part in ignored_dirs for part in path.parts):
+                continue
+            files.append(path)
+    return files
+
+
+def check_text_integrity(issues: list[str], scope: str) -> None:
+    roots: list[Path] = []
+    if scope in {"repo", "all"}:
+        roots.append(ROOT)
+    if scope in {"installed", "all"}:
+        roots.extend(
+            [
+                USERPROFILE / ".codex" / "skills" / "sw-v1-0",
+                USERPROFILE / ".codex" / "skills" / "sw-update",
+                USERPROFILE / ".codex" / "skills" / "sw-rescue",
+                USERPROFILE / ".codex" / "skills" / "sw-help",
+                USERPROFILE / "plugins" / "sw-v1-0",
+            ]
+        )
+    for path in iter_text_files(roots):
+        try:
+            text = read_text(path)
+        except UnicodeDecodeError:
+            fail(issues, f"text file is not UTF-8 readable: {path}")
+            continue
+        for seq in MOJIBAKE_SEQUENCES:
+            if seq in text:
+                fail(issues, f"possible mojibake sequence {seq!r} in {path}")
+                break
+        if PRIVATE_USE_RE.search(text):
+            fail(issues, f"possible corrupted/private-use character in {path}")
+
+
+def check_aesthetic_media_not_tracked(issues: list[str]) -> None:
+    if not (ROOT / ".git").exists():
+        return
+    completed = subprocess.run(
+        ["git", "ls-files"],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+    )
+    if completed.returncode != 0:
+        return
+    tracked = [ROOT / line.strip() for line in completed.stdout.splitlines() if line.strip()]
+    for path in tracked:
+        if path.suffix.lower() not in MEDIA_SUFFIXES:
+            continue
+        for root in AESTHETIC_MEDIA_ROOTS:
+            try:
+                path.relative_to(root)
+            except ValueError:
+                continue
+            fail(issues, f"aesthetic media file is tracked by git: {path.relative_to(ROOT)}")
+            break
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Check SW release consistency.")
     parser.add_argument(
@@ -232,11 +390,15 @@ def main() -> int:
     if args.scope in {"repo", "all"}:
         check_fixed_replies(issues, version)
         check_prompt_references(issues)
+        check_project_memory_templates(issues)
         check_repo_tool_skills(issues)
         check_secret_leaks(issues)
+        check_aesthetic_media_not_tracked(issues)
 
     if args.scope in {"installed", "all"}:
         check_external_copies(issues, version)
+
+    check_text_integrity(issues, args.scope)
 
     if issues:
         print(f"SW consistency check failed for scope={args.scope}:")

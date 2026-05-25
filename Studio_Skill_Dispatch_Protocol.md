@@ -38,6 +38,7 @@ Escalate to full routing only when needed:
 - route conflicts with current project state
 - user asks for full workflow, status, audit, SOP, or company handoff
 - complex campaign, film, tool integration, eval/debug, or architecture maintenance
+- visual style is missing and project-local references or global aesthetic defaults need arbitration
 - stage transition depends on a chain decision
 - a selected skill references optional files that are relevant to the request
 
@@ -104,6 +105,10 @@ Never combine Storyboard Visual Word into the Studio role trace.
 ## Tool No-Bypass Rule
 
 External tool skills must not replace upstream Studio roles.
+
+## Aesthetic Decision Rule
+
+When the user has not specified the visual style, or asks SW to choose the best look, load `aesthetic-director` before expensive visual production, prompt writing, Banana generation, Seedance generation, storyboard boards, or deck polish. Read only `Aesthetic_Decision_Index.md` by default. Project-local `.sw` visual references and user-supplied reference images override the global library.
 
 ## Historical Accuracy No-Bypass Rule
 

@@ -1,4 +1,4 @@
-﻿# Feature Trigger Index
+# Feature Trigger Index
 
 This is SW's compact feature trigger index. Use it for `@sw_help`, `/sw_help`, `/sw-help`, feature discovery, and low-cost trigger checks.
 
@@ -111,6 +111,31 @@ storyboard-director or production-designer -> asset-producer if needed -> prompt
 Do not trigger for ordinary storyboard planning, prompt writing, image generation, integrated storyboard sheet design, or Word/PPT tasks that are not visual director handoffs.
 
 Formal DOCX output should embed selected images and include scene title, time/shot range, visual setting, and rationale. Do not include raw prompts, local paths, generation-result tables, or tool parameters unless the user asks for an internal production appendix.
+
+## Aesthetic Decision
+
+Purpose: choose a high-taste visual profile when the user has not specified a look, asks SW to decide, or supplies project-local visual references that need interpretation.
+
+Trigger when the user says:
+
+- `/aesthetic`
+- 自动选择审美
+- 审美画像
+- 视觉参考方向
+- moodboard direction
+- SW decide the look
+- 你按审美库选
+- 我没指定视觉风格，你来定
+
+Default route:
+
+```text
+aesthetic-director -> next production role
+```
+
+Use `Aesthetic_Decision_Index.md` first. Do not load raw images, contact sheets, or broad source indexes unless the user asks for reference inspection, moodboard comparison, or aesthetic-library maintenance.
+
+Project-local `.sw/ASSETS.md`, `.sw/RULES.md`, `.sw/MEMORY.md`, and user-provided reference images override the global library.
 
 ## Historical Accuracy
 
@@ -234,7 +259,7 @@ Trigger words:
 Required reply:
 
 ```text
-SW rescue synchronized. Current version: V1.9.1
+SW rescue synchronized. Current version: V1.10.2
 ```
 
 This is not a project start, not a normal sync replacement, and not a tool-generation step. It exists to bypass stale `sw-v1-0` or `sw-update` skill chips with a separate skill id.

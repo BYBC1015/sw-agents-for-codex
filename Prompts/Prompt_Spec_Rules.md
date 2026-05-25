@@ -58,6 +58,7 @@
 | 用途 | 重点 | 不要做 |
 | --- | --- | --- |
 | 海报主视觉 | 留白、信息层级、主体冲击力、可排版空间 | 不要让 AI 直接生成大量文字 |
+| 海报视觉文字 | 主标题/数字字效、材质、光影、透视、和主视觉的一体感 | 不要用普通系统字体替代设计字效 |
 | 海报背景 | 氛围、色彩、空间、低干扰 | 不要抢主标题 |
 | 产品图 | 材质、光线、比例、细节真实 | 不要夸张变形产品 |
 | 人物图 | 年龄、姿态、表情、服装、授权风险 | 不要生成真实名人替身 |
@@ -230,15 +231,25 @@
 
 大多数图像/视频生成模型不擅长稳定生成准确文字。商业设计默认按以下规则：
 
-- 海报标题、价格、日期、二维码、logo 默认后期在 Photoshop、Illustrator、Canva 或剪辑软件中添加。
-- 图片 prompt 中只要求“保留干净文字区域”，不要要求模型生成准确中文标题。
-- 如果必须生成文字，只生成极短、可容错的英文字母或占位符，并在终审中检查。
+- 先区分两类文字：
+  - `视觉文字`：主标题、发布会标题、核心数字、金属字、发光字、透视字、霓虹字、品牌化标题牌等，本质是画面的一部分。
+  - `精确信息文字`：日期、价格、参数、小字说明、二维码、logo、法务文案、客户必须逐字准确的长中文。
+- 视觉文字不要默认降级成普通系统字体。优先用 image/视觉生成或局部重绘保留字效、光影、材质、透视、空间关系和整体冲击力；短中文或数字可以写入 prompt，但生成后必须做字符准确性检查。
+- 精确信息文字默认后期在 Photoshop、Illustrator、Canva 或剪辑软件中添加；如果需要脚本/系统字体排版，必须尽量匹配原海报字重、描边、渐变、辉光、阴影、透视和色彩，不允许用素的默认字体破坏视觉。
+- 图片 prompt 中对精确信息文字只要求“保留干净文字区域”；对视觉文字可以要求模型生成短标题字效或标题牌。
+- 如果必须同时保证字效和准确文字，采用两步策略：先用 image/视觉模型生成或修复标题质感，再用可控排版做最终字符校准。
 - logo 默认使用客户提供文件后期叠加，不让 AI 临摹或生成相似 logo。
 
 文字区域描述示例：
 
 ```text
 画面上方保留 35% 干净留白，用于后期添加中文标题；背景低干扰，无文字、无 logo、无水印。
+```
+
+视觉文字描述示例：
+
+```text
+主标题作为画面核心视觉文字处理：大号立体发光中文标题，蓝白渐变玻璃质感，字面有轻微体积光和边缘辉光，标题与主视觉共享同一光源；保持短句字符清晰，生成后检查错字，不使用平面默认系统字体。
 ```
 
 ## 一致性规则
@@ -375,3 +386,9 @@ Use `Prompts/Visual_Development_Board_Rules.md` only when the user asks for char
 - Do not jump straight to image generation. First output the sheet/board handoff or storyboard group table, then generate one selected board prompt.
 - If the user says to use Banana Pro for a character sheet or storyboard sheet, treat it as confirmation for one draft board only. Batch boards require separate confirmation.
 - Exact labels, Chinese text, logos, and final typography should be added after generation unless the user explicitly accepts model text risk.
+
+## Aesthetic Decision Hook
+
+- Read `01_Research/HQ_Aesthetic_References/Aesthetic_Decision_Index.md` before final image/video prompts when the user has not specified a visual style, says SW should decide the look, or provides project-local visual references that need translation.
+- Keep the aesthetic decision as a compact handoff: profile, visual levers, reference lane, locked constraints, and avoid list.
+- Do not load HQ image folders or contact sheets for normal prompt writing. Use deeper indexes only when the user asks for moodboard inspection, reference comparison, or visual-library maintenance.

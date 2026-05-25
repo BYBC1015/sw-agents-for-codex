@@ -1,6 +1,6 @@
-﻿# SW Version
+# SW Version
 
-Current runtime version: V1.9.1
+Current runtime version: V1.10.2
 Stable invocation name: SW_V1.0
 Stable invocation aliases: `/sw`, `/SW_V1.0`, `@SW_V1.0`, `/sw_v1.0`, `/sw-v1-0`
 Version sync aliases: `@sw_update`, `SW_UPDATE`, `/sw_update`, `/sw-update`, `SW_REFRESH`
@@ -86,6 +86,9 @@ Each entry must include:
 
 | Version | Date | Change |
 | --- | --- | --- |
+| V1.10.2 | 2026-05-25 | Poster quick-edit correction: existing-poster revisions now use a short output-first route instead of the full brief/direction pipeline, and poster display lettering such as hero titles, launch titles, big numerals, glow/metal/3D/neon type is treated as visual art rather than plain system-font text. Exact information text remains controlled and QA'd. |
+| V1.10.1 | 2026-05-25 | Deep maintenance update: added UTF-8-safe text integrity scanning for real mojibake/private-use character leaks, blocked tracked aesthetic media files in release checks, validated all Studio/tool skills under UTF-8 mode, fixed Seedance prompt-only dry-run so text-to-video is not blocked by missing image URLs, and expanded the HQ aesthetic resource map plus future interactive-browser planning without increasing normal SW startup cost. |
+| V1.10.0 | 2026-05-25 | Added the `aesthetic-director` studio role, compact `Aesthetic_Decision_Index.md` for automatic visual-taste selection, portable aesthetic-library storage config, library doctor, and top-tier collection queue. Normal projects use the tiny decision layer first; raw HQ images/contact sheets stay local-only and load only on explicit reference/moodboard/library-maintenance requests. |
 | V1.9.1 | 2026-05-21 | Replaced the Banana image-generation backend with Banana Pro using OpenRouter `google/gemini-3-pro-image-preview`, added private `~/.config/banana-pro/openrouter.env` key lookup, kept the existing SW-compatible runner entry, and preserved no-bypass/cost guardrails. |
 | V1.9.0 | 2026-05-21 | Added `storyboard-visual-word` as an explicit downstream DOCX handoff tool for visual方案文件 / 视觉导演方案 / Word视觉方案 requests. It packages already-selected storyboard, scene, or concept images into a clean Word visual director document without replacing storyboard design, prompt generation, or image generation. |
 | V1.8.1 | 2026-05-21 | Expanded the Oscar Best Picture visual-language reference from 20 to 30 films and added a local Daily Selected aesthetic index for user-supplied PDFs. Extracted images/contact sheets stay ignored locally; tracked files store only prompt-safe usage rules and compact indexes. |

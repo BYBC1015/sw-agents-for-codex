@@ -31,6 +31,7 @@ studio-orchestrator
 -> brief-strategist
 -> research-scout (optional)
 -> creative-director
+-> aesthetic-director (when visual style is not locked)
 -> copywriter
 -> poster-art-director
 -> layout-designer
@@ -44,8 +45,27 @@ Key gates:
 
 - brief locked before directions
 - direction locked before layout/prompt detail
-- exact text/logo/QR handled in post-production
+- aesthetic profile locked or assumed before expensive key visual generation
+- display lettering (hero titles, launch titles, big numerals, glowing/metal/3D/neon title blocks) stays part of the visual system and should preserve image/design effects
+- exact information text/logo/QR handled in post-production and QA
 - review before delivery
+
+## Poster Quick Edit Workflow
+
+Use this when an existing poster/image is already present and the user asks for a local fix, export variant, title treatment improvement, or reference-based tweak.
+
+```text
+poster-art-director or layout-designer
+-> prompt-director or image tool only if visual rendering is needed
+-> review-producer only for final QA
+```
+
+Key gates:
+
+- no full brief/direction restart unless the user changes the goal
+- at most one blocking question
+- output edited visual/preview first, then no more than three notes
+- preserve or improve display lettering effects; do not replace with plain system fonts
 
 ## Presentation / Deck Workflow
 
@@ -54,6 +74,7 @@ studio-orchestrator
 -> brief-strategist
 -> research-scout (optional)
 -> creative-director
+-> aesthetic-director (when deck look is not locked)
 -> presentation-designer
 -> copywriter
 -> layout-designer
@@ -66,6 +87,7 @@ Key gates:
 
 - purpose and audience locked before slide structure
 - client decision outcome locked before proposal detail
+- visual profile chosen before detailed slide polish or AI imagery
 - slide storyline locked before visual polish
 - slide roles and title takeaways locked before detailed copy/layout
 - client-facing proposal decks may load `presentation-designer` references only when the subject requires them
@@ -80,6 +102,7 @@ studio-orchestrator
 -> brief-strategist
 -> research-scout (optional)
 -> creative-director
+-> aesthetic-director (when visual language is not locked)
 -> scriptwriter
 -> storyboard-director
 -> cinematographer
@@ -97,6 +120,7 @@ studio-orchestrator
 Key gates:
 
 - structure before shot list
+- aesthetic profile before storyboard image prompts or reference-frame selection
 - shot list before edit plan
 - selected AI shots only after specs are locked
 - when a selected AI video shot uses local reference media, use `url-relay` after `prompt-director` and before `seedance-2-video`
@@ -111,6 +135,7 @@ studio-orchestrator
 -> research-scout
 -> creative-director
 -> film-director
+-> aesthetic-director (when look/world grammar is not locked)
 -> scriptwriter
 -> production-designer
 -> cinematographer
@@ -126,6 +151,7 @@ studio-orchestrator
 Key gates:
 
 - directing intent before script
+- aesthetic profile before production-design, cinematography, storyboard boards, or generation prompts
 - script/treatment before storyboard
 - cinematography and production design before AI video prompts
 - historical accuracy, when enabled, locks period/civilization choices before production design and checks still images after generation

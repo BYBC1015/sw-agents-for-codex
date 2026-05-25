@@ -76,7 +76,7 @@ Before real generation, confirm these fields are known or reasonably defaulted:
 - `ratio`: usually `9:16`, `16:9`, or `1:1`.
 - `duration`: default `15`.
 - `resolution`: default `720p` for draft speed; use `1080p` only when final quality is worth the cost.
-- `image-url`: at least one public `http(s)` URL.
+- `image-url`: optional for pure text-to-video; required when using `firstFrame` or `firstLastFrame`.
 - `image-file`: optional local file input when a public URL is not yet available. Use only after privacy/upload guardrails are satisfied.
 - `allow-temporary-relay-url`: only for user-confirmed third-party temporary relay URLs already supplied as public URLs.
 - `temporary-relay-fallback`: only after user confirmation or private config; it is tried after SW URL Relay fails, with `auto` currently choosing Litterbox.
@@ -103,7 +103,17 @@ Seedance prompts should be compact and concrete:
    python scripts/seedance_task.py setup-key
    ```
 
-3. Run a dry payload check before spending credits, or whenever the key is missing:
+3. Run a dry payload check before spending credits, or whenever the key is missing. Pure text-to-video is allowed:
+
+   ```bash
+   python scripts/seedance_task.py dry-run \
+     --prompt "10秒，电影感产品发布镜头，深色舞台中央一束轮廓光扫过金属质感标题牌，镜头缓慢前推，蓝白高光，轻微粒子漂浮，无文字细节，无logo。" \
+     --ratio 16:9 \
+     --duration 10 \
+     --resolution 720p
+   ```
+
+   Use `--image-url` or `--image-file` only when a reference image/video is required:
 
    ```bash
    python scripts/seedance_task.py dry-run \
