@@ -41,6 +41,7 @@ Small wording-only fixes may stay on the current maintenance branch, but anythin
 $env:PYTHONUTF8='1'
 python .\tools\sw_sync_installed.py
 python .\tools\sw_doctor.py
+python .\tools\sw_bootstrap.py --no-sync --no-network
 ```
 
 6. If only repository CI is needed:
@@ -76,11 +77,25 @@ Use `tools/sw_sync_installed.py` after version bumps or entry changes. It update
 - user-level `~/.codex/skills/sw-update`
 - user-level `~/.codex/skills/sw-rescue`
 - user-level `~/.codex/skills/sw-help`
+- a compact loader runtime pack beside `~/.codex/skills/sw-v1-0/SKILL.md`
 - user-level tool skills for Banana Pro, Seedance 2.0, and URL Relay
 - local plugin skills and command files
+- a compact loader runtime pack beside the plugin `sw-v1-0/SKILL.md`
 - local plugin manifest version
 
 The script does not store API keys or upload tokens. Tool credentials stay in environment variables or local private config files.
+
+## Bootstrap Rule
+
+Use `tools/sw_bootstrap.py` after cloning SW on a new computer, after repairing local plugin paths, or when another Codex instance needs a compact readiness report. It runs the sync script by default, then checks installed entries, Banana Pro key state, Seedance key state, URL Relay config/health, and optional tools without printing secrets.
+
+For a source-only release sanity check, use:
+
+```powershell
+python .\tools\sw_bootstrap.py --no-sync --no-network
+```
+
+This is local infrastructure. It should not be invoked during normal design-project work.
 
 ## Token Policy
 

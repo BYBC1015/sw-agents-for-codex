@@ -56,6 +56,8 @@ The cost gate decides:
 - Banana Pro is a post-prompt execution step, not a shortcut around Studio roles. If the request also asks for storyboard, video/film shot design, poster design, PPT/deck/slide layout, character/product/prop design, or scene planning, the responsible Studio role must produce the upstream handoff before `prompt-director` and `banana-pro`.
 - Poster quick edits are a low/mid-cost exception to full project routing: if the user already has the poster/image and asks for a local fix or variants, keep the role chain short and output the visual first.
 - Do not spend model context explaining routine image-edit iterations. Mention only the changed visual layer, the export result, and any QA risk.
+- If the user invoked SW through a visible skill chip and the same turn is a clear poster/image quick edit, treat the chip as the load acknowledgement. Do not spend a tool/read step looking for runtime files before the edit; use the embedded quick-edit rule or colocated installed runtime pack.
+- Poster work is not PPT work: do not default to system-font text overlays for poster hero titles or title effects. Use image-native visual typography for the poster's main visual text, and reserve editable/system text for exact information, small copy, legal/logo/QR, or explicit editable-layer requests.
 - `banana-pro` is a tool skill, not a Studio role. It does not count as an extra Studio support role, but generation still uses the high-cost gate when quota, uploads, or final-use assets are involved.
 - Explicit 即梦2.0生成 / 即梦生成 / Seedance 2.0 / Ark Seedance video-generation requests can add `seedance-2-video` after `prompt-director`; use `tool-integrator` only when capability, parameters, API, key state, or connection state is unclear. Do not load it for generic video prompts or storyboard work.
 - Seedance is a post-prompt execution step, not a shortcut around Studio roles. If the request also asks for script, storyboard, camera, edit, motion, sound, color, scene design, or film treatment, the responsible Studio role must produce the upstream handoff before `prompt-director` and `seedance-2-video`.
@@ -192,7 +194,7 @@ Stop instead of expanding when:
 
 Before replying, internally check:
 
-- Did I read `SW_Runtime_Index.md` and the selected role skill files?
+- Did I read `SW_Runtime_Index.md` and the selected role skill files, or correctly use the embedded poster quick-edit hot path?
 - Did the trace use `Studio_Role_Label_Protocol.md`?
 - Did I keep role count within budget?
 - Did I keep output inside the cost lane?

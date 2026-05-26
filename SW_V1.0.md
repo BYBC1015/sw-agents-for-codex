@@ -30,15 +30,36 @@ activate SW_V1.0
 
 ## Required Reply
 
-After activation succeeds, reply exactly:
+After text activation succeeds, reply exactly:
 
 ```text
-SW loaded successfully. Current version: V1.10.2
+SW loaded successfully. Current version: V1.10.5
 ```
 
 If the user only invokes SW, stop after the required reply and wait for the project request.
 
-If the same user message includes a project request, put the required reply first, then continue using the hot path: `SW_Runtime_Index.md`, `Cost_Governor.md`, and only the selected role skills. Read `AGENTS.md` only when full project rules are needed or files conflict.
+If the same user message includes a normal project request, put the required reply first, then continue using the hot path: `SW_Runtime_Index.md`, `Cost_Governor.md`, and only the selected role skills. Read `AGENTS.md` only when full project rules are needed or files conflict.
+
+## Direct Quick-Edit Exception
+
+If the host UI already shows the SW skill chip and the user gives an actionable small edit for an existing poster/image, treat the chip itself as the load acknowledgement. Do not add a separate activation narration, do not search the filesystem for runtime files, and do not reopen the full Brief/Direction pipeline.
+
+Use this embedded quick route:
+
+1. Identify the edit target and affected layer.
+2. If the request is clear, execute the smallest visual edit pass immediately.
+3. Preserve or regenerate display lettering as image-native visual typography unless the user asks for editable text layers.
+4. Do not add plain system-font overlays to poster hero titles, launch titles, or large numerals by default.
+5. Keep exact information text controlled and QA'd.
+6. Reply with the edited output/preview first, then one short QA note if needed.
+
+Examples that use this exception: existing poster text-size adjustment, title hierarchy correction, export a vertical version, remove a small artifact, make the title treatment closer to the provided reference, or "the text is too plain".
+
+Only read runtime files for this route when the edit is ambiguous, the image tool fails, or the user asks for the underlying SW process.
+
+## Installed Runtime Pack
+
+When this file is installed as a Codex skill, the sync script may copy a portable runtime pack next to `SKILL.md`: `VERSION.md`, `SW_Runtime_Index.md`, `Cost_Governor.md`, `Studio_Role_Label_Protocol.md`, `Studio_Skill_Dispatch_Protocol.md`, and `Studio_Skills/`. Prefer those colocated files before searching other folders. If they are absent, use the embedded quick rules above for simple poster/image edits rather than spending a turn searching for them.
 
 ## Stale Snapshot Guard
 
@@ -75,7 +96,7 @@ For synchronization in historical conversations or other project folders, use:
 Expected sync reply:
 
 ```text
-SW version synchronized. Current version: V1.10.2
+SW version synchronized. Current version: V1.10.5
 ```
 
 If normal sync still returns a stale sealed chip, use the standalone rescue entry:
@@ -87,7 +108,7 @@ If normal sync still returns a stale sealed chip, use the standalone rescue entr
 Expected rescue reply:
 
 ```text
-SW rescue synchronized. Current version: V1.10.2
+SW rescue synchronized. Current version: V1.10.5
 ```
 
 ## Minimum Project Folder Package

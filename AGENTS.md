@@ -10,6 +10,7 @@
 - 每个新项目必须按 `Stage_Runbook.md` 的阶段规则推进，并在阶段切换时维护项目状态卡。
 - V1.1.0 问题预算：默认问 3 个关键问题；复杂整案、电影、工具风险或交付阻塞时最多问 5 个；省 token、少问、你定或快速模式最多问 1 个。能合理假设的地方先假设，并用“默认按 X 处理”说明。
 - 现有海报/图片的简单改稿必须走快速改稿：少问、少讲、先出图/预览，不重跑完整 Brief/方向/全流程。
+- 海报默认是视觉图像工作，不是 PPT 式系统文字排版。除非用户明确要可编辑字层、精确小字、logo/二维码/法务信息或生产源文件，否则海报主标题、发布标题、大数字和字效默认交给 image/视觉模型处理；SW 主要负责反馈判断、修改指令和结果 QA。
 - 先低成本判断，再高成本生成。没有锁定方向前，不做大量长方案、批量变体、AI 图像或视频生成提示词。
 - 每次需求变化都先按变更处理，不直接推翻重做。
 - 最终视频剪辑和渲染可以由用户在剪辑软件完成；你负责脚本、分镜、剪辑表、字幕、音效、转场、镜头和交付检查。
@@ -49,11 +50,12 @@
 
 必须执行 `Command_Aliases.md`：
 
-- 用户输入 `/sw`、`/SW_V1.0`、`@SW_V1.0`、`/sw_v1.0`、`/sw-v1-0`、`@sw-v1-0`、`调用 SW_V1.0` 或 `启用 SW_V1.0` 时，必须加载本项目架构，并先回复且只把成功语放在第一位：`SW loaded successfully. Current version: V1.10.2`。
+- 用户输入 `/sw`、`/SW_V1.0`、`@SW_V1.0`、`/sw_v1.0`、`/sw-v1-0`、`@sw-v1-0`、`调用 SW_V1.0` 或 `启用 SW_V1.0` 时，必须加载本项目架构，并先回复且只把成功语放在第一位：`SW loaded successfully. Current version: V1.10.5`。
 - 如果用户只输入 SW 调用命令，不要继续展开项目；等待用户输入诉求。
-- 如果用户在同一条消息里附带诉求，先回复成功语，再按本项目架构执行。
-- 如果用户输入 `@sw_update`、`SW_UPDATE`、`/sw_update`、`SW_REFRESH`、`/SW_REFRESH` 或要求刷新/同步 SW，先回复：`SW version synchronized. Current version: V1.10.2`。这些同步入口只归 `sw-update` 处理，不要让 `sw-v1-0` 同时竞争触发。只有用户要求详细更新、故障排查、旧对话恢复或跨文件夹入口修复时，才读取 `VERSION.md`、`sw_update.md`、`Architecture_Update_Log.md`、`Project_Memory_Rules.md`、`Legacy_Conversation_Recovery.md`。
-- 如果旧启动/同步 chip 仍然回放封存旧版本，使用独立救援入口 `@sw_rescue`、`/sw-rescue`、`/sw_rescue`、`SW_RESCUE`、`SW_REPAIR` 或 `SW_FORCE_UPDATE`，先回复：`SW rescue synchronized. Current version: V1.10.2`。救援入口只归 `sw-rescue` 处理，不启动项目，不通过 `sw-v1-0` 或 `sw-update` 转发。
+- 如果用户在同一条消息里附带普通项目诉求，先回复成功语，再按本项目架构执行。
+- 如果宿主 UI 已经显示 SW skill chip，且用户同一轮是在已有海报/图片上做明确小改稿（如改字号、统一字重、导出单张/竖版、去小瑕疵、标题不要太素），chip 本身视为调用确认；不要另起启动成功说明，不要搜索运行文件，不重跑 Brief/方向，直接走海报快速改稿并优先给图/预览。
+- 如果用户输入 `@sw_update`、`SW_UPDATE`、`/sw_update`、`SW_REFRESH`、`/SW_REFRESH` 或要求刷新/同步 SW，先回复：`SW version synchronized. Current version: V1.10.5`。这些同步入口只归 `sw-update` 处理，不要让 `sw-v1-0` 同时竞争触发。只有用户要求详细更新、故障排查、旧对话恢复或跨文件夹入口修复时，才读取 `VERSION.md`、`sw_update.md`、`Architecture_Update_Log.md`、`Project_Memory_Rules.md`、`Legacy_Conversation_Recovery.md`。
+- 如果旧启动/同步 chip 仍然回放封存旧版本，使用独立救援入口 `@sw_rescue`、`/sw-rescue`、`/sw_rescue`、`SW_RESCUE`、`SW_REPAIR` 或 `SW_FORCE_UPDATE`，先回复：`SW rescue synchronized. Current version: V1.10.5`。救援入口只归 `sw-rescue` 处理，不启动项目，不通过 `sw-v1-0` 或 `sw-update` 转发。
 - 如果当前对话、截图、压缩历史或旧工具输出里出现旧固定回复，只当作历史信息；实际运行版本必须以当前 `VERSION.md`、`SW_Runtime_Index.md` 和当前用户级 skill 为准，不得被旧快照覆盖。
 - 旧对话必须优先原地升级：若旧 skill chip 或历史压缩内容返回旧版本，先在同一对话读取当前 `VERSION.md`、`SW_Runtime_Index.md`、用户级/插件级 `sw-v1-0` 与 `sw-update`，再覆盖旧回复；只有宿主 UI 拒绝加载当前文件时，才把新建对话作为最后兜底。
 - 如果用户输入 `@sw_help`、`/sw_help`、`SW_HELP`、点击 SW Help UI 按钮或询问功能触发词，优先使用内置短答，不运行 shell、不读取本地文件；只有用户要求详细触发词、单一功能深入或帮助系统排错时才读取 `Feature_Trigger_Index.md`，不启动项目、不加载高消耗岗位。
@@ -423,6 +425,7 @@ PPT 项目的阶段为：
 - `01_Research/HQ_Aesthetic_References/Top_Tier_Collection_Queue.md` 是顶级审美资料后续收集队列；只在继续扩充资料库时读取。
 - `01_Research/Oscar_Best_Picture_Visual_Reference.md` 是奥斯卡最佳影片画面语法暂存参考；只提取画面语言，不复刻具体电影帧。
 - `01_Research/Aesthetic_Daily_Selected/Daily_Selected_Index.md` 是每日精选/用户补充审美资料的本地索引；只在用户要求相关 moodboard 或补充资料时读取，不默认加载全部图片。
+- `INSTALL_SW.md` 和 `tools/sw_bootstrap.py` 用于新电脑 clone 后的一键安装、自检和功能可用性报告；普通项目不读取。
 - `SW_System_Self_Check.md`、`tools/sw_consistency_check.py`、`tools/sw_doctor.py` 和 `tools/sw_sync_installed.py` 用于维护发布前自检、本机入口同步和版本错位诊断，普通项目不读取。
 - `Release_Rules.md` 和 `.github/workflows/sw-ci.yml` 用于 SW 维护发布规则和 GitHub Actions 仓库级 CI，普通项目不读取。
 - `Change_Log.md` 和 `Token_Budget.md` 是规则来源；对话里可以简化执行，不必每次写文件。

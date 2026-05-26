@@ -1,7 +1,7 @@
 # SW System Self-Check
 
 Date: 2026-05-25
-Target runtime: V1.10.2
+Target runtime: V1.10.5
 
 This file records the maintenance diagnosis for entry loss, version mismatch, stale chips, and likely future failure points. It is a working audit, not a user-facing startup file.
 
@@ -52,6 +52,8 @@ This file records the maintenance diagnosis for entry loss, version mismatch, st
 
 - `tools/sw_doctor.py` prints the current version, git state, and the selected consistency check result in one compact maintenance pass.
 
+- `tools/sw_bootstrap.py` is the new-computer readiness check: it syncs skills/plugin, runs doctor, checks Banana/Seedance key state, checks URL Relay config/health, and reports ready versus needs-config without printing secrets.
+
 - `tools/aesthetic_library_doctor.py` checks portable aesthetic-library roots after library moves or missing-image reports.
 
 - `Examples/Regression_Test_Suite.md` now points maintenance work to this checker before publish.
@@ -66,9 +68,11 @@ This file records the maintenance diagnosis for entry loss, version mismatch, st
 | Cross-project partial copy | Other project has startup but no update/rescue | Copy `SW_V1.0.md`, `sw_update.md`, and `sw_rescue.md` together |
 | UTF-8 false alarm | Chinese docs look garbled in shell | Re-read with explicit UTF-8 before editing |
 | Tool route bypass | Banana/Seedance generates before storyboard/prompt | Enforce upstream Studio role -> `prompt-director` -> tool skill |
+| Poster system-text regression | Simple poster edits rebuild hero titles with plain fonts or explain workflow before showing the image | Use chip quick-edit hot path and image-native poster typography; system text only for exact info/editable-layer requests |
 | Relay fallback surprise | Third-party temporary URL used without intent | Try SW media uploader first; fallback only on server failure plus confirmation/config |
 | Aesthetic library bloat | Normal projects read too many references/images | Use `aesthetic-director` + `Aesthetic_Decision_Index.md` first; inspect images only on explicit moodboard/reference requests |
 | Moved image library | Indexes point to missing local images | Set `SW_AESTHETIC_LIBRARY_ROOT` or related variables, then run `python tools/aesthetic_library_doctor.py` |
+| Cloned computer not ready | SW loads but Banana/Seedance/Relay state is unclear | Run `python tools/sw_bootstrap.py` and follow its ready/needs-config report |
 | Secret leakage | API key appears in repo docs/logs | Stop publish; remove key; rotate if already pushed |
 
 ## Maintenance Rule
@@ -79,6 +83,7 @@ Before every SW publish:
 $env:PYTHONUTF8='1'
 python .\tools\sw_sync_installed.py
 python .\tools\sw_doctor.py
+python .\tools\sw_bootstrap.py --no-sync --no-network
 ```
 
 If it fails, fix the listed surfaces before commit/push. Do not rely on manual grep alone for release readiness.

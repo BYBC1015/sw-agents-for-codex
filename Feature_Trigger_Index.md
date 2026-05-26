@@ -259,7 +259,7 @@ Trigger words:
 Required reply:
 
 ```text
-SW rescue synchronized. Current version: V1.10.2
+SW rescue synchronized. Current version: V1.10.5
 ```
 
 This is not a project start, not a normal sync replacement, and not a tool-generation step. It exists to bypass stale `sw-v1-0` or `sw-update` skill chips with a separate skill id.

@@ -57,6 +57,18 @@ ENTRY_SKILLS = {
 
 TOOL_SKILLS = ["banana-pro", "seedance-2-video", "url-relay", "storyboard-visual-word"]
 
+RUNTIME_PACK_FILES = [
+    "VERSION.md",
+    "SW_Runtime_Index.md",
+    "Cost_Governor.md",
+    "Studio_Role_Label_Protocol.md",
+    "Studio_Skill_Dispatch_Protocol.md",
+]
+
+PORTABLE_RUNTIME_DIRS = [
+    "Studio_Skills",
+]
+
 
 def read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8-sig")
@@ -237,6 +249,8 @@ Load `aesthetic-director` and read `01_Research/HQ_Aesthetic_References/Aestheti
 def sync_entry_skill(base: Path, skill_id: str, version: str, dry_run: bool) -> None:
     skill_dir = base / skill_id
     write_text(skill_dir / "SKILL.md", build_skill(skill_id), dry_run)
+    if skill_id == "sw-v1-0":
+        sync_runtime_pack(skill_dir, dry_run)
     yaml_text = agent_yaml(skill_id, version)
     if yaml_text:
         write_text(skill_dir / "agents" / "openai.yaml", yaml_text, dry_run)
@@ -262,6 +276,24 @@ def copy_skill_dir(src: Path, dst: Path, dry_run: bool) -> None:
     if dst.exists():
         shutil.rmtree(dst)
     shutil.copytree(src, dst, ignore=ignore_generated)
+
+
+def sync_runtime_pack(skill_dir: Path, dry_run: bool) -> None:
+    """Copy the compact runtime pack next to the installed loader skill.
+
+    This prevents simple image/poster edits from wasting time searching the
+    original repository path after the skill is installed on another machine or
+    invoked from a project folder that does not contain the full SW tree.
+    """
+
+    for rel in RUNTIME_PACK_FILES:
+        src = ROOT / rel
+        if src.exists():
+            write_text(skill_dir / rel, read_text(src), dry_run)
+    for rel in PORTABLE_RUNTIME_DIRS:
+        src = ROOT / rel
+        if src.exists():
+            copy_skill_dir(src, skill_dir / rel, dry_run)
 
 
 def plugin_manifest(version: str) -> dict:

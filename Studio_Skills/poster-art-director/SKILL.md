@@ -38,6 +38,7 @@ Ask 3 by default; ask up to 5 when size, brand, required copy, product material,
 - Separate `display lettering` from `exact information text`.
   - Display lettering: hero headline, launch title, big numerals, glowing/metal/3D/neon title treatment. Preserve or create it with image/visual generation or local graphic treatment first; do not flatten it into plain system fonts.
   - Exact information text: dates, parameters, captions, legal copy, QR, logos, long Chinese copy. Keep it editable/post-produced and QA for character accuracy.
+- Default poster workflow is image-native typography. For most poster revisions, SW's job is to judge the visual problem, translate feedback into a precise edit instruction, and guide one image/model edit pass. Do not build a system-font layout unless the user asks for editable layers, exact information text, or a PPT-like handoff.
 - If exact text and strong title effects are both needed, recommend a two-pass solution: image/visual model for the title texture and lighting, then controlled overlay/QA for the final characters.
 - For detailed grid and type layout, hand off to `layout-designer`.
 - For copy refinement, hand off to `copywriter`.

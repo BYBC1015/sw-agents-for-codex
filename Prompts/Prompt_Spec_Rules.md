@@ -366,6 +366,16 @@
 - 视频提示词默认中文即可；如果用户要复制到英文模型，再补英文版。
 - 不要中英混杂在同一条主提示词里，避免语义重复和权重混乱。
 
+## Poster Image-Native Typography Add-On
+
+Use this add-on for poster prompts and poster image edits.
+
+- Posters are visual images, not slide decks. By default, hero titles, launch titles, large numerals, metallic/glowing/3D/neon titles, and brand-like display lettering should be treated as part of the image.
+- Do not ask for plain system-font overlays unless the user explicitly wants editable layers or production text files.
+- For poster main titles, describe the lettering as visual material: weight, bevel, glow, extrusion, gradient, texture, shadow, perspective, light source, integration with the main visual, and character accuracy QA.
+- For precise information text, dates, legal copy, QR codes, logos, and long Chinese copy, leave clean layout space or add controlled post-production text after generation.
+- For poster feedback, translate user wording into a minimal image edit: affected text block, visual weight, size, stroke/glow, spacing, alignment, contrast, and what must remain unchanged. Avoid reopening the full poster brief.
+
 ## Historical Accuracy Add-On
 
 Use this add-on only after the user explicitly enables historical accuracy checking.

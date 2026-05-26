@@ -1,6 +1,6 @@
 # SW Version
 
-Current runtime version: V1.10.2
+Current runtime version: V1.10.5
 Stable invocation name: SW_V1.0
 Stable invocation aliases: `/sw`, `/SW_V1.0`, `@SW_V1.0`, `/sw_v1.0`, `/sw-v1-0`
 Version sync aliases: `@sw_update`, `SW_UPDATE`, `/sw_update`, `/sw-update`, `SW_REFRESH`
@@ -68,7 +68,7 @@ When the version changes, update:
 - `Cost_Governor.md` when cost, token, output-depth, or high-cost gate behavior changes
 - `SW_Runtime_Index.md` when compact runtime behavior changes
 - the version log below
-- release maintenance files when infrastructure changes: `SW_System_Self_Check.md`, `Release_Rules.md`, `tools/sw_consistency_check.py`, `tools/sw_sync_installed.py`, `tools/sw_doctor.py`, and `.github/workflows/sw-ci.yml`
+- release maintenance files when infrastructure changes: `INSTALL_SW.md`, `SW_System_Self_Check.md`, `Release_Rules.md`, `tools/sw_consistency_check.py`, `tools/sw_sync_installed.py`, `tools/sw_bootstrap.py`, `tools/sw_doctor.py`, and `.github/workflows/sw-ci.yml`
 
 ## Update Content Recording
 
@@ -86,6 +86,9 @@ Each entry must include:
 
 | Version | Date | Change |
 | --- | --- | --- |
+| V1.10.5 | 2026-05-26 | Added portable install/bootstrap infrastructure: `INSTALL_SW.md` explains the one-command new-computer setup, and `tools/sw_bootstrap.py` detects the system, syncs user skills and the local plugin, runs SW doctor, checks Banana/Seedance keys, checks URL Relay config/health without printing secrets, and reports which features are ready versus needing local configuration. |
+| V1.10.4 | 2026-05-26 | Poster image-native typography patch: poster hero titles, launch titles, large numerals, and stylized display lettering default to image/visual-model handling instead of system-font overlays. SW's poster role now emphasizes feedback judgment, precise edit instructions, and QA; editable/system text is reserved for exact information text, small copy, legal/logo/QR, or explicit editable-layer requests. |
+| V1.10.3 | 2026-05-26 | Poster quick-edit performance patch: SW skill-chip invocation plus a clear existing-poster/image edit now goes straight to output-first editing without separate startup narration, runtime-file searching, or full project routing. Installed loader skills now carry a compact runtime pack and Studio skill pack so synced computers and other project folders do not have to rediscover the SW repository path for routine work. |
 | V1.10.2 | 2026-05-25 | Poster quick-edit correction: existing-poster revisions now use a short output-first route instead of the full brief/direction pipeline, and poster display lettering such as hero titles, launch titles, big numerals, glow/metal/3D/neon type is treated as visual art rather than plain system-font text. Exact information text remains controlled and QA'd. |
 | V1.10.1 | 2026-05-25 | Deep maintenance update: added UTF-8-safe text integrity scanning for real mojibake/private-use character leaks, blocked tracked aesthetic media files in release checks, validated all Studio/tool skills under UTF-8 mode, fixed Seedance prompt-only dry-run so text-to-video is not blocked by missing image URLs, and expanded the HQ aesthetic resource map plus future interactive-browser planning without increasing normal SW startup cost. |
 | V1.10.0 | 2026-05-25 | Added the `aesthetic-director` studio role, compact `Aesthetic_Decision_Index.md` for automatic visual-taste selection, portable aesthetic-library storage config, library doctor, and top-tier collection queue. Normal projects use the tiny decision layer first; raw HQ images/contact sheets stay local-only and load only on explicit reference/moodboard/library-maintenance requests. |

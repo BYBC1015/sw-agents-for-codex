@@ -148,6 +148,10 @@ Codex 先判断用户真正要的交付物，再决定阶段深度。
 下一步：
 ```
 
+## Poster Control Difference
+
+Poster work should default to visual editing, not document-style text layout. Unlike PPT/deck pages or storyboard annotation sheets, a poster usually does not need system-font reconstruction. For poster requests, SW should mostly handle feedback, visual judgment, edit instructions, and QA. Use system/editable text only for exact information text, small copy, legal/logo/QR, or explicit editable-layer delivery.
+
 ## V1.5 Historical Accuracy Controls
 
 - `开启历史检查`, `要考据`, `按历史准确做`: enable `historical-consultant` for the current request/current visual-output chain.

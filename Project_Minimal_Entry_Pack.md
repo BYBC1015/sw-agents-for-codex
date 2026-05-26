@@ -36,19 +36,19 @@ Copy these when you want version history and troubleshooting available inside th
 Startup:
 
 ```text
-SW loaded successfully. Current version: V1.10.2
+SW loaded successfully. Current version: V1.10.5
 ```
 
 Version sync:
 
 ```text
-SW version synchronized. Current version: V1.10.2
+SW version synchronized. Current version: V1.10.5
 ```
 
 Rescue:
 
 ```text
-SW rescue synchronized. Current version: V1.10.2
+SW rescue synchronized. Current version: V1.10.5
 ```
 
 ## Optional Project Memory Pack
@@ -81,3 +81,5 @@ Every future SW update must keep `SW_V1.0.md`, `sw_update.md`, `sw_rescue.md`, t
 Default help and sync entries should use hot-start behavior: fixed short reply first, no shell/file reads for normal help, detailed files only when requested.
 
 If a long-running project has its own visual references, keep them in `.sw/ASSETS.md` or a project-local reference folder and mention the rule in `.sw/RULES.md`. SW should use those project references before the global aesthetic library.
+
+Installed SW entries created by `tools/sw_sync_installed.py` include a compact runtime pack beside the loader skill. This lets another project folder or a newly synced computer run quick poster/image edits without searching for the original repository path. If a user clicks the SW skill chip and asks for a clear existing-poster/image tweak, the chip itself is the load acknowledgement; SW should edit first and explain only the changed layer or QA risk.

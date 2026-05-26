@@ -127,6 +127,14 @@ Exit when one aesthetic profile is selected or when the user explicitly says to 
 
 ## Stage 4A: Poster Plan
 
+### Poster Default: Image-Native Typography
+
+Poster production is not the same as PPT/deck production. For most posters, SW should act as an art director and revision director: judge the visual problem, translate feedback into precise image-edit instructions, and inspect the result. Do not rebuild poster hero typography with plain system fonts by default.
+
+- Use image/visual-model lettering for hero titles, launch titles, big numerals, glowing/metal/3D/neon title effects, and other display lettering.
+- Use editable/system text mainly for exact information text, small copy, legal copy, logo/QR placement, or when the user explicitly asks for editable layers.
+- In quick poster edits, output the changed visual first and keep explanation to the affected layer plus QA risk.
+
 | 项目 | 规则 |
 | --- | --- |
 | 进入条件 | 主方向已确认或默认确认 |

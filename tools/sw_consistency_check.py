@@ -68,6 +68,19 @@ PLUGIN_FILES = [
     USERPROFILE / "plugins" / "sw-v1-0" / "commands" / "aesthetic.md",
 ]
 
+INSTALLED_RUNTIME_PACK_FILES = [
+    USERPROFILE / ".codex" / "skills" / "sw-v1-0" / "SW_Runtime_Index.md",
+    USERPROFILE / ".codex" / "skills" / "sw-v1-0" / "Cost_Governor.md",
+    USERPROFILE / ".codex" / "skills" / "sw-v1-0" / "Studio_Skills" / "poster-art-director" / "SKILL.md",
+    USERPROFILE / ".codex" / "skills" / "sw-v1-0" / "Studio_Skills" / "layout-designer" / "SKILL.md",
+    USERPROFILE / ".codex" / "skills" / "sw-v1-0" / "Studio_Skills" / "prompt-director" / "SKILL.md",
+    USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "sw-v1-0" / "SW_Runtime_Index.md",
+    USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "sw-v1-0" / "Cost_Governor.md",
+    USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "sw-v1-0" / "Studio_Skills" / "poster-art-director" / "SKILL.md",
+    USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "sw-v1-0" / "Studio_Skills" / "layout-designer" / "SKILL.md",
+    USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "sw-v1-0" / "Studio_Skills" / "prompt-director" / "SKILL.md",
+]
+
 PROMPT_REFERENCE_FILES = [
     ROOT / "Prompts" / "Image_Aesthetic_Prompt_Reference.md",
     ROOT / "Prompts" / "Video_Motion_Edit_Prompt_Rules.md",
@@ -94,6 +107,8 @@ PROJECT_MEMORY_TEMPLATE_FILES = [
 ]
 
 REPO_TOOL_SKILL_FILES = [
+    ROOT / "INSTALL_SW.md",
+    ROOT / "tools" / "sw_bootstrap.py",
     ROOT / "banana-pro" / "SKILL.md",
     ROOT / "banana-pro" / "scripts" / "generate_openrouter_image.py",
     ROOT / "banana-pro" / "bin" / "banana-pro",
@@ -213,6 +228,10 @@ def check_external_copies(issues: list[str], version: str) -> None:
     else:
         fail(issues, f"missing plugin manifest: {manifest}")
 
+    for path in INSTALLED_RUNTIME_PACK_FILES:
+        if not path.exists():
+            fail(issues, f"missing installed runtime pack file: {path}")
+
 
 def check_prompt_references(issues: list[str]) -> None:
     for path in PROMPT_REFERENCE_FILES:
@@ -240,10 +259,11 @@ def check_prompt_references(issues: list[str]) -> None:
         fail(issues, "Studio_Role_Label_Protocol.md does not mention aesthetic-director")
 
     poster_text_rules = {
-        ROOT / "Prompts" / "Prompt_Spec_Rules.md": ["视觉文字", "系统字体"],
-        ROOT / "Stage_Runbook.md": ["海报快速改稿", "系统字体"],
-        ROOT / "SW_Runtime_Index.md": ["Poster quick edit", "Display lettering"],
-        ROOT / "Studio_Skills" / "poster-art-director" / "SKILL.md": ["Display lettering", "plain system fonts"],
+        ROOT / "Prompts" / "Prompt_Spec_Rules.md": ["视觉文字", "系统字体", "Poster Image-Native Typography"],
+        ROOT / "Stage_Runbook.md": ["海报快速改稿", "Poster Default: Image-Native Typography"],
+        ROOT / "SW_Runtime_Index.md": ["Poster quick edit", "image-native"],
+        ROOT / "Studio_Skills" / "poster-art-director" / "SKILL.md": ["image-native typography", "plain system fonts"],
+        ROOT / "Studio_Skills" / "layout-designer" / "SKILL.md": ["system/editable text overlays", "poster hero titles"],
     }
     for path, required_terms in poster_text_rules.items():
         if not path.exists():

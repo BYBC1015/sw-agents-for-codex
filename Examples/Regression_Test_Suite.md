@@ -25,7 +25,7 @@ Check version consistency:
 python .\tools\sw_consistency_check.py --scope repo
 python .\tools\sw_sync_installed.py --dry-run
 python .\tools\sw_doctor.py
-rg "SW loaded successfully. Current version: V1.10.2|SW version synchronized. Current version: V1.10.2|SW rescue synchronized. Current version: V1.10.2|Current runtime version: V1.10.2" .
+rg "SW loaded successfully. Current version: V1.10.5|SW version synchronized. Current version: V1.10.5|SW rescue synchronized. Current version: V1.10.5|Current runtime version: V1.10.5" .
 rg "<previous-version>" . --glob "!VERSION.md" --glob "!Architecture_Update_Log.md"
 ```
 
@@ -54,7 +54,7 @@ Test-Path .\01_Research\HQ_Aesthetic_References\Aesthetic_Library_Config.md
 Test-Path .\01_Research\Oscar_Best_Picture_Visual_Reference.md
 Test-Path .\01_Research\Aesthetic_Daily_Selected\Daily_Selected_Index.md
 rg "Aesthetic_Decision_Index|Image_Aesthetic_Prompt_Reference|Video_Motion_Edit_Prompt_Rules|Visual_Development_Board_Rules|Oscar_Best_Picture_Visual_Reference|Daily_Selected_Index" .\Prompts\Prompt_Spec_Rules.md .\Studio_Skills\prompt-director\SKILL.md
-rg "视觉文字|display lettering|系统字体|Poster Quick Edit|海报快速改稿" .\Prompts\Prompt_Spec_Rules.md .\Stage_Runbook.md .\SW_Runtime_Index.md .\Studio_Skills\poster-art-director\SKILL.md
+rg "视觉文字|display lettering|系统字体|Poster Quick Edit|海报快速改稿|image-native|Poster Image-Native Typography" .\Prompts\Prompt_Spec_Rules.md .\Stage_Runbook.md .\SW_Runtime_Index.md .\Studio_Skills\poster-art-director\SKILL.md .\Studio_Skills\layout-designer\SKILL.md
 ```
 
 Aesthetic decision checks:
