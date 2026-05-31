@@ -1,6 +1,6 @@
 # Feature Trigger Index
 
-This is SW's compact feature trigger index. Use it for `@sw_help`, `/sw_help`, `/sw-help`, feature discovery, and low-cost trigger checks.
+This compact index is for `@sw_help`, `/sw_help`, `/sw-help`, feature discovery, and low-cost trigger checks. It does not start a project by itself.
 
 ## Banana Pro
 
@@ -19,7 +19,7 @@ Trigger only when the user explicitly asks for:
 Default route:
 
 ```text
-upstream Studio role if needed -> prompt-director -> banana-pro
+upstream Studio role if needed -> Selected Asset Packet if a concrete object is selected -> prompt-director -> banana-pro
 ```
 
 Do not trigger for ordinary image prompt drafting.
@@ -41,7 +41,7 @@ Trigger only when the user explicitly asks for:
 Default route:
 
 ```text
-upstream Studio role if needed -> prompt-director -> seedance-2-video
+upstream Studio role if needed -> Selected Asset Packet if a concrete shot/media item is selected -> prompt-director -> seedance-2-video
 ```
 
 Do not trigger for ordinary storyboard, edit-plan, or video prompt drafting.
@@ -68,18 +68,35 @@ Trigger when the user explicitly asks for:
 Default route:
 
 ```text
-prompt-director if prompt work is needed -> url-relay -> downstream tool
-```
-
-For Seedance local files:
-
-```text
-prompt-director -> url-relay -> seedance-2-video
+Selected Asset Packet if a concrete media item is selected -> prompt-director if prompt work is needed -> url-relay -> downstream tool
 ```
 
 Do not upload private client assets, faces, unreleased products, or brand assets without explicit user permission.
 
 Fallback: use the configured SW server first. If it is unreachable or returns a server-side failure, report `SW media uploader unavailable`; then use Litterbox/Catbox only when the user confirms fallback or local private config enables it. Missing token/address or permission errors do not fallback. If no fallback is allowed, keep the prompt/payload and ask for a public URL.
+
+## Black Background Cutout
+
+Purpose: fast local transparent PNG preview from black or simple solid-background images.
+
+Trigger when the user explicitly asks for:
+
+- `抠图`
+- `扣图`
+- `去底`
+- `去黑底`
+- `黑底转透明`
+- `透明底 PNG`
+- `transparent PNG`
+- `@black-background-cutout`
+
+Default route:
+
+```text
+existing local image file -> black-background-cutout
+```
+
+Do not run prompt writing, image generation, public upload, or full project routing unless the user also asks for redesign. This tool is for quick cutout preview only and may leave slight edge fringing. For complex photo cutouts or formal delivery, recommend professional refinement or a regenerated transparent asset.
 
 ## Storyboard Visual Word
 
@@ -99,18 +116,52 @@ Trigger only when the user explicitly asks for:
 Default route when selected visuals already exist:
 
 ```text
-finishing-producer -> storyboard-visual-word
+Selected Asset Packet for selected visuals -> finishing-producer -> storyboard-visual-word
 ```
 
 Default route when visuals are not ready:
 
 ```text
-storyboard-director or production-designer -> asset-producer if needed -> prompt-director if needed -> explicit image tool if requested -> finishing-producer -> storyboard-visual-word
+storyboard-director or production-designer -> asset-producer if needed -> prompt-director if needed -> explicit image tool if requested -> Selected Asset Packet -> finishing-producer -> storyboard-visual-word
 ```
 
 Do not trigger for ordinary storyboard planning, prompt writing, image generation, integrated storyboard sheet design, or Word/PPT tasks that are not visual director handoffs.
 
 Formal DOCX output should embed selected images and include scene title, time/shot range, visual setting, and rationale. Do not include raw prompts, local paths, generation-result tables, or tool parameters unless the user asks for an internal production appendix.
+
+## Feishu Docs
+
+Purpose: render or publish already-prepared visual plans and storyboard handoffs into Feishu/Lark Docs.
+
+Trigger only when the user explicitly asks for:
+
+- `转到飞书`
+- `同步到飞书`
+- `发布到飞书`
+- `飞书视觉方案`
+- `飞书分镜`
+- `Feishu Docs`
+- `Lark Docs`
+- `@feishu-docs`
+- make this visual plan/storyboard into a Feishu document
+
+Default route when the handoff already exists:
+
+```text
+Selected Asset Packet if selected images/media are part of the handoff -> finishing-producer -> feishu-docs
+```
+
+Default route when the visual/storyboard source is not ready:
+
+```text
+storyboard-director or production-designer -> optional image/URL tools if needed -> Selected Asset Packet -> finishing-producer -> feishu-docs
+```
+
+Do not trigger for ordinary storyboard planning, prompt writing, image/video generation, DOCX packaging, or general mention of 飞书 unless the user asks to transfer/render/publish into Feishu.
+
+No credential behavior: render Feishu-friendly Markdown or dry-run a publish plan only. Real publishing requires local private Feishu/Lark app credentials and explicit `--execute`.
+
+Privacy: external publishing can expose client material, local paths, prompts, or internal notes. Confirm before publishing sensitive content.
 
 ## Aesthetic Decision
 
@@ -124,7 +175,7 @@ Trigger when the user says:
 - 视觉参考方向
 - moodboard direction
 - SW decide the look
-- 你按审美库选
+- 你按审美库来
 - 我没指定视觉风格，你来定
 
 Default route:
@@ -137,6 +188,27 @@ Use `Aesthetic_Decision_Index.md` first. Do not load raw images, contact sheets,
 
 Project-local `.sw/ASSETS.md`, `.sw/RULES.md`, `.sw/MEMORY.md`, and user-provided reference images override the global library.
 
+## Obsidian Aesthetic Vault
+
+Purpose: browse, review, and curate SW's aesthetic reference library in Obsidian without loading raw images into normal SW runtime. Generated notes embed local contact-sheet previews so clicking graph/profile/collection nodes shows images first, then source links.
+
+Trigger only when the user explicitly asks for:
+
+- `Obsidian审美库`
+- `打开审美资料库`
+- `整理审美库`
+- `筛选审美图片`
+- `审美 vault`
+- `把审美资料放进 Obsidian`
+
+Default action:
+
+```text
+run tools/sync_obsidian_aesthetic_vault.py -> sync the active Obsidian vault when available, otherwise use Obsidian_Aesthetic_Vault/
+```
+
+Normal project work must not load this vault. Use `Aesthetic_Decision_Index.md` for low-token automatic aesthetic selection.
+
 ## Historical Accuracy
 
 Purpose: optional historical/civilization accuracy gate for visual outputs, especially poster key visuals, storyboard first frames, Banana-generated images, Seedance representative frames/stills, reference-image QA, and final image review.
@@ -146,7 +218,7 @@ Historical checking is not just prompt wording. When enabled, it checks the fina
 ### Five Trigger Groups
 
 1. Historical accuracy intent:
-   - 历史准确, 考据, 严谨, 符合史实, 不要穿帮, 复原, 学术, 依据, 可考, 博物馆级, 纪录片级
+   - 历史准确, 考据, 严谨, 符合史实, 不要穿帮, 复原, 学术, 依据, 可查, 博物馆级, 纪录片级
 
 2. Dynasty/period specificity:
    - 夏商周, 秦汉, 魏晋, 隋唐, 宋元明清, 民国
@@ -154,7 +226,7 @@ Historical checking is not just prompt wording. When enabled, it checks the fina
    - 朝代考究, 时代背景, 某朝服饰, 某朝建筑
 
 3. Civilization/archaeology/site:
-   - 古埃及, 两河, 波斯, 希腊, 罗马, 玛雅, 印度河
+   - 古埃及, 两河, 波斯, 希腊, 罗马, 玛雅, 印度
    - 良渚, 古蜀, 三星堆, 殷墟, 敦煌, 龟兹, 楼兰
    - 考古, 遗址, 文物, 墓葬, 壁画, 器物复原
 
@@ -215,41 +287,27 @@ Default scope is the current request or current visual-output chain only. It is 
 
 Scope commands:
 
-- `开启历史检查`: enable for the current request/visual chain.
-- `本项目开启历史检查`, `全程开启历史检查`: enable for the current conversation/project until closed.
-- `只检查这张`, `只检查这一帧`: enable for one image/frame only.
-- `记住历史检查规则`: only after explicit memory approval, write a short rule to `.sw/MEMORY.md` for long-term projects.
+- `本项目开启历史检查`
+- `全程开启历史检查`
+- `本项目按历史准确做`
 
 Close commands:
 
-- `关闭历史检查`, `不用历史检查`, `恢复普通模式`: turn off historical checking for the current conversation/project.
-- `本次不用考据`, `这张不用考据`: skip historical checking for the current request/image only.
-- If the rule was saved in `.sw/MEMORY.md`, closing it permanently requires an explicit memory update/delete command.
+- `关闭历史检查`
+- `不用历史检查`
+- `恢复普通模式`
 
-### Output Quality Scope
+Persistent memory changes require the user to explicitly ask to remember/write/delete project memory.
 
-When enabled, historical accuracy applies to:
+## Rescue Entry
 
-- Period Lock Card before production
-- prompt constraints before image generation
-- Banana Pro generated image QA
-- Seedance representative frame/still QA when output is available
-- storyboard first-frame image QA
-- poster/key visual QA
-- reference-image review
-- final delivery review
+Purpose: bypass stale `sw-v1-0` or `sw-update` skill chips that keep replaying sealed old versions.
 
-Seedance is available as an explicit video-generation tool, but historical QA remains visual-frame based. Review prompts, reference images, public first frames, and representative output frames/stills; do not claim full automated video QA.
+Trigger when the user says:
 
-## SW Rescue
-
-Use only when startup/update entries or old UI chips keep returning stale SW versions.
-
-Trigger words:
-
+- `@sw_rescue`
 - `/sw-rescue`
 - `/sw_rescue`
-- `@sw_rescue`
 - `SW_RESCUE`
 - `SW_REPAIR`
 - `SW_FORCE_UPDATE`
@@ -259,10 +317,10 @@ Trigger words:
 Required reply:
 
 ```text
-SW rescue synchronized. Current version: V1.10.5
+SW rescue synchronized. Current version: V1.12.10
 ```
 
-This is not a project start, not a normal sync replacement, and not a tool-generation step. It exists to bypass stale `sw-v1-0` or `sw-update` skill chips with a separate skill id.
+This is not a project start, not a normal sync replacement, and not a tool-generation step.
 
 ## Help Entry
 

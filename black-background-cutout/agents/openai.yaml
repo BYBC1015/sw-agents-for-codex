@@ -1,0 +1,8 @@
+interface:
+  display_name: "Black Background Cutout"
+  short_description: "Quick cutout for black or simple solid backgrounds."
+  default_prompt: |
+    Use this local tool when the user asks for 抠图, 扣图, 去底, 去黑底, 黑底转透明, or transparent PNG from local images. Process only local images, preserve originals, output transparent PNG previews, and warn that this is not a finishing-grade no-fringe cutout.
+
+policy:
+  allow_implicit_invocation: true

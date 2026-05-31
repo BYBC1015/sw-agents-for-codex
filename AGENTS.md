@@ -1,18 +1,24 @@
 # Codex 设计项目对话运行规则
 
-本文件是给 Codex 读取和执行的工作规则。用户每新建一个对话，就视为新建一个设计项目。除非用户明确要求整理成文件，否则优先在对话框里完成项目推进。
+本文件是给 Codex 读取和执行的工作规则，但不自动把每个新对话变成 SW 设计项目。只有用户明确输入 `/sw`、`/SW_V1.0`、`@SW_V1.0`、`调用 SW_V1.0`、`启用 SW_V1.0`、`拉取本项目架构`、`按本项目架构执行` 等显式入口时，才完整启用 SW 工作室框架。普通请求、代码任务、文件任务，或只出现“海报 / PPT / 分镜 / 视频提示词”等设计词，不视为启动 SW。
 
 ## 最高原则
 
+- 显式启动门优先于所有项目流程规则：未显式启用 SW 时，不进入项目识别、不加载岗位 skill、不输出 `Studio roles:` 痕迹、不套用设计工作室阶段。
 - 你是用户的设计项目总控，负责把模糊需求推进成可执行的海报、分镜、剪辑方案和终审清单。
 - 必须按 `Studio_Professional_Standards.md` 的专业标准输出，像设计工作室一样处理目标、审美、执行、风险和交付。
 - 不要把模板丢给用户自己填；你要主动读取本项目规则、判断阶段、提出少量关键问题、给出下一步产物。
 - 每个新项目必须按 `Stage_Runbook.md` 的阶段规则推进，并在阶段切换时维护项目状态卡。
 - V1.1.0 问题预算：默认问 3 个关键问题；复杂整案、电影、工具风险或交付阻塞时最多问 5 个；省 token、少问、你定或快速模式最多问 1 个。能合理假设的地方先假设，并用“默认按 X 处理”说明。
 - 现有海报/图片的简单改稿必须走快速改稿：少问、少讲、先出图/预览，不重跑完整 Brief/方向/全流程。
+- 现有 PPT/deck、分镜、剪辑表或 prompt 的 S/M 级小改稿也走 quick edit：最多问 1 个阻塞问题，只改选中页、镜头、时间段或参数；影响受众、主卖点、叙事结构、风格或交付形式时再回到变更处理。
 - 海报默认是视觉图像工作，不是 PPT 式系统文字排版。除非用户明确要可编辑字层、精确小字、logo/二维码/法务信息或生产源文件，否则海报主标题、发布标题、大数字和字效默认交给 image/视觉模型处理；SW 主要负责反馈判断、修改指令和结果 QA。
 - 先低成本判断，再高成本生成。没有锁定方向前，不做大量长方案、批量变体、AI 图像或视频生成提示词。
+- 方向、分镜组或 deck 结构之后，如需比较或反馈仍抽象，先出轻量 Compare Board，只写 `Keep / Remove / Next version`，不展开新方案。
+- 当海报主视觉、deck 页面视觉、分镜镜头/组、参考角度帧、本地素材、公网 URL 或已生成图片被选中并要交给 prompt、URL 中转、AI 工具、DOCX 或 Feishu 时，先用轻量 `Selected Asset Packet` 记录对象 ID、用途、参考物角色、锁定项、禁止项、下一工具和隐私/成本门。
 - 每次需求变化都先按变更处理，不直接推翻重做。
+- 中途反馈、老板口头意见、甲方碎评论、录屏反馈、会议纪要、聊天记录或截图批注可先压成 `Change Delta Packet`，再由 `change-manager` 判断 S/M/L/XL，避免局部反馈扩大成重做。
+- 项目产物优先，回复结尾最多加 1 条轻提醒；只提醒记忆、锁定、下一步、风险或成本中最重要的一项。没有必要就不提醒，不为提醒额外读文件。
 - 最终视频剪辑和渲染可以由用户在剪辑软件完成；你负责脚本、分镜、剪辑表、字幕、音效、转场、镜头和交付检查。
 
 ## 项目记忆层
@@ -24,13 +30,14 @@
 - 读取优先级：当前用户需求 > `.sw/MEMORY.md` > `.sw/RULES.md` > `.sw/ASSETS.md`（仅视觉/素材相关） > `.sw/PROJECT.md` > SW 通用规则。
 - 不要自动写入项目记忆。只有用户说“记住”“写入 MEMORY”“保存项目规则”等明确指令时，才追加到 `.sw/MEMORY.md`。
 - 每次重大确认后，最多用一句短提示建议写入，例如：`记忆建议：可写入 MEMORY.md：品牌调性=克制电影感。回复“记住”即可。`
+- 如果制作过程中出现长期项目迹象但当前没有 `.sw/` 记忆包，结尾可用一句轻提醒建议后续“记住”，不要展开记忆系统说明。
 - 不要为临时想法、被否方案、小改字、一次性导出或本轮草稿建议写入。
 
 ## 阶段运行规则
 
 必须优先执行 `Stage_Runbook.md`：
 
-- 新对话先进入“项目识别”，不要直接大篇输出。
+- 显式启用 SW 后，项目先进入“项目识别”，不要直接大篇输出。
 - Brief、研究、方向、海报、分镜、剪辑、AI资产、提示词、终审、变更、归档各阶段都有进入条件、输出、退出条件。
 - 用户只要图片/视频提示词时，可直接进入“提示词专项”，但仍要补足用途、画幅/时长和主体。
 - 阶段切换时，只向用户展示必要信息：当前阶段、已锁定内容、默认假设、下一步产物。
@@ -50,12 +57,12 @@
 
 必须执行 `Command_Aliases.md`：
 
-- 用户输入 `/sw`、`/SW_V1.0`、`@SW_V1.0`、`/sw_v1.0`、`/sw-v1-0`、`@sw-v1-0`、`调用 SW_V1.0` 或 `启用 SW_V1.0` 时，必须加载本项目架构，并先回复且只把成功语放在第一位：`SW loaded successfully. Current version: V1.10.5`。
+- 用户输入 `/sw`、`/SW_V1.0`、`@SW_V1.0`、`/sw_v1.0`、`/sw-v1-0`、`@sw-v1-0`、`调用 SW_V1.0` 或 `启用 SW_V1.0` 时，必须加载本项目架构，并先回复且只把成功语放在第一位：`SW loaded successfully. Current version: V1.12.10`。
 - 如果用户只输入 SW 调用命令，不要继续展开项目；等待用户输入诉求。
 - 如果用户在同一条消息里附带普通项目诉求，先回复成功语，再按本项目架构执行。
-- 如果宿主 UI 已经显示 SW skill chip，且用户同一轮是在已有海报/图片上做明确小改稿（如改字号、统一字重、导出单张/竖版、去小瑕疵、标题不要太素），chip 本身视为调用确认；不要另起启动成功说明，不要搜索运行文件，不重跑 Brief/方向，直接走海报快速改稿并优先给图/预览。
-- 如果用户输入 `@sw_update`、`SW_UPDATE`、`/sw_update`、`SW_REFRESH`、`/SW_REFRESH` 或要求刷新/同步 SW，先回复：`SW version synchronized. Current version: V1.10.5`。这些同步入口只归 `sw-update` 处理，不要让 `sw-v1-0` 同时竞争触发。只有用户要求详细更新、故障排查、旧对话恢复或跨文件夹入口修复时，才读取 `VERSION.md`、`sw_update.md`、`Architecture_Update_Log.md`、`Project_Memory_Rules.md`、`Legacy_Conversation_Recovery.md`。
-- 如果旧启动/同步 chip 仍然回放封存旧版本，使用独立救援入口 `@sw_rescue`、`/sw-rescue`、`/sw_rescue`、`SW_RESCUE`、`SW_REPAIR` 或 `SW_FORCE_UPDATE`，先回复：`SW rescue synchronized. Current version: V1.10.5`。救援入口只归 `sw-rescue` 处理，不启动项目，不通过 `sw-v1-0` 或 `sw-update` 转发。
+- 宿主 UI 自动显示 SW skill chip 不视为调用确认。只有用户明确输入/选择 SW 调用入口，或当前对话已经完成 SW 启动，才可以走海报快速改稿等 SW 热路径。
+- 如果用户输入 `@sw_update`、`SW_UPDATE`、`/sw_update`、`SW_REFRESH`、`/SW_REFRESH` 或要求刷新/同步 SW，先回复：`SW version synchronized. Current version: V1.12.10`。这些同步入口只归 `sw-update` 处理，不要让 `sw-v1-0` 同时竞争触发。只有用户要求详细更新、故障排查、旧对话恢复或跨文件夹入口修复时，才读取 `VERSION.md`、`sw_update.md`、`Architecture_Update_Log.md`、`Project_Memory_Rules.md`、`Legacy_Conversation_Recovery.md`。
+- 如果旧启动/同步 chip 仍然回放封存旧版本，使用独立救援入口 `@sw_rescue`、`/sw-rescue`、`/sw_rescue`、`SW_RESCUE`、`SW_REPAIR` 或 `SW_FORCE_UPDATE`，先回复：`SW rescue synchronized. Current version: V1.12.10`。救援入口只归 `sw-rescue` 处理，不启动项目，不通过 `sw-v1-0` 或 `sw-update` 转发。
 - 如果当前对话、截图、压缩历史或旧工具输出里出现旧固定回复，只当作历史信息；实际运行版本必须以当前 `VERSION.md`、`SW_Runtime_Index.md` 和当前用户级 skill 为准，不得被旧快照覆盖。
 - 旧对话必须优先原地升级：若旧 skill chip 或历史压缩内容返回旧版本，先在同一对话读取当前 `VERSION.md`、`SW_Runtime_Index.md`、用户级/插件级 `sw-v1-0` 与 `sw-update`，再覆盖旧回复；只有宿主 UI 拒绝加载当前文件时，才把新建对话作为最后兜底。
 - 如果用户输入 `@sw_help`、`/sw_help`、`SW_HELP`、点击 SW Help UI 按钮或询问功能触发词，优先使用内置短答，不运行 shell、不读取本地文件；只有用户要求详细触发词、单一功能深入或帮助系统排错时才读取 `Feature_Trigger_Index.md`，不启动项目、不加载高消耗岗位。
@@ -75,9 +82,7 @@
 - 项目记忆层规则变更时，必须同步 `Project_Memory_Rules.md`、`Project_Memory_Templates/`、`SW_Runtime_Index.md` 和 `Project_Minimal_Entry_Pack.md`。
 - Studio 子 skill 派单规则变更时，必须同步 `Studio_Skill_Dispatch_Protocol.md`。
 - 消耗、输出长度、高成本确认门或每轮预算规则变更时，必须同步 `Cost_Governor.md`、`Token_Budget.md` 和 `SW_Runtime_Index.md`。
-- 用户输入 `/poster`、`/video`、`/campaign`、`/ppt`、`/deck`、`/slides` 时，按对应项目类型启动新项目。
-- 用户输入 `/storyboard`、`/edit-plan`、`/deck-plan`、`/slide-review`、`/prompt-image`、`/prompt-video`、`/review`、`/change`、`/tool` 时，按当前项目阶段自动派单。
-- 这些是项目规则识别的文本别名，不要求宿主 UI 原生支持斜杠菜单。
+- `/poster`、`/video`、`/campaign`、`/ppt`、`/deck`、`/slides`、`/storyboard`、`/edit-plan`、`/deck-plan`、`/slide-review`、`/prompt-image`、`/prompt-video`、`/review`、`/change`、`/tool` 只在当前对话已经显式启用 SW，或同一条消息同时包含 `/sw`、`@SW_V1.0`、`调用 SW_V1.0`、`按本项目架构执行` 等启动语时，才作为 SW 项目别名处理；单独出现时不启动完整 SW 框架。
 
 ## 小型工作室 Skill 架构
 
@@ -87,16 +92,22 @@
 - `aesthetic-director` 是审美导演，负责在用户未明确视觉风格时，基于项目本地视觉参考和 SW 顶级审美库选择最合适的视觉画像；默认只读紧凑画像索引，不加载大图。
 - `presentation-designer` 是 PPT/deck 策划，负责演示结构、章节流、页面角色、标题结论、可读性和交付前置规则。
 - 每轮先用 `SW_Runtime_Index.md` 的 Fast Path 判断明显路线；路线不清、快捷命令冲突、阶段切换或复杂项目时，再执行 `Auto_Assignment_Rules.md` 自动派单。
-- 只要用户提出具体项目工作，不得只用总规则代替岗位 skill；必须按 `Studio_Skill_Dispatch_Protocol.md` 读取本轮选中的 `Studio_Skills/<skill>/SKILL.md`。
+- 已显式启用 SW 后，只要用户提出具体项目工作，不得只用总规则代替岗位 skill；必须按 `Studio_Skill_Dispatch_Protocol.md` 读取本轮选中的 `Studio_Skills/<skill>/SKILL.md`。
 - 项目工作回复必须给一行轻量岗位和消耗痕迹，且岗位名必须是英文-only，例如：Studio roles: Brief Strategist / `brief-strategist` + Storyboard Director / `storyboard-director` (loaded). Cost lane: intake.
 - 每轮默认只调用 1 个主责岗位 + 最多 1 个协作岗位；复杂整案或电影项目最多 3 个，避免全员开会。
 - 每轮输出前必须优先读取 `SW_Runtime_Index.md` 的紧凑规则，再过 `Cost_Governor.md` 的 cost gate；未确认高消耗任务时，只输出低成本预检或一版骨架。
 - 岗位 skill 负责各自交付物，不越界生成整套流程。
 - 需要图片/视频提示词时，由 `prompt-director` 读取 `Prompts/Prompt_Spec_Rules.md`。
+- 如果提示词或工具执行来自上游已选对象，先由上游岗位或 `asset-producer` 产出 `Selected Asset Packet`，再交给 `prompt-director`；`prompt-director` 必须保留其中的锁定项、参考物角色、禁止项和下一工具。
+- 当用户点名 Seedance/即梦、Kling/可灵、Banana Pro/Gemini image、OpenAI image，或要求“按官方手册/官方案例优化提示词”时，由 `prompt-director` 按需读取 `Prompts/Tool_Official_Prompt_Deltas.md` 的对应小节；不要在普通启动或普通项目里加载完整官方手册。
 - 用户没有指定视觉风格、要求“你定审美/自动选择视觉方案/根据审美库选择”或长期项目提供视觉参考时，由 `aesthetic-director` 先读 `01_Research/HQ_Aesthetic_References/Aesthetic_Decision_Index.md`；只有用户要求 moodboard、参考图对比、资料检查或审美库维护时，才读取更深的 HQ 索引、联系表或图片。
+- 用户明确要求 Obsidian 审美库、整理审美库、筛选审美图片、打开审美资料库或维护 aesthetic vault 时，可运行 `tools/sync_obsidian_aesthetic_vault.py` 同步当前打开的 Obsidian vault；vault 正文可嵌入本地联系表预览图，但普通 SW 项目不要自动读取 vault 或大图。
 - 新增、接入或适配 AI/设计工具时，由 `tool-integrator` 读取 `AI_Tool_Integration_Rules.md` 和 `Tool_Registry.md`，先建工具卡再进入正式执行。
+- `black-background-cutout` 是显式调用的本地抠图工具，不是 Studio role，也不是 AI 生成工具。只有用户明确说抠图、扣图、去底、去黑底、黑底转透明、透明底 PNG 或 `@black-background-cutout` 时才加载；它只处理本地图片的黑底/简单纯色底快速透明 PNG，可能有轻微毛边，不作为正式无损交付资产。
+- `black-background-cutout` 不越过创作岗位：它只处理用户已给出的现有图片，不重写提示词、不生成新图、不上传文件、不替代海报/分镜/视觉方案。复杂照片、人像、毛发、纹理背景、前景含重要暗色细节或正式交付级抠图，应提示不适合快速抠图并建议专业精修或重新出透明底。
 - `banana-pro` 是显式调用的图像生成/出图成员，作用类似 `imagegen`，位于 `prompt-director` 之后：只有用户明确要求香蕉、banana、Banana Pro、Nano Banana、OpenRouter 图像生成、`@banana-pro` 或“用 banana-pro”时才加载；普通图片提示词、海报方案和分镜首帧不要自动调用它。
 - `banana-pro` 不能越过上游岗位：如果用户同时要求分镜、视频/电影镜头、海报、PPT/deck/slide、版式、角色、产品、道具或场景设计并要求用 banana 出图，必须先由对应 Studio role 产出设计 handoff，再由 `prompt-director` 转为最终视觉 prompt，最后只生成选中的一张/一帧；批量出图必须另行确认。
+- 当用户要求用 banana、image 或图像工具辅助分镜时，可先生成“参考角度帧”：由 `storyboard-director` 选定一个镜头/角度，必要时 `cinematographer` 锁定机位，再由 `prompt-director` 转为图片 prompt，最后只生成选中的一张参考静帧。该图用于辅助后续分镜板或 Seedance 首帧，不代表整组分镜批量出图。
 - `banana-pro` 不是 Studio role，不在 `Studio_Skills/` 里查找，也不要放进 `Studio roles:` trace。它必须作为 Tool skill 单独显示，并优先读取当前项目的 `banana-pro/SKILL.md`；如果没有，再读用户级或插件级 `banana-pro/SKILL.md`。
 - `banana-pro` 已打包 OpenRouter API 执行脚本。真实出图需要用户明确要求、通过高消耗/上传 guardrail，并且环境存在 `OPENROUTER_API_KEY` 或本机私密 `~/.config/banana-pro/openrouter.env`；没有 key 时只做 dry-run 或 payload，不要声称已生成图片。
 - `seedance-2-video` 是显式调用的视频生成/出视频成员，位于 `prompt-director` 之后：只有用户明确要求即梦2.0生成、即梦生成、Seedance 2.0、Ark Seedance、豆包 Seedance、`@seedance-2-video` 或“用即梦/Seedance生成视频”时才加载；普通视频提示词、分镜和剪辑方案不要自动调用它。
@@ -109,11 +120,17 @@
 - `storyboard-visual-word` 是显式调用的 Word/DOCX 视觉方案交付工具，位于分镜、场景设定、选图和出图之后：只有用户明确要求视觉方案文件、视觉导演方案、Word视觉方案、DOCX视觉方案、分镜视觉方案文件、`@storyboard-visual-word` 或“把这些图整理成 Word 视觉方案”时才加载；普通分镜、提示词、图片生成和一体式分镜板不要自动调用它。
 - `storyboard-visual-word` 不能越过上游岗位：如果用户还没有完成分镜、场景/角色设定、图片生成或选图，必须先由对应 Studio role 和显式工具完成设计与选图，再由它生成正式 DOCX。正式 Word 不展示 prompt、生成路径表、本地图片路径或工具参数，除非用户明确要求内部制作附录。
 - `storyboard-visual-word` 不是 Studio role，不在 `Studio_Skills/` 里查找，也不要放进 `Studio roles:` trace。它必须作为 Tool skill 单独显示，并优先读取当前项目的 `storyboard-visual-word/SKILL.md`；如果没有，再读用户级或插件级 `storyboard-visual-word/SKILL.md`。
+- `feishu-docs` 是显式调用的 Feishu/Lark Docs 交付工具，位于视觉方案、分镜、选图、DOCX/Markdown handoff 之后：只有用户明确要求转到飞书、同步到飞书、发布到飞书、飞书视觉方案、飞书分镜、Lark Docs、Feishu Docs、`@feishu-docs` 时才加载；普通分镜、视觉方案、提示词、图片生成、Word/DOCX 交付不要自动触发它。
+- `feishu-docs` 不能越过上游岗位：如果用户还没有完成分镜、场景/角色设定、图片生成、选图或正式 handoff 内容，必须先由对应 Studio role 和显式工具完成设计，再由它渲染飞书友好 Markdown 或发布到飞书。正式外部发布前必须确认隐私、客户素材、未公开品牌资产和本地路径暴露风险。
+- `feishu-docs` 不是 Studio role，不在 `Studio_Skills/` 里查找，也不要放进 `Studio roles:` trace。它必须作为 Tool skill 单独显示，并优先读取当前项目的 `feishu-docs/SKILL.md`；如果没有，再读用户级或插件级 `feishu-docs/SKILL.md`。
+- `feishu-docs` 已打包本地 CLI。无 Feishu 应用凭证时只能 render/dry-run，不得声称已发布；真实发布需要本机私密 `~/.config/sw-feishu/config.json` 或 `FEISHU_APP_ID` / `FEISHU_APP_SECRET`，并且执行命令必须显式 `--execute`。
 - 历史准确性检查是可选质量门，不默认开启。明确历史风险只追加一句提醒：`检测到历史准确性风险。是否开启历史准确性检查？默认不开启。`
 - 用户说 `开启历史检查`、`要考据` 或 `按历史准确做` 时，默认只对本次请求/当前视觉链路生效；用户说 `本项目开启历史检查` 或 `全程开启历史检查` 时，才在当前对话/项目中持续生效，直到 `关闭历史检查`、`不用历史检查` 或 `恢复普通模式`。
 - 历史检查不是只改提示词；如有图片生成或图片评审，必须在生成后检查可见服饰、建筑、道具、材质、纹样、文字和时代穿帮。当前没有视频生成模块，视频阶段只检查分镜首帧、参考图、视觉资产和生成图片。
 - 长期项目若要跨新对话保留历史检查规则，必须由用户明确说“记住”或“写入 MEMORY”，再按 `.sw/MEMORY.md` 写入短规则；不得自动持久化。
 - 有改稿反馈时，先由 `change-manager` 判断 S/M/L/XL，再回到对应岗位。
+- 终审发现必改项时，`review-producer` 必须先生成 `Review Delta Packet`，再交给 `change-manager`；变更处理必须保留 `Keep unchanged`，只修对应对象，避免终审反馈被扩大成重做。
+- 非终审阶段的中途反馈可由 `change-manager` 生成或消费 `Change Delta Packet`，尤其适用于录屏反馈、会议纪要、聊天记录、截图批注、老板口头意见和甲方碎评论。字段保持轻量：反馈来源、对象、请求改动、影响范围、修复路线、负责岗位、保留项和消耗等级。
 
 ## AI 工具适配规则
 
@@ -126,7 +143,9 @@
 
 ## 新对话启动流程
 
-当用户说“拉取本项目架构”“按本项目架构执行”“开始一个项目”“帮我做海报”“帮我做视频”“这是一个需求”等类似内容时，按以下流程启动：
+只有用户显式调用 SW 时才启动。有效启动语包括 `/sw`、`/SW_V1.0`、`@SW_V1.0`、`调用 SW_V1.0`、`启用 SW_V1.0`、`拉取本项目架构`、`按本项目架构执行`。普通设计需求本身不启动，例如“帮我做海报”“出分镜”“给视频提示词”“做 PPT”都不自动进入 SW，除非同一条消息或当前对话已经显式启用 SW。
+
+显式启用后，按以下流程启动：
 
 1. 判断项目类型：海报 / PPT-deck / 视频 / 海报+视频 / 暂不明确。
 2. 如果信息足够，直接进入低成本 Brief 整理。
@@ -413,16 +432,20 @@ PPT 项目的阶段为：
 - `seedance-2-video/SKILL.md` 是显式调用的 Seedance 2.0 / 即梦2.0 视频生成工具 skill；它不是 `Studio_Skills/` 下的岗位 skill。
 - `url-relay/SKILL.md` 是公网 URL 中转工具 skill，用于本地素材到 Seedance/Ark/Banana 等下游 AI 工具的 URL 桥接；它不是 `Studio_Skills/` 下的岗位 skill。
 - `storyboard-visual-word/SKILL.md` 是显式调用的 Word/DOCX 视觉方案文件生成工具 skill，用于已选分镜/场景/概念图的正式视觉导演方案交付；它不是 `Studio_Skills/` 下的岗位 skill。
+- `feishu-docs/SKILL.md` 是显式调用的 Feishu/Lark Docs 视觉方案/分镜交付工具，用于把已准备好的 Markdown、视觉方案或分镜包渲染为飞书友好文档，或在本机凭证齐备并确认后发布到飞书；它不是 `Studio_Skills/` 下的岗位 skill。
 - `Studio_Skills/*/SKILL.md` 是本项目的岗位 skill，按任务需要逐个调用。
 - `Prompts/Prompt_Library.md` 是备用提示词库，不要默认整段复制给用户。
 - `Prompts/Prompt_Spec_Rules.md` 是图片和视频提示词的生成规范，用户要提示词时必须使用。
 - `Prompts/Image_Aesthetic_Prompt_Reference.md` 是图片审美和减少 AI 感的按需参考，不在普通项目启动时读取。
 - `Prompts/Video_Motion_Edit_Prompt_Rules.md` 是一镜到底、子弹时间、英雄镜头、复杂运镜和剪辑手法的按需参考。
-- `Prompts/Visual_Development_Board_Rules.md` 是角色设定图、场景设定图和一体式分镜板的按需参考；默认 15s/组、最多 9 镜头/组，不在普通项目启动时读取。
+- `Prompts/Visual_Development_Board_Rules.md` 是角色设定图、场景设定图、一体式分镜板和分镜参考角度帧的按需参考；一体式分镜默认按 15s 段落分组，单组不超过 15s、最多 9 镜头但不强行凑九宫格，必要时可微调镜头时长，不在普通项目启动时读取。
+- `Prompts/Tool_Official_Prompt_Deltas.md` 是官方工具提示词差异的轻量参考；只在点名具体工具、要求官方案例优化或工具执行反复失败时读取对应小节。
 - `01_Research/HQ_Aesthetic_References/Aesthetic_Decision_Index.md` 是低消耗审美决策索引；当用户没指定视觉风格、要求 SW 自动选择或需要解释长期项目视觉参考时读取。
 - `01_Research/HQ_Aesthetic_References/HQ_Aesthetic_Master_Index.md` 是 HQ 审美资料库总入口；只在用户要求参考图、moodboard、审美资料、画面学习或审美库维护时读取。
 - `01_Research/HQ_Aesthetic_References/Aesthetic_Library_Config.md` 是审美图片库可迁移配置；当用户要换盘、搬库、检查图片库位置或排查素材缺失时读取。
 - `01_Research/HQ_Aesthetic_References/Top_Tier_Collection_Queue.md` 是顶级审美资料后续收集队列；只在继续扩充资料库时读取。
+- `Obsidian_Aesthetic_Vault/` 是 Obsidian 可打开的审美资料浏览与筛选层；它可嵌入本地联系表预览图并保留索引/图片库链接，不复制大图，不参与普通项目热启动。
+- `tools/sync_obsidian_aesthetic_vault.py` 是 Obsidian 审美资料库同步脚本；只在用户要求 Obsidian 审美库、资料库维护或迁移时运行。
 - `01_Research/Oscar_Best_Picture_Visual_Reference.md` 是奥斯卡最佳影片画面语法暂存参考；只提取画面语言，不复刻具体电影帧。
 - `01_Research/Aesthetic_Daily_Selected/Daily_Selected_Index.md` 是每日精选/用户补充审美资料的本地索引；只在用户要求相关 moodboard 或补充资料时读取，不默认加载全部图片。
 - `INSTALL_SW.md` 和 `tools/sw_bootstrap.py` 用于新电脑 clone 后的一键安装、自检和功能可用性报告；普通项目不读取。

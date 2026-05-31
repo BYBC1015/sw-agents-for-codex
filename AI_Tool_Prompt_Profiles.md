@@ -2,6 +2,8 @@
 
 本文件定义不同类型 AI 工具的 prompt 结构。`prompt-director` 和 `tool-integrator` 在输出工具版 prompt 前，先选择对应剖面。
 
+官方工具提示词差异不在本文件展开。只有当用户点名 Seedance/即梦、Kling/可灵、Banana Pro/Gemini image、OpenAI image，或要求“按官方案例/官方手册优化”时，才按需读取 `Prompts/Tool_Official_Prompt_Deltas.md` 的对应小节，并保留通用 prompt 作为主版本。
+
 ## 通用 Prompt 内核
 
 所有工具都从同一个内核出发：
@@ -51,7 +53,7 @@
 
 输出必须包含：
 
-- model：`google/gemini-3.1-flash-image-preview`
+- model：`google/gemini-3-pro-image-preview`
 - modalities：`["image", "text"]`
 - image_config：`aspect_ratio` 与 `image_size`
 - reference roles：仅在用户提供参考图时列出，如 character reference、product reference、scene reference、composition reference
@@ -113,8 +115,8 @@
 - ratio：默认 `9:16`，按平台可改为 `16:9`、`1:1` 等
 - duration：默认 `15`
 - resolution：草稿默认 `720p`，最终或明确要求再用 `1080p`
-- video-mode：`reference`、`firstFrame` 或 `firstLastFrame`
-- image-url：至少 1 个公共 `http(s)` URL；本地图片不能直接传给 Ark
+- video-mode：`text-to-video`、`reference`、`firstFrame` 或 `firstLastFrame`
+- image-url：纯文生视频可不填；只有使用参考图、首帧、首尾帧或本地素材中转时，才需要公共 `http(s)` URL；本地图片不能直接传给 Ark
 - QA checklist：主体稳定、动作合理、镜头连续、画幅、文字/logo 风险、历史/道具/服装风险、可剪辑性
 
 不要在普通视频提示词里自动切换到 Seedance；先保留通用 prompt，用户确认使用该成员后再进入 dry-run 或真实生成。若用户同时要求“设计分镜/镜头/剪辑并用即梦生成”，先产出对应设计 handoff，再转最终 prompt，再生成选中的一条镜头/片段。没有 `ARK_API_KEY` 或本地 key 时，只输出 dry-run payload，不声称已出视频。

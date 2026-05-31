@@ -4,7 +4,7 @@
 
 Default project replies ask 3 useful questions. Complex campaign, film, tool-risk, or blocked-delivery turns may ask up to 5. Low-token, speed, "少问", or "你定" turns ask at most 1 and continue with clear assumptions.
 
-本文件是 Codex 的“项目控制层”。它不替代 `Stage_Runbook.md`，而是规定用户在对话里如何快速指挥 Codex，以及 Codex 如何按模式、质量门和平台默认值执行。
+本文件是 Codex 的“项目控制层”。它只在当前对话已经显式启用 SW 后生效，不替代 `Stage_Runbook.md`，而是规定用户在对话里如何快速指挥 Codex，以及 Codex 如何按模式、质量门和平台默认值执行。未显式输入 `/sw`、`@SW_V1.0`、`调用 SW_V1.0`、`按本项目架构执行` 等入口时，不因普通设计词自动进入这些控制规则。
 
 ## 工作模式
 
@@ -36,6 +36,7 @@ Default project replies ask 3 useful questions. Complex campaign, film, tool-ris
 | 展开 | 从当前结果进入更详细版本 |
 | 收短 | 压缩成结论和下一步 |
 | 给 3 个方向 | 进入创意方向，最多 3 个 |
+| 对比一下 / 哪个更好 / 保留什么 | 对方向、分镜组或 deck 结构输出轻量 Compare Board，只收口保留/删除/下一版 |
 | 选 A / 选 B / 选 C | 锁定方向并进入下一阶段 |
 | 出海报方案 | 进入海报方案 |
 | 出PPT方案 / 出deck | 进入 presentation/deck 方案，主责 `presentation-designer` |
@@ -44,6 +45,8 @@ Default project replies ask 3 useful questions. Complex campaign, film, tool-ris
 | 出分镜 | 进入视频分镜 |
 | 出剪辑表 | 进入剪辑方案 |
 | 改海报 / 修图 / 出单张 / 出四版 / 照图二 | 进入海报快速改稿；优先输出图，不重跑完整项目 |
+| 改PPT / 改分镜 / 改剪辑表 / 改提示词 | 进入 quick edit；最多问 1 个阻塞问题，只改选中页、镜头、时间段或参数 |
+| 用这张 / 用这个镜头 / 选中这页 / 交给工具 | 生成轻量 Selected Asset Packet，再交给 `prompt-director` 或显式工具 |
 | 出图片提示词 | 进入提示词专项，按图片规则输出 |
 | 出视频提示词 | 进入提示词专项，按视频镜头规则输出 |
 | 终审 | 进入终审，只找风险和必改项 |
@@ -80,9 +83,10 @@ Codex 不要每轮都展示完整状态卡。只有以下情况展示轻量状�
 | G0 项目识别 | 启动 | 类型、目标、平台至少明确 2 项 | 只问最关键问题 |
 | G1 Brief | Brief | 目标、受众、核心信息、必须出现 | 标注默认假设后继续 |
 | G2 方向 | Direction | 不超过 3 个方向，有推荐项 | 不生成精修方案 |
+| G2B 对比 | Direction/Storyboard/Presentation | 有明确 `Keep` / `Remove` / `Next version` | 先收口，不直接重写整套方案 |
 | G3 制作方案 | Poster/Presentation/Storyboard/Edit | 可执行到软件层面 | 补齐文案、页面角色、镜头、素材或时间线 |
 | G4 提示词 | Prompt | 有主体、构图、景别、光线、限制 | 按 `Prompt_Spec_Rules.md` 补齐参数 |
-| G5 交付 | Review | 信息、版权、品牌、平台规格检查过 | 列出必改项，不说“可交付” |
+| G5 交付 | Review | 信息、版权、品牌、平台规格检查过 | 列出必改项，并用 `Review Delta Packet` 交给变更处理；不说“可交付” |
 
 ## 平台默认规则
 
@@ -151,6 +155,63 @@ Codex 先判断用户真正要的交付物，再决定阶段深度。
 ## Poster Control Difference
 
 Poster work should default to visual editing, not document-style text layout. Unlike PPT/deck pages or storyboard annotation sheets, a poster usually does not need system-font reconstruction. For poster requests, SW should mostly handle feedback, visual judgment, edit instructions, and QA. Use system/editable text only for exact information text, small copy, legal/logo/QR, or explicit editable-layer delivery.
+
+## Compare Board And Quick Edit
+
+When the user needs to compare directions, storyboard groups, or deck structures, use a lightweight Compare Board instead of expanding a new proposal:
+
+```text
+Compare Board:
+- Keep:
+- Remove:
+- Next version:
+```
+
+Quick edit applies to existing poster/images, deck pages or outlines, storyboard groups or selected shots, edit-plan segments, and prompt refinements. Ask at most one blocking question and output the revised object first. If the change affects audience, core message, narrative structure, visual style, or delivery format, route through `change-manager` before rewriting.
+
+When the user selects a concrete poster visual, deck page visual, storyboard shot/group, reference frame, local media file, public URL, generated image, or concept image for prompt/tool handoff, use a lightweight Selected Asset Packet before `prompt-director`, URL Relay, Banana, Seedance, Kling, DOCX, or Feishu:
+
+```text
+Selected Asset Packet:
+- Object ID:
+- Source stage:
+- Asset type:
+- Purpose:
+- Selected input:
+- Reference roles:
+- Locked items:
+- Avoid:
+- Next tool:
+- Privacy/cost gate:
+```
+
+Do not use it as a new planning stage; it only preserves the selected object, locks, reference roles, avoid list, next tool, and upload/cost decision.
+
+## Reply-End Nudge
+
+For ordinary project work, output the requested product first. Add at most one final light reminder only when it helps production:
+
+- memory nudge for likely long-running projects or durable decisions
+- lock nudge for character, scene, selected asset, reference role, style, or aspect ratio
+- next-step nudge for the smallest useful next action
+- risk nudge for copyright, logo, exact text, privacy, platform, or tool cost
+- cost nudge before high-cost generation or broad expansion
+
+Skip the nudge when there is no useful reminder. Do not add multiple reminders, do not expand into a checklist, and do not read extra files just to produce the nudge.
+
+Midstream feedback should become a `Change Delta Packet` when it is more than a tiny wording tweak. If feedback arrives as a screen recording, meeting note, chat log, screenshot annotation, boss oral note, or client comment, first compress it into the packet before rewriting:
+
+```text
+Change Delta Packet:
+- Source feedback:
+- Object:
+- Requested change:
+- Impact scope:
+- Fix route:
+- Responsible role:
+- Keep unchanged:
+- Cost lane:
+```
 
 ## V1.5 Historical Accuracy Controls
 

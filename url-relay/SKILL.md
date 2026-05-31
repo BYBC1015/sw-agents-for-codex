@@ -12,16 +12,19 @@ Use this as a small tool skill, not a Studio role. It turns local media into a p
 Default route for Seedance:
 
 ```text
-upstream Studio role if needed -> prompt-director -> url-relay when local files need public URLs -> seedance-2-video
+upstream Studio role if needed -> Selected Asset Packet -> prompt-director -> url-relay when local files need public URLs -> downstream tool
 ```
 
 Do not use URL Relay for creative planning, prompt writing, storyboard design, or review. It is an execution support layer.
+
+If a Selected Asset Packet is present, use `Object ID`, `Selected input`, `Next tool`, and `Privacy/cost gate` to identify the exact file or URL to relay. Do not upload a different local file because it looks related.
 
 ## Privacy And Cost
 
 - Public relay URLs are fetchable by anyone who has the link until the server cleanup removes them.
 - Upload only files the user has permission to send outside the local machine.
 - Do not upload client-confidential, unreleased product, face, brand, or private-location material unless the user explicitly allows it.
+- If a Selected Asset Packet has an unresolved `Privacy/cost gate`, stop before upload and ask for the missing permission or public URL.
 - Uploading uses server bandwidth and storage, not AI model tokens. The downstream generator may still consume model credits.
 - Never print or commit the upload token. Read it from `~/.config/sw-media-uploader/config.json`, `SW_RELAY_TOKEN`, or a user-provided local config path.
 

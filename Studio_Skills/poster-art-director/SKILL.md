@@ -28,6 +28,22 @@ Poster Plan:
 - Recommendation:
 ```
 
+When a poster key visual, title-effect treatment, background, reference image, or generated still is selected for prompt writing or image generation/editing, add:
+
+```text
+Selected Asset Packet:
+- Object ID:
+- Source stage:
+- Asset type:
+- Purpose:
+- Selected input:
+- Reference roles:
+- Locked items:
+- Avoid:
+- Next tool:
+- Privacy/cost gate:
+```
+
 ## Questions
 
 Ask 3 by default; ask up to 5 when size, brand, required copy, product material, or output channel is unclear.
@@ -42,5 +58,6 @@ Ask 3 by default; ask up to 5 when size, brand, required copy, product material,
 - If exact text and strong title effects are both needed, recommend a two-pass solution: image/visual model for the title texture and lighting, then controlled overlay/QA for the final characters.
 - For detailed grid and type layout, hand off to `layout-designer`.
 - For copy refinement, hand off to `copywriter`.
-- For image generation, hand off to `prompt-director`.
+- For image generation, hand off the selected poster object to `prompt-director` with a Selected Asset Packet.
+- Use the packet to preserve the poster's display lettering decision, exact-information boundaries, composition locks, product/brand constraints, and reference-image roles.
 - For final check, hand off to `review-producer`.

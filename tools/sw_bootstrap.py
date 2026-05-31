@@ -33,6 +33,7 @@ PLUGIN_ROOT = USERPROFILE / "plugins" / "sw-v1-0"
 BANANA_ENV_FILE = Path.home() / ".config" / "banana-pro" / "openrouter.env"
 SEEDANCE_KEY_FILE = Path.home() / ".config" / "codex-seedance-2-video" / "secrets.json"
 RELAY_CONFIG_FILE = Path.home() / ".config" / "sw-media-uploader" / "config.json"
+FEISHU_CONFIG_FILE = Path.home() / ".config" / "sw-feishu" / "config.json"
 
 SW_UPLOAD_URL = "http://123.56.255.86/upload"
 SW_PUBLIC_BASE = "http://123.56.255.86/u"
@@ -60,6 +61,42 @@ def read_json(path: Path) -> dict[str, Any]:
     if not path.exists():
         return {}
     return json.loads(read_text(path))
+
+
+def active_obsidian_vault() -> Path | None:
+    config_candidates = []
+    for base_name in ("APPDATA", "LOCALAPPDATA"):
+        base = os.environ.get(base_name)
+        if not base:
+            continue
+        config_candidates.extend(
+            [
+                Path(base) / "obsidian" / "obsidian.json",
+                Path(base) / "Obsidian" / "obsidian.json",
+            ]
+        )
+    for config_path in config_candidates:
+        if not config_path.exists():
+            continue
+        try:
+            data = read_json(config_path)
+        except (OSError, json.JSONDecodeError):
+            continue
+        vaults = data.get("vaults") or {}
+        candidates = []
+        for item in vaults.values():
+            path = item.get("path")
+            if not path:
+                continue
+            candidates.append((bool(item.get("open")), int(item.get("ts") or 0), Path(path)))
+        if candidates:
+            candidates.sort(key=lambda item: (item[0], item[1]), reverse=True)
+            return candidates[0][2]
+    return None
+
+
+def obsidian_vault_path() -> Path:
+    return Path(os.environ.get("SW_OBSIDIAN_AESTHETIC_VAULT") or active_obsidian_vault() or ROOT / "Obsidian_Aesthetic_Vault").expanduser()
 
 
 def parse_version() -> str:
@@ -202,7 +239,9 @@ def installed_paths() -> dict[str, bool]:
         "user_banana": USER_SKILLS / "banana-pro" / "SKILL.md",
         "user_seedance": USER_SKILLS / "seedance-2-video" / "SKILL.md",
         "user_url_relay": USER_SKILLS / "url-relay" / "SKILL.md",
+        "user_black_background_cutout": USER_SKILLS / "black-background-cutout" / "SKILL.md",
         "user_storyboard_visual_word": USER_SKILLS / "storyboard-visual-word" / "SKILL.md",
+        "user_feishu_docs": USER_SKILLS / "feishu-docs" / "SKILL.md",
         "plugin_manifest": PLUGIN_ROOT / ".codex-plugin" / "plugin.json",
         "plugin_sw_command": PLUGIN_ROOT / "commands" / "sw.md",
         "plugin_update_command": PLUGIN_ROOT / "commands" / "sw-update.md",
@@ -247,6 +286,41 @@ def check_seedance() -> dict[str, Any]:
         "key_source": source,
         "config_path": str(SEEDANCE_KEY_FILE),
         "setup_hint": "Run: python seedance-2-video/scripts/seedance_task.py setup-key",
+    }
+
+
+def check_feishu() -> dict[str, Any]:
+    data = read_json(FEISHU_CONFIG_FILE)
+    app_id = os.environ.get("FEISHU_APP_ID") or str(data.get("app_id") or "")
+    app_secret = os.environ.get("FEISHU_APP_SECRET") or str(data.get("app_secret") or "")
+    folder_token = os.environ.get("FEISHU_FOLDER_TOKEN") or str(data.get("folder_token") or "")
+    base_url = os.environ.get("FEISHU_BASE_URL") or str(data.get("base_url") or "https://open.feishu.cn/open-apis")
+    has_core_config = bool(app_id and app_secret)
+    return {
+        "name": "Feishu Docs handoff",
+        "status": READY if has_core_config else NEEDS_CONFIG,
+        "app_id_state": secret_state(app_id),
+        "app_secret_state": secret_state(app_secret),
+        "folder_token_state": secret_state(folder_token),
+        "base_url": base_url,
+        "config_path": str(FEISHU_CONFIG_FILE),
+        "setup_hint": "Run: python feishu-docs/scripts/feishu_doc_cli.py setup --app-id <app_id> --folder-token <folder_token>",
+    }
+
+
+def check_obsidian_vault() -> dict[str, Any]:
+    vault = obsidian_vault_path()
+    home = vault / "Home.md"
+    router = vault / "00_Index" / "Profile Router.md"
+    config = vault / "obsidian-vault-config.json"
+    ready = home.exists() and router.exists() and config.exists()
+    return {
+        "name": "Obsidian Aesthetic Vault",
+        "status": READY if ready else NEEDS_CONFIG,
+        "vault": str(vault),
+        "home": str(home),
+        "setup_hint": "Run: python tools/sync_obsidian_aesthetic_vault.py",
+        "detail": "Markdown-only aesthetic browsing vault; no API key required and no heavy images are copied.",
     }
 
 
@@ -308,7 +382,12 @@ def check_url_relay(no_network: bool, timeout: int) -> dict[str, Any]:
     return report
 
 
-def feature_status(installed: dict[str, bool], keys: dict[str, Any], relay: dict[str, Any]) -> list[dict[str, Any]]:
+def feature_status(
+    installed: dict[str, bool],
+    keys: dict[str, Any],
+    relay: dict[str, Any],
+    obsidian: dict[str, Any],
+) -> list[dict[str, Any]]:
     return [
         {
             "name": "SW core workflow (/sw, @SW_V1.0)",
@@ -336,14 +415,29 @@ def feature_status(installed: dict[str, bool], keys: dict[str, Any], relay: dict
             "detail": "Local media can become public URLs when SW media uploader config and token are present.",
         },
         {
+            "name": "Black Background Cutout",
+            "status": READY if installed["user_black_background_cutout"] else FAILED,
+            "detail": "Local black/simple solid-background cutout tool is installed; no API key or upload required.",
+        },
+        {
             "name": "Storyboard Visual Word",
             "status": READY if installed["user_storyboard_visual_word"] else FAILED,
             "detail": "DOCX visual方案 handoff tool is installed; no API key required.",
         },
         {
+            "name": "Feishu Docs",
+            "status": keys["feishu"]["status"] if installed["user_feishu_docs"] else FAILED,
+            "detail": "Feishu visual-plan/storyboard handoff is installed; real publishing needs local Feishu app credentials.",
+        },
+        {
             "name": "Aesthetic decision index",
             "status": READY if (ROOT / "01_Research" / "HQ_Aesthetic_References" / "Aesthetic_Decision_Index.md").exists() else WARNING,
             "detail": "Compact aesthetic routing index is present.",
+        },
+        {
+            "name": "Obsidian Aesthetic Vault",
+            "status": obsidian["status"],
+            "detail": obsidian["detail"],
         },
     ]
 
@@ -361,6 +455,8 @@ def collect_needs(features: list[dict[str, Any]], key_reports: dict[str, Any], r
         needs.append("URL Relay: configure upload URL, public base, and upload token in ~/.config/sw-media-uploader/config.json.")
     elif relay["status"] == WARNING:
         needs.append("URL Relay: config exists, but network/health check needs attention.")
+    if key_reports["feishu"]["status"] == NEEDS_CONFIG:
+        needs.append("Feishu Docs: configure FEISHU_APP_ID/FEISHU_APP_SECRET locally, or use render/dry-run only.")
     return needs
 
 
@@ -384,10 +480,15 @@ def print_human(report: dict[str, Any]) -> None:
     print(f"- Banana Pro key: {report['keys']['banana']['key_state']}")
     print(f"- Seedance key: {report['keys']['seedance']['key_state']}")
     print(f"- URL Relay token: {report['url_relay']['token_state']}")
+    print(f"- Feishu app secret: {report['keys']['feishu']['app_secret_state']}")
     if report.get("sync") and report["sync"]["status"] != SKIPPED:
         print(f"- Sync: {report['sync']['status']}")
     if report.get("doctor") and report["doctor"]["status"] != SKIPPED:
         print(f"- Doctor: {report['doctor']['status']}")
+    if report.get("obsidian_sync") and report["obsidian_sync"]["status"] != SKIPPED:
+        print(f"- Obsidian vault sync: {report['obsidian_sync']['status']}")
+    if report.get("obsidian"):
+        print(f"- Obsidian vault: {report['obsidian']['vault']}")
     print()
     print("No secrets were printed or written to the repository.")
 
@@ -431,10 +532,22 @@ def main() -> int:
         if not doctor["ok"]:
             report["ok"] = False
 
+    if args.no_sync:
+        report["obsidian_sync"] = {"status": SKIPPED, "reason": "--no-sync"}
+    else:
+        obsidian_sync = command_result(
+            [sys.executable, str(ROOT / "tools" / "sync_obsidian_aesthetic_vault.py"), "--json"],
+            max(args.timeout, 30),
+        )
+        report["obsidian_sync"] = {"status": READY if obsidian_sync["ok"] else FAILED, **obsidian_sync}
+        if not obsidian_sync["ok"]:
+            report["ok"] = False
+
     installed = installed_paths()
-    keys = {"banana": check_banana(), "seedance": check_seedance()}
+    keys = {"banana": check_banana(), "seedance": check_seedance(), "feishu": check_feishu()}
     relay = check_url_relay(args.no_network, args.timeout)
-    features = feature_status(installed, keys, relay)
+    obsidian = check_obsidian_vault()
+    features = feature_status(installed, keys, relay, obsidian)
     needs = collect_needs(features, keys, relay)
     if any(feature["status"] == FAILED for feature in features):
         report["ok"] = False
@@ -444,6 +557,7 @@ def main() -> int:
             "installed_paths": installed,
             "keys": keys,
             "url_relay": relay,
+            "obsidian": obsidian,
             "features": features,
             "needs_config": needs,
         }

@@ -27,6 +27,15 @@ Questions for next step:
 Next role:
 ```
 
+When the user needs to compare options before choosing, add only this lightweight board:
+
+```text
+Compare Board:
+- Keep:
+- Remove:
+- Next version:
+```
+
 ## Questions
 
 Ask 3 by default; ask up to 5 only for full campaign or film direction.
@@ -34,6 +43,7 @@ Ask 3 by default; ask up to 5 only for full campaign or film direction.
 ## Rules
 
 - Never exceed 3 directions unless the user explicitly requests more.
+- A Compare Board is for selecting or tightening existing options. Do not use it to invent a fourth direction.
 - Do not write the full poster, storyboard, or script here.
 - If the user says "you decide", recommend one direction and move on.
 - If visual style is not locked, hand off to `aesthetic-director` before expensive visual production.

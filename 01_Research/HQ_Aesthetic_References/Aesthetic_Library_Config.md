@@ -1,6 +1,6 @@
 # Aesthetic Library Config
 
-Last updated: 2026-05-25
+Last updated: 2026-05-27
 
 This file defines how SW locates the local aesthetic image library without hard-coding one disk path.
 
@@ -29,6 +29,7 @@ Use these optional environment variables when moving the library:
 | `SW_AESTHETIC_DAILY_ROOT` | Daily Selected root. Expected to contain `images/`, `contact_sheets/`, and optional `_candidate_review/`. |
 | `SW_AESTHETIC_SOURCE_ROOT` | High-level source preview root. Expected to contain `images/` and `contact_sheets/`. |
 | `SW_OSCAR_FRAME_ROOT` | Older Oscar frame reference root. Expected to contain `images/` and `contact_sheets/`. |
+| `SW_OBSIDIAN_AESTHETIC_VAULT` | Optional Obsidian vault path. If unset, the sync script uses the currently open Obsidian vault when available; otherwise it uses `Obsidian_Aesthetic_Vault/` in the repository root. |
 
 ## Path Rule
 
@@ -48,6 +49,24 @@ python tools/aesthetic_library_doctor.py
 
 The doctor reports which root is active, whether expected image/contact-sheet folders exist, approximate storage size, and which optional roots are missing.
 
+## Obsidian Vault
+
+The Obsidian layer is a Markdown-only browsing and curation layer. It embeds local preview images from existing contact sheets while keeping indexes and folder links available; it does not copy heavy images into the vault.
+
+Sync or rebuild it with:
+
+```powershell
+python tools/sync_obsidian_aesthetic_vault.py
+```
+
+If you do not already have an Obsidian vault open, open this folder in Obsidian:
+
+```text
+Obsidian_Aesthetic_Vault/
+```
+
+If the vault moves to another drive, either open that vault in Obsidian and rerun the sync command, set `SW_OBSIDIAN_AESTHETIC_VAULT`, or pass `--vault <path>` explicitly.
+
 ## SW Runtime Rule
 
-Normal project work should not run the doctor. Use it only for maintenance, relocation, missing-image debugging, or when a user asks where the library lives.
+Normal project work should not run the doctor or load the Obsidian vault. Use them only for maintenance, relocation, missing-image debugging, visual browsing, curation, or when a user asks where the library lives.

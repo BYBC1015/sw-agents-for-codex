@@ -1,10 +1,10 @@
 # Auto Assignment Rules
 
-Use these rules to choose the current studio role. The user should not need to manually select roles.
+Use these rules to choose the current studio role only after SW has been explicitly activated. The user should not need to manually select roles after activation.
 
 ## Inputs
 
-Judge these before every project reply:
+Judge these before every activated SW project reply:
 
 - project type: poster, presentation/deck/PPT/slides, video, poster+video, film/brand film, prompt-only, tool, review, revision, unclear
 - current stage: intake, research, direction, copy, poster, layout, script, storyboard, camera, edit, motion, sound, color, prompt, review, finishing, change
@@ -24,13 +24,17 @@ Judge these before every project reply:
    - Plain `开启历史检查` applies to the current request/visual chain. `本项目开启历史检查` or `全程开启历史检查` applies to the current conversation/project until closed.
    - `关闭历史检查`, `不用历史检查`, or `恢复普通模式` disables current project-level historical checking. If the setting was saved in `.sw/MEMORY.md`, require explicit memory update/delete to persist the closure.
    - For video, check storyboard first frames, still references, visual assets, generated images, and representative Seedance output frames when available. Do not claim full automated video QA beyond visible frames/stills.
-2. Existing poster/image quick edit:
+2. Existing object quick edit:
    - If the user provides or refers to an existing poster/image and asks to modify, repair, export variants, improve title treatment, match a reference, or says the output is too plain, route to Poster Quick Edit instead of the full poster pipeline.
    - Use `poster-art-director` or `layout-designer` for the affected visual decision; add `prompt-director` and an image-generation/editing tool only when visual rendering is needed.
+   - If the user refers to an existing deck page/outline, storyboard group/shot list, edit plan/timeline, or prompt and asks for a local S/M-level fix, route directly to `presentation-designer`, `storyboard-director`, `edit-director`, or `prompt-director` for quick edit.
    - Ask at most one blocking question. Prefer image/output first, then no more than three short notes.
    - Display lettering (hero title, launch title, big numerals, glowing/metal/3D/neon title blocks) should keep or regain image-model/design effects. Do not downgrade it to plain system fonts.
-3. Revision/feedback/change -> `change-manager`.
-4. New tool, connector, plugin, tool-specific prompt conversion -> `tool-integrator`.
+   - If feedback changes audience, core message, narrative structure, visual style, project goal, or deliverable form, route to `change-manager`.
+3. Compare request / abstract selection feedback after directions, storyboard groups, or deck structures -> current primary role outputs Compare Board only.
+4. Revision/feedback/change, including screen recordings, meeting notes, chat logs, screenshot annotations, boss oral comments, or client comments -> `change-manager`.
+5. New tool, connector, plugin, tool-specific prompt conversion -> `tool-integrator`.
+   - If an upstream role has selected a concrete poster/deck/storyboard/reference/media object for prompt writing, URL upload, generation, DOCX, or Feishu, insert a Selected Asset Packet before `prompt-director` or the explicit tool. Do not treat it as a separate Studio role.
    - Explicit 香蕉 / banana / Banana Pro / Nano Banana / OpenRouter image-generation request with a complete final prompt -> `prompt-director` -> `banana-pro`; add `tool-integrator` only when capability, parameters, API, or connection state is unclear.
    - If explicit Banana generation is bundled with storyboard, video/film shot design, poster, PPT/deck/slide, layout, character, product, prop, or scene design, route the upstream Studio role first, then `prompt-director` -> `banana-pro`. Do not let the tool trigger bypass the design role.
    - Explicit 即梦2.0生成 / 即梦生成 / Seedance 2.0 / Ark Seedance video-generation request with a complete final prompt -> `prompt-director` -> `seedance-2-video`; add `tool-integrator` only when capability, parameters, API, key state, or connection state is unclear.
@@ -38,25 +42,25 @@ Judge these before every project reply:
    - If explicit Seedance generation uses local image/video files instead of public URLs, insert `url-relay` between `prompt-director` and `seedance-2-video`; use SW media uploader first, then only a confirmed/configured temporary fallback, and stop before real generation if no public URL is available.
    - Explicit URL中转 / 公网URL / 上传参考图 / 上传参考视频 / `@url-relay` -> `url-relay`; if a downstream generation tool is named, return to that tool after the relay URL is ready.
    - Explicit 视觉方案文件 / 视觉导演方案 / Word视觉方案 / DOCX视觉方案 / 分镜视觉方案文件 / `@storyboard-visual-word` with selected images and rationale -> `finishing-producer` -> `storyboard-visual-word`; if storyboard/scene visuals still need creation or selection, route the upstream Studio role first.
-5. Final check/risk/delivery readiness -> `review-producer`.
-6. Export/package/naming/handoff -> `finishing-producer`.
-7. Unspecified visual style, moodboard decision, taste calibration, global aesthetic library use, "SW decide the look", or user-provided visual reference interpretation -> `aesthetic-director`.
-8. Character setting sheet, role reference board, scene setting sheet, production-design board -> `production-designer`; add `asset-producer` only when source/risk/asset priority matters.
-9. Integrated storyboard sheet, one-image storyboard board, storyboard contact sheet -> `storyboard-director`; add `cinematographer` only when camera continuity is weak.
-10. Image/video/AI prompt request -> `prompt-director`.
-11. Audio/music/SFX/voice/mix -> `sound-designer`.
-12. Color grade/LUT/shot matching/product color -> `colorist`.
-13. Motion graphics/titles/subtitle animation/transitions -> `motion-designer`.
-14. Camera/lens/lighting/shot language -> `cinematographer`.
-15. Script/voiceover/dialogue/narrative beats -> `scriptwriter`.
-16. Film/brand film/treatment/directing intent -> `film-director`.
-17. Presentation/PPT/deck/slide outline/storyline/section flow/speaker deck/pitch deck/client-facing proposal/government report/local tourism film proposal/city image film proposal -> `presentation-designer`.
-18. Poster copy/headline/CTA or slide wording/title takeaway -> `copywriter`.
-19. Poster or presentation layout/grid/type hierarchy -> `layout-designer`.
-20. Poster visual/art direction -> `poster-art-director`.
-21. Storyboard/shot table -> `storyboard-director`.
-22. New or unclear project -> `studio-orchestrator` + `brief-strategist`.
-23. Direction request -> `creative-director`.
+6. Final check/risk/delivery readiness -> `review-producer`.
+7. Export/package/naming/handoff -> `finishing-producer`.
+8. Unspecified visual style, moodboard decision, taste calibration, global aesthetic library use, "SW decide the look", or user-provided visual reference interpretation -> `aesthetic-director`.
+9. Character setting sheet, role reference board, scene setting sheet, production-design board -> `production-designer`; add `asset-producer` only when source/risk/asset priority matters.
+10. Integrated storyboard sheet, one-image storyboard board, storyboard contact sheet -> `storyboard-director`; add `cinematographer` only when camera continuity is weak.
+11. Image/video/AI prompt request -> `prompt-director`.
+12. Audio/music/SFX/voice/mix -> `sound-designer`.
+13. Color grade/LUT/shot matching/product color -> `colorist`.
+14. Motion graphics/titles/subtitle animation/transitions -> `motion-designer`.
+15. Camera/lens/lighting/shot language -> `cinematographer`.
+16. Script/voiceover/dialogue/narrative beats -> `scriptwriter`.
+17. Film/brand film/treatment/directing intent -> `film-director`.
+18. Presentation/PPT/deck/slide outline/storyline/section flow/speaker deck/pitch deck/client-facing proposal/government report/local tourism film proposal/city image film proposal -> `presentation-designer`.
+19. Poster copy/headline/CTA or slide wording/title takeaway -> `copywriter`.
+20. Poster or presentation layout/grid/type hierarchy -> `layout-designer`.
+21. Poster visual/art direction -> `poster-art-director`.
+22. Storyboard/shot table -> `storyboard-director`.
+23. New or unclear project -> `studio-orchestrator` + `brief-strategist`.
+24. Direction request -> `creative-director`.
 
 ## Project Type Defaults
 

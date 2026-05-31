@@ -24,6 +24,7 @@ Use this skill's script for the repeatable "scene images + rationale -> Word" la
 - Avoid overview contact sheets in the formal Word unless the user explicitly asks for a contact sheet. The Word should be scene-by-scene, not a generation-results report.
 - If generation failed and there are no images, deliver a prompt-only fallback separately; once images exist, remove prompt sections from the formal Word.
 - If the user has not selected images yet, do not fabricate a Word file. Ask for selected image paths or route back to the relevant SW role to create/select visuals first.
+- If Selected Asset Packets exist, use them to confirm selected images, scene/group ids, reference roles, locked items, avoid list, and privacy/cost gates. Do not expose packet internals, local paths, raw prompts, or tool parameters in the formal Word unless the user asks for an internal appendix.
 
 ## Workflow
 
@@ -102,6 +103,7 @@ Use after the visual package is ready:
 
 ```text
 storyboard-director / production-designer / asset-producer if needed
+-> Selected Asset Packet for each selected image/group
 -> prompt-director if prompt/image generation is needed
 -> banana-pro or other image tool if explicitly requested
 -> storyboard-visual-word

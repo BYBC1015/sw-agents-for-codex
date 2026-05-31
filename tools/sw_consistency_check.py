@@ -45,7 +45,9 @@ USER_SKILL_FILES = [
     USERPROFILE / ".codex" / "skills" / "banana-pro" / "SKILL.md",
     USERPROFILE / ".codex" / "skills" / "seedance-2-video" / "SKILL.md",
     USERPROFILE / ".codex" / "skills" / "url-relay" / "SKILL.md",
+    USERPROFILE / ".codex" / "skills" / "black-background-cutout" / "SKILL.md",
     USERPROFILE / ".codex" / "skills" / "storyboard-visual-word" / "SKILL.md",
+    USERPROFILE / ".codex" / "skills" / "feishu-docs" / "SKILL.md",
 ]
 
 PLUGIN_FILES = [
@@ -56,7 +58,9 @@ PLUGIN_FILES = [
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "banana-pro" / "SKILL.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "seedance-2-video" / "SKILL.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "url-relay" / "SKILL.md",
+    USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "black-background-cutout" / "SKILL.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "storyboard-visual-word" / "SKILL.md",
+    USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "feishu-docs" / "SKILL.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "sw-update" / "agents" / "openai.yaml",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "sw-rescue" / "agents" / "openai.yaml",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "sw-help" / "agents" / "openai.yaml",
@@ -85,6 +89,7 @@ PROMPT_REFERENCE_FILES = [
     ROOT / "Prompts" / "Image_Aesthetic_Prompt_Reference.md",
     ROOT / "Prompts" / "Video_Motion_Edit_Prompt_Rules.md",
     ROOT / "Prompts" / "Visual_Development_Board_Rules.md",
+    ROOT / "Prompts" / "Tool_Official_Prompt_Deltas.md",
     ROOT / "01_Research" / "HQ_Aesthetic_References" / "Aesthetic_Decision_Index.md",
     ROOT / "01_Research" / "HQ_Aesthetic_References" / "Aesthetic_Library_Config.md",
     ROOT / "01_Research" / "HQ_Aesthetic_References" / "HQ_Aesthetic_Master_Index.md",
@@ -116,8 +121,18 @@ REPO_TOOL_SKILL_FILES = [
     ROOT / "seedance-2-video" / "scripts" / "seedance_task.py",
     ROOT / "url-relay" / "SKILL.md",
     ROOT / "url-relay" / "scripts" / "url_relay.py",
+    ROOT / "black-background-cutout" / "SKILL.md",
+    ROOT / "black-background-cutout" / "agents" / "openai.yaml",
+    ROOT / "black-background-cutout" / "scripts" / "black_background_cutout.py",
     ROOT / "storyboard-visual-word" / "SKILL.md",
     ROOT / "storyboard-visual-word" / "scripts" / "build_scene_visual_docx.py",
+    ROOT / "feishu-docs" / "SKILL.md",
+    ROOT / "feishu-docs" / "agents" / "openai.yaml",
+    ROOT / "feishu-docs" / "scripts" / "feishu_doc_cli.py",
+    ROOT / "tools" / "sync_obsidian_aesthetic_vault.py",
+    ROOT / "Obsidian_Aesthetic_Vault" / "Home.md",
+    ROOT / "Obsidian_Aesthetic_Vault" / "00_Index" / "Profile Router.md",
+    ROOT / "Obsidian_Aesthetic_Vault" / "obsidian-vault-config.json",
 ]
 
 SECRET_PATTERNS = [
@@ -249,6 +264,7 @@ def check_prompt_references(issues: list[str]) -> None:
             "Image_Aesthetic_Prompt_Reference.md",
             "Video_Motion_Edit_Prompt_Rules.md",
             "Visual_Development_Board_Rules.md",
+            "Tool_Official_Prompt_Deltas.md",
             "Daily_Selected_Index.md",
         ]:
             if required not in text:
@@ -296,13 +312,21 @@ def check_repo_tool_skills(issues: list[str]) -> None:
     registry = ROOT / "Tool_Registry.md"
     if registry.exists():
         text = read_text(registry)
-        for required in ["Banana Pro", "Seedance", "URL Relay", "Storyboard Visual Word"]:
+        for required in [
+            "Banana Pro",
+            "Seedance",
+            "URL Relay",
+            "Black Background Cutout",
+            "Storyboard Visual Word",
+            "Feishu Docs",
+            "Obsidian Aesthetic Vault",
+        ]:
             if required not in text:
                 fail(issues, f"Tool_Registry.md does not mention {required}")
 
 
 def check_secret_leaks(issues: list[str]) -> None:
-    ignored_dirs = {".git", "__pycache__", "banana_outputs", "seedance_outputs"}
+    ignored_dirs = {".git", "__pycache__", "banana_outputs", "seedance_outputs", "cutout_transparent_png"}
     for path in ROOT.rglob("*"):
         if not path.is_file():
             continue
@@ -319,7 +343,7 @@ def check_secret_leaks(issues: list[str]) -> None:
 
 def iter_text_files(paths: list[Path]) -> list[Path]:
     files: list[Path] = []
-    ignored_dirs = {".git", "__pycache__", "banana_outputs", "seedance_outputs"}
+    ignored_dirs = {".git", "__pycache__", "banana_outputs", "seedance_outputs", "cutout_transparent_png"}
     for base in paths:
         if not base.exists():
             continue

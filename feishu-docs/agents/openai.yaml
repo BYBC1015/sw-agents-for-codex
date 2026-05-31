@@ -1,0 +1,6 @@
+interface:
+  display_name: "Feishu Docs"
+  short_description: "Render or publish visual handoffs to Feishu/Lark."
+  default_prompt: "Use $feishu-docs only when I ask to transfer, render, or publish an already-prepared visual plan or storyboard handoff to Feishu/Lark Docs."
+policy:
+  allow_implicit_invocation: true

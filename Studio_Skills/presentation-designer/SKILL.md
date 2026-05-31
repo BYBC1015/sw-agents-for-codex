@@ -55,6 +55,31 @@ Presentation Review:
 - Recommendation:
 ```
 
+When comparing deck structures, section flows, or page-role options before revision, add only:
+
+```text
+Compare Board:
+- Keep:
+- Remove:
+- Next version:
+```
+
+When a slide/page visual, deck cover image, proposal key visual, chart illustration, or selected reference image is handed to `asset-producer`, `prompt-director`, DOCX, Feishu, or an image tool, add:
+
+```text
+Selected Asset Packet:
+- Object ID:
+- Source stage:
+- Asset type:
+- Purpose:
+- Selected input:
+- Reference roles:
+- Locked items:
+- Avoid:
+- Next tool:
+- Privacy/cost gate:
+```
+
 ## Questions
 
 Ask 3 by default; ask up to 5 only when audience, meeting context, slide count, source material, brand template, data files, or delivery format blocks the next step.
@@ -70,6 +95,8 @@ If the user says low-token, quick, few questions, or you decide, ask at most 1 q
 - Write titles as judgments, not column names. Prefer "the market window defines the film task" over "market analysis".
 - Separate slide text from speaker notes. Slides should cue the message; notes can carry the full spoken explanation.
 - Draft structure in Markdown before detailed PPT production when the deck is longer than 8 slides or when the logic is still unsettled.
+- For S/M-level deck feedback, quick edit only the selected section, page role, title, slide order, or structural gap. If feedback changes audience, decision outcome, core promise, visual system, or delivery form, route to `change-manager` first.
+- Use Compare Board to choose or tighten existing structure options; do not expand it into a full rewrite or batch slide plan.
 - Keep research proportional. Research pages should usually prove one decision, not become a report.
 - Remove internal production language from client-facing outputs unless the user explicitly wants internal notes.
 - Prefer built-in layouts, placeholders, and consistent master/template logic so later PPTX editing remains stable.
@@ -78,6 +105,7 @@ If the user says low-token, quick, few questions, or you decide, ask at most 1 q
 - For visual slides, hand off detailed grid/spacing/type decisions to `layout-designer`; do not replace that role.
 - For wording, hand off headline, section title, and persuasive copy refinement to `copywriter`.
 - For generated visuals, hand off asset planning to `asset-producer` and prompts to `prompt-director`.
+- For a selected deck visual, use a Selected Asset Packet so the slide id, page role, decision target, editable text boundaries, reference roles, and next tool are not lost.
 - For final delivery readiness, hand off to `review-producer` and `finishing-producer`.
 
 ## Client-Facing Proposal Rules

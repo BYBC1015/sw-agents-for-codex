@@ -4,11 +4,11 @@
 
 第一版目标不是把创意变成僵硬流水线，而是让每个项目都有清楚的输入、确认点、版本记录和交付检查。你可以把 Codex 当作创意总控、PPT 策划、资料整理员、分镜助理、剪辑策划、终审检查员和变更管理员。
 
-更推荐的使用方式是：每次新建一个对话，就当作新建一个项目。Codex 会读取 `AGENTS.md`，自动判断项目类型，少量追问，并在对话框里推进完整流程。
+更推荐的使用方式是：需要 SW 时先在新对话里显式输入 `/sw`、`/SW_V1.0` 或 `@SW_V1.0`。启用后，Codex 才会判断项目类型、少量追问，并在对话框里推进完整流程；普通设计词本身不会自动启动 SW。
 
 ## 当前版本
 
-- 当前运行版本：`V1.10.5`
+- 当前运行版本：`V1.12.10`
 - 稳定调用入口：`/sw`、`/SW_V1.0` 或 `@SW_V1.0`
 - 版本同步入口：`@sw_update`
 - 完整更新记录：[`VERSION.md`](VERSION.md) / [`Architecture_Update_Log.md`](Architecture_Update_Log.md)
@@ -19,6 +19,18 @@
 
 | 版本 | 日期 | 更新内容 |
 | --- | --- | --- |
+| V1.12.10 | 2026-06-01 | 收窄 SW 启动门：普通“海报/PPT/分镜/提示词/改稿”等设计词不再自动进入完整 SW；只有 `/sw`、`@SW_V1.0`、`调用 SW_V1.0`、`拉取本项目架构`、`按本项目架构执行` 等显式入口才启用。项目类型快捷命令只在已启用 SW 后生效，并同步收窄 skill/plugin 描述，避免跨设备 git 同步后隐式进框架。 |
+| V1.12.9 | 2026-06-01 | 新增 `black-background-cutout` 本地抠图工具：用户明确说抠图/扣图/去底/去黑底/黑底转透明/透明底 PNG 时，直接走本地黑底/简单纯色底透明 PNG 预览流程；不写 prompt、不生成、不上传、不跑完整项目，并提示可能有轻微毛边，不作为正式无损交付资产。 |
+| V1.12.8 | 2026-06-01 | 轻量补强异步反馈收口：录屏反馈、会议纪要、聊天记录、截图批注、老板口头意见和甲方评论先压成现有 `Change Delta Packet`，再判断 S/M/L/XL；不新增 lane、不新增包、不增加默认读取。 |
+| V1.12.7 | 2026-06-01 | 新增“回复末尾轻提醒”的默认习惯：项目产物优先，结尾最多 1 条提醒，只用于记忆、锁定、下一步、风险或成本，不新增 lane、不增加默认读取；同时明确长期项目识别信号，并修复记忆规则中的乱码示例。 |
+| V1.12.6 | 2026-05-31 | 新增 `Selected Asset Packet` 选中对象交接包：海报主视觉、deck 页面视觉、分镜镜头/组、参考帧、本地素材、公网 URL 或已生成图片进入 prompt、URL 中转、生成工具、DOCX 或 Feishu 前，先统一记录对象 ID、用途、参考物角色、锁定项、禁止项、下一工具和隐私/成本门，减少口头交接造成的漂移。 |
+| V1.12.5 | 2026-05-29 | 新增反馈标准化小升级：方向、分镜组和 deck 结构可用轻量 `Compare Board` 收口，只保留 Keep / Remove / Next version；quick edit 扩展到 PPT/deck、分镜、剪辑表和 prompt 的 S/M 级局部修改；中途反馈可先压成 `Change Delta Packet` 再派单，避免口头反馈扩大成重做。 |
+| V1.12.4 | 2026-05-27 | 补充官方工具提示词差异层，并修复终审到改稿的 A1 反馈闭环：Seedance/即梦、Kling/可灵、Banana Pro/Gemini image、OpenAI image 的官方提示词经验只在点名工具或排错时按需读取；终审必改项会生成 `Review Delta Packet` 再交给改稿，不再把小问题扩大成重做。 |
+| V1.12.3 | 2026-05-27 | 新增“分镜参考角度帧”：当用户要求用 Banana/image 辅助分镜时，SW 可先为某个选中镜头生成一张特定角度参考静帧，用来锁定机位、空间关系、主体比例和光线；默认只生成一张，不代表整组分镜、每镜头或 Seedance 批量生成。 |
+| V1.12.2 | 2026-05-27 | 优化 Obsidian 审美库与一体式分镜规则：图谱/画像/集合节点正文直接嵌入本地预览图，不再只显示链接；分镜图按 15 秒段落分组，单组不超过 15 秒，必要时可微调镜头时长，9 宫格只是上限不是目标。 |
+| V1.12.1 | 2026-05-26 | 修复 Obsidian 真实使用路径：同步脚本会优先识别当前打开的 Obsidian vault，支持 Windows 跨盘 file URI 链接，并避免把外部 vault 误判为仓库内部路径。 |
+| V1.12.0 | 2026-05-26 | 新增 Markdown-only Obsidian 审美资料库：`Obsidian_Aesthetic_Vault/` 可直接作为 Obsidian vault 打开，用于浏览、筛选和维护审美资料；同步脚本只建立 Markdown 链接，不复制大图，不启动 WPS/Word，日常 SW 自动审美仍只读轻量索引。 |
+| V1.11.0 | 2026-05-26 | 新增 `feishu-docs` 显式飞书/Lark Docs 交付工具：视觉方案、分镜包或已整理的 Markdown 可先本地渲染为飞书友好文档，也可在本机配置 Feishu 应用凭证并显式 `--execute` 后发布到飞书；日常 SW 启动和项目流程不增加消耗。 |
 | V1.10.5 | 2026-05-26 | 新增 `INSTALL_SW.md` 和 `tools/sw_bootstrap.py`：新电脑 clone 后可一条命令同步 SW skills/plugin，检查 Banana/Seedance key、URL Relay 配置和健康状态，并输出“已可用/待补配置”的清单；日常项目使用不增加 token。 |
 | V1.10.4 | 2026-05-26 | 明确海报默认走 image-native typography：主标题、发布标题、大数字、发光/金属/3D/霓虹字等视觉文字默认由 image/视觉模型处理；SW 主要负责反馈判断、修改指令和 QA，系统/可编辑文字只用于精确信息、小字、法务、logo/二维码或明确要源文件的场景。 |
 | V1.10.3 | 2026-05-26 | 优化 SW chip 下的海报/图片快速改稿：明确小改图时直接进入 output-first 编辑，不再额外启动说明、搜索运行文件或重跑项目流程；安装同步会把轻量运行包和 Studio skills 一起放进 loader skill，换电脑和其他项目文件夹更稳。 |
@@ -75,6 +87,12 @@
 每次新建对话时，最推荐先调用：
 
 ```text
+/sw
+```
+
+或：
+
+```text
 /SW_V1.0
 ```
 
@@ -87,8 +105,10 @@
 调用成功后，Codex 应回复：
 
 ```text
-SW loaded successfully. Current version: V1.10.5
+SW loaded successfully. Current version: V1.12.10
 ```
+
+SW 现在是显式调用模式：仅仅在对话里说“海报 / PPT / 分镜 / 视频提示词”等普通设计词，不会自动进入 SW 框架。需要使用工作室流程时，请先输入 `/sw`、`@SW_V1.0`、`调用 SW_V1.0` 或 `按本项目架构执行`。
 
 Version synchronization uses a separate entry:
 
@@ -99,7 +119,7 @@ Version synchronization uses a separate entry:
 Expected reply:
 
 ```text
-SW version synchronized. Current version: V1.10.5
+SW version synchronized. Current version: V1.12.10
 ```
 
 If old startup/update chips keep replaying stale versions, use the standalone rescue entry:
@@ -117,7 +137,7 @@ or:
 Expected reply:
 
 ```text
-SW rescue synchronized. Current version: V1.10.5
+SW rescue synchronized. Current version: V1.12.10
 ```
 
 For other project folders, copy `SW_V1.0.md`, `sw_update.md`, and `sw_rescue.md`; copying only the startup file will not create the local update/rescue entries. For long-running projects, also copy `Project_Memory_Templates/.sw/` into that project folder.
@@ -136,6 +156,10 @@ URL Relay is the media bridge for tools that need public URLs. Trigger it with `
 
 Storyboard Visual Word is an optional downstream DOCX handoff tool. Trigger it with `视觉方案文件`, `视觉导演方案`, `Word视觉方案`, `DOCX视觉方案`, or `@storyboard-visual-word` after selected storyboard/scene/concept images are ready.
 
+Feishu Docs is an optional downstream handoff tool. Trigger it with `转到飞书`, `同步到飞书`, `发布到飞书`, `飞书视觉方案`, `飞书分镜`, `Lark Docs`, or `@feishu-docs` after the visual plan or storyboard handoff is ready. Without local Feishu app credentials, it only renders or dry-runs and does not publish.
+
+
+Obsidian Aesthetic Vault is an optional local browsing layer for the aesthetic library. Trigger it with `Obsidian审美库`, `打开审美资料库`, `整理审美库`, or `筛选审美图片`. Sync command: `python tools/sync_obsidian_aesthetic_vault.py`, then open `Obsidian_Aesthetic_Vault/` in Obsidian. Normal SW projects do not auto-load this vault or large images.
 Historical Accuracy is optional. Plain `开启历史检查` applies only to the current request/visual chain; `本项目开启历史检查` or `全程开启历史检查` keeps it on for the current conversation/project; `关闭历史检查`, `不用历史检查`, or `恢复普通模式` turns it off.
 
 长期项目记忆层建议：
@@ -226,6 +250,7 @@ Studio roles: Brief Strategist / `brief-strategist` + Storyboard Director / `sto
 - `seedance-2-video/`：显式调用的 Seedance 2.0 / 即梦2.0 视频生成 skill，包含 Ark API dry-run/run/poll 脚本；补齐 `ARK_API_KEY` 或本地私密 key 后可在提示词后真实生成视频。
 - `url-relay/`：公网 URL 中转 skill，优先使用 SW media uploader 服务器把本地图片/视频上传成下游 AI 工具可抓取的 `http(s)` URL；自有服务器不可用时可按确认/配置切到临时中转；上传 token 只存本机私密配置，不进入仓库。
 - `storyboard-visual-word/`：视觉方案文件 / Word/DOCX 视觉导演方案工具 skill，用于把已选分镜、场景或概念图整理成正式交付文件。
+- `feishu-docs/`：飞书/Lark Docs 视觉方案与分镜交付 skill，用于把已准备好的 handoff 渲染为飞书友好 Markdown，或在本机凭证和显式确认后发布到飞书。
 - `Seedance_URL_Relay_Codex_Handoff.md`：只迁移即梦2.0与 URL Relay 中转策略的标准接入指令，不包含完整 SW 框架。
 - `Studio_Skills/`：每个岗位一个 project-local `SKILL.md`。
 - `Start_New_Project.md`：新项目启动语和最小输入示例。

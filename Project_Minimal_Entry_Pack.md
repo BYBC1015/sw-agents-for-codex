@@ -2,6 +2,8 @@
 
 Use this when preparing another project folder for SW.
 
+SW is explicit-invocation only. Copying these files into another project folder must not make ordinary design requests auto-enter SW. Users should start with `/sw`, `/SW_V1.0`, `@SW_V1.0`, `调用 SW_V1.0`, or `按本项目架构执行`.
+
 ## Required Root Files
 
 Copy these three files into the root of each project folder:
@@ -12,7 +14,7 @@ Copy these three files into the root of each project folder:
 
 These two files create the expected local entries:
 
-- `@SW_V1.0` starts or loads the SW design studio workflow.
+- `@SW_V1.0` starts or loads the SW design studio workflow only when explicitly invoked.
 - `@sw_update` synchronizes the current conversation with the latest SW runtime version.
 - `@sw_rescue` or `/sw-rescue` force-refreshes stale/sealed startup or update chips.
 
@@ -36,19 +38,19 @@ Copy these when you want version history and troubleshooting available inside th
 Startup:
 
 ```text
-SW loaded successfully. Current version: V1.10.5
+SW loaded successfully. Current version: V1.12.10
 ```
 
 Version sync:
 
 ```text
-SW version synchronized. Current version: V1.10.5
+SW version synchronized. Current version: V1.12.10
 ```
 
 Rescue:
 
 ```text
-SW rescue synchronized. Current version: V1.10.5
+SW rescue synchronized. Current version: V1.12.10
 ```
 
 ## Optional Project Memory Pack
@@ -82,4 +84,5 @@ Default help and sync entries should use hot-start behavior: fixed short reply f
 
 If a long-running project has its own visual references, keep them in `.sw/ASSETS.md` or a project-local reference folder and mention the rule in `.sw/RULES.md`. SW should use those project references before the global aesthetic library.
 
-Installed SW entries created by `tools/sw_sync_installed.py` include a compact runtime pack beside the loader skill. This lets another project folder or a newly synced computer run quick poster/image edits without searching for the original repository path. If a user clicks the SW skill chip and asks for a clear existing-poster/image tweak, the chip itself is the load acknowledgement; SW should edit first and explain only the changed layer or QA risk.
+Installed SW entries created by `tools/sw_sync_installed.py` include a compact runtime pack beside the loader skill. This lets another project folder or a newly synced computer run activated SW work without searching for the original repository path. A skill chip merely appearing in the UI is not activation; the user must explicitly invoke/select SW before quick edit or other SW routes apply.
+Standalone terms such as poster, PPT, deck, storyboard, image prompt, video prompt, review, or revision are not startup aliases. Project-type shortcuts such as `/poster` and `/video` apply only after SW has been explicitly activated in the same conversation.

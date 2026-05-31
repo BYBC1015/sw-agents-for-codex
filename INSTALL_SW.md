@@ -22,7 +22,7 @@ The bootstrap script will:
 - synchronize SW skills into `~/.codex/skills`
 - synchronize the local plugin into `~/plugins/sw-v1-0`
 - run the SW doctor and consistency checks
-- check whether Banana Pro, Seedance 2.0, URL Relay, Storyboard Visual Word, and the aesthetic index are usable
+- check whether Banana Pro, Seedance 2.0, URL Relay, Storyboard Visual Word, Feishu Docs, the aesthetic index, and the Obsidian aesthetic vault are usable
 - check whether local private keys/configs are present without printing secrets
 - report what is ready and what still needs local configuration
 
@@ -47,6 +47,8 @@ The installer copies repository-controlled skills and plugin entries to local Co
 | `~/.codex/skills/banana-pro` | Banana Pro / OpenRouter image generation tool |
 | `~/.codex/skills/seedance-2-video` | Seedance 2.0 / 即梦2.0 video generation tool |
 | `~/.codex/skills/url-relay` | Public URL relay for local media files |
+| `~/.codex/skills/black-background-cutout` | Local black/simple solid-background cutout tool |
+| `~/.codex/skills/feishu-docs` | Feishu/Lark Docs visual handoff tool |
 | `~/.codex/skills/storyboard-visual-word` | DOCX visual方案 handoff tool |
 | `~/plugins/sw-v1-0` | Slash/chip plugin entry pack |
 
@@ -104,6 +106,34 @@ python .\url-relay\scripts\url_relay.py setup --upload-url http://123.56.255.86/
 
 When prompted, paste the SW media uploader token. The token is an upload credential for the relay server, not a model token, and must remain local/private.
 
+### Feishu Docs
+
+Local render and publish dry-run work without credentials. Real Feishu/Lark publishing needs a local private app config:
+
+```powershell
+python .\feishu-docs\scripts\feishu_doc_cli.py setup --app-id <your app id> --folder-token <optional folder token>
+```
+
+The app secret is stored only in `~/.config/sw-feishu/config.json` or read from local environment variables.
+
+### Obsidian Aesthetic Vault
+
+The Obsidian layer is local and Markdown-only. It does not need API keys and does not copy heavy images.
+
+Sync or rebuild it with:
+
+```powershell
+python .\tools\sync_obsidian_aesthetic_vault.py
+```
+
+Then open this folder as a vault in Obsidian:
+
+```text
+Obsidian_Aesthetic_Vault
+```
+
+If you keep the vault on another drive, open that vault in Obsidian before running the sync script, set `SW_OBSIDIAN_AESTHETIC_VAULT`, or pass `--vault <path>` explicitly.
+
 ## Bootstrap Options
 
 ```powershell
@@ -128,6 +158,8 @@ Available features:
 - [ready or needs_config] Seedance 2.0
 - [ready or needs_config] URL Relay
 - [ready] Storyboard Visual Word
+- [ready or needs_config] Feishu Docs
+- [ready] Obsidian Aesthetic Vault
 ```
 
 `needs_config` is normal on a new computer until local keys and relay token are added.

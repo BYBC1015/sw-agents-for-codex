@@ -9,7 +9,10 @@
 - 每个工具必须有工具卡，记录能力、输入、输出、限制、成本和风险。
 - 新工具接入时，先注册工具卡，再加入自动派单。
 - 工具参数不确定或可能已更新时，优先查官方文档或让用户提供工具说明。
+- 点名具体生成工具或要求“官方案例/官方手册”时，先保留 Universal Prompt，再按 `Prompts/Tool_Official_Prompt_Deltas.md` 读取对应小节做工具差异转换；普通项目不要加载完整官方手册。
+- 当上游已经选定具体海报视觉、deck 页面、分镜镜头、参考图、URL、本地素材或生成结果时，先用 `Selected Asset Packet` 记录对象 ID、用途、参考物角色、锁定项、禁止项、下一工具和隐私/成本门，再进入 prompt 或工具转换。
 - 涉及付费、高成本、外部发布、版权风险时，先低成本预检。
+- Black Background Cutout / `black-background-cutout` 是显式触发的本地抠图工具，不是 AI 生成工具。只有用户明确说抠图、扣图、去底、去黑底、黑底转透明、透明底 PNG 或 `@black-background-cutout` 时才加载；它只对本地黑底/简单纯色底图片做快速透明 PNG 预览，可能有轻微毛边，不作为正式无损交付资产。
 - Banana Pro / `banana-pro` 是显式调用的出图成员，作用类似 `imagegen`，位于 `prompt-director` 之后：只有用户明确提到香蕉、banana、Banana Pro、Nano Banana、OpenRouter 图像生成、`@banana-pro`，或明确要求用这个成员生成图片时才加载；普通图片提示词仍由 `prompt-director` 处理。
 - Banana Pro 不能越过上游设计岗位。若同一请求包含分镜、视频/电影镜头、海报、PPT/deck/slide、版式、角色、产品、道具或场景设计，先由对应 Studio role 产出设计 handoff，再由 `prompt-director` 转为最终视觉 prompt，最后才交给 Banana Pro 生成选中的一张/一帧。
 - Banana Pro 已包含 OpenRouter API 执行脚本；真实生成需要用户明确确认且环境存在 `OPENROUTER_API_KEY` 或本机私密 `~/.config/banana-pro/openrouter.env`。没有 key 时只做 dry-run/payload，不声称已出图。
@@ -20,6 +23,10 @@
 - URL Relay 不参与创意、不改写提示词，也不是 Studio role。它只负责本地素材 -> 公网 URL；上传 token 和服务器配置必须留在本机私密配置，不进入仓库、prompt、日志或交付文件。
 - Storyboard Visual Word / `storyboard-visual-word` 是显式触发的 DOCX 视觉方案交付工具，位于上游分镜/视觉开发/选图完成之后：只有用户明确要求视觉方案文件、视觉导演方案、Word视觉方案、DOCX视觉方案、分镜视觉方案文件或 `@storyboard-visual-word` 时才加载；普通分镜、提示词、图片生成和一体式分镜板不自动触发它。
 - Storyboard Visual Word 不能越过上游设计岗位。若同一请求还需要脚本、分镜、场景设定、角色设定、出图或选图，先由对应 Studio role 和工具完成设计与选图，再把已选图片和视觉设定打包成 DOCX。
+- Feishu Docs / `feishu-docs` 是显式触发的 Feishu/Lark Docs 交付工具，位于上游视觉方案、分镜、选图、DOCX/Markdown handoff 完成之后：只有用户明确要求转到飞书、同步到飞书、发布到飞书、飞书视觉方案、飞书分镜、Lark Docs、Feishu Docs 或 `@feishu-docs` 时才加载；普通分镜、提示词、图片生成、Word/DOCX 交付不自动触发它。
+- Feishu Docs 不能越过上游设计岗位。若同一请求还需要脚本、分镜、场景设定、角色设定、出图、选图或 Markdown/DOCX 源内容，先完成对应设计与交付整理，再渲染飞书友好 Markdown 或发布到飞书。真实发布必须确认外部发布和隐私风险。
+- Obsidian Aesthetic Vault 是本地审美资料库浏览和筛选层，不是生成工具。只有用户明确要求 Obsidian 审美库、整理审美库、筛选审美图片、打开审美资料库或维护 aesthetic vault 时才使用；普通 SW 项目仍只读取 `Aesthetic_Decision_Index.md`，不加载 vault 或大图。
+- Obsidian Aesthetic Vault 不能替代 `aesthetic-director` 的低成本判断。它只服务人工浏览、资料筛选、profile 维护和项目 moodboard；同步脚本只生成 Markdown 链接，不启动 WPS/Word/Office，不复制大图，不消耗模型 token。
 
 ## 工具类型
 
@@ -27,6 +34,7 @@
 | --- | --- | --- |
 | 图像生成 | 海报主视觉、背景、产品氛围、分镜图 | `prompt-director` |
 | 图像编辑 | 扩图、局部替换、去背景、风格统一 | `prompt-director` + `asset-producer` |
+| 本地像素处理 | 黑底/纯色底抠图、透明 PNG 预览 | 显式工具 skill |
 | 视频生成 | AI 镜头、动态视觉、产品动效 | `prompt-director` + `storyboard-director` |
 | 视频编辑 | 自动剪辑、字幕、节奏、转场 | `edit-director` |
 | 版式/设计 | Canva、海报模板、尺寸适配 | `poster-art-director` |
@@ -58,13 +66,15 @@
 
 ## 通用提示词到工具提示词
 
-所有 AI 生成工具都走 4 层转换：
+所有 AI 生成工具都走 4 层转换；若已有 Selected Asset Packet，则在 Studio Brief 之后、Prompt Profile 之前消化该包：
 
 1. Studio Brief：目标、受众、平台、方向、禁区。
-2. Prompt Profile：按 `AI_Tool_Prompt_Profiles.md` 选择图像生成、图像编辑、视频生成、视频编辑、版式或音频剖面。
-3. Universal Prompt：主体、场景、构图、镜头、光线、色彩、动作、限制。
-4. Tool Prompt：按工具支持的语法、参数、比例、时长、参考图、负面词转换。
-5. QA Notes：后期处理、版权风险、一致性和二次修改参数。
+2. Selected Asset Packet：仅在已有选中对象时使用，保留对象 ID、用途、参考角色、锁定项、禁止项、下一工具、隐私/成本门。
+3. Prompt Profile：按 `AI_Tool_Prompt_Profiles.md` 选择图像生成、图像编辑、视频生成、视频编辑、版式或音频剖面。
+4. Universal Prompt：主体、场景、构图、镜头、光线、色彩、动作、限制。
+5. Official Delta：只有点名工具或排错时，按 `Prompts/Tool_Official_Prompt_Deltas.md` 叠加官方提示词差异。
+6. Tool Prompt：按工具支持的语法、参数、比例、时长、参考图、负面词转换。
+7. QA Notes：后期处理、版权风险、一致性和二次修改参数。
 
 ## 工具选择规则
 
@@ -78,6 +88,8 @@
 | 用户明确要求即梦2.0生成 / 即梦生成 / Seedance 2.0 / Ark Seedance 视频生成 | 已有完整 prompt：`prompt-director` -> `seedance-2-video`；仍需设计：先上游 Studio role -> `prompt-director` -> `seedance-2-video`；`tool-integrator` 只在能力、参数、key 或接入状态不清楚时介入 |
 | 下游 AI 工具需要公网 URL，但用户提供本地图片/视频文件 | `url-relay` 将本地素材中转为 `http(s)` URL；随后回到 Banana/Seedance/其他工具；隐私不明时先确认 |
 | 用户明确要求视觉方案文件 / 视觉导演方案 / Word视觉方案 / DOCX视觉方案 | 已有选定图片和设定：`storyboard-visual-word`；仍需分镜/设定/选图：先上游 Studio role -> 可选生成工具 -> `storyboard-visual-word` |
+| 用户明确要求转到飞书 / 同步到飞书 / 发布到飞书 / 飞书视觉方案 / 飞书分镜 | 已有 handoff：`feishu-docs`；仍需分镜/设定/选图/Markdown：先上游 Studio role -> 可选生成工具 -> `finishing-producer` -> `feishu-docs` |
+| 用户明确要求 Obsidian审美库 / 整理审美库 / 筛选审美图片 / 打开审美资料库 | 运行 `tools/sync_obsidian_aesthetic_vault.py` 生成/同步 Markdown vault；日常审美决策仍回到 `aesthetic-director` + compact index |
 | 需要剪辑节奏 | 视频编辑工具或人工剪辑方案 |
 | 需要音效/BGM | 音频工具或授权素材库 |
 | 需要团队协作 | Canva/云盘/项目管理工具 |

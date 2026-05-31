@@ -1,6 +1,12 @@
 # 新项目启动语
 
-以后每次新建对话，先调用：
+以后每次需要启用 SW 工作室时，先显式调用：
+
+```text
+/sw
+```
+
+或：
 
 ```text
 /SW_V1.0
@@ -15,10 +21,12 @@
 调用成功后，Codex 应只回复：
 
 ```text
-SW loaded successfully. Current version: V1.10.5
+SW loaded successfully. Current version: V1.12.10
 ```
 
-然后你再输入项目诉求即可。Codex 会自动判断这是海报、PPT/deck、视频，还是海报+视频，并按本项目的设计工作室架构执行。
+然后你再输入项目诉求即可。Codex 会在已启用 SW 的前提下判断这是海报、PPT/deck、视频，还是海报+视频，并按本项目的设计工作室架构执行。
+
+如果没有输入 `/sw`、`@SW_V1.0`、`调用 SW_V1.0`、`按本项目架构执行` 等显式入口，普通“做海报 / 做 PPT / 出分镜 / 出视频提示词”不会自动启动 SW。
 
 如果这是长期项目，可在项目文件夹添加 `.sw/MEMORY.md`、`.sw/RULES.md`、`.sw/PROJECT.md`。SW 会轻量读取；重大确认后只用一句短提示建议是否写入记忆。
 
@@ -55,9 +63,7 @@ SW loaded successfully. Current version: V1.10.5
 
 此时 Codex 应先回复成功语，再继续执行项目。
 
-```text
-做一个艺术市集 30 秒短视频，发抖音和视频号，要有城市感。
-```
+如果只输入普通项目诉求而没有显式 SW 入口，按普通 Codex 请求处理，不自动进入 SW。
 
 ## 工作模式
 

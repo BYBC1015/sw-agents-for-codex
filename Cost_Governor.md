@@ -21,9 +21,11 @@ The cost gate decides:
 | --- | --- | --- | --- | --- | --- |
 | Sync | `@sw_update`, `SW_UPDATE`, `/sw_update`, `SW_REFRESH` | `sw-update` only | one line | 0 | version sync only |
 | Rescue | `/sw-rescue`, `@sw_rescue`, `SW_RESCUE`, `SW_REPAIR`, `SW_FORCE_UPDATE` | `sw-rescue` only | one line | 0 | stale-chip rescue only |
-| Activation | `/SW_V1.0`, `@SW_V1.0` with no request | `sw-v1-0` only | one line | 0 | load only |
+| Activation | `/sw`, `/SW_V1.0`, `@SW_V1.0`, `调用 SW_V1.0`, `启用 SW_V1.0`, `拉取本项目架构`, `按本项目架构执行` with no request | `sw-v1-0` only | one line | 0 | explicit load only |
 | Intake | new or unclear request | orchestrator + brief | short | 3 default, 5 max | brief, assumptions, next role |
 | Direction | brief is usable | primary + support | medium | 3 default | up to 3 directions, recommendation |
+| Compare board | after direction options, storyboard groups, or deck structures when selection/feedback is fuzzy | primary role only | short | 0-1 | `Keep` / `Remove` / `Next version` only |
+| Selected asset packet | before a selected poster/deck/storyboard/reference/media object is handed to `prompt-director`, URL Relay, generation tools, DOCX, or Feishu | current upstream role or `asset-producer` only | short | 0-1 | package one selected object with locks, reference roles, avoid list, next tool, and privacy/cost gate |
 | Production | task and direction are clear | primary + support | medium | 3 default, 5 max | one role deliverable |
 | High-cost | detailed prompts, long scripts, full long decks, batch slide rewrites, batch variants, AI asset generation | selected roles after confirmation | controlled | 0-3 | one confirmed version/batch |
 | Review/change | final review or feedback | primary first | short | 0-3, 5 if blocked | risks, S/M/L/XL, scoped fix |
@@ -31,9 +33,10 @@ The cost gate decides:
 | Memory | major durable confirmation or explicit "remember/save" request | project memory file only | one line or 1-3 bullets | 0 | suggest or append concise local memory |
 | Aesthetic decision | visual style not locked, moodboard decision, SW decides the look | `aesthetic-director` + compact decision index | short/medium | 0-3 | one recommended profile plus one fallback at most |
 | Feature help | `@sw_help`, `/sw_help`, `/sw-help`, feature trigger questions | embedded `sw-help` answer first; `Feature_Trigger_Index.md` only for details/debug | short | 0 | feature list only |
+| Aesthetic vault maintenance | Obsidian审美库, 整理审美库, 筛选审美图片, 打开审美资料库 | sync script + compact indexes only | short | 0-1 | sync Markdown vault; do not load raw images into model context |
 | Historical reminder | clear historical accuracy risk but not confirmed | `Feature_Trigger_Index.md` only | one line added to current route | 0-1 | ask whether to enable, do not load historical role |
 | Maintenance-lite | maintain, optimize, quick check, sync confidence | version strings, selected skill validation, plugin JSON, secret scan | short | 0 | find obvious breakage only |
-| Poster quick edit | existing poster/image, simple repair, export variants, title treatment | affected visual decision + output-first QA | short | 0-1 | do not rerun full poster pipeline |
+| Quick edit | existing poster/image, deck page/outline, storyboard group/shot list, edit plan/timeline, or prompt refinement | affected role only | short | 0-1 | output-first local fix; do not rerun full pipeline |
 | Maintenance-full | publish/upload, deep regression, release audit, unexplained failure | regression suite plus affected files | medium | 0-2 | broad validation after lite path |
 
 ## Question Budget
@@ -50,19 +53,26 @@ The cost gate decides:
 - Use up to three roles only for complex campaign/film turns.
 - Never read all studio skills by default.
 - Aesthetic auto-selection uses `aesthetic-director` and `Aesthetic_Decision_Index.md` only. Do not load raw images, contact sheets, or broad research indexes unless the user asks for reference inspection or moodboard comparison.
+- Obsidian aesthetic vault work is local and explicit-only. Syncing `Obsidian_Aesthetic_Vault/` does not count as aesthetic auto-selection and should not cause raw images to enter model context.
 - Project-local visual references in `.sw/ASSETS.md`, `.sw/RULES.md`, `.sw/MEMORY.md`, or user-provided references override global aesthetic defaults.
 - Prompt-only requests go directly to `prompt-director`.
+- Explicit 抠图 / 扣图 / 去底 / 去黑底 / 黑底转透明 / 透明底 PNG / `@black-background-cutout` requests can load `black-background-cutout` directly as a low-cost local pixel tool. It does not require `prompt-director`, does not upload files, does not generate images, and should warn that quick cutouts may have slight fringing and are not finishing-grade assets.
 - Explicit 香蕉 / banana / Banana Pro / Nano Banana / OpenRouter image-generation requests can add `banana-pro` as the image-generation member after `prompt-director`; use `tool-integrator` only when capability, parameters, API, or connection state is unclear. Do not load it for generic image prompts.
 - Banana Pro is a post-prompt execution step, not a shortcut around Studio roles. If the request also asks for storyboard, video/film shot design, poster design, PPT/deck/slide layout, character/product/prop design, or scene planning, the responsible Studio role must produce the upstream handoff before `prompt-director` and `banana-pro`.
-- Poster quick edits are a low/mid-cost exception to full project routing: if the user already has the poster/image and asks for a local fix or variants, keep the role chain short and output the visual first.
-- Do not spend model context explaining routine image-edit iterations. Mention only the changed visual layer, the export result, and any QA risk.
-- If the user invoked SW through a visible skill chip and the same turn is a clear poster/image quick edit, treat the chip as the load acknowledgement. Do not spend a tool/read step looking for runtime files before the edit; use the embedded quick-edit rule or colocated installed runtime pack.
+- When a concrete object has been selected upstream, use a Selected Asset Packet before `prompt-director` or any tool execution. It prevents the selected URL, reference image role, locked items, avoid list, and next tool from being carried only as loose prose.
+- Quick edits are a low/mid-cost exception to full project routing: if the user already has the object and asks for a local fix, keep the role chain short and output the revised object first.
+- Quick edits may apply to poster/images, presentation outlines or selected pages, storyboard groups or selected shots, edit plans or timeline segments, and prompt refinements.
+- For non-poster quick edits, preserve the locked brief/direction and change only the selected section/page/shot/time span/prompt parameter. If the feedback changes audience, core message, narrative structure, visual style, or deliverable form, route to `change-manager` instead.
+- Do not spend model context explaining routine edit iterations. Mention only the changed object, what stayed unchanged, and any QA risk.
+- A visible SW skill chip alone is not activation. Use SW quick-edit rules only after explicit SW activation or explicit user selection of the SW entry; otherwise handle the request as a normal Codex task.
 - Poster work is not PPT work: do not default to system-font text overlays for poster hero titles or title effects. Use image-native visual typography for the poster's main visual text, and reserve editable/system text for exact information, small copy, legal/logo/QR, or explicit editable-layer requests.
 - `banana-pro` is a tool skill, not a Studio role. It does not count as an extra Studio support role, but generation still uses the high-cost gate when quota, uploads, or final-use assets are involved.
 - Explicit 即梦2.0生成 / 即梦生成 / Seedance 2.0 / Ark Seedance video-generation requests can add `seedance-2-video` after `prompt-director`; use `tool-integrator` only when capability, parameters, API, key state, or connection state is unclear. Do not load it for generic video prompts or storyboard work.
 - Seedance is a post-prompt execution step, not a shortcut around Studio roles. If the request also asks for script, storyboard, camera, edit, motion, sound, color, scene design, or film treatment, the responsible Studio role must produce the upstream handoff before `prompt-director` and `seedance-2-video`.
 - `seedance-2-video` is a tool skill, not a Studio role. It does not count as an extra Studio support role, but real video generation still uses the high-cost gate when quota, public image URLs, long polling, or final-use assets are involved.
 - `url-relay` is a tool skill, not a Studio role. It may be loaded before `seedance-2-video` when local media needs a public URL. Relay upload is not model-token cost, but it can expose files publicly and use server bandwidth, so apply the upload/privacy guardrail before private or client assets.
+- If a Selected Asset Packet points at local/private media or a client asset, the `Privacy/cost gate` field must be resolved before URL Relay, generation, Feishu publishing, or any public handoff.
+- `feishu-docs` is a tool skill, not a Studio role. It may be loaded only when the user explicitly asks to transfer/render/publish a prepared visual plan or storyboard to Feishu/Lark. Local render and publish dry-run are low model-token cost; real Feishu publishing is an external-sharing action and needs privacy confirmation plus local credentials.
 - If URL Relay fails or the SW uploader is unavailable, do not submit high-cost video generation until the media URL is resolved. First report that the SW uploader is unavailable; then use an already-public user URL or a confirmed/configured Litterbox/Catbox fallback only for unreachable/server-side relay failures. Missing token/address or permission errors must stop for config repair. Without a valid path, keep the prompt/payload.
 - Presentation/deck structure requests go to `presentation-designer` first; full long decks or batch slide rewrites require the high-cost gate.
 - Proposal decks can load `presentation-designer` references only when the request mentions client-facing, government, local tourism, city image film, video production proposal, visual QA, or similar specialized needs.
@@ -77,12 +87,15 @@ The cost gate decides:
 - Add `01_Research/HQ_Aesthetic_References/Aesthetic_Decision_Index.md` only when the visual style is not locked, the user asks SW to decide the look, or project-local visual references need interpretation.
 - Add `01_Research/HQ_Aesthetic_References/HQ_Aesthetic_Master_Index.md` only for HQ aesthetic references, source lanes, contact sheets, or moodboard calibration.
 - Add `01_Research/HQ_Aesthetic_References/Aesthetic_Library_Config.md` and run `tools/aesthetic_library_doctor.py` only for storage relocation, missing-image debugging, or aesthetic-library maintenance.
+- Run `tools/sync_obsidian_aesthetic_vault.py` only when the user explicitly asks for Obsidian aesthetic browsing, screening, curation, or vault maintenance.
 - Add `Prompts/Image_Aesthetic_Prompt_Reference.md` only for visual taste, anti-AI look, or filmic image prompt refinement.
 - Add `Prompts/Video_Motion_Edit_Prompt_Rules.md` only for one-take, bullet-time, hero-shot, complex movement, edit-technique, or execution-level AI video prompts.
 - Add `Prompts/Visual_Development_Board_Rules.md` only for character setting sheets, scene setting sheets, production-design boards, or integrated storyboard sheets.
+- Add `Prompts/Tool_Official_Prompt_Deltas.md` only when a named tool such as Seedance, Kling, Banana Pro/Gemini image, or OpenAI image needs official prompt-case conversion, or when repeated tool execution failures indicate a tool-specific prompt delta. Read only the relevant section; do not load full manuals during normal work.
 - Add `01_Research/Oscar_Best_Picture_Visual_Reference.md` only when the user asks for Oscar/classic film visual references.
 - Add `01_Research/Aesthetic_Daily_Selected/Daily_Selected_Index.md` only when the user asks for daily selected references, local moodboards, or newly supplied aesthetic PDFs; do not load all extracted images by default.
 - Add `storyboard-visual-word/SKILL.md` only when the user asks for a 视觉方案文件, 视觉导演方案, Word视觉方案, DOCX视觉方案, 分镜视觉方案文件, or `@storyboard-visual-word`; do not load it for ordinary storyboard planning.
+- Add `feishu-docs/SKILL.md` only when the user asks for 转到飞书, 同步到飞书, 发布到飞书, 飞书视觉方案, 飞书分镜, Lark Docs, Feishu Docs, or `@feishu-docs`; do not load it for ordinary storyboard planning, DOCX export, or general mention of Feishu.
 
 ## Comfortable-Use Rules
 
@@ -90,10 +103,11 @@ The cost gate decides:
 - If the request is actionable, proceed with assumptions instead of a setup questionnaire.
 - If the user says "continue", produce the next smallest useful deliverable.
 - If the user says "you decide", choose a safe industry default and state only important assumptions.
-- If feedback arrives, classify the change before rewriting.
+- If feedback arrives, classify the change before rewriting. For screen recordings, meeting notes, chat logs, screenshot annotations, boss oral comments, or client comments, first compress only the actionable points into `Change Delta Packet`.
 - Keep one visible role/cost trace per project reply.
 - End each role output with concise recommendation and next role.
 - After major durable confirmations, use at most one short memory suggestion line. Do not add it for minor edits, temporary ideas, or rejected directions.
+- After the requested deliverable, a role may add at most one reply-end nudge when it prevents a likely mistake: memory, lock, next step, risk, or cost. This must not trigger extra file reads or turn into a checklist.
 - Historical accuracy scan is low-cost and current-message only. It may add a one-line reminder to the normal route, but it must not load `historical-consultant`, research, browse, or expand until the user confirms.
 
 ## Hot Start Gate
@@ -125,9 +139,12 @@ For visual development boards, lock the board type and scope before generation:
 
 - character sheet: character identity, wardrobe, signature prop, expression range, and sheet format
 - scene sheet: location, key props, material/light, and continuity locks
-- integrated storyboard sheet: selected group, time range, total duration, shot count, and board layout
+- storyboard reference angle frame: selected group/shot, purpose, camera angle, subject scale, scene geometry, and continuity locks
+- integrated storyboard sheet: selected group, time range, total duration, shot count, board layout, and whether slight timing adjustment is allowed to keep a group under 15 seconds
 
-Default storyboard board generation covers one group only: 15 seconds maximum and 9 shots maximum.
+Default storyboard board generation covers one group only: 15 seconds maximum and 9 shots maximum. Nine shots is an upper limit, not a target; do not spend tokens forcing a 3x3 board when fewer shots communicate the beat.
+
+Default storyboard reference angle generation covers one selected still only. It may use imagegen or Banana Pro as a reference plate for the storyboard, but it does not confirm full-board generation, every-shot generation, Seedance generation, or final delivery.
 
 If these are not locked, output a low-cost preflight instead of the high-cost result.
 
@@ -163,6 +180,7 @@ Project memory is optional and low-token:
 - If `.sw/MEMORY.md`, `.sw/RULES.md`, or `.sw/PROJECT.md` exists, read only relevant local files.
 - Suggest writing only durable confirmations such as brand tone, locked direction, audience, channel, continuity, asset rules, or client review constraints.
 - Suggested wording must stay short: `记忆建议：可写入 MEMORY.md：品牌调性=克制电影感。回复“记住”即可。`
+- If `.sw/` is missing but the current request shows long-running signals such as recurring client/brand/series work, repeated characters/scenes/assets, or decisions that would cause mistakes in a future conversation, add one light nudge rather than explaining the whole memory system.
 - Write only when the user explicitly says to remember/save/write it.
 - Never store API keys, passwords, private contacts, or sensitive asset paths unless the user explicitly asks and confirms the memory is private.
 

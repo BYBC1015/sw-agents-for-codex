@@ -11,9 +11,12 @@ This file supports `Cost_Governor.md`. `Cost_Governor.md` decides the runtime co
 | Activation | `/SW_V1.0`, `@SW_V1.0` with no project request | one English loaded line | no |
 | Intake | new or unclear request | brief, assumptions, max 3 questions | no |
 | Direction | brief is usable | up to 3 directions | no detailed prompt batch |
+| Compare board | directions, storyboard groups, or deck structures need selection/feedback before production | `Keep` / `Remove` / `Next version` | no |
+| Selected asset packet | a concrete poster/deck/storyboard/reference/media object is selected for prompt, relay, generation, DOCX, or Feishu handoff | compact selected-object card | no |
 | Production | task and direction are clear | one deliverable type | only if confirmed |
 | High-cost | detailed prompts, long scripts, full long decks, batch slide rewrites, batch variants, AI asset generation | one confirmed batch | yes, after gate |
 | Review/change | final check or revision | concise risk/change decision | no batch rewrite before classification |
+| Quick edit | existing poster/image, deck page/outline, storyboard group/shot, edit segment, or prompt needs S/M local fix | revised object first, max 1 blocking question | no broad rewrite |
 | Memory | major durable confirmation or explicit remember/save request | one short suggestion or 1-3 bullets | no |
 | Feature help | `@sw_help`, `/sw_help`, trigger-word questions | embedded short help first; detailed trigger index only on request | no |
 | Historical reminder | clear historical accuracy risk without user confirmation | one reminder line | no |
@@ -33,6 +36,8 @@ This file supports `Cost_Governor.md`. `Cost_Governor.md` decides the runtime co
 - Complex campaign/film: up to 3 roles only when needed.
 - Prompt-only: go directly to `prompt-director`.
 - Never load all roles by default.
+- Compare Board and quick edit are designed to reduce reruns. Use Compare Board only as a short decision object, and use quick edit only when the existing object and affected area are clear. L/XL feedback still returns to `change-manager`.
+- Selected Asset Packet is also a rerun reducer: use it only for the selected object, then preserve its locks and reference roles through `prompt-director` and explicit tools.
 
 ## High-Cost Tasks
 

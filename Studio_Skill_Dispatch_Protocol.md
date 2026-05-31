@@ -4,7 +4,7 @@ This protocol makes each studio skill an executable role, not a decorative label
 
 ## When It Applies
 
-Apply this protocol for all project work:
+Apply this protocol only after SW has been explicitly activated in the current conversation. Do not apply it just because the user mentions a design topic. Once activated, use it for project work such as:
 
 - brief, research, direction
 - presentation, PPT, deck, slides
@@ -15,7 +15,7 @@ Apply this protocol for all project work:
 - tool integration
 - review, change, finishing
 
-Do not apply it when the user only invokes `/SW_V1.0`, `@SW_V1.0`, or only invokes `@sw_update`.
+Do not apply it when the user only invokes `/SW_V1.0`, `@SW_V1.0`, `/sw`, or only invokes `@sw_update`. Do not apply it before explicit SW activation.
 
 ## Dispatch Steps
 
@@ -89,6 +89,10 @@ Tool skill: URL Relay / `url-relay` (loaded for local media public URL handoff).
 ```
 
 ```text
+Tool skill: Black Background Cutout / `black-background-cutout` (loaded for explicit cutout request).
+```
+
+```text
 Tool skill: Storyboard Visual Word / `storyboard-visual-word` (loaded for visual方案文件/DOCX handoff).
 ```
 
@@ -99,12 +103,59 @@ Studio roles: Prompt Director / `prompt-director` (loaded). Cost lane: high-cost
 Tool skill: Banana Pro / `banana-pro` (loaded by explicit user request).
 ```
 
-Never combine Banana Pro, Seedance, or URL Relay into the Studio role trace.
+Never combine Banana Pro, Seedance, URL Relay, or Black Background Cutout into the Studio role trace.
 Never combine Storyboard Visual Word into the Studio role trace.
 
 ## Tool No-Bypass Rule
 
 External tool skills must not replace upstream Studio roles.
+
+## Compare Board Rule
+
+Compare Board is a lightweight selection object, not a new full stage. Use it after creative directions, storyboard groups, or deck structures when the user needs comparison or feedback is abstract. Output only:
+
+```text
+Compare Board:
+- Keep:
+- Remove:
+- Next version:
+```
+
+Do not add new concepts, extra directions, batch rewrites, or long rationale inside the Compare Board unless the user explicitly asks.
+
+## Selected Asset Packet Rule
+
+Selected Asset Packet is a selected-object handoff, not a new role or stage. Use it when an upstream role has chosen one concrete object for prompt writing, URL upload, image/video generation, DOCX packaging, or Feishu publishing.
+
+```text
+Selected Asset Packet:
+- Object ID:
+- Source stage:
+- Asset type:
+- Purpose:
+- Selected input:
+- Reference roles:
+- Locked items:
+- Avoid:
+- Next tool:
+- Privacy/cost gate:
+```
+
+Rules:
+
+- The upstream role owns selection; `prompt-director` and tool skills consume the packet.
+- Use it for selected poster key visuals, deck page visuals, storyboard shots/groups, reference angle frames, local media files, public URLs, generated images, or selected concept images.
+- Skip it for direct final-prompt requests where the user already supplied the complete prompt.
+- `Reference roles` must define how each reference is used: character identity, product shape, scene layout, composition, style, texture, color, first frame, last frame, or edit source.
+- `Locked items` and `Avoid` survive downstream prompt conversion unless the user explicitly changes them.
+- Resolve `Privacy/cost gate` before public URL upload, paid generation, Feishu publishing, or long polling.
+- Formal client handoffs should not expose local paths, raw prompts, tool parameters, or generation tables unless the user asks for an internal appendix.
+
+## Quick Edit Rule
+
+For S/M-level changes to an existing poster/image, deck page or outline, storyboard group or shot, edit-plan segment, or prompt, route to the affected role and output the revised object first. Ask at most one blocking question.
+
+If feedback changes audience, core message, narrative structure, visual style, project goal, or deliverable form, route to `change-manager` before rewriting. Midstream boss/client feedback, screen-recording notes, meeting notes, chat logs, screenshot annotations, and oral comments can be compressed into a `Change Delta Packet` so `Keep unchanged` survives the handoff.
 
 ## Aesthetic Decision Rule
 
@@ -181,6 +232,7 @@ Tool skill: Storyboard Visual Word / `storyboard-visual-word` (loaded for visual
 - Questions must support the next role or unblock execution.
 - Every role should include a concise recommendation and next role.
 - After major durable confirmations, add at most one short project-memory suggestion line. Do not expand the memory system unless the user asks.
+- After the deliverable, add at most one reply-end nudge only when useful. Nudge types are memory, lock, next step, risk, or cost. The nudge must be one short line and must not add extra reads, new workflow stages, or multiple reminders.
 
 ## Handoff Packet
 
@@ -241,6 +293,12 @@ For `url-relay`, do not search for `Studio_Skills/url-relay/SKILL.md`; it is not
 2. `C:\Users\Administrator\.codex\skills\url-relay\SKILL.md`
 3. `C:\Users\Administrator\plugins\sw-v1-0\skills\url-relay\SKILL.md`
 
+For `black-background-cutout`, do not search for `Studio_Skills/black-background-cutout/SKILL.md`; it is not a Studio role. Load it as a tool skill from the first available path:
+
+1. `black-background-cutout/SKILL.md` in the current project folder
+2. `C:\Users\Administrator\.codex\skills\black-background-cutout\SKILL.md`
+3. `C:\Users\Administrator\plugins\sw-v1-0\skills\black-background-cutout\SKILL.md`
+
 For `storyboard-visual-word`, do not search for `Studio_Skills/storyboard-visual-word/SKILL.md`; it is not a Studio role. Load it as a tool skill from the first available path:
 
 1. `storyboard-visual-word/SKILL.md` in the current project folder
@@ -265,6 +323,8 @@ If a historical conversation cannot read the latest local files, tell the user t
 - if the request includes upstream video/film design work, do not let `seedance-2-video` skip the relevant Studio role; generate only after the selected clip/shot prompt is ready
 - `url-relay` loads only when the user explicitly asks for URL中转, 公网URL, 上传参考图/视频, `@url-relay`, or a downstream tool such as Seedance needs a public URL but the user provided a local file
 - `url-relay` is a public URL handoff member; route it after prompt/design handoff and before the downstream tool
+- `black-background-cutout` loads only when the user explicitly asks for 抠图, 扣图, 去底, 去黑底, 黑底转透明, 透明底 PNG, or `@black-background-cutout`
+- `black-background-cutout` is a local pixel-processing member for existing images. It does not use prompt writing, image generation, upload, or full project routing, and it must warn that quick cutouts may have slight fringing.
 - if relay upload fails, do not spend generation credits until a public URL exists. First report that the SW media uploader is unavailable; then use an already-public URL or a confirmed/configured Litterbox/Catbox fallback only for unreachable/server-side relay failures. Missing token/address or permission errors stop for config repair. Otherwise keep the prompt/payload and ask for a public URL.
 - `storyboard-visual-word` loads only when the user explicitly asks for 视觉方案文件, 视觉导演方案, Word视觉方案, DOCX视觉方案, 分镜视觉方案文件, or `@storyboard-visual-word`
 - `storyboard-visual-word` is a downstream DOCX handoff member; route it after selected visuals and scene rationale are ready, not during ordinary storyboard planning

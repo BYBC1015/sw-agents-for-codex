@@ -4,7 +4,7 @@
 
 For all stages, role skills ask 3 useful questions by default and may ask up to 5 only when complex campaign, film, tool-risk, or blocked-delivery context requires it. In low-token, speed, "少问", or "你定" mode, ask at most 1 question and proceed with assumptions.
 
-本文件规定 Codex 在每个新对话项目中如何逐阶段工作。核心目标：少问、少消耗、可执行、可改稿。
+本文件规定 Codex 在显式启用 SW 后如何逐阶段工作。核心目标：少问、少消耗、可执行、可改稿。未输入 `/sw`、`@SW_V1.0`、`调用 SW_V1.0`、`按本项目架构执行` 等显式入口时，不进入本阶段手册。
 
 ## 全局状态卡
 
@@ -27,6 +27,39 @@ Codex 在每个项目开始和每次阶段切换时，内部维护一张状态�
 派单必须先执行 `Auto_Assignment_Rules.md`，再进入具体阶段输出。
 
 长期项目如果存在 `.sw/` 本地记忆包，阶段输出前只读取相关小文件。阶段中出现重大确认时，最多给一句短建议写入 `MEMORY.md`，不要自动写。
+
+每个阶段的产物必须优先输出。阶段结尾最多加 1 条轻提醒，只用于记忆、锁定、下一步、风险或成本提醒；无必要时不提醒，也不为了提醒增加文件读取。
+
+## 轻量对比与快速改稿
+
+Compare Board 不是新大阶段，只是方向、分镜组或 deck 结构之后的短中间物。用户需要比较、反馈很抽象，或下一步会进入高成本制作时才使用，固定只保留：
+
+```text
+Compare Board:
+- Keep:
+- Remove:
+ - Next version:
+```
+
+Selected Asset Packet is not a new stage. It is a short selected-object handoff used only after a poster visual, deck page visual, storyboard shot/group, reference still, local media item, public URL, or generated image has been chosen and before it goes to `prompt-director`, URL Relay, Banana, Seedance, Kling, Storyboard Visual Word, or Feishu.
+
+```text
+Selected Asset Packet:
+- Object ID:
+- Source stage:
+- Asset type:
+- Purpose:
+- Selected input:
+- Reference roles:
+- Locked items:
+- Avoid:
+- Next tool:
+- Privacy/cost gate:
+```
+
+Use the packet to preserve what was selected, what must not change, what each reference is responsible for, and which tool gets the object next. Do not use it for direct prompt-only requests where the user already supplied a complete final prompt.
+
+Quick edit 适用于已有对象的 S/M 级局部改动：海报/图片、deck 页面或结构、分镜组或单个镜头、剪辑表片段、prompt 参数。最多问 1 个阻塞问题，先输出修改后的对象；如果改动影响受众、主卖点、叙事结构、视觉风格或交付形式，必须回到阶段 9 变更处理。
 
 ## 阶段 0：项目识别
 
@@ -111,6 +144,15 @@ Codex 在每个项目开始和每次阶段切换时，内部维护一张状态�
 
 如果用户说“你定”，Codex 选择最稳妥方向并说明原因。
 
+当方向之间需要选择，或用户反馈仍是“高级一点/不够抓人/保留这个感觉但别太满”这类抽象判断时，先给轻量 Compare Board，不额外扩写新方向：
+
+```text
+Compare Board:
+- Keep:
+- Remove:
+- Next version:
+```
+
 ## Stage 3B: Aesthetic Decision
 
 Use this stage when the creative direction is usable but the visual style is not locked, the user says SW should decide the look, or project-local visual references need interpretation.
@@ -176,6 +218,7 @@ Poster production is not the same as PPT/deck production. For most posters, SW s
 ### PPT 阶段区别
 
 - 结构阶段：解决“这套 deck 为什么讲、讲给谁、按什么顺序讲”。
+- 对比阶段：当 deck 有多个章节流、页面角色方案或用户反馈抽象时，只用 Compare Board 收口，不直接重写整套 deck。
 - 客户提案阶段：先判断这套 PPT 要促成什么结果，例如批准预算、确认方向、建立信任、政府汇报或项目过会。
 - 页面角色阶段：解决“每一页承担什么任务”，不要先堆内容。
 - 文案阶段：交给 `copywriter` 处理标题、章节名、CTA 和精简表达。
@@ -199,7 +242,8 @@ Poster production is not the same as PPT/deck production. For most posters, SW s
 
 - 结构阶段：解决“先说什么、后说什么”。
 - 分镜阶段：解决“每个镜头看到什么”。
-- 一体式分镜板阶段：把连续镜头组织成可审阅的一张图；默认 15s 为一组，最多 9 个镜头，超过 15s 或 9 镜头转下一组。
+- 对比阶段：当多个分镜组、镜头顺序或节奏方向需要判断时，只用 Compare Board 收口“保留/删除/下一版”，不重写全片。
+- 一体式分镜板阶段：把连续镜头组织成可审阅的一张图；默认按 15s 段落分组，单组总时长不超过 15s，最多 9 个镜头但不强行凑九宫格；若镜头卡不到 15s 边界，可先微调镜头时长，仍不自然则转下一组。
 - 剪辑阶段：解决“怎么剪、怎么听、怎么转场”。
 - 提示词阶段：解决“AI 生成某个镜头怎么描述”。
 
@@ -252,8 +296,9 @@ Poster production is not the same as PPT/deck production. For most posters, SW s
 
 - 需要人物连续性时，优先建议角色设定图：大人设、正背侧、表情、细节、剪影、色卡。
 - 需要空间连续性时，优先建议场景设定图：建立镜头、关键角度、材质/道具、光线、色卡。
-- 需要审阅多镜头时，优先建议一体式分镜板：一组一张，默认 15s、最多 9 镜头。
+- 需要审阅多镜头时，优先建议一体式分镜板：一组一张，默认 15s 段落、单组不超过 15s、最多 9 镜头；镜头数按内容决定，不强行凑 9 格。
 - 这些属于生产参考资产；生成图片前仍需通过 `prompt-director`，真实出图工具需显式确认。
+- 当其中某个资产被选中进入 prompt、URL 中转、生成工具、DOCX 或 Feishu 交付时，先写 `Selected Asset Packet`，不要把“选中哪张/哪镜/哪条 URL”只放在口头描述里。
 
 ### 用户上传素材规则
 
@@ -277,6 +322,8 @@ Poster production is not the same as PPT/deck production. For most posters, SW s
 
 必须执行 `Prompts/Prompt_Spec_Rules.md`。
 
+如果提示词输入来自已选海报主视觉、deck 页面视觉、分镜镜头、参考角度帧、本地素材、公网 URL 或已生成图片，先读取或生成 `Selected Asset Packet`。`prompt-director` 只转换该包对应的对象，必须保留 `Locked items`，按 `Reference roles` 使用参考物，并把 `Avoid` 写入负面/限制条件。
+
 如果是角色设定图、场景设定图或一体式分镜板，按需读取 `Prompts/Visual_Development_Board_Rules.md`。默认只输出一张/一组的 prompt，不批量输出全部分镜组。
 
 ### 提示词修改策略
@@ -296,7 +343,7 @@ Poster production is not the same as PPT/deck production. For most posters, SW s
 | 目标 | 找问题，不再发散创意 |
 | 最多提问 | 0-2 个；只问会影响交付的问题 |
 | 默认消耗 | 低 |
-| 输出 | 必改项、可选优化、版权/品牌/平台风险、交付结论 |
+| 输出 | 必改项、可选优化、版权/品牌/平台风险、交付结论；有必改项时附 `Review Delta Packet` |
 | 禁止 | 在终审阶段随意提出新创意方向 |
 | 退出条件 | 可以交付，或明确列出必须修改项 |
 
@@ -307,15 +354,31 @@ Poster production is not the same as PPT/deck production. For most posters, SW s
 3. 平台尺寸、时长、字幕可读性。
 4. 视觉和节奏优化。
 
+### Review Delta Packet
+
+终审发现必改项时，先压缩成轻量交接包，再进入变更处理，避免重新发散：
+
+```text
+Review Delta Packet:
+- Object:
+- Issue type:
+- Impact scope:
+- Fix route:
+- Responsible role:
+- Keep unchanged:
+- Evidence/reference:
+- Cost lane:
+```
+
 ## 阶段 9：变更处理
 
 | 项目 | 规则 |
 | --- | --- |
-| 进入条件 | 用户提出修改、老板/客户反馈、方向变化 |
+| 进入条件 | 用户提出修改、老板/客户反馈、方向变化，或终审产出 `Review Delta Packet` |
 | 目标 | 判断影响，不直接重做 |
 | 最多提问 | 2 个；只问影响等级无法判断的问题 |
 | 默认消耗 | 低 |
-| 输出 | S/M/L/XL 等级、影响范围、更新方案、是否回退阶段 |
+| 输出 | S/M/L/XL 等级、影响范围、保留项、更新方案、是否回退阶段 |
 | 禁止 | 覆盖旧方向；无评估地大范围重写 |
 | 退出条件 | 给出修改版或确认回到哪个阶段 |
 
@@ -325,6 +388,26 @@ Poster production is not the same as PPT/deck production. For most posters, SW s
 - M：更新当前阶段，保留方向。
 - L：回到创意方向，旧方案保留为历史版本。
 - XL：重新立项，当前对话可作为旧项目归档。
+
+若来自 `Review Delta Packet`，必须优先保留其中的 `Keep unchanged`，只修 `Object` 对应的问题；除非明确判断为 L/XL，不要把终审反馈扩大成重做项目。
+
+### Change Delta Packet
+
+中途反馈、老板口头意见、甲方碎评论、录屏反馈、会议纪要、聊天记录、截图批注或非终审改稿，先压缩成 `Change Delta Packet` 再派单。它和 `Review Delta Packet` 的区别是：前者处理制作过程中的反馈，后者处理终审必改项。
+
+```text
+Change Delta Packet:
+- Source feedback:
+- Object:
+- Requested change:
+- Impact scope:
+- Fix route:
+- Responsible role:
+- Keep unchanged:
+- Cost lane:
+```
+
+若来自 `Change Delta Packet`，必须先判断 S/M/L/XL，再只修 `Object` 对应范围。S/M 级可进入 quick edit；L/XL 才回到方向或重新立项。
 
 ## 阶段 10：归档与复盘
 

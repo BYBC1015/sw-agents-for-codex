@@ -2,13 +2,17 @@
 
 本文件定义“文本型斜杠命令”和“文本型 @ 调用”。目标是让用户不用每次粘贴完整启动语。
 
-注意：这些命令是本项目规则识别的文本别名，不等同于宿主 UI 原生注册的斜杠菜单。只要新对话能读取 `AGENTS.md`，Codex 就应按这些别名执行。
+注意：这些命令是本项目规则识别的文本别名，不等同于宿主 UI 原生注册的斜杠菜单。即使新对话能读取 `AGENTS.md`，也不得因为普通设计词自动启动 SW；必须先有显式 SW 调用入口。
 
 ## 新项目启动
 
 ### SW_V1.0 主入口
 
 以下命令用于调用本项目架构：
+
+```text
+/sw
+```
 
 ```text
 /SW_V1.0
@@ -21,7 +25,7 @@
 调用成功后必须先回复：
 
 ```text
-SW loaded successfully. Current version: V1.10.5
+SW loaded successfully. Current version: V1.12.10
 ```
 
 如果只输入调用命令，回复成功语后停止等待诉求。如果调用命令后附带需求，先回复成功语，再继续执行项目流程。
@@ -35,7 +39,7 @@ Version sync:
 Required reply:
 
 ```text
-SW version synchronized. Current version: V1.10.5
+SW version synchronized. Current version: V1.12.10
 ```
 
 Historical conversation fallback:
@@ -65,7 +69,7 @@ or:
 Required reply:
 
 ```text
-SW rescue synchronized. Current version: V1.10.5
+SW rescue synchronized. Current version: V1.12.10
 ```
 
 Use this when startup/update chips keep replaying old sealed snapshots. It must not start a project and must not route through `sw-v1-0` or `sw-update`.
@@ -78,7 +82,7 @@ Feature help:
 
 Use this for optional feature triggers such as Banana Pro, Seedance 2.0 Video, URL Relay, and Historical Accuracy. It should answer from embedded short help first, must not run shell/file reads for normal help, only read detailed trigger files when requested, and must not start a project.
 
-以下命令等价于：
+显式架构拉取语等价于：
 
 ```text
 请读取当前项目的 AGENTS.md，把这个对话当作一个新的设计工作室项目来跑。
@@ -87,6 +91,8 @@ Use this for optional feature triggers such as Banana Pro, Seedance 2.0 Video, U
 ```
 
 ## 项目类型快捷启动
+
+以下项目类型快捷命令不再单独启动完整 SW。只有当前对话已经显式启用 SW，或同一条消息同时包含 `/sw`、`@SW_V1.0`、`调用 SW_V1.0`、`按本项目架构执行` 等启动语时，才按这些别名处理。
 
 ### 海报
 
@@ -97,7 +103,7 @@ Use this for optional feature triggers such as Banana Pro, Seedance 2.0 Video, U
 等价规则：
 
 ```text
-按 AGENTS.md 跑一个新的设计工作室项目。项目类型默认是海报。
+已启用 SW 时，项目类型默认是海报。
 需求是：[需求原话]
 ```
 
@@ -110,7 +116,7 @@ Use this for optional feature triggers such as Banana Pro, Seedance 2.0 Video, U
 等价规则：
 
 ```text
-按 AGENTS.md 跑一个新的设计工作室项目。项目类型默认是视频。
+已启用 SW 时，项目类型默认是视频。
 需求是：[需求原话]
 ```
 
@@ -123,7 +129,7 @@ Use this for optional feature triggers such as Banana Pro, Seedance 2.0 Video, U
 等价规则：
 
 ```text
-按 AGENTS.md 跑一个新的设计工作室项目。项目类型默认是海报+视频整合传播。
+已启用 SW 时，项目类型默认是海报+视频整合传播。
 需求是：[需求原话]
 ```
 
@@ -144,13 +150,13 @@ Use this for optional feature triggers such as Banana Pro, Seedance 2.0 Video, U
 等价规则：
 
 ```text
-按 AGENTS.md 跑一个新的设计工作室项目。项目类型默认是 presentation/deck/PPT。
+已启用 SW 时，项目类型默认是 presentation/deck/PPT。
 需求是：[需求原话]
 ```
 
 ## 阶段快捷命令
 
-这些命令不一定新建立项；如果已有上下文，就按当前项目继续推进。
+这些命令不单独启动 SW；只有已显式启用 SW 的上下文中，才按当前项目继续推进。
 
 | 命令 | 等价意图 | 主责岗位 |
 | --- | --- | --- |
@@ -181,6 +187,6 @@ Use this for optional feature triggers such as Banana Pro, Seedance 2.0 Video, U
 
 - 命令后的全部内容都视为用户原始需求，不要求用户再填表。
 - 新项目统一使用 `/sw`、`/SW_V1.0` 或 `@SW_V1.0`；旧入口不再推荐，避免插件列表出现多个工作室入口。
-- `/poster`、`/video`、`/campaign`、`/ppt`、`/deck`、`/slides` 会预设项目类型，但仍按 `Auto_Assignment_Rules.md` 自动派单。
+- `/poster`、`/video`、`/campaign`、`/ppt`、`/deck`、`/slides` 只有在 SW 已显式启用后才预设项目类型，并按 `Auto_Assignment_Rules.md` 自动派单。
 - 如果命令和上下文冲突，以用户命令为准。
-- 如果用户只输入命令、没有需求，Codex 默认问 3 个关键问题；复杂整案、电影、工具风险或交付阻塞最多问 5 个；若用户同时写“少问/省 token/你定”，最多问 1 个。
+- 如果 SW 已启用且用户只输入项目命令、没有需求，Codex 默认问 3 个关键问题；复杂整案、电影、工具风险或交付阻塞最多问 5 个；若用户同时写“少问/省 token/你定”，最多问 1 个。

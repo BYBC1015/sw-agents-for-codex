@@ -101,19 +101,65 @@ Scene Sheet Handoff:
 
 Use this when the user wants a one-image storyboard, a contact-sheet storyboard, or a reviewable storyboard board instead of separate generated frames.
 
+If multiple storyboard groups, board layouts, or shot-order options need selection before image prompting, use a lightweight Compare Board first:
+
+```text
+Compare Board:
+- Keep:
+- Remove:
+- Next version:
+```
+
+Do not turn Compare Board into another storyboard table or batch board prompt. It only decides what survives into the next selected group.
+
+## Reference Angle Frame
+
+Use this when the storyboard needs one specific scene angle, camera position, or spatial relation clarified before generating a full storyboard board.
+
+Rules:
+
+- A reference angle frame is one still image for one selected shot or angle, not a full storyboard.
+- Use it to lock scene geometry, character scale, prop placement, lens height, foreground/background relationship, lighting direction, or camera angle.
+- It can be generated with Banana Pro or a generic image tool after `storyboard-director` and, when useful, `cinematographer` define the shot intent.
+- It returns to storyboard planning as a reference plate for the integrated storyboard sheet, Seedance first frame, or later visual方案文件.
+- Do not generate reference frames for every shot unless the user explicitly confirms batch generation.
+
+Low-cost handoff before image generation:
+
+```text
+Reference Angle Frame Handoff:
+- Group:
+- Shot:
+- Purpose:
+- Scene/setting:
+- Camera angle:
+- Lens/height:
+- Subject scale:
+- Foreground/background:
+- Lighting/palette:
+- Continuity locks:
+- Tool:
+```
+
 Grouping rules:
 
 - one storyboard group equals one image board
-- default group duration is 15 seconds
-- one group contains at most 9 shots
-- if total shot duration exceeds 15 seconds, start the next group
+- default group target is a 15-second segment
+- one group duration must not exceed 15 seconds
+- one group contains at most 9 shots, but 9 shots is only the upper limit, not a goal
+- do not force a 3x3 board; choose the layout from the actual shot count
+- if a shot lands awkwardly across the 15-second boundary, first adjust nearby shot durations slightly to keep the group natural and under 15 seconds
+- if the story beat cannot be adjusted cleanly, start the next group instead of splitting the shot awkwardly
 - if shot count exceeds 9 before 15 seconds, start the next group
-- for a 30-second script, usually produce two storyboard boards: Group A 0-15s and Group B 15-30s
+- for a 30-second script, usually produce two storyboard boards: Group A about 0-15s and Group B about 15-30s, with exact shot timing allowed to shift slightly for rhythm
 - do not batch-generate all groups unless the user confirms; start with one selected group
 
 Recommended board layout:
 
-- 3x3 grid for up to 9 shots, or 2x3 grid for 4-6 shots
+- 1-2 shots: large cinematic cells or split-screen board
+- 3-4 shots: 2x2 board
+- 5-6 shots: 2x3 board
+- 7-9 shots: 3x3 board
 - consistent character, wardrobe, location, time of day, color, and prop continuity across panels
 - each panel has shot number, short duration, shot size, camera angle, and action note
 - arrows or small motion marks may indicate camera/subject movement
@@ -133,6 +179,13 @@ Storyboard Board Group:
 | Shot | Time | Duration | Frame | Action | Camera | Transition | Note |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 ```
+
+Before generating a storyboard image, ask only the missing questions that can change the board:
+
+- If duration or platform/ratio is unknown, ask 1 question.
+- If character, product, or reference continuity is missing, ask 1-2 questions.
+- If the user says "you decide" or "fast", make practical defaults and state them briefly.
+- Do not ask about every panel when the script already implies the flow.
 
 Integrated storyboard image prompt must include:
 

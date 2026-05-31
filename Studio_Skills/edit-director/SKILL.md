@@ -32,6 +32,22 @@ Edit Plan:
 - Recommendation:
 ```
 
+When one edit segment, source clip, extension point, first/last frame, or selected shot is handed to `prompt-director`, URL Relay, Seedance, Kling, Runway-style tools, or another video generation/editing tool, add:
+
+```text
+Selected Asset Packet:
+- Object ID:
+- Source stage:
+- Asset type:
+- Purpose:
+- Selected input:
+- Reference roles:
+- Locked items:
+- Avoid:
+- Next tool:
+- Privacy/cost gate:
+```
+
 ## Questions
 
 Ask 3 by default; ask up to 5 when edit tool, length, source footage, voice/caption style, or platform is unclear.
@@ -40,6 +56,9 @@ Ask 3 by default; ask up to 5 when edit tool, length, source footage, voice/capt
 
 - Make rhythm, subtitles, and sound time-based.
 - Use transitions for meaning, not decoration.
+- For S/M-level edit-plan feedback, quick edit only the selected time span, subtitle strategy, sound cue, transition, or pacing note and output the revised segment first.
+- If feedback changes the story goal, audience, core message, visual style, total duration, or delivery form, route to `change-manager` first.
 - Keep generation prompts and edit plans separate: multi-cut ideas become separate shot prompts plus this edit plan.
+- Use a Selected Asset Packet for the selected edit object before AI video generation/editing, especially when the next tool needs a first frame, last frame, source clip URL, or single target shot.
 - For one-take work, decide whether hidden cuts are acceptable; if not, preserve one continuous visible camera path.
 - Hand off to `motion-designer`, `sound-designer`, `colorist`, or `review-producer`.

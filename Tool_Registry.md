@@ -9,13 +9,57 @@
 | 通用图片生成 | 预留 | 用 `prompt-director` 输出通用图片 prompt |
 | 通用视频生成 | 预留 | 用 `prompt-director` 输出逐镜头视频 prompt |
 | 图像编辑/扩图 | 预留 | 先锁定修改区域、保留项和禁止项 |
+| 本地像素处理/抠图 | 已接入 | 明确说抠图/扣图/去黑底/透明底时用 `black-background-cutout` |
 | Canva/在线设计 | 预留 | 用 `poster-art-director` 处理版式和尺寸 |
 | Adobe 工作流 | 预留 | 用 `poster-art-director` / `edit-director` 输出执行清单 |
 | 剪映/CapCut | 预留 | 用 `edit-director` 输出时间线、字幕、音效 |
 | 音频/配音 | 预留 | 用 `edit-director` 输出旁白、BGM、音效需求 |
 | 素材库/云盘 | 预留 | 用 `asset-producer` 管理素材来源和授权 |
 
+## Selected Asset Packet Before Tool Handoff
+
+When a registered tool receives a selected poster visual, deck page visual, storyboard shot/group, reference frame, local media file, public URL, generated still, or concept image from an upstream Studio role, the handoff should include:
+
+```text
+Selected Asset Packet:
+- Object ID:
+- Source stage:
+- Asset type:
+- Purpose:
+- Selected input:
+- Reference roles:
+- Locked items:
+- Avoid:
+- Next tool:
+- Privacy/cost gate:
+```
+
+Tool cards should interpret `Selected input` and `Reference roles` before execution. Public upload, paid generation, long polling, or external publishing must wait until `Privacy/cost gate` is resolved.
+
 ## 已登记工具成员
+
+```text
+工具名：Black Background Cutout
+工具类型：本地像素处理 / 黑底或简单纯色底抠图 / transparent PNG preview
+接入状态：本地 skill 已接入；定位为显式抠图工具；已打包本地 Pillow 脚本；不需要 API key、不上传、不生成图片
+触发说法：抠图、扣图、去底、去黑底、黑底转透明、透明底 PNG、transparent PNG、@black-background-cutout
+最适合：黑底或简单纯色底图片的快速透明 PNG；内部预览、临时排版、PPT/海报/分镜方案占位、批量低成本去底
+不适合：复杂照片、人像、毛发、产品自然场景、烟雾/渐变/纹理背景、前景含重要暗色细节、正式交付级无毛边资产、AI 字效正式复用方案
+输入需要：本地图片路径、可选批量 glob、背景颜色（默认黑色）、边缘阈值、裁边 padding
+输出格式：原画布透明 PNG、裁边透明 PNG、棋盘格 JPG 预览、zip 包
+提示词格式：无；它不写 prompt、不改图像语义、不重新生成
+提示词剖面：本地像素处理 / 快速抠图 / transparent PNG preview
+关键参数：`edge_start` 默认 2、`opaque_at` 默认 24、`padding` 默认 24、可选 `bg_color`
+限制与风险：阈值法可能产生轻微毛边或暗边；暗色前景、发光、阴影、JPG 压缩边缘可能受影响；不应承诺无损或正式交付质量
+成本等级：低；本地处理，不消耗模型额度，不上传
+隐私注意：只处理本地文件；输出透明 PNG 和预览图仍可能包含客户素材，外发前按项目隐私规则判断
+质检方式：检查棋盘格预览；确认背景去除、主体保留、无大块黑底、毛边在预览用途可接受；原图不被修改
+失败时替代方案：降低/提高阈值重跑；复杂背景改用专业抠图、PS/AE/分层文件、重新生成透明底资产或人工精修
+归属岗位：black-background-cutout；tool-integrator 仅在能力、参数或适用边界不清楚时介入
+派单显示：`black-background-cutout` 必须单独显示为 `Tool skill:`，不要写成 Studio role
+读取路径：优先 `black-background-cutout/SKILL.md`，其次用户级 `C:\Users\Administrator\.codex\skills\black-background-cutout\SKILL.md`，最后插件级 `C:\Users\Administrator\plugins\sw-v1-0\skills\black-background-cutout\SKILL.md`
+执行脚本：`scripts/black_background_cutout.py`，从 skill 根目录相对解析
+```
 
 ```text
 工具名：Banana Pro
@@ -48,7 +92,7 @@
 触发说法：即梦2.0生成、即梦生成、Seedance 2.0、Ark Seedance、豆包 Seedance、@seedance-2-video、用即梦生成视频、用 Seedance 生成视频
 最适合：单条短镜头生成、分镜验证、产品动态氛围、文旅/品牌片镜头草稿、已有首帧/参考图的视频化
 不适合：普通视频提示词的默认处理、复杂多镜头长剧情、准确字幕/文字/logo、没有公共图片 URL 的本地图片直接传入、未确认额度消耗、未配置 `ARK_API_KEY` 时假装已生成视频
-输入需要：用途、选中镜头、中文视频 prompt、画幅 ratio、时长 duration、分辨率 resolution、video-mode、至少 1 个公共 `http(s)` image-url 或可经 `url-relay` 上传的本地 image-file、输出目录
+输入需要：用途、选中镜头、中文视频 prompt、画幅 ratio、时长 duration、分辨率 resolution、video-mode；纯文生视频不需要 image-url，参考图/首帧/首尾帧/本地素材中转才需要公共 `http(s)` image-url 或可经 `url-relay` 上传的本地 image-file；输出目录
 输出格式：dry-run payload；真实生成后的 `final.mp4`、`run_manifest.json`、任务状态和下载路径
 提示词格式：由 `prompt-director` 先产出通用逐镜头视频 prompt，再交给 Seedance 作为生成/出视频环节
 不可越级：若同一需求包含脚本、分镜、视频/电影镜头、剪辑、动效、声音、调色、场景或方案设计，先由对应 Studio role 产出 handoff，再由 `prompt-director` 生成最终 prompt，最后交给 Seedance；默认只生成选中的一条镜头/片段
@@ -112,6 +156,29 @@
 ```
 
 ## 工具卡模板
+
+```text
+工具名：Feishu Docs
+工具类型：文档发布 / Feishu-Lark Docs handoff / visual plan publishing
+接入状态：本地 skill 已接入；定位为 `finishing-producer` 之后的显式交付工具；已打包本地 CLI，可 render、doctor、dry-run publish，并在本机 Feishu 应用凭证齐备且显式 `--execute` 后发布基础文档块
+触发说法：转到飞书、同步到飞书、发布到飞书、飞书视觉方案、飞书分镜、Feishu Docs、Lark Docs、@feishu-docs
+最适合：已完成的视觉方案、分镜包、场景/角色视觉 handoff、带目录的导演视觉说明、需要在飞书中浏览和评审的 Markdown 文档
+不适合：普通分镜创作、提示词生成、图片/视频生成、未选图时强行发布、需要完整原生图片上传/复杂排版还原的最终交付、没有外部发布授权的客户资料
+输入需要：Markdown 或已整理 handoff 文件、标题、模式 visual-plan/storyboard/generic、可选 folder_token、Feishu/Lark app_id/app_secret 本机私密配置
+输出格式：飞书友好 Markdown、publish dry-run plan、真实发布后的 document_id/created_blocks；失败时保留本地 Markdown fallback
+提示词格式：无；它不生成 prompt，不改写创意，只做交付渲染/发布
+提示词剖面：文档交付 / 外部协作 / 视觉方案发布
+关键参数：`~/.config/sw-feishu/config.json`、`FEISHU_APP_ID`、`FEISHU_APP_SECRET`、`FEISHU_FOLDER_TOKEN`、`FEISHU_BASE_URL`、`--execute`
+限制与风险：飞书 API 权限、空间、文档块结构可能需要企业应用授权；外部发布可能暴露客户素材、local paths、prompt 或内部注释；第一版不假设原生图片上传，图片应优先使用 URL Relay 或用户提供公网链接
+成本等级：本地 render/dry-run 低；真实发布不消耗模型 token，但消耗外部平台 API/空间并有隐私风险
+隐私注意：app secret 和 tenant token 只能在本机私密配置或环境变量中读取，不得写入仓库、prompt、日志或交付内容；正式发布前确认客户素材和本地路径是否允许外发
+质检方式：doctor 检查配置；publish 默认 dry-run；真实发布后检查 block_count/created_blocks；图片不可见时改用 URL Relay/public URL 或手动导入
+失败时替代方案：保留 Feishu-ready Markdown，手动导入/粘贴到飞书；修复 app 权限后重试；需要高保真图片排版时仍走 `storyboard-visual-word` 生成 DOCX
+归属岗位：finishing-producer -> feishu-docs；tool-integrator 只在能力、API、权限或接入状态不清楚时介入
+派单显示：`feishu-docs` 必须单独显示为 `Tool skill:`，不写成 Studio role
+读取路径：优先 `feishu-docs/SKILL.md`，其次用户级 `C:\Users\Administrator\.codex\skills\feishu-docs\SKILL.md`，最后插件级 `C:\Users\Administrator\plugins\sw-v1-0\skills\feishu-docs\SKILL.md`
+执行脚本：`scripts/feishu_doc_cli.py`
+```
 
 复制以下模板新增工具：
 
@@ -177,6 +244,26 @@
 质检方式：主体稳定、动作合理、时长、画幅、可剪辑性
 失败时替代方案：拆短镜头或改为实拍/剪辑方案
 归属岗位：prompt-director
+```
+
+## Obsidian Aesthetic Vault Tool Note
+
+```text
+工具名称：Obsidian Aesthetic Vault
+工具类型：审美资料库浏览 / Markdown vault / visual curation layer
+接入状态：已接入本地生成脚本；默认 vault 位于 `Obsidian_Aesthetic_Vault/`；可通过 `SW_OBSIDIAN_AESTHETIC_VAULT` 改到其他磁盘
+触发说法：Obsidian审美库、打开审美资料库、整理审美库、筛选审美图片、审美 vault、把审美资料放进 Obsidian
+最适合：人工浏览高质量审美资料、筛选低质量图片、维护 profile、做项目 moodboard、查看 contact sheet 和资料索引
+不适合：普通 SW 项目启动、日常自动审美决策、图片生成、视频生成、外部发布、需要 WPS/Word 预览的交付
+输入需要：现有审美库索引、contact_sheets/images 文件夹、可选 vault 路径
+输出格式：Obsidian 可打开的 Markdown vault；不复制大图，只建立链接和整理笔记
+关键参数：`tools/sync_obsidian_aesthetic_vault.py`、`SW_OBSIDIAN_AESTHETIC_VAULT`、`Aesthetic_Decision_Index.md`
+限制与风险：外部图片/本地大图仍保留在原库；如果移动资料库，需要更新环境变量或重新同步；不自动读取大图以免增加 token/磁盘成本
+成本等级：低；生成 vault 不消耗模型 token，日常 SW 仍只读轻量索引
+隐私注意：不要把客户私密图、API key、上传 token、个人绝对路径写入公开仓库或交付文档
+质检方式：同步脚本可重复运行；检查 `Home.md`、`Profile Router.md`、profile 数量和主要索引链接
+失败时替代方案：直接读取 `Aesthetic_Decision_Index.md`；或手动在 Obsidian 打开仓库根目录/审美资料目录
+归属岗位：aesthetic-director 需要人工浏览/库维护时使用；普通自动审美选择仍由 `aesthetic-director` 读取 compact index
 ```
 
 ## Historical Accuracy Tool Note

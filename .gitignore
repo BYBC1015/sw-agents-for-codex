@@ -28,6 +28,11 @@ secrets.*
 ~$*
 banana_outputs/
 banana-pro-output/
+seedance_outputs/
+outputs/
+kling_outputs/
+cutout_transparent_png/
+*.rar
 openrouter_payload*.json
 openrouter_response*.json
 banana_prompt_full.txt

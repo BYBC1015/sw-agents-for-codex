@@ -26,9 +26,10 @@ ENTRY_SKILLS = {
     "sw-v1-0": {
         "source": ROOT / "SW_V1.0.md",
         "description": (
-            "Load the SW_V1.0 design studio workflow. Use for /sw, /SW_V1.0, "
-            "@SW_V1.0, poster, presentation, video, storyboard, edit-plan, "
-            "aesthetic direction, AI prompt, review, revision, and tool-integration projects."
+            "Explicitly load the SW_V1.0 design studio workflow. Use only for "
+            "/sw, /SW_V1.0, @SW_V1.0, call SW_V1.0, activate SW_V1.0, "
+            "拉取本项目架构, or 按本项目架构执行. Do not use for ordinary "
+            "creative-task wording unless an explicit SW invocation is present."
         ),
     },
     "sw-update": {
@@ -50,12 +51,20 @@ ENTRY_SKILLS = {
         "source": ROOT / "sw_help.md",
         "description": (
             "Show concise SW feature triggers for Banana Pro, Seedance, URL "
-            "Relay, SW Rescue, and Historical Accuracy without starting a project."
+            "Relay, Obsidian Aesthetic Vault, SW Rescue, and Historical Accuracy "
+            "without starting a project."
         ),
     },
 }
 
-TOOL_SKILLS = ["banana-pro", "seedance-2-video", "url-relay", "storyboard-visual-word"]
+TOOL_SKILLS = [
+    "banana-pro",
+    "seedance-2-video",
+    "url-relay",
+    "black-background-cutout",
+    "storyboard-visual-word",
+    "feishu-docs",
+]
 
 RUNTIME_PACK_FILES = [
     "VERSION.md",
@@ -67,6 +76,7 @@ RUNTIME_PACK_FILES = [
 
 PORTABLE_RUNTIME_DIRS = [
     "Studio_Skills",
+    "Prompts",
 ]
 
 
@@ -120,8 +130,11 @@ def fixed_help_reply() -> str:
 - Banana Pro: trigger with 香蕉 / banana / Banana Pro / Nano Banana / @banana-pro / 用 banana 出图.
 - Seedance 2.0 Video: trigger with 即梦2.0生成 / 即梦生成 / Seedance 2.0 / @seedance-2-video / 用即梦生成视频.
 - URL Relay: trigger with URL中转 / 公网URL / 上传参考图 / 上传参考视频 / @url-relay. Used before Seedance when local files need public URLs.
+- Black Background Cutout: trigger with 抠图 / 扣图 / 去底 / 去黑底 / 黑底转透明 / 透明底 PNG / @black-background-cutout. Fast local transparent PNG preview for black/simple solid backgrounds; not finishing-grade.
 - Storyboard Visual Word: trigger with 视觉方案文件 / 视觉导演方案 / Word视觉方案 / DOCX视觉方案 / @storyboard-visual-word after selected storyboard or scene images are ready.
+- Feishu Docs: trigger with 转到飞书 / 同步到飞书 / 发布到飞书 / 飞书视觉方案 / 飞书分镜 / Lark Docs / @feishu-docs after the visual plan or storyboard handoff is ready.
 - Aesthetic Decision: trigger with /aesthetic, "SW decide the look", 自动选择审美, 审美画像, or moodboard direction. Reads the compact decision index first and does not load raw images by default.
+- Obsidian Aesthetic Vault: trigger with Obsidian审美库 / 整理审美库 / 筛选审美图片 / 打开审美资料库. Syncs a Markdown-only vault for browsing; normal SW work still uses the compact index.
 - SW Rescue: trigger with /sw-rescue / @sw_rescue / SW_RESCUE when old SW chips keep returning stale versions.
 - Historical Accuracy: reminder appears only for clear accuracy risk. Say "开启历史检查" for the current request/visual chain; "本项目开启历史检查" or "全程开启历史检查" for the current conversation/project; "关闭历史检查" / "不用历史检查" / "恢复普通模式" to turn it off.
 
@@ -262,6 +275,7 @@ def ignore_generated(_: str, names: list[str]) -> set[str]:
         ".DS_Store",
         "banana_outputs",
         "seedance_outputs",
+        "cutout_transparent_png",
         "openrouter_payload.json",
         "openrouter_response.json",
         "run_manifest.json",
@@ -301,9 +315,10 @@ def plugin_manifest(version: str) -> dict:
         "name": "sw-v1-0",
         "version": version.removeprefix("V"),
         "description": (
-            "SW_V1.0 design studio workflow loader for poster, presentation, "
-            "video, storyboard, edit plan, AI prompt, review, revision, tool "
-            "integration, aesthetic direction, URL relay handoff, slash command entry, and stale-chat rescue."
+            "SW_V1.0 explicit design studio workflow loader for /sw, "
+            "/SW_V1.0, @SW_V1.0, update/help/rescue entries, optional tool "
+            "skills, and stale-chat rescue. Ordinary design words do not "
+            "auto-activate the full SW framework."
         ),
         "author": {
             "name": "Local Design Studio",
@@ -314,37 +329,40 @@ def plugin_manifest(version: str) -> dict:
         "repository": "https://local.invalid/sw-v1-0",
         "license": "Proprietary",
         "keywords": [
-            "design",
-            "studio",
-            "poster",
-            "video",
-            "storyboard",
-            "presentation",
-            "ppt",
-            "deck",
-            "prompt",
+            "sw",
+            "sw-v1-0",
+            "explicit-invocation",
             "update",
             "sync",
             "rescue",
             "repair",
             "url-relay",
+            "black-background-cutout",
+            "cutout",
+            "transparent-png",
             "seedance",
             "banana-pro",
             "storyboard-visual-word",
+            "feishu-docs",
+            "feishu",
+            "lark",
             "docx",
             "visual-bible",
             "aesthetic",
             "moodboard",
+            "obsidian",
+            "aesthetic-vault",
         ],
         "skills": "./skills/",
         "interface": {
             "displayName": "SW_V1.0",
             "shortDescription": "Call the design studio workflow architecture.",
             "longDescription": (
-                "Loads the SW_V1.0 design studio architecture for new poster, "
-                "presentation, video, storyboard, edit, AI prompt, review, "
-                "revision, and tool-integration projects, with separate update, "
-                "help, and rescue entries."
+                "Explicitly loads the SW_V1.0 design studio architecture after "
+                "/sw, /SW_V1.0, @SW_V1.0, or a written SW invocation. Ordinary "
+                "creative-task wording does not auto-activate the full framework. Separate update, "
+                "help, rescue, Feishu handoff, and Obsidian aesthetic vault "
+                "support remain available."
             ),
             "developerName": "Local Design Studio",
             "category": "Productivity",
@@ -364,9 +382,11 @@ def plugin_manifest(version: str) -> dict:
                 "@sw_help",
                 "/aesthetic",
                 "@url-relay",
+                "@black-background-cutout",
                 "@seedance-2-video",
                 "@banana-pro",
                 "@storyboard-visual-word",
+                "@feishu-docs",
             ],
             "brandColor": "#111827",
         },

@@ -1,0 +1,3 @@
+display_name: Kling API
+short_description: Official Kling video API runner.
+default_prompt: Use Kling API to dry-run, submit, poll, and download a video task.

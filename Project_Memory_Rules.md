@@ -43,14 +43,26 @@ Only read `.sw/CHANGELOG.md` when the task involves revisions, delivery, or audi
 
 Also read `.sw/ASSETS.md` when the task involves visual direction, moodboards, character/scene references, recurring style, or user-provided visual reference packs. Keep this read selective; do not load large images by default.
 
-If `.sw/` is missing, continue with normal SW behavior and do not ask the user to create it unless the project is long-running or the user asks for persistent project memory.
+If `.sw/` is missing, continue with normal SW behavior and do not ask the user to create it unless the project is long-running, repeated across conversations, or the user asks for persistent project memory.
+
+## Long-Running Project Signals
+
+Treat a project as likely long-running when the current request shows one or more of these signals:
+
+- the same brand, client, campaign, film, product, character, scene, or visual system will continue across multiple outputs
+- the user says this will continue later, recur, become a series, or should be used next time
+- confirmed style, audience, platform, review standard, asset rule, or continuity constraint would cause mistakes if forgotten in a new conversation
+- the work spans posters, storyboard, deck, prompts, revisions, review, and delivery for the same project
+- the user keeps reusing the same references, materials, characters, locations, or forbidden directions
+
+Do not treat a project as long-running just because it is complex. A complex one-off remains short-term if the decisions do not need to survive future conversations.
 
 ## What Counts As Major Confirmation
 
 Suggest writing to `MEMORY.md` only when the user confirms durable information:
 
 - project goal, audience, channel, format, or deadline
-- brand tone, style direction, visual identity, or design禁区
+- brand tone, style direction, visual identity, or design forbidden zones
 - locked creative direction, storyline, storyboard structure, or key visual
 - character, product, prop, scene, or continuity constraints
 - client preference, approval rule, review standard, or compliance constraint
@@ -68,6 +80,12 @@ Keep the suggestion one line and optional:
 ```
 
 Use at most one memory suggestion per reply. Do not explain the whole memory system during project work.
+
+If `.sw/` is missing but the project shows long-running signals, use one short reply-end nudge instead of a setup lecture:
+
+```text
+轻提醒：这个项目已经出现长期复用信号；后续若要跨对话继承，可回复“记住”。
+```
 
 ## Write Rule
 

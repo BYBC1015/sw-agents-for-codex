@@ -22,8 +22,35 @@
 
 - `Prompts/Image_Aesthetic_Prompt_Reference.md`：当用户要求更强审美、减少 AI 感、电影画面语言、图片提示词精修时读取。
 - `Prompts/Video_Motion_Edit_Prompt_Rules.md`：当用户要求一镜到底、子弹时间、英雄镜头、复杂运镜、剪辑手法或 Seedance/即梦执行级视频 prompt 时读取。
+- `Prompts/Tool_Official_Prompt_Deltas.md`：当用户点名 Seedance/即梦、Kling/可灵、Banana Pro/Gemini image、OpenAI image，或要求按官方案例/官方手册优化时读取对应小节；不要整份加载或复述官方手册。
 - `01_Research/Oscar_Best_Picture_Visual_Reference.md`：当用户要求奥斯卡/经典电影画面参考时读取；只提取画面语法，不复刻具体电影画面。
 - `01_Research/Aesthetic_Daily_Selected/Daily_Selected_Index.md`：当用户要求每日精选、审美资料、今天补充的资料、moodboard 或 visual reference 时读取；只读索引和相关联系表，不默认汇总全部图片。
+
+## Selected Asset Packet Add-On
+
+When prompt work starts from an upstream selected object, consume the packet before writing the prompt:
+
+```text
+Selected Asset Packet:
+- Object ID:
+- Source stage:
+- Asset type:
+- Purpose:
+- Selected input:
+- Reference roles:
+- Locked items:
+- Avoid:
+- Next tool:
+- Privacy/cost gate:
+```
+
+Prompt rules for this packet:
+
+- Write for the selected `Object ID` only; do not expand into a full project prompt set.
+- Convert `Reference roles` into specific prompt controls instead of treating every reference as style.
+- Preserve `Locked items` unless the user explicitly changes them.
+- Carry `Avoid` into the negative prompt, continuity constraints, tool settings, or post-generation QC.
+- If `Selected input` is local/private media, do not write it as a final public URL until URL Relay or the user provides an accessible URL and the privacy/cost gate is resolved.
 
 ## 工具适配层
 

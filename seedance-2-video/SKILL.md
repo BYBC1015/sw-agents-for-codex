@@ -14,12 +14,14 @@ It is not a Studio role and is not a story planner. It does not replace `storybo
 Default route:
 
 ```text
-upstream Studio role if needed -> prompt-director -> seedance-2-video
+upstream Studio role if needed -> Selected Asset Packet -> prompt-director -> seedance-2-video
 ```
 
 If the user asks for storyboard, film/video structure, shot design, motion design, edit rhythm, character/product/scene planning, or prompt writing and also says to use 即梦/Seedance, finish the upstream design first, then convert only the selected shot or clip into a Seedance-ready prompt.
 
 If the user already provides a final video prompt and the needed public image URL, use `prompt-director` only for a quick prompt sanity check, then run this tool.
+
+If a Selected Asset Packet is present, treat it as the selected-shot source of truth. Preserve `Object ID`, `Reference roles`, `Locked items`, `Avoid`, and `Privacy/cost gate`; do not substitute a different shot or media source.
 
 ## Security Rule
 
@@ -62,7 +64,8 @@ export ARK_BASE_URL="https://ark.cn-beijing.volces.com"
 - Submit endpoint: `POST /api/v3/contents/generations/tasks`.
 - Poll endpoint: `GET /api/v3/contents/generations/tasks/{task_id}`.
 - Auth: `Authorization: Bearer <local key>`, loaded from `ARK_API_KEY` or the private `setup-key` file.
-- Input images: 1-9 public `http` or `https` URLs are required by the bundled runner. Do not pass local paths; Ark must fetch the media itself.
+- Input images: pure text-to-video can run without images. When using reference, `firstFrame`, `firstLastFrame`, or local media handoff, pass 1-9 public `http` or `https` URLs. Do not pass local paths directly; Ark must fetch the media itself.
+- If the input comes from a Selected Asset Packet, resolve its `Privacy/cost gate` before URL Relay, real generation, long polling, or temporary relay fallback.
 - Local files: pass local references with `--image-file`; the runner uploads them through SW URL Relay first and then sends the returned public URL to Ark.
 - Temporary relays: use the configured SW media uploader first. If it is unreachable or returns a server-side failure and the user/config allows fallback, use Catbox/Litterbox only after reporting that the SW server is unavailable. Missing token or config errors do not trigger fallback.
 - Default video settings: `ratio=9:16`, `duration=15`, `resolution=720p`, `watermark=false`, `seed=-1`.
@@ -88,6 +91,7 @@ Seedance prompts should be compact and concrete:
 
 - One clip per prompt.
 - Specify subject, action, scene, camera movement, composition, lighting, color, atmosphere, duration, and constraints.
+- When using image-to-video or first-frame control, let the source image carry appearance and composition; use the prompt mainly for action, camera path, stability locks, and end state.
 - Replace vague wording such as "更电影感" with controllable choices: lens feel, camera path, light direction, contrast, depth of field, color temperature, pace, and frame size.
 - For one-take, bullet-time, hero-shot, montage, match cut, speed ramp, or complex movement requests, read the current SW root's `Prompts/Video_Motion_Edit_Prompt_Rules.md` first when available; if this skill is used from an installed copy, fall back to `C:\Users\Administrator\Documents\New project\Prompts\Video_Motion_Edit_Prompt_Rules.md`. Keep each generated clip to one continuous camera path.
 - Multi-cut ideas should be split into separate clip prompts plus an edit plan; do not submit one overloaded multi-scene prompt as a single Seedance task.

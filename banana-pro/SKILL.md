@@ -57,6 +57,7 @@ Banana Pro must not skip SW's design pipeline.
 
 2. Check the handoff quality.
    - Required handoff fields: purpose, subject, scene, composition or shot size, lighting/color, aspect ratio, constraints, and whether this is draft or final.
+   - If a Selected Asset Packet is present, treat it as the handoff source of truth for `Object ID`, `Selected input`, `Reference roles`, `Locked items`, `Avoid`, and `Privacy/cost gate`.
    - If the request includes an upstream task such as storyboard, video, film, poster, deck, slide, layout, character, product, or prop work, do not generate until the responsible Studio role has produced a usable handoff.
    - If the handoff is underspecified, ask at most one blocking question or produce a low-cost preflight.
 
@@ -103,6 +104,7 @@ Banana Pro result:
 ## Guardrails
 
 - Ask before consuming quota, uploading private references, or generating final-use brand/face/product assets.
+- If using a Selected Asset Packet, do not change locked items or reference roles during generation; stop before upload/generation if its privacy/cost gate is unresolved.
 - Treat an explicit phrase such as "use banana to generate one draft" as confirmation for one draft image only; still pause for private uploads, final brand/face/product assets, or batch generation.
 - Do not use `banana-pro` for ordinary prompt drafting.
 - Do not use `banana-pro` to replace `storyboard-director`, `poster-art-director`, `presentation-designer`, `layout-designer`, `asset-producer`, or `prompt-director`.

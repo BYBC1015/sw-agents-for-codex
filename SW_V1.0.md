@@ -4,11 +4,17 @@ This is the stable project-start entry for the SW design studio workflow.
 
 ## Use For
 
-- starting a new poster, presentation/PPT/deck, video, storyboard, edit-plan, prompt, review, revision, or tool-integration project
-- loading the design studio workflow in a new conversation
+- explicitly starting a new SW design-studio project after the user invokes `/sw`, `/SW_V1.0`, `@SW_V1.0`, `调用 SW_V1.0`, or `启用 SW_V1.0`
+- loading the design studio workflow in a new conversation only when the user asks for it
 - keeping one stable project invocation name while runtime versions continue to update
 
+Do not auto-activate from ordinary topic words such as poster, PPT, deck, storyboard, video prompt, image prompt, review, revision, or tool integration. Those requests use SW only after explicit activation in the same conversation.
+
 ## Invocation
+
+```text
+/sw
+```
 
 ```text
 /SW_V1.0
@@ -33,16 +39,16 @@ activate SW_V1.0
 After text activation succeeds, reply exactly:
 
 ```text
-SW loaded successfully. Current version: V1.10.5
+SW loaded successfully. Current version: V1.12.10
 ```
 
 If the user only invokes SW, stop after the required reply and wait for the project request.
 
-If the same user message includes a normal project request, put the required reply first, then continue using the hot path: `SW_Runtime_Index.md`, `Cost_Governor.md`, and only the selected role skills. Read `AGENTS.md` only when full project rules are needed or files conflict.
+If the same user message includes a normal project request after the activation phrase, put the required reply first, then continue using the hot path: `SW_Runtime_Index.md`, `Cost_Governor.md`, and only the selected role skills. Read `AGENTS.md` only when full project rules are needed or files conflict.
 
 ## Direct Quick-Edit Exception
 
-If the host UI already shows the SW skill chip and the user gives an actionable small edit for an existing poster/image, treat the chip itself as the load acknowledgement. Do not add a separate activation narration, do not search the filesystem for runtime files, and do not reopen the full Brief/Direction pipeline.
+If the user explicitly selects/invokes the SW skill entry and gives an actionable small edit for an existing poster/image, treat that explicit selection as the load acknowledgement. A chip merely appearing in the host UI is not enough. Do not add a separate activation narration, do not search the filesystem for runtime files, and do not reopen the full Brief/Direction pipeline.
 
 Use this embedded quick route:
 
@@ -96,7 +102,7 @@ For synchronization in historical conversations or other project folders, use:
 Expected sync reply:
 
 ```text
-SW version synchronized. Current version: V1.10.5
+SW version synchronized. Current version: V1.12.10
 ```
 
 If normal sync still returns a stale sealed chip, use the standalone rescue entry:
@@ -108,7 +114,7 @@ If normal sync still returns a stale sealed chip, use the standalone rescue entr
 Expected rescue reply:
 
 ```text
-SW rescue synchronized. Current version: V1.10.5
+SW rescue synchronized. Current version: V1.12.10
 ```
 
 ## Minimum Project Folder Package
