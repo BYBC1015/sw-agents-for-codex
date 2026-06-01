@@ -199,6 +199,7 @@ For a fresh continuation, inspect in this order:
 - Whether to publish this as a personal plugin, a GitHub repo, or keep it as local skills.
 - Whether to run full consistency checks after handoff and before archive.
 - Whether to prune or archive generated `outputs/` and local media indexes.
+- Pending user decision: whether the Terracotta Warriors storyboard prompt structure should become a formal reusable template. Current leaning: keep it recorded as a high-quality historical-drama storyboard prompt baseline, but do not make it a default SW storyboard format yet. Key value: global visual/style baseline, conditional object locks, material/light/emotional-distance control, and per-shot deltas. Main risk: template bloat and slower normal storyboard runs if over-standardized.
 
 ## Suggested Next Steps
 

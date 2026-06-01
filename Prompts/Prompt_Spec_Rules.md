@@ -413,6 +413,31 @@ Use this add-on only after the user explicitly enables historical accuracy check
 - For Banana Pro or any image generator, add a post-generation QA note for anachronisms, wrong dynasty/civilization details, fantasy-TV conventions, modern objects, wrong materials, and incorrect symbols/text.
 - For Seedance or any video generator, apply these rules before generation to storyboard first frames, still references, public image URLs, and visual constraints; after generation, review representative output frames/stills when available. Do not claim full automated video QA beyond visible frames/stills.
 
+## Historical Drama Style Capsule Add-On
+
+Use this add-on only when the user confirms the look, the look is already locked, or SW needs to preserve a grounded historical-drama visual baseline for historical drama, cultural heritage, archaeology, ancient craft, intangible heritage, or museum storytelling.
+
+This is visual style guidance, not historical accuracy checking. It does not load `historical-consultant` by itself.
+
+Recommended capsule:
+
+```text
+Historical Drama Style Capsule:
+- Image texture: Japanese negative film aesthetic, CCD camera look, low contrast, muted faded colors, subtle warm-grey tones, soft highlight bloom, delicate film grain, hazy matte texture.
+- Emotional distance: memory-like realism, understated cinematic atmosphere, transparent emotional distance, quiet melancholy.
+- Light / atmosphere: soft diffusion glow around window light, grounded production-design scale, low-saturation warm-cool contrast, atmospheric shadow, practical environmental light.
+- Material / object locks: define visible historical materials, surfaces, clothing/armor, props, inscriptions, weathering, and cannot-change object forms.
+- Avoid: glossy modern surfaces, fantasy-TV costume logic, generic AI ancient palace styling, plastic props, random symbols, incorrect logos/text.
+```
+
+Use it once as `Visual Baseline`. For each image or shot prompt, merge:
+
+```text
+Style Capsule + Scene Tone + Shot Content + Shot Composition + Object Locks
+```
+
+During planning, do not repeat the full capsule in every shot. Write only the shot delta. During final prompt output, include the capsule once or reference it as a locked baseline, then write each shot's specific changes.
+
 ## Visual Development Board Add-On
 
 Use `Prompts/Visual_Development_Board_Rules.md` only when the user asks for character setting sheets, scene setting sheets, production-design boards, integrated storyboard sheets, or one-image storyboard contact sheets.

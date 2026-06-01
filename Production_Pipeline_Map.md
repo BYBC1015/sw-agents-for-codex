@@ -268,6 +268,7 @@ Key gates:
 - do not force a 3x3 board; choose the board layout from the actual shot count
 - if a shot cannot land cleanly at the 15-second boundary, first adjust shot durations slightly; if that breaks the beat, start the next group
 - exceeding 15 seconds or 9 shots starts the next group
+- full-storyboard triggers use the real script shot count; supplemental shots need narrative purpose, and 3x3 contact sheets may leave black slots instead of forcing filler
 - generate Group A first unless the user explicitly confirms batch generation
 - exact labels, logos, and final typography stay in post-production unless the user accepts model text risk
 

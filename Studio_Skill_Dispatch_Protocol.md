@@ -166,6 +166,8 @@ When the user has not specified the visual style, or asks SW to choose the best 
 Historical accuracy is confirmation-gated and visual-output focused.
 
 - Clear historical risk without confirmation only adds: `检测到历史准确性风险。是否开启历史准确性检查？默认不开启。`
+- Clear historical drama, cultural-heritage, archaeology, ancient craft, intangible-heritage, dynasty-specific artifact, or museum-narrative work may instead add one broader nudge: `检测到历史/文博题材。可开启历史准确性检查，或使用历史剧胶片风格胶囊；默认不开启。`
+- The Historical Drama Style Capsule is a look/prompt baseline, not an accuracy gate and not a new role. It can be used by `storyboard-director` or `prompt-director` only after user confirmation or when the visual style is already locked.
 - If the project request is otherwise actionable, continue the normal route with historical checking off by default.
 - Do not load `historical-consultant` for style-only words such as 国风, 古风, 唐风, 宋韵, 东方美学, 敦煌感, 新中式, or 仙侠感.
 - Plain `开启历史检查` applies to the current request/current visual-output chain. Project-level scope requires `本项目开启历史检查` or `全程开启历史检查`.

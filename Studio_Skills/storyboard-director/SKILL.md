@@ -37,6 +37,17 @@ Storyboard Board Groups:
 - Group B: about 15-30s, <=15s total, actual shot count, layout [1-2 large cells/2x2/2x3/3x3]
 ```
 
+For full storyboard generation requests, add:
+
+```text
+Full Storyboard Scope:
+- Trigger:
+- Core shot count:
+- Supplemental shots:
+- Contact sheet plan:
+- Blank/failed slots:
+```
+
 If one specific camera angle or scene relation needs visual proof before the full board, add:
 
 ```text
@@ -49,6 +60,17 @@ Reference Angle Frame:
 - Subject scale:
 - Continuity locks:
 - Recommended tool: imagegen or banana-pro
+```
+
+For historical drama, cultural-heritage, archaeology, ancient craft, intangible-heritage, or museum-narrative storyboards where the user accepts a grounded historical-drama look, add one compact global capsule before the shot table:
+
+```text
+Historical Drama Style Capsule:
+- Image texture:
+- Light / atmosphere:
+- Emotional distance:
+- Material / object locks:
+- Avoid:
 ```
 
 When a shot, group, first frame, or reference angle is selected for prompt writing, URL Relay, Seedance, Banana, or another generation tool, add:
@@ -87,12 +109,19 @@ Prioritize platform, duration, material source, spoken/caption style, and must-s
 ## Rules
 
 - For 15s, prefer 3-6 shots; for 30s, prefer 6-10 shots.
+- Treat "生成全部分镜", "完整分镜", "全片分镜", "全量跑分镜", and "按剧本生成所有镜头" as full-storyboard triggers. First derive the real core shot count from the script or storyboard table.
+- Core shots must stay faithful to the script. Do not add, remove, or merge core shots only to fill a 3x3 grid.
+- Supplemental shots are allowed only when they have a narrative function: establishing space, emotional transition, character reaction, prop insert, action bridge, or rhythm pause. Mark them separately, for example `07A`, `12B`, or `S01`. Do not add filler frames just to complete a contact sheet page.
+- For full-storyboard contact sheets, use 3x3 pages as review containers: 8 useful frames may stay 8 with one black slot, while 12 useful frames become two pages. Do not create six weak filler frames just to fill page 2.
+- If a frame is intentionally blank, missing, or failed, keep a black slot and record it in the status list. Do not silently invent a replacement frame.
 - If the user asks for an integrated storyboard sheet, group shots into boards: one board per 15-second segment, <=15 seconds total duration per group, and maximum 9 shots per board.
 - 9 shots is only an upper limit. Do not force a 3x3 board when the beat works better as 2x2, 2x3, or a few larger cinematic cells.
 - If a shot cannot land cleanly on the 15-second boundary, first adjust nearby shot durations slightly to keep the group under 15 seconds and preserve rhythm. If the beat cannot be adjusted cleanly, start the next group instead of splitting the shot awkwardly.
 - For S/M-level storyboard feedback, quick edit only the selected group, shot, order, caption, or timing. If the feedback changes the story goal, audience, core message, visual style, or deliverable form, route to `change-manager` first.
 - Use Compare Board to decide between existing storyboard options or feedback targets; do not turn it into a full rewrite.
 - For generated storyboard boards, first output the group table and continuity locks; do not jump straight to Banana/Seedance generation.
+- Use a Historical Drama Style Capsule only as an optional global look baseline. Do not repeat the full style paragraph inside every shot; each shot should carry only content, composition, lens, motion, and object changes.
+- The capsule does not replace historical accuracy checking. If accuracy risk is present and the user has not confirmed checking, add only the one-line reminder and continue with checking off by default.
 - Before handing a selected storyboard group, shot, first frame, or reference angle to `prompt-director` or a tool, package it as a Selected Asset Packet. Use ids such as `G1-S03`, `Group-A-board`, or `ref-angle-01`.
 - In the packet, use `Reference roles` to separate character continuity, scene geometry, composition, style, first frame, last frame, and motion/edit source references.
 - A single "use banana to generate the storyboard" request confirms only one storyboard board group unless the user explicitly asks for batch generation.

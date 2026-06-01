@@ -112,6 +112,34 @@ Compare Board:
 
 Do not turn Compare Board into another storyboard table or batch board prompt. It only decides what survives into the next selected group.
 
+## Full Storyboard Generation
+
+Use this when the user explicitly asks for "生成全部分镜", "完整分镜", "全片分镜", "全量跑分镜", or "按剧本生成所有镜头".
+
+Rules:
+
+- First confirm the real core shot count from the script or storyboard table.
+- Generate according to the real story structure. Do not force the story to become 9, 18, 27, or another multiple of 9.
+- Supplemental shots are allowed when they improve storytelling: establishing space, emotional transition, character reaction, prop insert, action bridge, or rhythm pause.
+- Supplemental shots must be labeled separately, such as `07A`, `12B`, or `S01`, and listed in a supplemental-shot table.
+- Do not add weak filler images only to fill a 3x3 page.
+- Full storyboard frames remain one shot per image. Contact sheets are only review pages.
+- Contact sheets use 3x3 pages by default. Empty slots stay black.
+- 8 useful frames may become 9 only if the extra frame has a clear narrative job; otherwise the 9th slot stays black.
+- 12 useful frames become two 3x3 pages: page 1 has shots 1-9, page 2 has shots 10-12 plus black slots unless useful supplemental shots are justified.
+- Missing or failed frames also use black slots and must be listed as `missing` or `failed`.
+
+Required status outputs:
+
+```text
+Full Storyboard Status:
+- Core shots:
+- Supplemental shots:
+- Generated frames:
+- Missing/failed:
+- Contact sheets:
+```
+
 ## Reference Angle Frame
 
 Use this when the storyboard needs one specific scene angle, camera position, or spatial relation clarified before generating a full storyboard board.

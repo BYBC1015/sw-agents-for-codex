@@ -1,6 +1,6 @@
 # SW Version
 
-Current runtime version: V1.12.10
+Current runtime version: V1.12.12
 Stable invocation name: SW_V1.0
 Stable invocation aliases: `/sw`, `/SW_V1.0`, `@SW_V1.0`, `/sw_v1.0`, `/sw-v1-0`
 Version sync aliases: `@sw_update`, `SW_UPDATE`, `/sw_update`, `/sw-update`, `SW_REFRESH`
@@ -86,6 +86,8 @@ Each entry must include:
 
 | Version | Date | Change |
 | --- | --- | --- |
+| V1.12.12 | 2026-06-01 | Added full-storyboard generation rules. Requests such as "生成全部分镜", "完整分镜", "全片分镜", or "按剧本生成所有镜头" now use the real script shot count, allow only narrative-purpose supplemental shots, and paginate contact sheets as 3x3 review pages with black slots for blanks, missing frames, or failed frames instead of forcing filler images. |
+| V1.12.11 | 2026-06-01 | Added a lightweight historical/cultural-heritage project nudge and a reusable Historical Drama Style Capsule rule. Historical accuracy remains confirmation-gated and handled by `historical-consultant`; the style capsule is an optional prompt baseline for historical drama, museum, archaeology, ancient craft, and cultural-heritage storyboard/prompt work, merged once as a global visual baseline plus per-shot deltas to reduce AI-looking output without increasing normal SW reads. |
 | V1.12.10 | 2026-06-01 | Narrowed SW activation to explicit invocation only. Ordinary design-topic wording such as poster, PPT, deck, storyboard, image prompt, video prompt, review, or revision no longer starts the full SW framework by itself. `/poster`, `/video`, `/ppt`, `/storyboard`, `/prompt-image`, and similar project aliases now apply only after SW has already been activated or when combined with `/sw`, `@SW_V1.0`, `调用 SW_V1.0`, `拉取本项目架构`, or `按本项目架构执行`. Skill metadata and installed plugin descriptions were narrowed to avoid implicit cross-device auto-entry. |
 | V1.12.9 | 2026-06-01 | Added `black-background-cutout` as a narrow local cutout tool skill. Explicit 抠图/扣图/去底/去黑底/黑底转透明/透明底 PNG requests now route to a local Pillow-based pixel workflow for black or simple solid-background transparent PNG previews. It does not use prompt writing, AI generation, upload, or full project routing, and it must warn that quick cutouts may have slight fringing and are not finishing-grade assets. |
 | V1.12.8 | 2026-06-01 | Clarified lightweight async feedback intake without adding a new lane or packet. Screen recordings, meeting notes, chat logs, screenshot annotations, boss oral comments, and client comments now route into the existing `Change Delta Packet` before rewrite/classification, preserving `Keep unchanged` and the smallest affected object. |

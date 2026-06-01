@@ -1,7 +1,7 @@
 # SW System Self-Check
 
 Date: 2026-05-26
-Target runtime: V1.12.10
+Target runtime: V1.12.12
 
 This file records the maintenance diagnosis for entry loss, version mismatch, stale chips, and likely future failure points. It is a working audit, not a user-facing startup file.
 

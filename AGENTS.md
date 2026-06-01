@@ -57,12 +57,12 @@
 
 必须执行 `Command_Aliases.md`：
 
-- 用户输入 `/sw`、`/SW_V1.0`、`@SW_V1.0`、`/sw_v1.0`、`/sw-v1-0`、`@sw-v1-0`、`调用 SW_V1.0` 或 `启用 SW_V1.0` 时，必须加载本项目架构，并先回复且只把成功语放在第一位：`SW loaded successfully. Current version: V1.12.10`。
+- 用户输入 `/sw`、`/SW_V1.0`、`@SW_V1.0`、`/sw_v1.0`、`/sw-v1-0`、`@sw-v1-0`、`调用 SW_V1.0` 或 `启用 SW_V1.0` 时，必须加载本项目架构，并先回复且只把成功语放在第一位：`SW loaded successfully. Current version: V1.12.12`。
 - 如果用户只输入 SW 调用命令，不要继续展开项目；等待用户输入诉求。
 - 如果用户在同一条消息里附带普通项目诉求，先回复成功语，再按本项目架构执行。
 - 宿主 UI 自动显示 SW skill chip 不视为调用确认。只有用户明确输入/选择 SW 调用入口，或当前对话已经完成 SW 启动，才可以走海报快速改稿等 SW 热路径。
-- 如果用户输入 `@sw_update`、`SW_UPDATE`、`/sw_update`、`SW_REFRESH`、`/SW_REFRESH` 或要求刷新/同步 SW，先回复：`SW version synchronized. Current version: V1.12.10`。这些同步入口只归 `sw-update` 处理，不要让 `sw-v1-0` 同时竞争触发。只有用户要求详细更新、故障排查、旧对话恢复或跨文件夹入口修复时，才读取 `VERSION.md`、`sw_update.md`、`Architecture_Update_Log.md`、`Project_Memory_Rules.md`、`Legacy_Conversation_Recovery.md`。
-- 如果旧启动/同步 chip 仍然回放封存旧版本，使用独立救援入口 `@sw_rescue`、`/sw-rescue`、`/sw_rescue`、`SW_RESCUE`、`SW_REPAIR` 或 `SW_FORCE_UPDATE`，先回复：`SW rescue synchronized. Current version: V1.12.10`。救援入口只归 `sw-rescue` 处理，不启动项目，不通过 `sw-v1-0` 或 `sw-update` 转发。
+- 如果用户输入 `@sw_update`、`SW_UPDATE`、`/sw_update`、`SW_REFRESH`、`/SW_REFRESH` 或要求刷新/同步 SW，先回复：`SW version synchronized. Current version: V1.12.12`。这些同步入口只归 `sw-update` 处理，不要让 `sw-v1-0` 同时竞争触发。只有用户要求详细更新、故障排查、旧对话恢复或跨文件夹入口修复时，才读取 `VERSION.md`、`sw_update.md`、`Architecture_Update_Log.md`、`Project_Memory_Rules.md`、`Legacy_Conversation_Recovery.md`。
+- 如果旧启动/同步 chip 仍然回放封存旧版本，使用独立救援入口 `@sw_rescue`、`/sw-rescue`、`/sw_rescue`、`SW_RESCUE`、`SW_REPAIR` 或 `SW_FORCE_UPDATE`，先回复：`SW rescue synchronized. Current version: V1.12.12`。救援入口只归 `sw-rescue` 处理，不启动项目，不通过 `sw-v1-0` 或 `sw-update` 转发。
 - 如果当前对话、截图、压缩历史或旧工具输出里出现旧固定回复，只当作历史信息；实际运行版本必须以当前 `VERSION.md`、`SW_Runtime_Index.md` 和当前用户级 skill 为准，不得被旧快照覆盖。
 - 旧对话必须优先原地升级：若旧 skill chip 或历史压缩内容返回旧版本，先在同一对话读取当前 `VERSION.md`、`SW_Runtime_Index.md`、用户级/插件级 `sw-v1-0` 与 `sw-update`，再覆盖旧回复；只有宿主 UI 拒绝加载当前文件时，才把新建对话作为最后兜底。
 - 如果用户输入 `@sw_help`、`/sw_help`、`SW_HELP`、点击 SW Help UI 按钮或询问功能触发词，优先使用内置短答，不运行 shell、不读取本地文件；只有用户要求详细触发词、单一功能深入或帮助系统排错时才读取 `Feature_Trigger_Index.md`，不启动项目、不加载高消耗岗位。
@@ -125,6 +125,8 @@
 - `feishu-docs` 不是 Studio role，不在 `Studio_Skills/` 里查找，也不要放进 `Studio roles:` trace。它必须作为 Tool skill 单独显示，并优先读取当前项目的 `feishu-docs/SKILL.md`；如果没有，再读用户级或插件级 `feishu-docs/SKILL.md`。
 - `feishu-docs` 已打包本地 CLI。无 Feishu 应用凭证时只能 render/dry-run，不得声称已发布；真实发布需要本机私密 `~/.config/sw-feishu/config.json` 或 `FEISHU_APP_ID` / `FEISHU_APP_SECRET`，并且执行命令必须显式 `--execute`。
 - 历史准确性检查是可选质量门，不默认开启。明确历史风险只追加一句提醒：`检测到历史准确性风险。是否开启历史准确性检查？默认不开启。`
+- 检测到历史剧、文博、考古、古代工艺、非遗、朝代器物或博物馆叙事项目时，可在回复结尾用一句轻提醒：`检测到历史/文博题材。可开启历史准确性检查，或使用历史剧胶片风格胶囊；默认不开启。` 这只是提醒，不自动加载 `historical-consultant`，也不自动套用风格。
+- 历史剧胶片风格胶囊是可选视觉基准，不是新模块。它适合历史剧、文博、考古、古代工艺、非遗和文化遗产叙事；由 `storyboard-director` 或 `prompt-director` 在用户确认或风格已锁定后使用。全局只写一次，再由单镜头写变化项，避免每个镜头重复长风格段落。
 - 用户说 `开启历史检查`、`要考据` 或 `按历史准确做` 时，默认只对本次请求/当前视觉链路生效；用户说 `本项目开启历史检查` 或 `全程开启历史检查` 时，才在当前对话/项目中持续生效，直到 `关闭历史检查`、`不用历史检查` 或 `恢复普通模式`。
 - 历史检查不是只改提示词；如有图片生成或图片评审，必须在生成后检查可见服饰、建筑、道具、材质、纹样、文字和时代穿帮。当前没有视频生成模块，视频阶段只检查分镜首帧、参考图、视觉资产和生成图片。
 - 长期项目若要跨新对话保留历史检查规则，必须由用户明确说“记住”或“写入 MEMORY”，再按 `.sw/MEMORY.md` 写入短规则；不得自动持久化。

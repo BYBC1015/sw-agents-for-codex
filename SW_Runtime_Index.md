@@ -7,19 +7,19 @@ This is the compact runtime index for SW_V1.0. Read it before deeper project fil
 Activation reply:
 
 ```text
-SW loaded successfully. Current version: V1.12.10
+SW loaded successfully. Current version: V1.12.12
 ```
 
 Sync reply:
 
 ```text
-SW version synchronized. Current version: V1.12.10
+SW version synchronized. Current version: V1.12.12
 ```
 
 Rescue reply:
 
 ```text
-SW rescue synchronized. Current version: V1.12.10
+SW rescue synchronized. Current version: V1.12.12
 ```
 
 If the user only invokes SW, sync, or rescue, reply with the matching fixed line and stop.
@@ -117,6 +117,7 @@ Do not show role trace for activation-only or sync-only replies.
 - If the user explicitly asks for Obsidian aesthetic browsing, curation, or library maintenance, sync/open the Obsidian aesthetic vault. The vault embeds local preview images from existing contact sheets but does not copy heavy media; normal SW work still uses the compact aesthetic index only.
 - Generate one deliverable type per turn by default.
 - After the deliverable, optionally add at most one short reply-end nudge when it helps the user remember an existing SW capability. Prefer memory, locking, next-step, risk, or cost nudges. Skip it when there is nothing useful to add.
+- For clear historical drama, cultural-heritage, archaeology, ancient craft, intangible-heritage, dynasty-specific artifact, or museum-narrative work, a reply-end nudge may offer historical accuracy checking or the Historical Drama Style Capsule in one line. Do not auto-load `historical-consultant` and do not auto-apply the capsule.
 - Prefer the Fast Path after SW is activated. Do not read full routing maps just to answer an obvious activated poster, PPT, video, prompt, review, or change request.
 - Do not generate detailed image/video prompts, long scripts, or batch variants until direction and specs are locked.
 - Use Chinese for normal project discussion unless fixed English reply text is required.
@@ -210,6 +211,7 @@ Rules:
   - Without Feishu credentials, render/dry-run only. Real publishing needs local private app config and explicit `--execute`; do not publish private assets or local paths without confirmation.
 - Revision: `change-manager` first, then affected role. Midstream boss/client feedback, screen-recording notes, meeting notes, chat logs, screenshot annotations, and oral comments should become a compact `Change Delta Packet` before rewriting, preserving `Keep unchanged` and the smallest affected object.
 - Historical accuracy: do not auto-load. Clear risk only adds one reminder line unless the user confirms. Plain enable applies to the current request/visual chain; `本项目开启历史检查` or `全程开启历史检查` applies to the current conversation/project until closed; `关闭历史检查`, `不用历史检查`, or `恢复普通模式` turns it off. If enabled and image/video generation happens, check final visible stills/frames after output when available, not only the prompt.
+- Historical Drama Style Capsule: optional look baseline for historical drama, cultural-heritage, archaeology, ancient craft, intangible-heritage, and museum storytelling. It is not historical accuracy checking and does not require `historical-consultant`. Use only after user confirmation or when the look is already locked; keep it once as global `Visual Baseline`, then write per-scene/per-shot deltas.
 
 Default role read budget: one primary plus up to one support role. Use up to three only for campaign or film complexity.
 
@@ -395,6 +397,7 @@ Execution rule:
 - Scene setting sheets lock recurring locations before storyboard/image/video generation. Include an establishing view, secondary angles, prop/material details, lighting study, and palette.
 - Reference angle frames are optional still plates for storyboard assistance. Use them only for a selected scene angle, camera position, or spatial relation; they support the next storyboard board or Seedance first-frame prompt and do not imply batch generation.
 - Integrated storyboard sheets are grouped review boards. Default grouping follows 15-second segments; each group must stay <=15 seconds and at most 9 shots. Do not force 9 panels/3x3; choose layout from actual shot count. If a shot cannot land cleanly on the 15-second boundary, first adjust shot durations slightly, otherwise start the next group.
+- Full-storyboard triggers such as "生成全部分镜", "完整分镜", "全片分镜", "全量跑分镜", or "按剧本生成所有镜头" use the real script shot count. Supplemental shots are allowed only for narrative function; contact sheets use 3x3 pages with black slots for unused, missing, or failed frames.
 - For Banana generation, a request to generate a character sheet or storyboard sheet confirms one draft board only, not a batch.
 
 ## Self-Check

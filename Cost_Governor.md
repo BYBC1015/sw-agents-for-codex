@@ -144,6 +144,8 @@ For visual development boards, lock the board type and scope before generation:
 
 Default storyboard board generation covers one group only: 15 seconds maximum and 9 shots maximum. Nine shots is an upper limit, not a target; do not spend tokens forcing a 3x3 board when fewer shots communicate the beat.
 
+Full-storyboard wording such as "生成全部分镜", "完整分镜", "全片分镜", or "按剧本生成所有镜头" confirms batch scope only for the defined shot list. It still requires high-cost/tool/privacy gates before actual image generation. Contact sheets may paginate into 3x3 pages, but do not spend tokens creating filler frames only to fill a page.
+
 Default storyboard reference angle generation covers one selected still only. It may use imagegen or Banana Pro as a reference plate for the storyboard, but it does not confirm full-board generation, every-shot generation, Seedance generation, or final delivery.
 
 If these are not locked, output a low-cost preflight instead of the high-cost result.

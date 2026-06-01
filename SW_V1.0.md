@@ -39,7 +39,7 @@ activate SW_V1.0
 After text activation succeeds, reply exactly:
 
 ```text
-SW loaded successfully. Current version: V1.12.10
+SW loaded successfully. Current version: V1.12.12
 ```
 
 If the user only invokes SW, stop after the required reply and wait for the project request.
@@ -102,7 +102,7 @@ For synchronization in historical conversations or other project folders, use:
 Expected sync reply:
 
 ```text
-SW version synchronized. Current version: V1.12.10
+SW version synchronized. Current version: V1.12.12
 ```
 
 If normal sync still returns a stale sealed chip, use the standalone rescue entry:
@@ -114,7 +114,7 @@ If normal sync still returns a stale sealed chip, use the standalone rescue entr
 Expected rescue reply:
 
 ```text
-SW rescue synchronized. Current version: V1.12.10
+SW rescue synchronized. Current version: V1.12.12
 ```
 
 ## Minimum Project Folder Package

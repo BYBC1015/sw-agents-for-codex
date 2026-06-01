@@ -221,6 +221,8 @@ Change Delta Packet:
 - `关闭历史检查`, `不用历史检查`, `恢复普通模式`, `只是古风`, `好看优先`: keep or turn historical checking off.
 - If the setting was saved in `.sw/MEMORY.md`, permanent closure requires an explicit memory update/delete command.
 - If clear historical risk appears but the user has not enabled it, add this line: `检测到历史准确性风险。是否开启历史准确性检查？默认不开启。`
+- If the project is historical drama, cultural heritage, archaeology, ancient craft, intangible heritage, dynasty-specific artifact, or museum narrative and visual style is not locked, use at most one broader nudge: `检测到历史/文博题材。可开启历史准确性检查，或使用历史剧胶片风格胶囊；默认不开启。`
 - Continue normal low-cost project work unless the user confirms historical checking.
 - Historical checking must judge final visible image/still results, not just the prompt.
 - For video projects, check storyboard images, still references, visual assets, and representative Seedance output frames when available. Do not claim full automated video QA beyond visible frames/stills.
+- The Historical Drama Style Capsule is optional visual style guidance. It can be used without `historical-consultant` after user confirmation or when the style is already locked; it should be stored once as a global baseline and merged with scene/shot deltas.

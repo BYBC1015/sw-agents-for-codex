@@ -215,6 +215,8 @@ Purpose: optional historical/civilization accuracy gate for visual outputs, espe
 
 Historical checking is not just prompt wording. When enabled, it checks the final visual asset/image for anachronism and credibility.
 
+Related optional look support: Historical Drama Style Capsule. It can be suggested for historical drama, cultural heritage, archaeology, ancient craft, intangible heritage, or museum storytelling, but it is only a visual baseline and does not enable historical checking.
+
 ### Five Trigger Groups
 
 1. Historical accuracy intent:
@@ -317,7 +319,7 @@ Trigger when the user says:
 Required reply:
 
 ```text
-SW rescue synchronized. Current version: V1.12.10
+SW rescue synchronized. Current version: V1.12.12
 ```
 
 This is not a project start, not a normal sync replacement, and not a tool-generation step.

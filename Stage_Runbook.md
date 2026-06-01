@@ -442,7 +442,9 @@ Change Delta Packet:
 
 - Historical/civilization checking is optional and confirmation-gated.
 - Clear historical risk without confirmation only adds: `检测到历史准确性风险。是否开启历史准确性检查？默认不开启。`
+- Clear historical drama, cultural-heritage, archaeology, ancient craft, intangible-heritage, dynasty-specific artifact, or museum-narrative work may add one broader nudge: `检测到历史/文博题材。可开启历史准确性检查，或使用历史剧胶片风格胶囊；默认不开启。`
 - If the request is otherwise actionable, continue the normal low-cost stage route with historical checking off by default.
 - After the user confirms, `historical-consultant` can enter before visual production and again after generated/selected images for image QA.
 - This applies to poster key visuals, storyboard first frames, reference stills, Banana-generated images, scene/prop/wardrobe concept images, and final still review.
-- Video support is currently image-stage only; do not route to a video-generation module that has not been integrated.
+- For video projects, check storyboard images, still references, visual assets, and representative generated frames/stills when available; do not claim full automated video QA beyond visible frames/stills.
+- The Historical Drama Style Capsule is optional visual style guidance, not historical checking. Keep it as a global baseline plus per-shot deltas; do not make it a new stage.
