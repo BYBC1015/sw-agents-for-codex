@@ -48,7 +48,7 @@ Ask 3 by default; ask up to 5 when product, logo, footage, music, font, or licen
 - Do not generate prompts for every asset by default.
 - Pick only 1-3 key AI assets worth generating. For video/film continuity, prioritize character sheets, scene setting sheets, and one integrated storyboard board group before scattered single-frame generation.
 - Produce a Selected Asset Packet only for the object actually moving downstream, not for every possible asset in the table.
-- `Reference roles` must define what each reference controls: character identity, product shape, scene layout, composition, style, texture, color, first frame, last frame, or edit source.
+- `Reference roles` must define what each reference controls. Prefer four compact categories: `identity` for character/product likeness or shape, `structure` for layout/composition/scene geometry, `style` for color/light/texture/mood, and `motion source` for first frame, last frame, edit source, or action continuity.
 - Resolve the packet's `Privacy/cost gate` before local/private media is uploaded, published, or sent to a paid generation tool.
 - If recurring characters appear across multiple shots, recommend a character setting sheet before batch storyboard or video generation.
 - If recurring locations, props, or atmosphere matter, recommend a scene setting sheet before batch storyboard or video generation.

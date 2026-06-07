@@ -8,7 +8,7 @@
 
 ## 当前版本
 
-- 当前运行版本：`V1.12.12`
+- 当前运行版本：`V1.12.13`
 - 稳定调用入口：`/sw`、`/SW_V1.0` 或 `@SW_V1.0`
 - 版本同步入口：`@sw_update`
 - 完整更新记录：[`VERSION.md`](VERSION.md) / [`Architecture_Update_Log.md`](Architecture_Update_Log.md)
@@ -19,6 +19,7 @@
 
 | 版本 | 日期 | 更新内容 |
 | --- | --- | --- |
+| V1.12.13 | 2026-06-07 | Optimized reference-role handling and Banana/API fast path: selected references now prefer identity / structure / style / motion source roles, and explicit Banana Pro draft generation with a clear prompt can use a fixed fast command without repeated doctor/key checks. Added local private `--setup-key` support for OpenRouter keys without storing secrets in the repo. |
 | V1.12.12 | 2026-06-01 | Added full-storyboard generation rules: real script shot count is authoritative; narrative-purpose supplemental shots are allowed; 3x3 contact sheets paginate and leave black slots for blank, missing, or failed frames instead of forcing filler images. |
 | V1.12.11 | 2026-06-01 | Added a lightweight historical/cultural-heritage project nudge and a reusable Historical Drama Style Capsule rule. Historical accuracy remains confirmation-gated and the style capsule is optional. |
 | V1.12.10 | 2026-06-01 | 收窄 SW 启动门：普通“海报/PPT/分镜/提示词/改稿”等设计词不再自动进入完整 SW；只有 `/sw`、`@SW_V1.0`、`调用 SW_V1.0`、`拉取本项目架构`、`按本项目架构执行` 等显式入口才启用。项目类型快捷命令只在已启用 SW 后生效，并同步收窄 skill/plugin 描述，避免跨设备 git 同步后隐式进框架。 |
@@ -107,7 +108,7 @@
 调用成功后，Codex 应回复：
 
 ```text
-SW loaded successfully. Current version: V1.12.12
+SW loaded successfully. Current version: V1.12.13
 ```
 
 SW 现在是显式调用模式：仅仅在对话里说“海报 / PPT / 分镜 / 视频提示词”等普通设计词，不会自动进入 SW 框架。需要使用工作室流程时，请先输入 `/sw`、`@SW_V1.0`、`调用 SW_V1.0` 或 `按本项目架构执行`。
@@ -121,7 +122,7 @@ Version synchronization uses a separate entry:
 Expected reply:
 
 ```text
-SW version synchronized. Current version: V1.12.12
+SW version synchronized. Current version: V1.12.13
 ```
 
 If old startup/update chips keep replaying stale versions, use the standalone rescue entry:
@@ -139,7 +140,7 @@ or:
 Expected reply:
 
 ```text
-SW rescue synchronized. Current version: V1.12.12
+SW rescue synchronized. Current version: V1.12.13
 ```
 
 For other project folders, copy `SW_V1.0.md`, `sw_update.md`, and `sw_rescue.md`; copying only the startup file will not create the local update/rescue entries. For long-running projects, also copy `Project_Memory_Templates/.sw/` into that project folder.

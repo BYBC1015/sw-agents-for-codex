@@ -26,6 +26,7 @@ The cost gate decides:
 | Direction | brief is usable | primary + support | medium | 3 default | up to 3 directions, recommendation |
 | Compare board | after direction options, storyboard groups, or deck structures when selection/feedback is fuzzy | primary role only | short | 0-1 | `Keep` / `Remove` / `Next version` only |
 | Selected asset packet | before a selected poster/deck/storyboard/reference/media object is handed to `prompt-director`, URL Relay, generation tools, DOCX, or Feishu | current upstream role or `asset-producer` only | short | 0-1 | package one selected object with locks, reference roles, avoid list, next tool, and privacy/cost gate |
+| API fast path | explicit API tool call with clear prompt/handoff, such as one Banana draft image | prompt/tool skill only | short | 0 | run fixed command directly; no separate doctor/key check unless the tool errors |
 | Production | task and direction are clear | primary + support | medium | 3 default, 5 max | one role deliverable |
 | High-cost | detailed prompts, long scripts, full long decks, batch slide rewrites, batch variants, AI asset generation | selected roles after confirmation | controlled | 0-3 | one confirmed version/batch |
 | Review/change | final review or feedback | primary first | short | 0-3, 5 if blocked | risks, S/M/L/XL, scoped fix |
@@ -59,6 +60,7 @@ The cost gate decides:
 - Explicit 抠图 / 扣图 / 去底 / 去黑底 / 黑底转透明 / 透明底 PNG / `@black-background-cutout` requests can load `black-background-cutout` directly as a low-cost local pixel tool. It does not require `prompt-director`, does not upload files, does not generate images, and should warn that quick cutouts may have slight fringing and are not finishing-grade assets.
 - Explicit 香蕉 / banana / Banana Pro / Nano Banana / OpenRouter image-generation requests can add `banana-pro` as the image-generation member after `prompt-director`; use `tool-integrator` only when capability, parameters, API, or connection state is unclear. Do not load it for generic image prompts.
 - Banana Pro is a post-prompt execution step, not a shortcut around Studio roles. If the request also asks for storyboard, video/film shot design, poster design, PPT/deck/slide layout, character/product/prop design, or scene planning, the responsible Studio role must produce the upstream handoff before `prompt-director` and `banana-pro`.
+- For explicit Banana requests with a complete prompt or clear selected-object handoff, use the API fast path: skip separate doctor/key checks, skip pattern references unless needed, write the prompt to a file when possible, and run the wrapper directly. Let the runner return `missing-key`, `ok`, or `no-image`.
 - When a concrete object has been selected upstream, use a Selected Asset Packet before `prompt-director` or any tool execution. It prevents the selected URL, reference image role, locked items, avoid list, and next tool from being carried only as loose prose.
 - Quick edits are a low/mid-cost exception to full project routing: if the user already has the object and asks for a local fix, keep the role chain short and output the revised object first.
 - Quick edits may apply to poster/images, presentation outlines or selected pages, storyboard groups or selected shots, edit plans or timeline segments, and prompt refinements.
@@ -171,7 +173,7 @@ Pause and ask for confirmation before:
 - unknown tool-specific prompt conversion
 - any action that consumes quota without a clear preview
 
-Explicit generation wording such as "use banana to generate one draft" or "use 即梦2.0生成一条草稿" counts as confirmation for one draft asset only. It does not confirm batch generation, private reference uploads, 1080p/final delivery, long unattended polling, or final-use brand/face/product output.
+Explicit generation wording such as "use banana to generate one draft", "直接用 banana 跑一张", or "use 即梦2.0生成一条草稿" counts as confirmation for one draft asset only. It does not confirm batch generation, private reference uploads, 4K/1080p/final delivery, long unattended polling, or final-use brand/face/product output.
 
 If blocked, produce a preview, risk note, or one-question confirmation instead of executing.
 

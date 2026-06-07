@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import getpass
 import json
 import mimetypes
 import os
@@ -173,6 +174,70 @@ def _read_env_file_key() -> str | None:
     return None
 
 
+def _redacted_key_state(api_key: str) -> str:
+    if len(api_key) <= 12:
+        return f"present:{len(api_key)}"
+    return f"{api_key[:6]}...{api_key[-4:]}:{len(api_key)}"
+
+
+def _write_env_file_key(env_path: Path, api_key: str, force: bool) -> None:
+    env_path = env_path.expanduser()
+    if env_path.exists() and not force:
+        existing = _read_env_file_key()
+        if existing:
+            raise SystemExit(
+                f"Key file already contains OPENROUTER_API_KEY: {env_path}. "
+                "Use --force to overwrite it."
+            )
+
+    lines: list[str] = []
+    if env_path.exists():
+        try:
+            lines = env_path.read_text(encoding="utf-8").splitlines()
+        except OSError:
+            lines = []
+
+    updated = False
+    next_lines: list[str] = []
+    for raw_line in lines:
+        if raw_line.strip().startswith("OPENROUTER_API_KEY="):
+            next_lines.append(f"OPENROUTER_API_KEY={api_key}")
+            updated = True
+        else:
+            next_lines.append(raw_line)
+    if not updated:
+        next_lines.append(f"OPENROUTER_API_KEY={api_key}")
+
+    env_path.parent.mkdir(parents=True, exist_ok=True)
+    env_path.write_text("\n".join(next_lines).rstrip() + "\n", encoding="utf-8")
+    try:
+        env_path.chmod(0o600)
+    except OSError:
+        pass
+
+
+def _command_setup_key(args: argparse.Namespace) -> int:
+    env_path = Path(args.env_file or DEFAULT_ENV_FILE).expanduser()
+    if args.from_stdin:
+        api_key = sys.stdin.read().strip()
+    else:
+        print(f"Saving OpenRouter key to local private file: {env_path}", file=sys.stderr)
+        api_key = getpass.getpass("Paste OPENROUTER_API_KEY (input hidden): ").strip()
+
+    if not api_key:
+        raise SystemExit("Empty key; nothing was saved.")
+    if any(char.isspace() for char in api_key):
+        raise SystemExit("OPENROUTER_API_KEY must not contain whitespace.")
+
+    _write_env_file_key(env_path, api_key, force=args.force)
+    print(json.dumps({
+        "status": "key-saved",
+        "env_file": str(env_path.resolve()),
+        "OPENROUTER_API_KEY": _redacted_key_state(api_key),
+    }, ensure_ascii=False))
+    return 0
+
+
 def _read_api_key() -> str | None:
     key = os.environ.get("OPENROUTER_API_KEY")
     if key:
@@ -260,7 +325,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--no-compress", dest="compress_prompt", action="store_false", help="Send the full prompt without deterministic compression.")
     parser.add_argument("--compress-limit", type=int, default=DEFAULT_COMPRESS_LIMIT)
     parser.add_argument("--no-retry-on-empty", dest="retry_on_empty", action="store_false", help="Disable one simplified retry when the API returns no image.")
+    parser.add_argument("--fast", action="store_true", help="Fast draft mode: 1K default, shorter prompt compression, and no empty-result retry unless rerun manually.")
     parser.add_argument("--dry-run", action="store_true", help="Write payload only; do not call OpenRouter.")
+    parser.add_argument("--setup-key", action="store_true", help="Save OPENROUTER_API_KEY to the local private env file and exit.")
+    parser.add_argument("--from-stdin", action="store_true", help="Read setup key from stdin. Intended for automation/tests.")
+    parser.add_argument("--force", action="store_true", help="Overwrite existing OPENROUTER_API_KEY in the local private env file during --setup-key.")
     parser.add_argument("--timeout", type=int, default=180)
     parser.set_defaults(compress_prompt=True, retry_on_empty=True)
     return parser.parse_args()
@@ -270,6 +339,16 @@ def main() -> int:
     args = parse_args()
     if args.env_file:
         os.environ["BANANA_PRO_ENV"] = args.env_file
+    if args.setup_key:
+        return _command_setup_key(args)
+
+    if args.fast:
+        if "--image-size" not in sys.argv:
+            args.image_size = "1K"
+        if "--compress-limit" not in sys.argv:
+            args.compress_limit = min(args.compress_limit, 1000)
+        args.retry_on_empty = False
+
     prompt = _read_prompt(args).strip()
     if not prompt:
         raise SystemExit("Prompt is empty.")
@@ -299,6 +378,7 @@ def main() -> int:
                 "aspect_ratio": args.aspect_ratio,
                 "image_size": args.image_size,
                 "compressed_prompt": compressed,
+                "fast_mode": args.fast,
             },
         }, ensure_ascii=False))
         return 0
@@ -353,6 +433,7 @@ def main() -> int:
             "image_size": args.image_size,
             "compressed_prompt": compressed,
             "retried_on_empty": retried,
+            "fast_mode": args.fast,
             "output_dir": str(output_dir.resolve()),
         },
     }, ensure_ascii=False))

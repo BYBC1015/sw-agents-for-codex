@@ -57,7 +57,7 @@ Selected Asset Packet:
 - Privacy/cost gate:
 ```
 
-Use the packet to preserve what was selected, what must not change, what each reference is responsible for, and which tool gets the object next. Do not use it for direct prompt-only requests where the user already supplied a complete final prompt.
+Use the packet to preserve what was selected, what must not change, what each reference is responsible for, and which tool gets the object next. For multiple references, prefer `identity`, `structure`, `style`, and `motion source` as the reference roles. Do not use it for direct prompt-only requests where the user already supplied a complete final prompt.
 
 Quick edit 适用于已有对象的 S/M 级局部改动：海报/图片、deck 页面或结构、分镜组或单个镜头、剪辑表片段、prompt 参数。最多问 1 个阻塞问题，先输出修改后的对象；如果改动影响受众、主卖点、叙事结构、视觉风格或交付形式，必须回到阶段 9 变更处理。
 

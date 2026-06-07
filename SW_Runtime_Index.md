@@ -7,19 +7,19 @@ This is the compact runtime index for SW_V1.0. Read it before deeper project fil
 Activation reply:
 
 ```text
-SW loaded successfully. Current version: V1.12.12
+SW loaded successfully. Current version: V1.12.13
 ```
 
 Sync reply:
 
 ```text
-SW version synchronized. Current version: V1.12.12
+SW version synchronized. Current version: V1.12.13
 ```
 
 Rescue reply:
 
 ```text
-SW rescue synchronized. Current version: V1.12.12
+SW rescue synchronized. Current version: V1.12.13
 ```
 
 If the user only invokes SW, sync, or rescue, reply with the matching fixed line and stop.
@@ -132,6 +132,7 @@ Do not show role trace for activation-only or sync-only replies.
 - Direction: up to 3 directions, recommendation, key risks.
 - Compare board: after direction options, storyboard groups, or deck structures when feedback/selection is fuzzy; output only `Keep`, `Remove`, and `Next version`.
 - Selected asset packet: before a selected poster visual, deck page visual, storyboard shot, reference frame, local media item, public URL, or generated still is handed to `prompt-director`, URL Relay, Banana, Seedance, Kling, DOCX, or Feishu; output one compact selected-object packet and do not reopen the brief.
+- API fast path: when an explicit API tool call already has a clear prompt or handoff, run the fixed tool command directly. Skip separate doctor/key checks and reference reads unless the tool reports an error. Keep private uploads, batch/final generation, 4K/1080p, and unresolved privacy/cost gates confirmation-gated.
 - Production: one role deliverable with questions and next role.
 - High-cost: confirmation first, then one confirmed version or controlled batch.
 - Review/change: concise risk list or S/M/L/XL decision before rewriting.
@@ -188,7 +189,7 @@ Rules:
   - If the user already provides a complete final image prompt, use `prompt-director` -> `banana-pro`.
   - If the same request includes storyboard, video, film, poster, PPT/deck/slide, layout, character, product, prop, or scene design work, do not jump directly to Banana Pro. First run the responsible Studio role for the upstream deliverable, then `prompt-director`, then `banana-pro` only for the selected frame/image.
   - Add `tool-integrator` only when capability, parameters, API, or connection state is unclear.
-  Treat `banana-pro` like an `imagegen`-style image-generation member after prompt preparation. It includes `scripts/generate_openrouter_image.py`; real generation needs confirmation and `OPENROUTER_API_KEY` from the environment or private `~/.config/banana-pro/openrouter.env`. If the key is missing, run dry-run or output the payload and do not claim an image was generated.
+  Treat `banana-pro` like an `imagegen`-style image-generation member after prompt preparation. It includes `scripts/generate_openrouter_image.py`; real generation needs confirmation and `OPENROUTER_API_KEY` from the environment or private `~/.config/banana-pro/openrouter.env`. If the prompt is clear and the user explicitly asks to generate one draft, use the fixed fast command directly and let the runner check the key. If the key is missing, return the missing-key payload and `--setup-key` route; do not claim an image was generated.
 - Explicit 抠图 / 扣图 / 去底 / 去黑底 / 黑底转透明 / 透明底 PNG / `@black-background-cutout`:
   - If the user provides existing local image files, load `black-background-cutout` directly. It is a local pixel-processing tool for black/simple solid backgrounds, not AI generation and not a Studio role.
   - It creates fast transparent PNG previews and may leave slight fringing. Do not present it as finishing-grade, no-fringe, or a solution for AI lettering reuse. For complex photo cutouts or formal delivery, recommend professional cutout/refinement or regenerated transparent assets.
@@ -235,7 +236,7 @@ Selected Asset Packet:
 
 Rules:
 
-- `Reference roles` must say what each reference does, such as character identity, product shape, scene layout, composition, color, texture, style, first frame, last frame, or edit source. Do not treat all references as global style.
+- `Reference roles` must say what each reference does. Prefer four compact categories: `identity` for character/product likeness or shape, `structure` for layout/composition/scene geometry, `style` for color/light/texture/mood, and `motion source` for first frame, last frame, edit source, or action continuity. Do not treat all references as global style.
 - `Locked items` are preserved by `prompt-director` and downstream tools unless the user explicitly changes them.
 - `Avoid` carries copyright, brand, deformation, wrong text, platform, and continuity constraints.
 - `Selected input` can be a short description, existing URL, local file label, generated output id, slide id, shot id, or visual-board id. Do not expose private local paths in formal client documents unless the user asks for an internal appendix.

@@ -47,7 +47,7 @@ Selected Asset Packet:
 Prompt rules for this packet:
 
 - Write for the selected `Object ID` only; do not expand into a full project prompt set.
-- Convert `Reference roles` into specific prompt controls instead of treating every reference as style.
+- Convert `Reference roles` into specific prompt controls instead of treating every reference as style. Prefer four compact roles: `identity` for character/product likeness or shape, `structure` for layout/composition/scene geometry, `style` for color/light/texture/mood, and `motion source` for first frame, last frame, edit source, or action continuity.
 - Preserve `Locked items` unless the user explicitly changes them.
 - Carry `Avoid` into the negative prompt, continuity constraints, tool settings, or post-generation QC.
 - If `Selected input` is local/private media, do not write it as a final public URL until URL Relay or the user provides an accessible URL and the privacy/cost gate is resolved.

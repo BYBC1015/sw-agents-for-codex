@@ -1,4 +1,4 @@
 interface:
   display_name: "Banana Pro"
   short_description: "Banana Pro OpenRouter image generation workflow"
-  default_prompt: "Use $banana-pro to generate one selected image through Banana Pro after the SW prompt is ready."
+  default_prompt: "Use $banana-pro to generate one selected image through Banana Pro after the SW prompt is ready. If the prompt or selected-object handoff is clear, use the fast fixed API path directly for one draft image; skip separate doctor/key checks unless the runner reports an error."

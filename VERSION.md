@@ -1,6 +1,6 @@
 # SW Version
 
-Current runtime version: V1.12.12
+Current runtime version: V1.12.13
 Stable invocation name: SW_V1.0
 Stable invocation aliases: `/sw`, `/SW_V1.0`, `@SW_V1.0`, `/sw_v1.0`, `/sw-v1-0`
 Version sync aliases: `@sw_update`, `SW_UPDATE`, `/sw_update`, `/sw-update`, `SW_REFRESH`
@@ -86,6 +86,7 @@ Each entry must include:
 
 | Version | Date | Change |
 | --- | --- | --- |
+| V1.12.13 | 2026-06-07 | Optimized the reference-role handoff and API-tool fast path. Selected Asset Packet reference roles now prefer `identity`, `structure`, `style`, and `motion source` so multi-reference image/video work does not treat every reference as global style. Banana Pro now has a fixed fast draft route with `--fast`, skips repeated doctor/key checks when the prompt or handoff is clear, and adds `--setup-key` to save OpenRouter keys in a local private env file without writing secrets into the repository. |
 | V1.12.12 | 2026-06-01 | Added full-storyboard generation rules. Requests such as "生成全部分镜", "完整分镜", "全片分镜", or "按剧本生成所有镜头" now use the real script shot count, allow only narrative-purpose supplemental shots, and paginate contact sheets as 3x3 review pages with black slots for blanks, missing frames, or failed frames instead of forcing filler images. |
 | V1.12.11 | 2026-06-01 | Added a lightweight historical/cultural-heritage project nudge and a reusable Historical Drama Style Capsule rule. Historical accuracy remains confirmation-gated and handled by `historical-consultant`; the style capsule is an optional prompt baseline for historical drama, museum, archaeology, ancient craft, and cultural-heritage storyboard/prompt work, merged once as a global visual baseline plus per-shot deltas to reduce AI-looking output without increasing normal SW reads. |
 | V1.12.10 | 2026-06-01 | Narrowed SW activation to explicit invocation only. Ordinary design-topic wording such as poster, PPT, deck, storyboard, image prompt, video prompt, review, or revision no longer starts the full SW framework by itself. `/poster`, `/video`, `/ppt`, `/storyboard`, `/prompt-image`, and similar project aliases now apply only after SW has already been activated or when combined with `/sw`, `@SW_V1.0`, `调用 SW_V1.0`, `拉取本项目架构`, or `按本项目架构执行`. Skill metadata and installed plugin descriptions were narrowed to avoid implicit cross-device auto-entry. |

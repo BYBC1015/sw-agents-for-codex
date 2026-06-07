@@ -34,7 +34,7 @@ Selected Asset Packet:
 - Privacy/cost gate:
 ```
 
-Tool cards should interpret `Selected input` and `Reference roles` before execution. Public upload, paid generation, long polling, or external publishing must wait until `Privacy/cost gate` is resolved.
+Tool cards should interpret `Selected input` and `Reference roles` before execution. Prefer four compact reference-role categories when possible: `identity`, `structure`, `style`, and `motion source`. Public upload, paid generation, long polling, or external publishing must wait until `Privacy/cost gate` is resolved.
 
 ## 已登记工具成员
 
@@ -64,7 +64,7 @@ Tool cards should interpret `Selected input` and `Reference roles` before execut
 ```text
 工具名：Banana Pro
 工具类型：图像生成 / 出图执行 / OpenRouter image generation
-接入状态：本地 skill 已接入；定位等同 `imagegen` 类出图成员；已打包 OpenRouter API 执行脚本；补齐 `OPENROUTER_API_KEY` 或本机私密 `~/.config/banana-pro/openrouter.env` 后可在确认后真实生成图片
+接入状态：本地 skill 已接入；定位等同 `imagegen` 类出图成员；已打包 OpenRouter API 执行脚本；补齐 `OPENROUTER_API_KEY` 或本机私密 `~/.config/banana-pro/openrouter.env` 后可在确认后真实生成图片；显式生成且 prompt/handoff 清楚时走 API fast path
 触发说法：香蕉、banana、@banana-pro、Banana Pro、Nano Banana、google/gemini-3-pro-image-preview、OpenRouter 图像生成、用 banana-pro 生成/出图/转换
 最适合：海报主视觉、分镜首帧、产品或道具概念图、角色设定图、场景底图、多参考图像提示词包
 不适合：普通图片提示词的默认处理、准确中文文字、logo/二维码、未确认版权或客户敏感素材的自动上传、未经确认的额度消耗、未配置 `OPENROUTER_API_KEY` 时假装已生成图片
@@ -82,7 +82,7 @@ Tool cards should interpret `Selected input` and `Reference roles` before execut
 归属岗位：prompt-director -> banana-pro；tool-integrator 仅在能力、参数、API 或接入状态不清楚时介入
 派单显示：`prompt-director` 放在 `Studio roles:`；`banana-pro` 必须单独显示为 `Tool skill:`，不要写成 Studio role
 读取路径：优先 `banana-pro/SKILL.md`，其次用户级 `C:\Users\Administrator\.codex\skills\banana-pro\SKILL.md`，最后插件级 `C:\Users\Administrator\plugins\sw-v1-0\skills\banana-pro\SKILL.md`
-执行脚本：`scripts/generate_openrouter_image.py`，从 skill 根目录相对解析；无 key 时用 `--dry-run` 或返回 missing-key
+执行脚本：`scripts/generate_openrouter_image.py`，从 skill 根目录相对解析；快速草稿用 `--fast --prompt-file <prompt.txt>`；本机保存 key 用 `--setup-key`；无 key 时用 `--dry-run` 或返回 missing-key
 ```
 
 ```text

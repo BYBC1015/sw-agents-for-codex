@@ -72,11 +72,13 @@ Recommended private file:
 ~/.config/banana-pro/openrouter.env
 ```
 
-File content:
+Fast local setup:
 
-```text
-OPENROUTER_API_KEY=<your OpenRouter key>
+```powershell
+python .\banana-pro\scripts\generate_openrouter_image.py --setup-key
 ```
+
+This saves `OPENROUTER_API_KEY` to the private file outside the repository. The key must not be committed into the SW repo or printed in handoff documents.
 
 ### Seedance 2.0 / 即梦2.0
 

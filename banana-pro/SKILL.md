@@ -17,9 +17,33 @@ Use `scripts/generate_openrouter_image.py` to generate images through OpenRouter
 - `OPENROUTER_API_KEY` is available in the environment or in the private env file
 - high-cost and upload/privacy guardrails are satisfied
 
-The script reads `OPENROUTER_API_KEY` from the process environment, then from `~/.config/banana-pro/openrouter.env`, and on Windows also falls back to the current user's environment variable registry value. If the key is missing, run dry-run or provide the ready payload; do not claim an image was generated.
+The script reads `OPENROUTER_API_KEY` from the process environment, then from the local private `~/.config/banana-pro/openrouter.env`, and on Windows also falls back to the current user's environment variable registry value. If the key is missing, run dry-run or provide the ready payload; do not claim an image was generated.
+
+For one-time local setup, save the key outside the repository:
+
+```powershell
+python <banana-pro-skill-dir>\scripts\generate_openrouter_image.py --setup-key
+```
+
+This writes a local private env file only. Do not put API keys in skill files, prompts, manifests, git-tracked files, or chat output.
 
 For speed, do not run a separate key-check command before every generation. Let the runner check the key; after one successful key-readable check or one successful generation in the current conversation, treat the key as available unless the runner reports otherwise.
+
+## Fast API Path
+
+When the user explicitly asks Banana Pro to generate and the prompt or selected-object handoff is already clear, use this fixed path:
+
+1. Do not run a separate doctor/key-check command.
+2. Do not read `references/` unless troubleshooting or a specialized prompt pattern is actually needed.
+3. Treat "用 banana 生成一张/出一张草稿/直接跑" as confirmation for one draft image.
+4. Write the final prompt to a temporary UTF-8 prompt file when possible, then run the wrapper directly:
+
+```powershell
+python <banana-pro-skill-dir>\scripts\generate_openrouter_image.py --fast --prompt-file <prompt.txt> --aspect-ratio "16:9"
+```
+
+5. If the key is missing, return the `missing-key` payload path and the `--setup-key` command. Do not start a long explanation.
+6. Pause only for private reference upload, batch generation, final-use brand/face/product assets, 4K/final output, or unresolved Selected Asset Packet privacy/cost gate.
 
 ## Execution Defaults
 
@@ -73,6 +97,12 @@ Banana Pro must not skip SW's design pipeline.
 
 ```powershell
 python <banana-pro-skill-dir>\scripts\generate_openrouter_image.py --prompt "<final prompt>" --aspect-ratio "16:9" --image-size "2K"
+```
+
+   - For fast drafts, prefer:
+
+```powershell
+python <banana-pro-skill-dir>\scripts\generate_openrouter_image.py --fast --prompt-file "<prompt-file>" --aspect-ratio "16:9"
 ```
 
    - For references, add `--reference-image <local-path>` or `--reference-url <url>`.

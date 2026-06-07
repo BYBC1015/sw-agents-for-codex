@@ -319,7 +319,7 @@ Trigger when the user says:
 Required reply:
 
 ```text
-SW rescue synchronized. Current version: V1.12.12
+SW rescue synchronized. Current version: V1.12.13
 ```
 
 This is not a project start, not a normal sync replacement, and not a tool-generation step.

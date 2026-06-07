@@ -270,7 +270,7 @@ def check_banana() -> dict[str, Any]:
         "key_state": secret_state(value),
         "key_source": source,
         "config_path": str(BANANA_ENV_FILE),
-        "setup_hint": f"Create {BANANA_ENV_FILE} with OPENROUTER_API_KEY=<your key>.",
+        "setup_hint": "Run: python banana-pro/scripts/generate_openrouter_image.py --setup-key",
     }
 
 

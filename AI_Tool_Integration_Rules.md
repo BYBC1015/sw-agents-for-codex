@@ -15,7 +15,7 @@
 - Black Background Cutout / `black-background-cutout` 是显式触发的本地抠图工具，不是 AI 生成工具。只有用户明确说抠图、扣图、去底、去黑底、黑底转透明、透明底 PNG 或 `@black-background-cutout` 时才加载；它只对本地黑底/简单纯色底图片做快速透明 PNG 预览，可能有轻微毛边，不作为正式无损交付资产。
 - Banana Pro / `banana-pro` 是显式调用的出图成员，作用类似 `imagegen`，位于 `prompt-director` 之后：只有用户明确提到香蕉、banana、Banana Pro、Nano Banana、OpenRouter 图像生成、`@banana-pro`，或明确要求用这个成员生成图片时才加载；普通图片提示词仍由 `prompt-director` 处理。
 - Banana Pro 不能越过上游设计岗位。若同一请求包含分镜、视频/电影镜头、海报、PPT/deck/slide、版式、角色、产品、道具或场景设计，先由对应 Studio role 产出设计 handoff，再由 `prompt-director` 转为最终视觉 prompt，最后才交给 Banana Pro 生成选中的一张/一帧。
-- Banana Pro 已包含 OpenRouter API 执行脚本；真实生成需要用户明确确认且环境存在 `OPENROUTER_API_KEY` 或本机私密 `~/.config/banana-pro/openrouter.env`。没有 key 时只做 dry-run/payload，不声称已出图。
+- Banana Pro 已包含 OpenRouter API 执行脚本；真实生成需要用户明确确认且环境存在 `OPENROUTER_API_KEY` 或本机私密 `~/.config/banana-pro/openrouter.env`。当用户明确要求生成一张草稿且 prompt/handoff 已清楚时，走 API fast path：不额外 doctor/key-check，不读无关参考，直接运行固定命令并让脚本返回 `ok/missing-key/no-image`。没有 key 时只做 dry-run/payload，不声称已出图。
 - Seedance 2.0 Video / `seedance-2-video` 是显式调用的视频生成成员，位于 `prompt-director` 之后：只有用户明确提到即梦2.0生成、即梦生成、Seedance 2.0、Ark Seedance、豆包 Seedance、`@seedance-2-video`，或明确要求用这个成员生成视频时才加载；普通视频提示词和分镜仍由 Studio roles 与 `prompt-director` 处理。
 - Seedance 不能越过上游视频设计岗位。若同一请求包含脚本、分镜、镜头语言、剪辑节奏、动效、声音、调色、场景或电影方案，先由对应 Studio role 产出 handoff，再由 `prompt-director` 转为最终视频 prompt，最后才交给 Seedance 生成选中的一条镜头/片段。
 - Seedance 已包含 Ark API dry-run/run/poll 脚本；真实生成需要用户明确确认且环境存在 `ARK_API_KEY` 或本地私密 key 文件。没有 key 时只做 dry-run/payload，不声称已出视频。
@@ -69,7 +69,7 @@
 所有 AI 生成工具都走 4 层转换；若已有 Selected Asset Packet，则在 Studio Brief 之后、Prompt Profile 之前消化该包：
 
 1. Studio Brief：目标、受众、平台、方向、禁区。
-2. Selected Asset Packet：仅在已有选中对象时使用，保留对象 ID、用途、参考角色、锁定项、禁止项、下一工具、隐私/成本门。
+2. Selected Asset Packet：仅在已有选中对象时使用，保留对象 ID、用途、参考角色、锁定项、禁止项、下一工具、隐私/成本门。多参考图优先按 `identity / structure / style / motion source` 标注，避免把所有参考都当成全局风格。
 3. Prompt Profile：按 `AI_Tool_Prompt_Profiles.md` 选择图像生成、图像编辑、视频生成、视频编辑、版式或音频剖面。
 4. Universal Prompt：主体、场景、构图、镜头、光线、色彩、动作、限制。
 5. Official Delta：只有点名工具或排错时，按 `Prompts/Tool_Official_Prompt_Deltas.md` 叠加官方提示词差异。
