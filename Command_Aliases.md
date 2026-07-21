@@ -25,7 +25,7 @@
 调用成功后必须先回复：
 
 ```text
-SW loaded successfully. Current version: V1.12.13
+SW loaded successfully. Current version: V1.13.1
 ```
 
 如果只输入调用命令，回复成功语后停止等待诉求。如果调用命令后附带需求，先回复成功语，再继续执行项目流程。
@@ -39,7 +39,7 @@ Version sync:
 Required reply:
 
 ```text
-SW version synchronized. Current version: V1.12.13
+SW version synchronized. Current version: V1.13.1
 ```
 
 Historical conversation fallback:
@@ -69,7 +69,7 @@ or:
 Required reply:
 
 ```text
-SW rescue synchronized. Current version: V1.12.13
+SW rescue synchronized. Current version: V1.13.1
 ```
 
 Use this when startup/update chips keep replaying old sealed snapshots. It must not start a project and must not route through `sw-v1-0` or `sw-update`.
@@ -166,7 +166,7 @@ Use this for optional feature triggers such as Banana Pro, Seedance 2.0 Video, U
 | `/deck-plan [需求]` | 出 PPT 结构、章节流和页面角色 | `presentation-designer` |
 | `/slide-review` | 检查 PPT 逻辑、层级、可读性和交付风险 | `presentation-designer` + `review-producer` |
 | `/poster-plan` | 出海报文案、版式、主视觉说明 | `poster-art-director` |
-| `/storyboard` | 出视频结构和分镜表 | `storyboard-director` |
+| `/storyboard` | 资产未锁时先确认 Project Asset Graph，再出视频结构和分镜表 | `production-designer` -> `storyboard-director` |
 | `/edit-plan` | 出剪辑时间线、字幕、BGM、音效 | `edit-director` |
 | `/prompt-image [需求]` | 出图片生成提示词 | `prompt-director` |
 | `/prompt-video [需求]` | 出视频镜头提示词 | `prompt-director` |

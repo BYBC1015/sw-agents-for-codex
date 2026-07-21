@@ -25,7 +25,7 @@ Check version consistency:
 python .\tools\sw_consistency_check.py --scope repo
 python .\tools\sw_sync_installed.py --dry-run
 python .\tools\sw_doctor.py
-rg "SW loaded successfully. Current version: V1.12.13|SW version synchronized. Current version: V1.12.13|SW rescue synchronized. Current version: V1.12.13|Current runtime version: V1.12.13" .
+rg "SW loaded successfully. Current version: V1.12.17|SW version synchronized. Current version: V1.12.17|SW rescue synchronized. Current version: V1.12.17|Current runtime version: V1.12.17" .
 rg "<previous-version>" . --glob "!VERSION.md" --glob "!Architecture_Update_Log.md"
 ```
 

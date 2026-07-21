@@ -9,6 +9,14 @@ Desktop.ini
 # Python/cache artifacts
 __pycache__/
 *.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage/
+htmlcov/
 
 # Node/build artifacts, in case future tooling is added
 node_modules/
@@ -19,9 +27,12 @@ build/
 # Local environment files
 .env
 .env.*
+.codex/
 *.key
 *.pem
 secrets.*
+*.secret
+*.token
 
 # Generated previews/exports
 *.bak
@@ -35,5 +46,9 @@ cutout_transparent_png/
 *.rar
 openrouter_payload*.json
 openrouter_response*.json
+ark_payload*.json
+ark_response*.json
+seedance_payload*.json
+seedance_response*.json
 banana_prompt_full.txt
 banana_prompt_used.txt

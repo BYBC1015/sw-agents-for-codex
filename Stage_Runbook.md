@@ -41,7 +41,7 @@ Compare Board:
  - Next version:
 ```
 
-Selected Asset Packet is not a new stage. It is a short selected-object handoff used only after a poster visual, deck page visual, storyboard shot/group, reference still, local media item, public URL, or generated image has been chosen and before it goes to `prompt-director`, URL Relay, Banana, Seedance, Kling, Storyboard Visual Word, or Feishu.
+Selected Asset Packet is not a new stage. It is a short selected-object handoff used only after a poster visual, deck page visual, storyboard shot/group, reference still, local media item, public URL, or generated image has been chosen and before it goes to `prompt-director`, URL Relay, Banana, Dreamina CLI, Seedance, Kling, Storyboard Visual Word, or Feishu.
 
 ```text
 Selected Asset Packet:
@@ -167,6 +167,21 @@ Use this stage when the creative direction is usable but the visual style is not
 
 Exit when one aesthetic profile is selected or when the user explicitly says to skip visual taste selection.
 
+## Stage 3C: Project Asset Graph
+
+Use this stage when an activated project starts as video, film, campaign story, product story, or storyboard work and recurring assets are not already locked.
+
+| Item | Rule |
+| --- | --- |
+| Lead skill | `production-designer` |
+| Input | brief, direction, script/treatment, user references, existing files/URLs, optional `.sw/ASSETS.md` |
+| Default cost | low to medium |
+| Output | compact Project Asset Graph: existing assets, assets to create, character nodes, scene/location nodes, prop/product/wardrobe nodes, continuity locks, storyboard handoff |
+| Questions | ask what exists already, what must be generated, and what must stay locked; if the user wants speed, assume draft nodes and continue |
+| Forbidden | expanding into full character sheets, scene sheets, generated boards, or batch assets without confirmation |
+
+Exit when the storyboard has enough asset continuity to avoid identity, scene, prop, wardrobe, or reference drift.
+
 ## Stage 4A: Poster Plan
 
 ### Poster Default: Image-Native Typography
@@ -228,6 +243,8 @@ Poster production is not the same as PPT/deck production. For most posters, SW s
 
 ## 阶段 4C：视频结构与分镜
 
+Before detailed shot tables or storyboard boards, run Stage 3C Project Asset Graph when characters, scenes, props, products, wardrobe, existing footage, or references are not locked. If the user asks for a storyboard directly, ask the asset-source questions first or continue with marked assumptions in fast mode.
+
 | 项目 | 规则 |
 | --- | --- |
 | 进入条件 | 主方向已确认或默认确认 |
@@ -244,6 +261,7 @@ Poster production is not the same as PPT/deck production. For most posters, SW s
 - 分镜阶段：解决“每个镜头看到什么”。
 - 对比阶段：当多个分镜组、镜头顺序或节奏方向需要判断时，只用 Compare Board 收口“保留/删除/下一版”，不重写全片。
 - 一体式分镜板阶段：把连续镜头组织成可审阅的一张图；默认按 15s 段落分组，单组总时长不超过 15s，最多 9 个镜头但不强行凑九宫格；若镜头卡不到 15s 边界，可先微调镜头时长，仍不自然则转下一组。
+- Storyboard Animatic Sheet 阶段：当分镜板将作为即梦/Seedance/AI-video 的执行蓝图时，必须升级为高信息量 sheet：上方 panel grid，底部 director strip，轨道包含 Beat Line、Camera Path、Action Path、Rhythm Track、Escalation Map、State Track、Style Track。密集 15s burst-cut sequence 可使用约 12-20 panels；没有 director strip 的普通分镜图只能作为视觉参考，不作为严格视频蓝图。
 - 剪辑阶段：解决“怎么剪、怎么听、怎么转场”。
 - 提示词阶段：解决“AI 生成某个镜头怎么描述”。
 
@@ -286,6 +304,13 @@ Poster production is not the same as PPT/deck production. For most posters, SW s
 4. AI 生成草稿或辅助素材。
 5. AI 生成可进最终稿的素材，必须加强版权和一致性检查。
 
+Dreamina/Jimeng official CLI execution rule:
+
+- Dreamina CLI / Jimeng CLI / official Jimeng CLI / `@dreamina-cli` only enters after the responsible upstream role and `prompt-director` when design work is still needed.
+- It can generate images or videos only after install/login/private upload/paid generation/batch/long polling risk is confirmed.
+- Before real use, inspect `dreamina -h` and the relevant subcommand help; do not hardcode model or parameter support.
+- If the CLI is missing or not logged in, stop at help/preflight or prompt-only handoff.
+
 显式工具执行规则：
 
 - Banana Pro 出图只在用户明确要求香蕉/banana/Banana Pro 时进入，且必须位于对应设计 handoff 和 `prompt-director` 之后。
@@ -297,6 +322,7 @@ Poster production is not the same as PPT/deck production. For most posters, SW s
 - 需要人物连续性时，优先建议角色设定图：大人设、正背侧、表情、细节、剪影、色卡。
 - 需要空间连续性时，优先建议场景设定图：建立镜头、关键角度、材质/道具、光线、色卡。
 - 需要审阅多镜头时，优先建议一体式分镜板：一组一张，默认 15s 段落、单组不超过 15s、最多 9 镜头；镜头数按内容决定，不强行凑 9 格。
+- 需要把分镜直接交给即梦/Seedance 生成一条 storyboard-locked sequence 时，优先建议 Storyboard Animatic Sheet：按案例级信息密度准备 Project Card、Continuity Header、Scene Packet、Identity/Environment/Effect/Spatial locks、Panel Headers、Camera + Lens Plan、Action Path、Rhythm Track、Escalation Map、State Track、Style Track。
 - 这些属于生产参考资产；生成图片前仍需通过 `prompt-director`，真实出图工具需显式确认。
 - 当其中某个资产被选中进入 prompt、URL 中转、生成工具、DOCX 或 Feishu 交付时，先写 `Selected Asset Packet`，不要把“选中哪张/哪镜/哪条 URL”只放在口头描述里。
 
@@ -324,7 +350,9 @@ Poster production is not the same as PPT/deck production. For most posters, SW s
 
 如果提示词输入来自已选海报主视觉、deck 页面视觉、分镜镜头、参考角度帧、本地素材、公网 URL 或已生成图片，先读取或生成 `Selected Asset Packet`。`prompt-director` 只转换该包对应的对象，必须保留 `Locked items`，按 `Reference roles` 使用参考物，并把 `Avoid` 写入负面/限制条件。
 
-如果是角色设定图、场景设定图或一体式分镜板，按需读取 `Prompts/Visual_Development_Board_Rules.md`。默认只输出一张/一组的 prompt，不批量输出全部分镜组。
+如果是 Project Asset Graph、角色设定图、场景设定图、一体式分镜板或 Storyboard Animatic Sheet，按需读取 `Prompts/Visual_Development_Board_Rules.md`。默认只输出一张/一组的 prompt，不批量输出全部分镜组。
+
+如果是即梦/Seedance 使用 Storyboard Animatic Sheet 生成视频，视频工具 prompt 固定为“引用 storyboard + 角色 + 环境 + panel beats”的执行模板：storyboard sheet 是 `motion source + structure`，角色表是 `identity`，环境图是 `structure/style`。`PANEL BEATS` 必须来自 sheet 的 Panel Headers、Camera + Lens Plan、Action Path、Rhythm Track、Escalation Map、State Track 和 Style Track；不要让工具复刻纸张、分镜格、标题栏或 director strip 图形。
 
 ### 提示词修改策略
 

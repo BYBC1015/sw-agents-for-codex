@@ -15,6 +15,7 @@ import json
 import os
 import platform
 import re
+import shutil
 import subprocess
 import sys
 import urllib.error
@@ -34,6 +35,8 @@ BANANA_ENV_FILE = Path.home() / ".config" / "banana-pro" / "openrouter.env"
 SEEDANCE_KEY_FILE = Path.home() / ".config" / "codex-seedance-2-video" / "secrets.json"
 RELAY_CONFIG_FILE = Path.home() / ".config" / "sw-media-uploader" / "config.json"
 FEISHU_CONFIG_FILE = Path.home() / ".config" / "sw-feishu" / "config.json"
+DREAMINA_CONFIG_DIR = Path.home() / ".dreamina_cli"
+DREAMINA_DEFAULT_EXE = USERPROFILE / "bin" / "dreamina.exe"
 
 SW_UPLOAD_URL = "http://123.56.255.86/upload"
 SW_PUBLIC_BASE = "http://123.56.255.86/u"
@@ -237,6 +240,7 @@ def installed_paths() -> dict[str, bool]:
         "user_help": USER_SKILLS / "sw-help" / "SKILL.md",
         "user_rescue": USER_SKILLS / "sw-rescue" / "SKILL.md",
         "user_banana": USER_SKILLS / "banana-pro" / "SKILL.md",
+        "user_dreamina": USER_SKILLS / "dreamina-cli" / "SKILL.md",
         "user_seedance": USER_SKILLS / "seedance-2-video" / "SKILL.md",
         "user_url_relay": USER_SKILLS / "url-relay" / "SKILL.md",
         "user_black_background_cutout": USER_SKILLS / "black-background-cutout" / "SKILL.md",
@@ -256,8 +260,8 @@ def check_banana() -> dict[str, Any]:
     source = None
     value = None
     for candidate_source, candidate_value in [
-        ("env:OPENROUTER_API_KEY", env_key),
         (str(BANANA_ENV_FILE), file_key),
+        ("env:OPENROUTER_API_KEY", env_key),
         ("windows_user_env:OPENROUTER_API_KEY", registry_key),
     ]:
         if candidate_value:
@@ -286,6 +290,24 @@ def check_seedance() -> dict[str, Any]:
         "key_source": source,
         "config_path": str(SEEDANCE_KEY_FILE),
         "setup_hint": "Run: python seedance-2-video/scripts/seedance_task.py setup-key",
+    }
+
+
+def check_dreamina() -> dict[str, Any]:
+    command = shutil.which("dreamina")
+    if not command and DREAMINA_DEFAULT_EXE.exists():
+        command = str(DREAMINA_DEFAULT_EXE)
+    return {
+        "name": "Dreamina/Jimeng official CLI",
+        "status": READY if command else NEEDS_CONFIG,
+        "command": command,
+        "session_state": "unchecked",
+        "config_path": str(DREAMINA_CONFIG_DIR),
+        "setup_hint": (
+            "Only after confirmation: run the official installer from "
+            "https://jimeng.jianying.com/cli, then run dreamina login."
+        ),
+        "detail": "Bootstrap checks only whether the local dreamina command exists; it does not install, login, or generate.",
     }
 
 
@@ -402,7 +424,12 @@ def feature_status(
         {
             "name": "Banana Pro",
             "status": keys["banana"]["status"] if installed["user_banana"] else FAILED,
-            "detail": "Image generation is ready when OPENROUTER_API_KEY is configured; otherwise dry-run/payload only.",
+            "detail": "Image generation is ready when the private Banana env file or OPENROUTER_API_KEY is configured; otherwise dry-run/payload only.",
+        },
+        {
+            "name": "Dreamina CLI",
+            "status": keys["dreamina"]["status"] if installed["user_dreamina"] else FAILED,
+            "detail": "Official Jimeng/Dreamina CLI route is available when the dreamina command is installed; login/generation are confirmed at use time.",
         },
         {
             "name": "Seedance 2.0",
@@ -448,7 +475,9 @@ def collect_needs(features: list[dict[str, Any]], key_reports: dict[str, Any], r
         if feature["status"] in {NEEDS_CONFIG, FAILED, WARNING}:
             needs.append(f"{feature['name']}: {feature['status']}")
     if key_reports["banana"]["status"] == NEEDS_CONFIG:
-        needs.append("Banana Pro key: set OPENROUTER_API_KEY in env or ~/.config/banana-pro/openrouter.env.")
+        needs.append("Banana Pro key: set ~/.config/banana-pro/openrouter.env or OPENROUTER_API_KEY.")
+    if key_reports["dreamina"]["status"] == NEEDS_CONFIG:
+        needs.append("Dreamina CLI: install the local dreamina command and login only after explicit confirmation.")
     if key_reports["seedance"]["status"] == NEEDS_CONFIG:
         needs.append("Seedance key: run seedance_task.py setup-key or set ARK_API_KEY locally.")
     if relay["status"] == NEEDS_CONFIG:
@@ -478,6 +507,7 @@ def print_human(report: dict[str, Any]) -> None:
     print()
     print("Private config state:")
     print(f"- Banana Pro key: {report['keys']['banana']['key_state']}")
+    print(f"- Dreamina CLI: {'installed' if report['keys']['dreamina']['command'] else 'missing'}")
     print(f"- Seedance key: {report['keys']['seedance']['key_state']}")
     print(f"- URL Relay token: {report['url_relay']['token_state']}")
     print(f"- Feishu app secret: {report['keys']['feishu']['app_secret_state']}")
@@ -544,7 +574,7 @@ def main() -> int:
             report["ok"] = False
 
     installed = installed_paths()
-    keys = {"banana": check_banana(), "seedance": check_seedance(), "feishu": check_feishu()}
+    keys = {"banana": check_banana(), "dreamina": check_dreamina(), "seedance": check_seedance(), "feishu": check_feishu()}
     relay = check_url_relay(args.no_network, args.timeout)
     obsidian = check_obsidian_vault()
     features = feature_status(installed, keys, relay, obsidian)

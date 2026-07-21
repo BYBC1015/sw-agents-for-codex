@@ -15,6 +15,7 @@
 - 海报默认是视觉图像工作，不是 PPT 式系统文字排版。除非用户明确要可编辑字层、精确小字、logo/二维码/法务信息或生产源文件，否则海报主标题、发布标题、大数字和字效默认交给 image/视觉模型处理；SW 主要负责反馈判断、修改指令和结果 QA。
 - 先低成本判断，再高成本生成。没有锁定方向前，不做大量长方案、批量变体、AI 图像或视频生成提示词。
 - 方向、分镜组或 deck 结构之后，如需比较或反馈仍抽象，先出轻量 Compare Board，只写 `Keep / Remove / Next version`，不展开新方案。
+- 视频、电影、叙事型 campaign、产品故事或分镜请求在进入分镜前，必须先确认或生成轻量 `Project Asset Graph`：现有资产、需新建资产、角色节点、场景节点、道具/产品/服装节点和连续性锁定项。项目开始或用户直接要求分镜时，主动问“已有资产 / 需要新建 / 哪些必须锁定”；用户说快速、少问或你定时，用默认假设先出草图版资产图，不阻塞分镜。
 - 当海报主视觉、deck 页面视觉、分镜镜头/组、参考角度帧、本地素材、公网 URL 或已生成图片被选中并要交给 prompt、URL 中转、AI 工具、DOCX 或 Feishu 时，先用轻量 `Selected Asset Packet` 记录对象 ID、用途、参考物角色、锁定项、禁止项、下一工具和隐私/成本门。
 - 每次需求变化都先按变更处理，不直接推翻重做。
 - 中途反馈、老板口头意见、甲方碎评论、录屏反馈、会议纪要、聊天记录或截图批注可先压成 `Change Delta Packet`，再由 `change-manager` 判断 S/M/L/XL，避免局部反馈扩大成重做。
@@ -57,12 +58,12 @@
 
 必须执行 `Command_Aliases.md`：
 
-- 用户输入 `/sw`、`/SW_V1.0`、`@SW_V1.0`、`/sw_v1.0`、`/sw-v1-0`、`@sw-v1-0`、`调用 SW_V1.0` 或 `启用 SW_V1.0` 时，必须加载本项目架构，并先回复且只把成功语放在第一位：`SW loaded successfully. Current version: V1.12.13`。
+- 用户输入 `/sw`、`/SW_V1.0`、`@SW_V1.0`、`/sw_v1.0`、`/sw-v1-0`、`@sw-v1-0`、`调用 SW_V1.0` 或 `启用 SW_V1.0` 时，必须加载本项目架构，并先回复且只把成功语放在第一位：`SW loaded successfully. Current version: V1.13.1`。
 - 如果用户只输入 SW 调用命令，不要继续展开项目；等待用户输入诉求。
 - 如果用户在同一条消息里附带普通项目诉求，先回复成功语，再按本项目架构执行。
 - 宿主 UI 自动显示 SW skill chip 不视为调用确认。只有用户明确输入/选择 SW 调用入口，或当前对话已经完成 SW 启动，才可以走海报快速改稿等 SW 热路径。
-- 如果用户输入 `@sw_update`、`SW_UPDATE`、`/sw_update`、`SW_REFRESH`、`/SW_REFRESH` 或要求刷新/同步 SW，先回复：`SW version synchronized. Current version: V1.12.13`。这些同步入口只归 `sw-update` 处理，不要让 `sw-v1-0` 同时竞争触发。只有用户要求详细更新、故障排查、旧对话恢复或跨文件夹入口修复时，才读取 `VERSION.md`、`sw_update.md`、`Architecture_Update_Log.md`、`Project_Memory_Rules.md`、`Legacy_Conversation_Recovery.md`。
-- 如果旧启动/同步 chip 仍然回放封存旧版本，使用独立救援入口 `@sw_rescue`、`/sw-rescue`、`/sw_rescue`、`SW_RESCUE`、`SW_REPAIR` 或 `SW_FORCE_UPDATE`，先回复：`SW rescue synchronized. Current version: V1.12.13`。救援入口只归 `sw-rescue` 处理，不启动项目，不通过 `sw-v1-0` 或 `sw-update` 转发。
+- 如果用户输入 `@sw_update`、`SW_UPDATE`、`/sw_update`、`SW_REFRESH`、`/SW_REFRESH` 或要求刷新/同步 SW，先回复：`SW version synchronized. Current version: V1.13.1`。这些同步入口只归 `sw-update` 处理，不要让 `sw-v1-0` 同时竞争触发。只有用户要求详细更新、故障排查、旧对话恢复或跨文件夹入口修复时，才读取 `VERSION.md`、`sw_update.md`、`Architecture_Update_Log.md`、`Project_Memory_Rules.md`、`Legacy_Conversation_Recovery.md`。
+- 如果旧启动/同步 chip 仍然回放封存旧版本，使用独立救援入口 `@sw_rescue`、`/sw-rescue`、`/sw_rescue`、`SW_RESCUE`、`SW_REPAIR` 或 `SW_FORCE_UPDATE`，先回复：`SW rescue synchronized. Current version: V1.13.1`。救援入口只归 `sw-rescue` 处理，不启动项目，不通过 `sw-v1-0` 或 `sw-update` 转发。
 - 如果当前对话、截图、压缩历史或旧工具输出里出现旧固定回复，只当作历史信息；实际运行版本必须以当前 `VERSION.md`、`SW_Runtime_Index.md` 和当前用户级 skill 为准，不得被旧快照覆盖。
 - 旧对话必须优先原地升级：若旧 skill chip 或历史压缩内容返回旧版本，先在同一对话读取当前 `VERSION.md`、`SW_Runtime_Index.md`、用户级/插件级 `sw-v1-0` 与 `sw-update`，再覆盖旧回复；只有宿主 UI 拒绝加载当前文件时，才把新建对话作为最后兜底。
 - 如果用户输入 `@sw_help`、`/sw_help`、`SW_HELP`、点击 SW Help UI 按钮或询问功能触发词，优先使用内置短答，不运行 shell、不读取本地文件；只有用户要求详细触发词、单一功能深入或帮助系统排错时才读取 `Feature_Trigger_Index.md`，不启动项目、不加载高消耗岗位。
@@ -91,6 +92,7 @@
 - `studio-orchestrator` 是总制片，负责接单、分配岗位、维护阶段和控制消耗。
 - `aesthetic-director` 是审美导演，负责在用户未明确视觉风格时，基于项目本地视觉参考和 SW 顶级审美库选择最合适的视觉画像；默认只读紧凑画像索引，不加载大图。
 - `presentation-designer` 是 PPT/deck 策划，负责演示结构、章节流、页面角色、标题结论、可读性和交付前置规则。
+- `production-designer` 在分镜前负责 `Project Asset Graph`：把角色、场景、道具、产品、服装、既有素材和待生成资产整理成项目级连续性地图，再交给 `storyboard-director`。
 - 每轮先用 `SW_Runtime_Index.md` 的 Fast Path 判断明显路线；路线不清、快捷命令冲突、阶段切换或复杂项目时，再执行 `Auto_Assignment_Rules.md` 自动派单。
 - 已显式启用 SW 后，只要用户提出具体项目工作，不得只用总规则代替岗位 skill；必须按 `Studio_Skill_Dispatch_Protocol.md` 读取本轮选中的 `Studio_Skills/<skill>/SKILL.md`。
 - 项目工作回复必须给一行轻量岗位和消耗痕迹，且岗位名必须是英文-only，例如：Studio roles: Brief Strategist / `brief-strategist` + Storyboard Director / `storyboard-director` (loaded). Cost lane: intake.
@@ -99,7 +101,7 @@
 - 岗位 skill 负责各自交付物，不越界生成整套流程。
 - 需要图片/视频提示词时，由 `prompt-director` 读取 `Prompts/Prompt_Spec_Rules.md`。
 - 如果提示词或工具执行来自上游已选对象，先由上游岗位或 `asset-producer` 产出 `Selected Asset Packet`，再交给 `prompt-director`；`prompt-director` 必须保留其中的锁定项、参考物角色、禁止项和下一工具。
-- 当用户点名 Seedance/即梦、Kling/可灵、Banana Pro/Gemini image、OpenAI image，或要求“按官方手册/官方案例优化提示词”时，由 `prompt-director` 按需读取 `Prompts/Tool_Official_Prompt_Deltas.md` 的对应小节；不要在普通启动或普通项目里加载完整官方手册。
+- 当用户点名 Dreamina CLI/Jimeng CLI/即梦官方 CLI、Seedance/即梦、Kling/可灵、Banana Pro/Gemini image、OpenAI image，或要求“按官方手册/官方案例优化提示词”时，由 `prompt-director` 按需读取 `Prompts/Tool_Official_Prompt_Deltas.md` 的对应小节；不要在普通启动或普通项目里加载完整官方手册。
 - 用户没有指定视觉风格、要求“你定审美/自动选择视觉方案/根据审美库选择”或长期项目提供视觉参考时，由 `aesthetic-director` 先读 `01_Research/HQ_Aesthetic_References/Aesthetic_Decision_Index.md`；只有用户要求 moodboard、参考图对比、资料检查或审美库维护时，才读取更深的 HQ 索引、联系表或图片。
 - 用户明确要求 Obsidian 审美库、整理审美库、筛选审美图片、打开审美资料库或维护 aesthetic vault 时，可运行 `tools/sync_obsidian_aesthetic_vault.py` 同步当前打开的 Obsidian vault；vault 正文可嵌入本地联系表预览图，但普通 SW 项目不要自动读取 vault 或大图。
 - 新增、接入或适配 AI/设计工具时，由 `tool-integrator` 读取 `AI_Tool_Integration_Rules.md` 和 `Tool_Registry.md`，先建工具卡再进入正式执行。
@@ -109,12 +111,16 @@
 - `banana-pro` 不能越过上游岗位：如果用户同时要求分镜、视频/电影镜头、海报、PPT/deck/slide、版式、角色、产品、道具或场景设计并要求用 banana 出图，必须先由对应 Studio role 产出设计 handoff，再由 `prompt-director` 转为最终视觉 prompt，最后只生成选中的一张/一帧；批量出图必须另行确认。
 - 当用户要求用 banana、image 或图像工具辅助分镜时，可先生成“参考角度帧”：由 `storyboard-director` 选定一个镜头/角度，必要时 `cinematographer` 锁定机位，再由 `prompt-director` 转为图片 prompt，最后只生成选中的一张参考静帧。该图用于辅助后续分镜板或 Seedance 首帧，不代表整组分镜批量出图。
 - `banana-pro` 不是 Studio role，不在 `Studio_Skills/` 里查找，也不要放进 `Studio roles:` trace。它必须作为 Tool skill 单独显示，并优先读取当前项目的 `banana-pro/SKILL.md`；如果没有，再读用户级或插件级 `banana-pro/SKILL.md`。
-- `banana-pro` 已打包 OpenRouter API 执行脚本。真实出图需要用户明确要求、通过高消耗/上传 guardrail，并且环境存在 `OPENROUTER_API_KEY` 或本机私密 `~/.config/banana-pro/openrouter.env`；没有 key 时只做 dry-run 或 payload，不要声称已生成图片。
+- `banana-pro` 已打包 OpenRouter API 执行脚本。真实出图需要用户明确要求、通过高消耗/上传 guardrail，并且存在本机私密 `~/.config/banana-pro/openrouter.env` 或 `OPENROUTER_API_KEY`；本机私密配置优先，避免旧进程环境变量覆盖新密钥；没有 key 时只做 dry-run 或 payload，不要声称已生成图片。
+- `dreamina-cli` 是显式调用的官方即梦/Dreamina CLI 图像与视频生成成员，位于 `prompt-director` 之后：只有用户明确要求 Dreamina CLI、Jimeng CLI、official Jimeng CLI、dreamina、即梦官方 CLI、即梦生成图片、即梦生成视频、`@dreamina-cli` 或“用官方即梦 CLI 生成”时才加载；普通图片/视频提示词、分镜和剪辑方案不要自动调用它。
+- `dreamina-cli` 不能越过上游岗位：如果用户同时要求脚本、分镜、镜头语言、剪辑节奏、动效、声音、调色、海报、PPT/deck/slide、版式、角色、产品、道具或场景设计并要求用 Dreamina/Jimeng CLI 生成，必须先由对应 Studio role 产出设计 handoff，再由 `prompt-director` 转为最终 prompt，最后只生成选中的图片、片段或任务；批量生成必须另行确认。
+- `dreamina-cli` 不是 Studio role，不在 `Studio_Skills/` 里查找，也不要放进 `Studio roles:` trace。它必须作为 Tool skill 单独显示，并优先读取当前项目的 `dreamina-cli/SKILL.md`；如果没有，再读用户级或插件级 `dreamina-cli/SKILL.md`。
+- `dreamina-cli` 依赖本地 `dreamina` 命令、账号登录态和异步任务查询。不要直接执行 `curl | bash`、登录、重登、真实生成、上传私密素材或批量生成，除非用户明确确认。不要硬编码模型能力；真实调用前用 `dreamina -h` 和 `dreamina <subcommand> -h` 确认当前 CLI 暴露的模型、参数、数量、时长、画幅和下载方式。未安装或未登录时只做 help/preflight 或 prompt-only handoff，不要声称已生成。
 - `seedance-2-video` 是显式调用的视频生成/出视频成员，位于 `prompt-director` 之后：只有用户明确要求即梦2.0生成、即梦生成、Seedance 2.0、Ark Seedance、豆包 Seedance、`@seedance-2-video` 或“用即梦/Seedance生成视频”时才加载；普通视频提示词、分镜和剪辑方案不要自动调用它。
 - `seedance-2-video` 不能越过上游岗位：如果用户同时要求脚本、分镜、镜头语言、剪辑节奏、动效、声音、调色、场景或电影方案并要求用即梦/Seedance生成，必须先由对应 Studio role 产出设计 handoff，再由 `prompt-director` 转为最终视频 prompt，最后只生成选中的一条镜头/片段；批量生成必须另行确认。
 - `seedance-2-video` 不是 Studio role，不在 `Studio_Skills/` 里查找，也不要放进 `Studio roles:` trace。它必须作为 Tool skill 单独显示，并优先读取当前项目的 `seedance-2-video/SKILL.md`；如果没有，再读用户级或插件级 `seedance-2-video/SKILL.md`。
 - `seedance-2-video` 已打包 Ark Seedance API 执行脚本。真实出视频需要用户明确要求、通过高消耗/上传 guardrail，并且环境存在 `ARK_API_KEY` 或本地私密 key 文件；没有 key 时只做 dry-run 或 payload，不要声称已生成视频。
-- `url-relay` 是工具执行前的公网 URL 中转成员，负责把本地图片/视频上传为下游 AI 工具可抓取的 `http(s)` URL；只有用户明确要求 URL中转、公网URL、上传参考图/视频、`@url-relay`，或 Seedance/即梦等工具需要公网 URL 但用户提供的是本地文件时才加载。
+- `url-relay` 是工具执行前的公网 URL 中转成员，负责把本地图片/视频上传为下游 AI 工具可抓取的 `http(s)` URL；只有用户明确要求 URL中转、公网URL、上传参考图/视频、`@url-relay`，或 Dreamina/Seedance/即梦等工具需要公网 URL 但用户提供的是本地文件时才加载。
 - `url-relay` 不是 Studio role，不在 `Studio_Skills/` 里查找，也不要放进 `Studio roles:` trace。它必须作为 Tool skill 单独显示；若随 Seedance 使用，顺序为 `prompt-director` -> `url-relay` -> `seedance-2-video`。
 - `url-relay` 默认优先使用 SW media uploader 服务器；上传 token 只读本机私密配置，不写入仓库、prompt、日志或交付内容。若服务器停用、连接失败或返回服务器侧错误，必须提示无法连接自有服务器；只有用户明确确认或本机私密配置允许时，才按优先级切到 Litterbox/Catbox 临时中转。缺 token、缺上传地址、权限或本机配置错误不触发临时中转。
 - `storyboard-visual-word` 是显式调用的 Word/DOCX 视觉方案交付工具，位于分镜、场景设定、选图和出图之后：只有用户明确要求视觉方案文件、视觉导演方案、Word视觉方案、DOCX视觉方案、分镜视觉方案文件、`@storyboard-visual-word` 或“把这些图整理成 Word 视觉方案”时才加载；普通分镜、提示词、图片生成和一体式分镜板不要自动调用它。
@@ -200,10 +206,11 @@
 1. Brief 压缩：目标、受众、平台、画幅、时长、核心信息。
 2. 视频结构：前 3 秒钩子、主体段落、结尾行动。
 3. 审美决策：若视觉语言未锁定，先由 `aesthetic-director` 选一个主审美画像。
-4. 分镜：镜头、时长、画面、字幕/旁白、镜头语言、转场、音效、素材需求。
-5. 剪辑方案：时间线、节奏、字幕策略、BGM、音效点、转场、调色和包装。
-6. AI 资产建议：需要哪些图像、视频片段、旁白、音乐或动效素材。
-7. 终审：节奏、信息、字幕、版权、平台发布规格。
+4. Project Asset Graph：确认现有资产、需新建资产、角色、场景、道具/产品/服装和连续性锁定项。
+5. 分镜：镜头、时长、画面、字幕/旁白、镜头语言、转场、音效、素材需求。
+6. 剪辑方案：时间线、节奏、字幕策略、BGM、音效点、转场、调色和包装。
+7. AI 资产建议：需要哪些图像、视频片段、旁白、音乐或动效素材。
+8. 终审：节奏、信息、字幕、版权、平台发布规格。
 
 视频每个阶段不同，不要把视频当海报写。分镜阶段重在镜头和时间；剪辑阶段重在节奏、声音和时间线；终审阶段重在观看体验和发布风险。
 
@@ -409,7 +416,7 @@ PPT 项目的阶段为：
 - `sw_update.md` 是 `@sw_update`、`SW_UPDATE`、`/sw_update`、`/sw-update` 与 `SW_REFRESH` 同步协议。
 - `sw_help.md` 是 `@sw_help`、`/sw_help` 与功能触发词帮助协议。
 - `sw-rescue` 是 `/sw-rescue`、`@sw_rescue`、`SW_RESCUE` 等错误救援入口，用于旧 chip 封存版本时原地刷新当前 SW 源。
-- `Feature_Trigger_Index.md` 是 Banana Pro、历史准确性等可选功能的低消耗触发词索引。
+- `Feature_Trigger_Index.md` 是 Banana Pro、Dreamina CLI、历史准确性等可选功能的低消耗触发词索引。
 - `Project_Minimal_Entry_Pack.md` 是其他项目文件夹需要复制的最小入口包说明。
 - `PULL_ARCHITECTURE.md` 是新对话拉取本项目架构的最简入口。
 - `AGENTS.md` 给 Codex 自己执行。
@@ -431,8 +438,9 @@ PPT 项目的阶段为：
 - `AI_Tool_Prompt_Profiles.md` 是图像、视频、编辑、版式、音频等工具类型的提示词剖面，生成工具版 prompt 时必须使用。
 - `Tool_Registry.md` 是工具注册表，新增工具必须先登记工具卡。
 - `banana-pro/SKILL.md` 是显式调用的 Banana Pro 图像生成工具 skill；它不是 `Studio_Skills/` 下的岗位 skill。
+- `dreamina-cli/SKILL.md` 是显式调用的官方 Dreamina/即梦 CLI 图像与视频生成工具 skill；它不是 `Studio_Skills/` 下的岗位 skill。
 - `seedance-2-video/SKILL.md` 是显式调用的 Seedance 2.0 / 即梦2.0 视频生成工具 skill；它不是 `Studio_Skills/` 下的岗位 skill。
-- `url-relay/SKILL.md` 是公网 URL 中转工具 skill，用于本地素材到 Seedance/Ark/Banana 等下游 AI 工具的 URL 桥接；它不是 `Studio_Skills/` 下的岗位 skill。
+- `url-relay/SKILL.md` 是公网 URL 中转工具 skill，用于本地素材到 Dreamina/Seedance/Ark/Banana 等下游 AI 工具的 URL 桥接；它不是 `Studio_Skills/` 下的岗位 skill。
 - `storyboard-visual-word/SKILL.md` 是显式调用的 Word/DOCX 视觉方案文件生成工具 skill，用于已选分镜/场景/概念图的正式视觉导演方案交付；它不是 `Studio_Skills/` 下的岗位 skill。
 - `feishu-docs/SKILL.md` 是显式调用的 Feishu/Lark Docs 视觉方案/分镜交付工具，用于把已准备好的 Markdown、视觉方案或分镜包渲染为飞书友好文档，或在本机凭证齐备并确认后发布到飞书；它不是 `Studio_Skills/` 下的岗位 skill。
 - `Studio_Skills/*/SKILL.md` 是本项目的岗位 skill，按任务需要逐个调用。

@@ -36,6 +36,17 @@ Selected Asset Packet:
 
 Tool cards should interpret `Selected input` and `Reference roles` before execution. Prefer four compact reference-role categories when possible: `identity`, `structure`, `style`, and `motion source`. Public upload, paid generation, long polling, or external publishing must wait until `Privacy/cost gate` is resolved.
 
+## Dreamina CLI Local Status Addendum
+
+Checked on 2026-07-13:
+
+- Official Dreamina/Jimeng CLI is installed locally at `C:\Users\Administrator\bin\dreamina.exe`.
+- Installed metadata reports version `1.4.10`, release date `2026-06-26`; `dreamina version` reports commit `2a20fff`, build time `2026-06-26T06:36:39Z`.
+- Login is still pending; account credit and real generation require `dreamina login`.
+- Current process PATH may not see plain `dreamina` until Codex/terminal restarts, so tools should fall back to the absolute executable path when needed.
+- Verified command families: `text2image`, `image2image`, `image_upscale`, `text2video`, `image2video`, `frames2video`, `multiframe2video`, `multimodal2video`, `query_result`, `list_task`, `session`, `user_credit`, `login`, `relogin`, `logout`.
+- The CLI can upload local files directly for image/video reference modes. URL Relay is only needed when a downstream tool or workflow explicitly requires public `http(s)` URLs.
+
 ## 已登记工具成员
 
 ```text
@@ -73,7 +84,7 @@ Tool cards should interpret `Selected input` and `Reference roles` before execut
 提示词格式：由 `prompt-director` 先产出通用视觉 prompt，再交给 Banana Pro 作为生成/出图环节
 不可越级：若同一需求包含分镜、视频/电影镜头、海报、PPT/deck/slide、版式、角色、产品、道具或场景设计，先由对应 Studio role 产出 handoff，再由 `prompt-director` 生成最终 prompt，最后交给 Banana Pro；默认只生成选中的一张/一帧
 提示词剖面：图像生成 / 图像编辑 / 多参考图像
-关键参数：model `google/gemini-3-pro-image-preview`、modalities `["image", "text"]`、aspect_ratio、image_size、reference image roles、`OPENROUTER_API_KEY` 或本机私密 `~/.config/banana-pro/openrouter.env`
+关键参数：model `google/gemini-3-pro-image-preview`、modalities `["image", "text"]`、aspect_ratio、image_size、reference image roles、本机私密 `~/.config/banana-pro/openrouter.env` 优先，其次 `OPENROUTER_API_KEY`
 限制与风险：模型、参数或 OpenRouter 行为可能更新；可能消耗额度；参考图可能涉及隐私、版权、客户未公开素材；未配置 key 时只能 dry-run，不能声称已出图
 成本等级：真实生成为高；仅准备设置为中
 隐私注意：生成前确认是否允许上传客户素材、人物照片、未公开产品图或品牌资产
@@ -86,15 +97,38 @@ Tool cards should interpret `Selected input` and `Reference roles` before execut
 ```
 
 ```text
+工具名：Dreamina CLI
+工具类型：图像生成 / 视频生成 / 官方即梦 Dreamina/Jimeng CLI / 本地账号会话
+接入状态：本地 SW tool skill 已接入；官方 CLI 程序 `dreamina` 需用户确认后安装；真实生成依赖本机登录态和 Dreamina 账号额度
+触发说法：Dreamina CLI、Jimeng CLI、official Jimeng CLI、dreamina、即梦官方 CLI、即梦生成图片、即梦生成视频、@dreamina-cli、用官方即梦 CLI 生成
+最适合：需要通过官方即梦/Dreamina CLI 调用图像或视频生成、查询额度、登录、管理 session、查询历史任务、下载异步结果、按 CLI 当前支持模型执行的任务
+不适合：普通图片/视频 prompt drafting、未确认安装/登录的真实生成、Ark Seedance API 任务、未确认隐私授权的素材上传、需要硬编码模型参数的任务
+输入需要：最终图像或视频 prompt、用途、画幅/时长/数量/质量目标、选中图片/视频/音频参考、是否允许上传、是否已安装并登录 `dreamina`
+输出格式：CLI help/preflight、submit_id、任务状态、下载后的本地媒体文件、失败原因、保留的 prompt-only handoff
+提示词格式：由 `prompt-director` 先产出通用 prompt，再根据 `dreamina <subcommand> -h` 转换为当前 CLI 支持的命令参数
+不可越级：若同一需求包含分镜、脚本、镜头语言、剪辑节奏、声音、调色、海报、PPT/deck/slide、版式、角色、产品、道具或场景设计，先由对应 Studio role 产出 handoff，再由 `prompt-director` 生成最终 prompt，最后交给 Dreamina CLI 只执行选中的图片/片段/任务
+关键参数：`dreamina -h`、`dreamina <subcommand> -h`、login/relogin/checklogin、user_credit、session、text2image、image2image、image_upscale、text2video、image2video、frames2video、multiframe2video、multimodal2video、query_result、list_task、submit_id、download_dir
+限制与风险：官方 Lark 文档可能需要登录；模型、时长、画幅、分辨率、生成数量和命令名以本机 CLI help 为准；真实生成可能消耗 Dreamina 额度；登录/重登、安装 CLI、私密素材上传、批量生成、4K/1080p/final 输出和长轮询都需要确认
+成本等级：help/preflight 为低；真实生成、批量、长轮询和下载为高
+隐私注意：不要把登录 token、OAuth device_code、cookie、账号会话、私密素材路径或生成的私有 URL 写入仓库、prompt、日志或交付文档
+质检方式：真实生成后检查是否有输出、文件是否存在、任务状态、分辨率/时长/数量是否符合承诺、可见黑帧/失败帧、是否符合上游 Selected Asset Packet 和 prompt
+失败时替代方案：保留 universal/tool prompt；未安装则提示官方安装路线；未登录则提示登录/重登；模型不支持则按 CLI help 换支持参数；用户要求 Ark API 时改走 `seedance-2-video`
+归属岗位：prompt-director -> dreamina-cli；tool-integrator 仅在能力、安装、登录、模型或参数不清楚时介入
+派单显示：`prompt-director` 放在 `Studio roles:`；`dreamina-cli` 必须单独显示为 `Tool skill:`，不要写成 Studio role
+读取路径：优先 `dreamina-cli/SKILL.md`，其次用户级 `C:\Users\Administrator\.codex\skills\dreamina-cli\SKILL.md`，最后插件级 `C:\Users\Administrator\plugins\sw-v1-0\skills\dreamina-cli\SKILL.md`
+执行入口：本机命令 `dreamina`；先读 `dreamina -h` 和对应子命令 help；不要未经确认执行 `curl | bash`、login/relogin 或真实生成
+```
+
+```text
 工具名：Seedance 2.0 Video
 工具类型：视频生成 / 出视频执行 / Volcano Ark Seedance 2.0 / 即梦2.0
 接入状态：本地 skill 已接入；定位为 `prompt-director` 之后的视频生成成员；已打包 Ark API dry-run/run/poll 执行脚本；补齐 `ARK_API_KEY` 或本地私密 key 后可在确认后真实生成视频
 触发说法：即梦2.0生成、即梦生成、Seedance 2.0、Ark Seedance、豆包 Seedance、@seedance-2-video、用即梦生成视频、用 Seedance 生成视频
 最适合：单条短镜头生成、分镜验证、产品动态氛围、文旅/品牌片镜头草稿、已有首帧/参考图的视频化
-不适合：普通视频提示词的默认处理、复杂多镜头长剧情、准确字幕/文字/logo、没有公共图片 URL 的本地图片直接传入、未确认额度消耗、未配置 `ARK_API_KEY` 时假装已生成视频
-输入需要：用途、选中镜头、中文视频 prompt、画幅 ratio、时长 duration、分辨率 resolution、video-mode；纯文生视频不需要 image-url，参考图/首帧/首尾帧/本地素材中转才需要公共 `http(s)` image-url 或可经 `url-relay` 上传的本地 image-file；输出目录
+不适合：普通视频提示词的默认处理、无 Storyboard Animatic Sheet 的复杂多镜头长剧情、准确字幕/文字/logo、没有公共图片 URL 的本地图片直接传入、未确认额度消耗、未配置 `ARK_API_KEY` 时假装已生成视频
+输入需要：用途、选中镜头或 Storyboard Animatic Sheet、中文视频 prompt、画幅 ratio、时长 duration、分辨率 resolution、video-mode；纯文生视频不需要 image-url，参考图/首帧/首尾帧/storyboard ref/本地素材中转才需要公共 `http(s)` image-url 或可经 `url-relay` 上传的本地 image-file；输出目录
 输出格式：dry-run payload；真实生成后的 `final.mp4`、`run_manifest.json`、任务状态和下载路径
-提示词格式：由 `prompt-director` 先产出通用逐镜头视频 prompt，再交给 Seedance 作为生成/出视频环节
+提示词格式：由 `prompt-director` 先产出通用逐镜头视频 prompt，再交给 Seedance 作为生成/出视频环节；若使用 Storyboard Animatic Sheet，则工具 prompt 固定为“引用 storyboard + 角色 + 环境 + PANEL BEATS”，并要求按 panel order 执行、不得发明 alternative coverage
 不可越级：若同一需求包含脚本、分镜、视频/电影镜头、剪辑、动效、声音、调色、场景或方案设计，先由对应 Studio role 产出 handoff，再由 `prompt-director` 生成最终 prompt，最后交给 Seedance；默认只生成选中的一条镜头/片段
 提示词剖面：视频生成 / 图生视频 / 参考图视频化
 关键参数：model `doubao-seedance-2-0-260128`、ratio、duration、resolution、seed、watermark、video-mode、public image URLs、`ARK_API_KEY`

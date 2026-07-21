@@ -9,17 +9,34 @@ This compact file stores prompt lessons distilled from official tool docs. It is
 - Do not paste full official examples into project replies.
 - Do not let tool-specific syntax bypass `storyboard-director`, `cinematographer`, `prompt-director`, or review roles.
 
-## Seedance / Jimeng / Volcano Ark
+## Seedance / Volcano Ark
 
-Use this delta when the user explicitly asks for Seedance / 即梦2.0 generation or asks for a Seedance-ready prompt.
+Use this delta when the user explicitly asks for Ark Seedance / Seedance 2.0 generation or asks for a Seedance-ready prompt. If the user asks for the official Dreamina/Jimeng CLI, use the Dreamina CLI section instead.
 
 - Choose mode first: `text-to-video`, `image-to-video` / `firstFrame`, `firstLastFrame`, or extension/edit when supported by the current runner.
 - Pure text-to-video does not need an image URL. Public `http(s)` image URLs are required only when using reference image, first frame, first/last frame, or local media relayed through URL Relay.
 - One prompt should describe one executable clip, not a full edit. Split multi-shot ideas into separate clips plus an edit plan.
 - Include: duration, ratio, subject, action, scene, camera path, lighting, color mood, speed, continuity locks, and text/logo avoidance.
 - If using a reference image, do not over-describe the whole image. State what should move, what must stay unchanged, where the camera goes, and how the clip ends.
+- If using a Storyboard Animatic Sheet as the reference, treat the storyboard image as `motion source + structure`, not as a style image. The prompt should say that the storyboard is the primary source of truth, every panel is consecutive, panel order is mandatory, and no alternative coverage should be invented.
+- Convert the sheet's Panel Headers, Camera + Lens Plan, Action Path, Rhythm Track, Escalation Map, State Track, and Style Track into a concise `PANEL BEATS` list. Do not ask Seedance to reproduce the physical paper sheet, panel borders, masthead, labels, or director strip.
+- For this storyboard-locked mode, include separate reference roles when available: character sheet = identity, environment reference = scene geography/style, storyboard sheet = motion source + structure.
 - Keep draft defaults cheap: `720p`, one selected clip, no batch, no long retry loop unless confirmed.
 - QA after output: subject stability, unwanted text, logo errors, motion jumps, aspect ratio, usable first/last frames, and whether the clip cuts well.
+
+## Dreamina CLI / Jimeng Official CLI
+
+Use this delta when the user explicitly asks for Dreamina CLI, Jimeng CLI, official Jimeng CLI, `dreamina`, `@dreamina-cli`, 即梦官方 CLI, or image/video generation through the official Jimeng/Dreamina CLI.
+
+- Choose command family first: `text2image`, `image2image`, `image_upscale`, `text2video`, `image2video`, `frames2video`, `multiframe2video`, `multimodal2video`, `query_result`, or `list_task`.
+- Do not hardcode model names, duration limits, resolution tiers, output counts, or parameter names. Before real use, inspect `dreamina -h` and the relevant `dreamina <subcommand> -h`.
+- Convert the universal SW prompt into one executable command's prompt and parameters. Split multi-shot or multi-asset ideas into separate tasks plus an edit plan.
+- Keep the upstream handoff intact: selected object, reference roles, locked items, avoid list, aspect ratio, duration, and privacy/cost gate must survive tool conversion.
+- For local references, use local file paths only when the current CLI help confirms support. If the CLI requires public URLs, route the file through URL Relay before generation.
+- Do not run installer, login/relogin, real generation, private upload, batch generation, final-output generation, 4K/1080p/final delivery, or long unattended polling without confirmation.
+- For async tasks, submission is not delivery. Record the returned `submit_id`, query the task, download or locate usable output, then claim generation is complete.
+- QA after output: image/video exists, count/duration/resolution match the request, audio status is known when relevant, no black/failure frames, and the result follows the selected prompt/handoff.
+- Fallback: if CLI is missing, login is missing, help is unavailable, or the requested model/parameter is not supported, keep a prompt-only handoff and do not claim output was generated.
 
 ## Kling 2.6-3
 

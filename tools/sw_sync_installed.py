@@ -28,7 +28,7 @@ ENTRY_SKILLS = {
         "description": (
             "Explicitly load the SW_V1.0 design studio workflow. Use only for "
             "/sw, /SW_V1.0, @SW_V1.0, call SW_V1.0, activate SW_V1.0, "
-            "拉取本项目架构, or 按本项目架构执行. Do not use for ordinary "
+            "pull project architecture, or follow this project architecture. Do not use for ordinary "
             "creative-task wording unless an explicit SW invocation is present."
         ),
     },
@@ -50,15 +50,16 @@ ENTRY_SKILLS = {
     "sw-help": {
         "source": ROOT / "sw_help.md",
         "description": (
-            "Show concise SW feature triggers for Banana Pro, Seedance, URL "
-            "Relay, Obsidian Aesthetic Vault, SW Rescue, and Historical Accuracy "
-            "without starting a project."
+            "Show concise SW feature triggers for Banana Pro, Dreamina CLI, "
+            "Seedance, URL Relay, Obsidian Aesthetic Vault, SW Rescue, and "
+            "Historical Accuracy without starting a project."
         ),
     },
 }
 
 TOOL_SKILLS = [
     "banana-pro",
+    "dreamina-cli",
     "seedance-2-video",
     "url-relay",
     "black-background-cutout",
@@ -127,16 +128,18 @@ def build_skill(skill_id: str) -> str:
 
 def fixed_help_reply() -> str:
     return """SW Help:
-- Banana Pro: trigger with 香蕉 / banana / Banana Pro / Nano Banana / @banana-pro / 用 banana 出图.
-- Seedance 2.0 Video: trigger with 即梦2.0生成 / 即梦生成 / Seedance 2.0 / @seedance-2-video / 用即梦生成视频.
-- URL Relay: trigger with URL中转 / 公网URL / 上传参考图 / 上传参考视频 / @url-relay. Used before Seedance when local files need public URLs.
-- Black Background Cutout: trigger with 抠图 / 扣图 / 去底 / 去黑底 / 黑底转透明 / 透明底 PNG / @black-background-cutout. Fast local transparent PNG preview for black/simple solid backgrounds; not finishing-grade.
-- Storyboard Visual Word: trigger with 视觉方案文件 / 视觉导演方案 / Word视觉方案 / DOCX视觉方案 / @storyboard-visual-word after selected storyboard or scene images are ready.
-- Feishu Docs: trigger with 转到飞书 / 同步到飞书 / 发布到飞书 / 飞书视觉方案 / 飞书分镜 / Lark Docs / @feishu-docs after the visual plan or storyboard handoff is ready.
-- Aesthetic Decision: trigger with /aesthetic, "SW decide the look", 自动选择审美, 审美画像, or moodboard direction. Reads the compact decision index first and does not load raw images by default.
-- Obsidian Aesthetic Vault: trigger with Obsidian审美库 / 整理审美库 / 筛选审美图片 / 打开审美资料库. Syncs a Markdown-only vault for browsing; normal SW work still uses the compact index.
+- Project Asset Graph: automatic after SW activation for video/film/storyboard starts when recurring assets are not locked. Ask existing assets / assets to create / continuity locks before storyboard.
+- Banana Pro: trigger with banana / Banana Pro / Nano Banana / @banana-pro / ? banana ??.
+- Dreamina CLI: trigger with Dreamina CLI / Jimeng CLI / official Jimeng CLI / dreamina / @dreamina-cli / official Jimeng image generation / official Jimeng video generation. Uses the local dreamina command after prompt prep; inspect CLI help before real use.
+- Seedance 2.0 Video: trigger with Seedance 2.0 / Ark Seedance / @seedance-2-video / use Seedance to generate video. This remains the Ark Seedance API route.
+- URL Relay: trigger with URL relay / public URL / upload reference image / upload reference video / @url-relay. Used before downstream tools when local files need public URLs.
+- Black Background Cutout: trigger with cutout / remove background / remove black background / transparent PNG / @black-background-cutout. Fast local transparent PNG preview for black/simple solid backgrounds; not finishing-grade.
+- Storyboard Visual Word: trigger with visual plan document / visual director document / Word visual plan / DOCX visual plan / @storyboard-visual-word after selected storyboard or scene images are ready.
+- Feishu Docs: trigger with publish to Feishu / sync to Feishu / Feishu visual plan / Feishu storyboard / Lark Docs / @feishu-docs after the visual plan or storyboard handoff is ready.
+- Aesthetic Decision: trigger with /aesthetic, "SW decide the look", auto aesthetic choice, aesthetic profile, or moodboard direction. Reads the compact decision index first and does not load raw images by default.
+- Obsidian Aesthetic Vault: trigger with Obsidian aesthetic vault / organize aesthetic vault / filter aesthetic images / open aesthetic library. Syncs a Markdown-only vault for browsing; normal SW work still uses the compact index.
 - SW Rescue: trigger with /sw-rescue / @sw_rescue / SW_RESCUE when old SW chips keep returning stale versions.
-- Historical Accuracy: reminder appears only for clear accuracy risk. Say "开启历史检查" for the current request/visual chain; "本项目开启历史检查" or "全程开启历史检查" for the current conversation/project; "关闭历史检查" / "不用历史检查" / "恢复普通模式" to turn it off.
+- Historical Accuracy: reminder appears only for clear accuracy risk. Say "enable historical check" for the current request/visual chain; "enable historical check for this project" for the current conversation/project; "turn off historical check" to disable it.
 
 This only shows help and does not start a project."""
 
@@ -340,6 +343,9 @@ def plugin_manifest(version: str) -> dict:
             "black-background-cutout",
             "cutout",
             "transparent-png",
+            "dreamina",
+            "dreamina-cli",
+            "jimeng",
             "seedance",
             "banana-pro",
             "storyboard-visual-word",
@@ -383,6 +389,7 @@ def plugin_manifest(version: str) -> dict:
                 "/aesthetic",
                 "@url-relay",
                 "@black-background-cutout",
+                "@dreamina-cli",
                 "@seedance-2-video",
                 "@banana-pro",
                 "@storyboard-visual-word",

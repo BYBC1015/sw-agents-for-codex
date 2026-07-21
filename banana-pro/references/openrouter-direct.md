@@ -14,7 +14,7 @@ For fast drafts when the prompt is already ready:
 python <banana-pro-skill-dir>\scripts\generate_openrouter_image.py --fast --prompt-file "<prompt-file>" --aspect-ratio "16:9"
 ```
 
-The script reads `OPENROUTER_API_KEY` from the process environment, then from `~/.config/banana-pro/openrouter.env`, and on Windows also falls back to the current user's environment variable registry value. It writes `openrouter_payload.json`, writes `openrouter_response.json` after API calls, and saves returned images to the output directory. If the key is missing, it writes the payload and returns a `missing-key` status without claiming generation.
+The script reads `OPENROUTER_API_KEY` from `~/.config/banana-pro/openrouter.env` first, then from the process environment, and on Windows also falls back to the current user's environment variable registry value. This prevents stale Codex process environment values from shadowing a freshly replaced local key. It writes `openrouter_payload.json`, writes `openrouter_response.json` after API calls, and saves returned images to the output directory. If the key is missing, it writes the payload and returns a `missing-key` status without claiming generation.
 
 For one-time local private key setup:
 

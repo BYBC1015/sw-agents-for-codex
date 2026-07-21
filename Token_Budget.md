@@ -12,6 +12,7 @@ This file supports `Cost_Governor.md`. `Cost_Governor.md` decides the runtime co
 | Intake | new or unclear request | brief, assumptions, max 3 questions | no |
 | Direction | brief is usable | up to 3 directions | no detailed prompt batch |
 | Compare board | directions, storyboard groups, or deck structures need selection/feedback before production | `Keep` / `Remove` / `Next version` | no |
+| Project asset graph | project start or storyboard request has unlocked recurring characters, scenes, props, products, wardrobe, existing footage, or reference assets | compact project-level asset map | no |
 | Selected asset packet | a concrete poster/deck/storyboard/reference/media object is selected for prompt, relay, generation, DOCX, or Feishu handoff | compact selected-object card | no |
 | Production | task and direction are clear | one deliverable type | only if confirmed |
 | High-cost | detailed prompts, long scripts, full long decks, batch slide rewrites, batch variants, AI asset generation | one confirmed batch | yes, after gate |
@@ -43,8 +44,10 @@ This file supports `Cost_Governor.md`. `Cost_Governor.md` decides the runtime co
 
 Treat these as high-cost:
 
+- real Dreamina/Jimeng official CLI image or video generation, CLI install/login/relogin, private media upload, batch generation, 4K/1080p/final output, or long unattended polling
 - detailed image generation prompts for multiple assets
 - detailed video prompts for multiple shots
+- full character sheets, scene sheets, or generated visual boards expanded from a Project Asset Graph
 - full long-form scripts
 - full 20+ slide deck plans, detailed speaker notes, or batch slide rewrites
 - batch variants
@@ -59,6 +62,8 @@ Project memory reads and one-line memory suggestions are low-cost. Writing to `.
 PPT/deck structure from `presentation-designer` stays low-to-medium by default; only full long decks, detailed speaker notes, broad research, PPTX generation, preview export, or batch slide rewrites become high-cost.
 
 Historical accuracy trigger scanning is low-cost and current-message only. Do not load historical references, browse, or run `historical-consultant` until the user confirms. Once enabled, strict period research, source notes, and post-generation image QA can become medium-to-high cost depending on depth.
+
+Dreamina/Jimeng official CLI preflight is low-cost when it only checks whether the `dreamina` command exists or reads CLI help. Real generation is high-cost because it can consume Dreamina credits, require login, upload local media, create async tasks, and wait for polling. Default to one selected image or clip; batch outputs, private/client assets, final delivery quality, and long polling need explicit confirmation.
 
 Seedance/即梦2.0 dry-run is low-cost because it only validates a sanitized payload. Real generation is high-cost because it can consume quota, require public image URLs, and wait in a long queue. Default to one selected clip/shot at `720p`; batch shots, multiple ratios, `1080p`, and long polling need explicit confirmation.
 

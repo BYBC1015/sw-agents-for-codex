@@ -103,6 +103,8 @@
 - 准确文字和 logo
 - 长时间稳定人物一致性
 
+例外：如果已经有 Storyboard Animatic Sheet，且 sheet 用 director strip 锁定 panel order、camera/action path、rhythm、escalation、state 和 style，Seedance/Jimeng 可以把该 sheet 当作单条 sequence 的执行蓝图；否则不要用一条 prompt 强塞复杂多镜头剧情。
+
 ### Seedance 2.0 / 即梦2.0 视频生成补充
 
 仅在用户明确要求即梦2.0生成、即梦生成、Seedance 2.0、Ark Seedance、豆包 Seedance 或 `@seedance-2-video` 时使用。它是 `prompt-director` 之后的视频生成/执行环节，不能替代脚本、分镜、镜头语言、剪辑节奏、动效、声音、调色或电影方案岗位。
@@ -117,6 +119,7 @@
 - resolution：草稿默认 `720p`，最终或明确要求再用 `1080p`
 - video-mode：`text-to-video`、`reference`、`firstFrame` 或 `firstLastFrame`
 - image-url：纯文生视频可不填；只有使用参考图、首帧、首尾帧或本地素材中转时，才需要公共 `http(s)` URL；本地图片不能直接传给 Ark
+- storyboard-locked mode：当输入是 Storyboard Animatic Sheet 时，storyboard ref 只作为 `motion source + structure`，角色表作为 `identity`，环境图作为 `scene geography/style`；工具版 prompt 必须包含 `PANEL BEATS`，并明确不要复刻分镜板纸张、格线、标题栏、标签或 director strip 图形
 - QA checklist：主体稳定、动作合理、镜头连续、画幅、文字/logo 风险、历史/道具/服装风险、可剪辑性
 
 不要在普通视频提示词里自动切换到 Seedance；先保留通用 prompt，用户确认使用该成员后再进入 dry-run 或真实生成。若用户同时要求“设计分镜/镜头/剪辑并用即梦生成”，先产出对应设计 handoff，再转最终 prompt，再生成选中的一条镜头/片段。没有 `ARK_API_KEY` 或本地 key 时，只输出 dry-run payload，不声称已出视频。
@@ -193,3 +196,12 @@ Use only when historical checking is explicitly enabled.
 - Image editing profile: define which historical elements must remain unchanged and which can be corrected.
 - Video generation profile: current SW support is limited to shot/still-frame prompt constraints unless a real video-generation module is integrated.
 - Output QA must inspect the actual visual result for anachronisms, not just the prompt text.
+
+## Dreamina CLI / Jimeng Official CLI Add-On
+
+Use only when the user explicitly asks for Dreamina CLI, Jimeng CLI, official Jimeng CLI, `dreamina`, `@dreamina-cli`, 即梦官方 CLI, or official CLI image/video generation.
+
+- Keep the universal SW prompt first, then convert through `Prompts/Tool_Official_Prompt_Deltas.md` -> Dreamina CLI.
+- Do not hardcode model or parameter support; inspect `dreamina -h` and the relevant subcommand help before real use.
+- Do not install, login/relogin, upload private media, run real generation, batch, or long polling without confirmation.
+- If the CLI is missing or login is missing, stop at help/preflight or prompt-only handoff.

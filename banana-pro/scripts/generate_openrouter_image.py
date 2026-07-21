@@ -239,11 +239,11 @@ def _command_setup_key(args: argparse.Namespace) -> int:
 
 
 def _read_api_key() -> str | None:
-    key = os.environ.get("OPENROUTER_API_KEY")
+    key = _read_env_file_key()
     if key:
         return key
 
-    key = _read_env_file_key()
+    key = os.environ.get("OPENROUTER_API_KEY")
     if key:
         return key
 

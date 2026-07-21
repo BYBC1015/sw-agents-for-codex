@@ -38,19 +38,19 @@ Copy these when you want version history and troubleshooting available inside th
 Startup:
 
 ```text
-SW loaded successfully. Current version: V1.12.13
+SW loaded successfully. Current version: V1.13.1
 ```
 
 Version sync:
 
 ```text
-SW version synchronized. Current version: V1.12.13
+SW version synchronized. Current version: V1.13.1
 ```
 
 Rescue:
 
 ```text
-SW rescue synchronized. Current version: V1.12.13
+SW rescue synchronized. Current version: V1.13.1
 ```
 
 ## Optional Project Memory Pack
@@ -83,6 +83,8 @@ Every future SW update must keep `SW_V1.0.md`, `sw_update.md`, `sw_rescue.md`, t
 Default help and sync entries should use hot-start behavior: fixed short reply first, no shell/file reads for normal help, detailed files only when requested.
 
 If a long-running project has its own visual references, keep them in `.sw/ASSETS.md` or a project-local reference folder and mention the rule in `.sw/RULES.md`. SW should use those project references before the global aesthetic library.
+
+For video, film, campaign story, product story, or storyboard work, the minimum entry behavior must include Project Asset Graph preflight before storyboard when recurring assets are not locked. Ask what assets already exist, what needs to be created, and which characters/scenes/props/products/wardrobe must stay unchanged; fast mode may proceed with marked assumptions.
 
 Installed SW entries created by `tools/sw_sync_installed.py` include a compact runtime pack beside the loader skill. This lets another project folder or a newly synced computer run activated SW work without searching for the original repository path. A skill chip merely appearing in the UI is not activation; the user must explicitly invoke/select SW before quick edit or other SW routes apply.
 Standalone terms such as poster, PPT, deck, storyboard, image prompt, video prompt, review, or revision are not startup aliases. Project-type shortcuts such as `/poster` and `/video` apply only after SW has been explicitly activated in the same conversation.

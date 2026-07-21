@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dreamina CLI"
+  short_description: "Use the official Dreamina/Jimeng CLI for image and video generation"
+  default_prompt: "Use Dreamina CLI only after an explicit Dreamina/Jimeng CLI request. Start with dreamina -h and the relevant subcommand help. Do not execute curl|bash, login, or real generation without confirmation. If dreamina is missing, report that the CLI is not installed and offer the official install route."

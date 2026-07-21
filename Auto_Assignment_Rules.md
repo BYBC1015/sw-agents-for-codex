@@ -16,6 +16,14 @@ Judge these before every activated SW project reply:
 
 ## Priority Routing
 
+Dreamina/Jimeng official CLI override:
+
+- Official Dreamina/Jimeng CLI triggers include Dreamina CLI, Jimeng CLI, official Jimeng CLI, `dreamina`, `@dreamina-cli`, 即梦官方 CLI, 即梦生成图片, 即梦生成视频, and wording that explicitly means the official local CLI rather than Ark Seedance API.
+- A complete final Dreamina/Jimeng CLI prompt routes `prompt-director` -> `dreamina-cli`; add `tool-integrator` only when installed state, login state, capability, model support, parameters, or connection state is unclear.
+- If the same request also asks for script, storyboard, camera, edit rhythm, motion, sound, color, poster, PPT/deck/slide, layout, character, product, prop, or scene design, route the upstream Studio role first, then `prompt-director`, then `dreamina-cli`. Do not let the tool trigger bypass the design role.
+- If local image/video/audio references are involved, inspect current CLI help before deciding whether local files are supported. If public URLs are required, insert `url-relay`; stop before real generation if install, login, upload permission, paid generation, batch generation, or long polling is not confirmed.
+- Keep `seedance-2-video` for Ark Seedance API / Seedance 2.0 requests. Ambiguous 即梦 wording should not silently switch to the official CLI unless the user names the CLI route.
+
 0. Rescue-only commands (`/sw-rescue`, `@sw_rescue`, `SW_RESCUE`, `SW_REPAIR`, `SW_FORCE_UPDATE`) -> use `sw-rescue`, reply with the fixed rescue line, and do not start a project.
 0. `@sw_help`, `/sw_help`, feature trigger questions -> use the embedded `sw-help` short answer first; read `Feature_Trigger_Index.md` only for detailed triggers/debug; do not start a project.
 1. Historical accuracy:
@@ -39,14 +47,15 @@ Judge these before every activated SW project reply:
    - If explicit Banana generation is bundled with storyboard, video/film shot design, poster, PPT/deck/slide, layout, character, product, prop, or scene design, route the upstream Studio role first, then `prompt-director` -> `banana-pro`. Do not let the tool trigger bypass the design role.
    - Explicit 即梦2.0生成 / 即梦生成 / Seedance 2.0 / Ark Seedance video-generation request with a complete final prompt -> `prompt-director` -> `seedance-2-video`; add `tool-integrator` only when capability, parameters, API, key state, or connection state is unclear.
    - If explicit Seedance generation is bundled with script, storyboard, video/film shot design, camera, edit rhythm, motion, sound, color, scene design, or film treatment, route the upstream Studio role first, then `prompt-director` -> `seedance-2-video`. Do not let the tool trigger bypass the design role.
+   - If explicit Seedance generation says to follow a storyboard, first route to `production-designer` for Project Asset Graph when continuity assets are not locked, then route to `storyboard-director` for a Storyboard Animatic Sheet or verify an equivalent panel-beat handoff exists. Then package it as a Selected Asset Packet before `prompt-director` writes the storyboard + character + environment + panel beats execution prompt.
    - If explicit Seedance generation uses local image/video files instead of public URLs, insert `url-relay` between `prompt-director` and `seedance-2-video`; use SW media uploader first, then only a confirmed/configured temporary fallback, and stop before real generation if no public URL is available.
    - Explicit URL中转 / 公网URL / 上传参考图 / 上传参考视频 / `@url-relay` -> `url-relay`; if a downstream generation tool is named, return to that tool after the relay URL is ready.
    - Explicit 视觉方案文件 / 视觉导演方案 / Word视觉方案 / DOCX视觉方案 / 分镜视觉方案文件 / `@storyboard-visual-word` with selected images and rationale -> `finishing-producer` -> `storyboard-visual-word`; if storyboard/scene visuals still need creation or selection, route the upstream Studio role first.
 6. Final check/risk/delivery readiness -> `review-producer`.
 7. Export/package/naming/handoff -> `finishing-producer`.
 8. Unspecified visual style, moodboard decision, taste calibration, global aesthetic library use, "SW decide the look", or user-provided visual reference interpretation -> `aesthetic-director`.
-9. Character setting sheet, role reference board, scene setting sheet, production-design board -> `production-designer`; add `asset-producer` only when source/risk/asset priority matters.
-10. Integrated storyboard sheet, one-image storyboard board, storyboard contact sheet -> `storyboard-director`; add `cinematographer` only when camera continuity is weak.
+9. Project Asset Graph, new storyboard start with unlocked continuity assets, character setting sheet, role reference board, scene setting sheet, production-design board -> `production-designer`; add `asset-producer` only when source/risk/asset priority matters.
+10. Integrated storyboard sheet, one-image storyboard board, storyboard contact sheet, or Storyboard Animatic Sheet -> `storyboard-director`; add `cinematographer` only when camera continuity is weak.
 11. Image/video/AI prompt request -> `prompt-director`.
 12. Audio/music/SFX/voice/mix -> `sound-designer`.
 13. Color grade/LUT/shot matching/product color -> `colorist`.
@@ -79,13 +88,13 @@ brief-strategist -> creative-director -> aesthetic-director when deck look is no
 Video:
 
 ```text
-brief-strategist -> creative-director -> aesthetic-director when visual language is not locked -> scriptwriter -> storyboard-director -> cinematographer -> edit-director -> motion-designer -> sound-designer -> colorist -> review-producer -> finishing-producer
+brief-strategist -> creative-director -> aesthetic-director when visual language is not locked -> scriptwriter -> production-designer for Project Asset Graph when continuity assets are not locked -> storyboard-director -> cinematographer -> edit-director -> motion-designer -> sound-designer -> colorist -> review-producer -> finishing-producer
 ```
 
 Film / brand film:
 
 ```text
-brief-strategist -> creative-director -> film-director -> aesthetic-director when look/world grammar is not locked -> scriptwriter -> production-designer -> cinematographer -> storyboard-director -> edit-director -> sound-designer -> colorist -> review-producer -> finishing-producer
+brief-strategist -> creative-director -> film-director -> aesthetic-director when look/world grammar is not locked -> scriptwriter -> production-designer for Project Asset Graph -> cinematographer -> storyboard-director -> edit-director -> sound-designer -> colorist -> review-producer -> finishing-producer
 ```
 
 Prompt-only:
@@ -101,9 +110,11 @@ prompt-director -> tool-integrator if needed -> review-producer if final-use
 - Visual direction when the look is not locked: primary `aesthetic-director`, support the next production role only if an immediate handoff is needed.
 - Poster production: primary `poster-art-director`, support `copywriter` or `layout-designer`.
 - Presentation/deck production: primary `presentation-designer` for structure/storyline/client-facing proposal logic; support `research-scout`, `copywriter`, `layout-designer`, `asset-producer`, or `review-producer` depending on request.
-- Video production: primary `storyboard-director`, support `scriptwriter` or `cinematographer`.
+- Video production: primary `storyboard-director`, support `scriptwriter` or `cinematographer`; if recurring characters, scenes, props, products, wardrobe, existing footage, or reference assets are not locked, first route `production-designer` for Project Asset Graph.
 - Character/scene setting sheet: primary `production-designer`, support `asset-producer` only when source, copyright, or asset priority matters.
+- Project Asset Graph: primary `production-designer`, support `asset-producer` only when asset source, copyright, client-provided files, or generation priority matters.
 - Integrated storyboard sheet: primary `storyboard-director`, support `cinematographer` only when camera language or continuity needs strengthening.
+- Storyboard Animatic Sheet for Seedance/Jimeng: primary `storyboard-director`, support `cinematographer` only when lens/camera path continuity needs strengthening.
 - Edit production: primary `edit-director`, support `motion-designer`, `sound-designer`, or `colorist` depending on request.
 - Film production: primary depends on stage; support can be `film-director`, `scriptwriter`, `production-designer`, or `cinematographer`.
 - Prompt production: primary `prompt-director`, support `tool-integrator` only when specific tool behavior matters.

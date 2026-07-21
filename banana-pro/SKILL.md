@@ -14,10 +14,10 @@ Use `scripts/generate_openrouter_image.py` to generate images through OpenRouter
 - the user explicitly asks for 香蕉 / banana / Banana Pro / Nano Banana / `@banana-pro`
 - the user wants actual image generation, not only a prompt
 - the needed upstream deliverable already exists, such as a locked poster visual direction, slide/page visual brief, storyboard shot, character sheet, product/prop brief, or final visual prompt
-- `OPENROUTER_API_KEY` is available in the environment or in the private env file
+- `OPENROUTER_API_KEY` is available in the private env file or environment
 - high-cost and upload/privacy guardrails are satisfied
 
-The script reads `OPENROUTER_API_KEY` from the process environment, then from the local private `~/.config/banana-pro/openrouter.env`, and on Windows also falls back to the current user's environment variable registry value. If the key is missing, run dry-run or provide the ready payload; do not claim an image was generated.
+The script reads `OPENROUTER_API_KEY` from the local private `~/.config/banana-pro/openrouter.env` first, then from the process environment, and on Windows also falls back to the current user's environment variable registry value. This avoids stale Codex process environment values overriding a freshly replaced local key. If the key is missing, run dry-run or provide the ready payload; do not claim an image was generated.
 
 For one-time local setup, save the key outside the repository:
 

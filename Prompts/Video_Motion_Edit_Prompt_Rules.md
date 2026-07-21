@@ -11,6 +11,8 @@ Video generation prompts and edit notes are not the same.
 
 Default rule: if the user wants multiple cuts, create separate shot prompts plus an edit plan. Do not force a multi-cut sequence into one generation prompt.
 
+Exception: if the user has a Storyboard Animatic Sheet and explicitly wants Seedance/Jimeng to generate one storyboard-locked sequence from that sheet, the prompt may describe a multi-panel sequence in one execution prompt. In that case, the storyboard sheet must provide the cut order and rhythm through a director strip, and the prompt must include `PANEL BEATS` instead of inventing new coverage.
+
 ## Motion Primitives
 
 | Intent | Prompt Language | Best Use |
@@ -87,6 +89,35 @@ Use these in edit plans, not as overloaded video-generation prompts.
 | J-cut / L-cut | audio leads or trails picture | specify in edit plan/audio notes |
 | Whip-pan transition | energetic scene bridge | generate ending/starting motion separately |
 | Speed ramp | emphasize impact | specify normal -> slow -> normal timing |
+
+## Storyboard Animatic Execution
+
+Use this for Seedance/Jimeng execution prompts only when a high-information Storyboard Animatic Sheet exists.
+
+Canonical template: use `Prompts/Prompt_Spec_Rules.md` -> `Storyboard Animatic Sheet -> Seedance 提示词`. This file records motion/edit constraints only and must not duplicate the full execution prompt template.
+
+Before writing this execution prompt, preserve any upstream Project Asset Graph as the continuity source for characters, scenes, props, products, wardrobe, existing footage, and reference assets.
+
+Required controls:
+
+- storyboard image = motion source + structure
+- character sheet/still = identity
+- Project Asset Graph = continuity locks
+- environment reference = scene geography/style
+- panel order is mandatory
+- `PANEL BEATS` translate the sheet's Panel Headers, Camera + Lens Plan, Action Path, Rhythm Track, Escalation Map, State Track, and Style Track
+- the model should recreate the filmed sequence implied by the panels, not the physical storyboard image
+
+Required sections in the execution prompt:
+
+- storyboard source-of-truth rule
+- character identity reference
+- environment geography/atmosphere reference
+- emotional guidance
+- audio instruction
+- `PANEL BEATS`
+- locked continuity
+- avoid list
 
 ## Prompt Upgrade Examples
 

@@ -2,6 +2,26 @@
 
 This compact index is for `@sw_help`, `/sw_help`, `/sw-help`, feature discovery, and low-cost trigger checks. It does not start a project by itself.
 
+## Project Asset Graph
+
+Purpose: compact project-level asset continuity map before storyboard.
+
+Trigger after SW activation when:
+
+- a new video, film, campaign story, product story, or storyboard project starts and recurring assets are not locked
+- the user asks for a storyboard but characters, scenes, props, products, wardrobe, existing footage, or reference files are unclear
+- a Seedance/Jimeng storyboard-locked sequence needs character/environment continuity before panel beats
+
+Default route:
+
+```text
+production-designer -> Project Asset Graph -> storyboard-director
+```
+
+Ask only the useful asset questions: what already exists, what must be created, and what must stay locked. In fast mode, write assumptions and continue.
+
+Do not confuse it with Selected Asset Packet. Project Asset Graph is project-level before storyboard; Selected Asset Packet packages one selected item for prompt/tool/document handoff.
+
 ## Banana Pro
 
 Purpose: explicit image generation after SW prompt preparation.
@@ -24,19 +44,48 @@ upstream Studio role if needed -> Selected Asset Packet if a concrete object is 
 
 Do not trigger for ordinary image prompt drafting.
 
-## Seedance 2.0 Video
+## Dreamina CLI
 
-Purpose: explicit video generation after SW shot/prompt preparation.
+Purpose: explicit Dreamina / Jimeng official CLI image and video generation after SW prompt preparation.
 
 Trigger only when the user explicitly asks for:
 
-- `即梦2.0生成`
-- `即梦生成`
+- `Dreamina CLI`
+- `Jimeng CLI`
+- official Jimeng CLI
+- `dreamina`
+- `@dreamina-cli`
+- official Jimeng/Dreamina CLI
+- official Jimeng image generation
+- official Jimeng video generation
+- Jimeng image generation through the official CLI
+- Jimeng video generation through the official CLI
+
+Default route:
+
+```text
+upstream Studio role if needed -> Selected Asset Packet if a concrete object is selected -> prompt-director -> dreamina-cli
+```
+
+Do not trigger for ordinary image/video prompt drafting. Do not execute the installer, login/relogin, private upload, real generation, batch generation, or long polling without confirmation. If `dreamina` is not installed, report that the CLI is missing and offer the official install route.
+
+Model behavior: do not hardcode supported models. Inspect `dreamina -h` and `dreamina <subcommand> -h` before real use.
+
+## Seedance 2.0 Video
+
+Purpose: explicit Ark Seedance API video generation after SW shot/prompt preparation.
+
+Use this route for Ark Seedance API / Seedance 2.0 execution. If the user explicitly asks for the official Dreamina/Jimeng CLI, route to `dreamina-cli` instead.
+
+Trigger only when the user explicitly asks for:
+
+- ??2.0??
+- Jimeng generation through the Ark Seedance API route
 - `Seedance 2.0`
 - `Ark Seedance`
-- `豆包 Seedance`
+- ?? Seedance
 - `@seedance-2-video`
-- use 即梦/Seedance to generate/output a video
+- use Seedance to generate/output a video
 
 Default route:
 
@@ -319,7 +368,7 @@ Trigger when the user says:
 Required reply:
 
 ```text
-SW rescue synchronized. Current version: V1.12.13
+SW rescue synchronized. Current version: V1.13.1
 ```
 
 This is not a project start, not a normal sync replacement, and not a tool-generation step.

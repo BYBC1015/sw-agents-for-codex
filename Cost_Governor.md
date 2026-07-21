@@ -25,6 +25,7 @@ The cost gate decides:
 | Intake | new or unclear request | orchestrator + brief | short | 3 default, 5 max | brief, assumptions, next role |
 | Direction | brief is usable | primary + support | medium | 3 default | up to 3 directions, recommendation |
 | Compare board | after direction options, storyboard groups, or deck structures when selection/feedback is fuzzy | primary role only | short | 0-1 | `Keep` / `Remove` / `Next version` only |
+| Project asset graph | project start or storyboard request where recurring characters, scenes, props, products, wardrobe, existing footage, or reference assets are not locked | `production-designer`; add `asset-producer` only for source/risk | short/medium | 1-3 | map existing assets, assets to create, continuity locks, and storyboard handoff |
 | Selected asset packet | before a selected poster/deck/storyboard/reference/media object is handed to `prompt-director`, URL Relay, generation tools, DOCX, or Feishu | current upstream role or `asset-producer` only | short | 0-1 | package one selected object with locks, reference roles, avoid list, next tool, and privacy/cost gate |
 | API fast path | explicit API tool call with clear prompt/handoff, such as one Banana draft image | prompt/tool skill only | short | 0 | run fixed command directly; no separate doctor/key check unless the tool errors |
 | Production | task and direction are clear | primary + support | medium | 3 default, 5 max | one role deliverable |
@@ -61,6 +62,8 @@ The cost gate decides:
 - Explicit 香蕉 / banana / Banana Pro / Nano Banana / OpenRouter image-generation requests can add `banana-pro` as the image-generation member after `prompt-director`; use `tool-integrator` only when capability, parameters, API, or connection state is unclear. Do not load it for generic image prompts.
 - Banana Pro is a post-prompt execution step, not a shortcut around Studio roles. If the request also asks for storyboard, video/film shot design, poster design, PPT/deck/slide layout, character/product/prop design, or scene planning, the responsible Studio role must produce the upstream handoff before `prompt-director` and `banana-pro`.
 - For explicit Banana requests with a complete prompt or clear selected-object handoff, use the API fast path: skip separate doctor/key checks, skip pattern references unless needed, write the prompt to a file when possible, and run the wrapper directly. Let the runner return `missing-key`, `ok`, or `no-image`.
+- Explicit Dreamina CLI / Jimeng CLI / official Jimeng CLI / dreamina / `@dreamina-cli` image or video generation requests can add `dreamina-cli` after `prompt-director`; use `tool-integrator` only when installed state, login state, capability, model support, parameters, or connection state is unclear. Do not load it for generic image/video prompts.
+- Dreamina CLI is a post-prompt execution step, not a shortcut around Studio roles. If the request also asks for storyboard, script, camera, edit, motion, sound, color, poster/deck layout, character/product/prop design, or scene planning, the responsible Studio role must produce the upstream handoff before `prompt-director` and `dreamina-cli`.
 - When a concrete object has been selected upstream, use a Selected Asset Packet before `prompt-director` or any tool execution. It prevents the selected URL, reference image role, locked items, avoid list, and next tool from being carried only as loose prose.
 - Quick edits are a low/mid-cost exception to full project routing: if the user already has the object and asks for a local fix, keep the role chain short and output the revised object first.
 - Quick edits may apply to poster/images, presentation outlines or selected pages, storyboard groups or selected shots, edit plans or timeline segments, and prompt refinements.
@@ -69,8 +72,10 @@ The cost gate decides:
 - A visible SW skill chip alone is not activation. Use SW quick-edit rules only after explicit SW activation or explicit user selection of the SW entry; otherwise handle the request as a normal Codex task.
 - Poster work is not PPT work: do not default to system-font text overlays for poster hero titles or title effects. Use image-native visual typography for the poster's main visual text, and reserve editable/system text for exact information, small copy, legal/logo/QR, or explicit editable-layer requests.
 - `banana-pro` is a tool skill, not a Studio role. It does not count as an extra Studio support role, but generation still uses the high-cost gate when quota, uploads, or final-use assets are involved.
+- `dreamina-cli` is a tool skill, not a Studio role. It may consume Dreamina credits, require CLI install/login, upload private media, and run async polling. Do not execute its installer, login/relogin, real generation, private upload, batch generation, or final-output generation without the relevant confirmation.
 - Explicit 即梦2.0生成 / 即梦生成 / Seedance 2.0 / Ark Seedance video-generation requests can add `seedance-2-video` after `prompt-director`; use `tool-integrator` only when capability, parameters, API, key state, or connection state is unclear. Do not load it for generic video prompts or storyboard work.
 - Seedance is a post-prompt execution step, not a shortcut around Studio roles. If the request also asks for script, storyboard, camera, edit, motion, sound, color, scene design, or film treatment, the responsible Studio role must produce the upstream handoff before `prompt-director` and `seedance-2-video`.
+- If a Seedance request depends on a storyboard sheet, require a Storyboard Animatic Sheet or equivalent panel-beat handoff before claiming storyboard-locked execution. The sheet must carry panel grid + director strip; otherwise use the board only as a visual reference and write a normal single-clip prompt.
 - `seedance-2-video` is a tool skill, not a Studio role. It does not count as an extra Studio support role, but real video generation still uses the high-cost gate when quota, public image URLs, long polling, or final-use assets are involved.
 - `url-relay` is a tool skill, not a Studio role. It may be loaded before `seedance-2-video` when local media needs a public URL. Relay upload is not model-token cost, but it can expose files publicly and use server bandwidth, so apply the upload/privacy guardrail before private or client assets.
 - If a Selected Asset Packet points at local/private media or a client asset, the `Privacy/cost gate` field must be resolved before URL Relay, generation, Feishu publishing, or any public handoff.
@@ -91,9 +96,9 @@ The cost gate decides:
 - Add `01_Research/HQ_Aesthetic_References/Aesthetic_Library_Config.md` and run `tools/aesthetic_library_doctor.py` only for storage relocation, missing-image debugging, or aesthetic-library maintenance.
 - Run `tools/sync_obsidian_aesthetic_vault.py` only when the user explicitly asks for Obsidian aesthetic browsing, screening, curation, or vault maintenance.
 - Add `Prompts/Image_Aesthetic_Prompt_Reference.md` only for visual taste, anti-AI look, or filmic image prompt refinement.
-- Add `Prompts/Video_Motion_Edit_Prompt_Rules.md` only for one-take, bullet-time, hero-shot, complex movement, edit-technique, or execution-level AI video prompts.
-- Add `Prompts/Visual_Development_Board_Rules.md` only for character setting sheets, scene setting sheets, production-design boards, or integrated storyboard sheets.
-- Add `Prompts/Tool_Official_Prompt_Deltas.md` only when a named tool such as Seedance, Kling, Banana Pro/Gemini image, or OpenAI image needs official prompt-case conversion, or when repeated tool execution failures indicate a tool-specific prompt delta. Read only the relevant section; do not load full manuals during normal work.
+- Add `Prompts/Video_Motion_Edit_Prompt_Rules.md` only for one-take, bullet-time, hero-shot, complex movement, edit-technique, Storyboard Animatic Sheet execution, or execution-level AI video prompts.
+- Add `Prompts/Visual_Development_Board_Rules.md` only for Project Asset Graphs, character setting sheets, scene setting sheets, production-design boards, integrated storyboard sheets, or Storyboard Animatic Sheets.
+- Add `Prompts/Tool_Official_Prompt_Deltas.md` only when a named tool such as Dreamina CLI/Jimeng, Seedance, Kling, Banana Pro/Gemini image, or OpenAI image needs official prompt-case conversion, or when repeated tool execution failures indicate a tool-specific prompt delta. Read only the relevant section; do not load full manuals during normal work.
 - Add `01_Research/Oscar_Best_Picture_Visual_Reference.md` only when the user asks for Oscar/classic film visual references.
 - Add `01_Research/Aesthetic_Daily_Selected/Daily_Selected_Index.md` only when the user asks for daily selected references, local moodboards, or newly supplied aesthetic PDFs; do not load all extracted images by default.
 - Add `storyboard-visual-word/SKILL.md` only when the user asks for a 视觉方案文件, 视觉导演方案, Word视觉方案, DOCX视觉方案, 分镜视觉方案文件, or `@storyboard-visual-word`; do not load it for ordinary storyboard planning.
@@ -143,8 +148,11 @@ For visual development boards, lock the board type and scope before generation:
 - scene sheet: location, key props, material/light, and continuity locks
 - storyboard reference angle frame: selected group/shot, purpose, camera angle, subject scale, scene geometry, and continuity locks
 - integrated storyboard sheet: selected group, time range, total duration, shot count, board layout, and whether slight timing adjustment is allowed to keep a group under 15 seconds
+- Storyboard Animatic Sheet: sequence goal, reference roles, panel count, panel headers, action path, camera + lens plan, rhythm track, escalation map, state track, style track, spatial continuity lock, and whether it is intended for Seedance/Jimeng execution
 
 Default storyboard board generation covers one group only: 15 seconds maximum and 9 shots maximum. Nine shots is an upper limit, not a target; do not spend tokens forcing a 3x3 board when fewer shots communicate the beat.
+
+Storyboard Animatic Sheet generation is a separate high-information board mode. Dense 15-second burst-cut sequences may use about 12-20 panels and a mandatory director strip, but only when the user needs the sheet to drive AI-video execution or explicitly requests that high-density format. Do not apply it to every normal storyboard request.
 
 Full-storyboard wording such as "生成全部分镜", "完整分镜", "全片分镜", or "按剧本生成所有镜头" confirms batch scope only for the defined shot list. It still requires high-cost/tool/privacy gates before actual image generation. Contact sheets may paginate into 3x3 pages, but do not spend tokens creating filler frames only to fill a page.
 
@@ -167,8 +175,10 @@ Pause and ask for confirmation before:
 - irreversible tool actions
 - final-use AI output involving brand, face, product, logo, copyright, or exact text risk
 - replacing display lettering/title effects with plain system fonts when the poster relies on stylized typography
+- expanding a Project Asset Graph into full character sheets, scene sheets, or generated visual boards for final/client use
 - character setting sheets, scene setting sheets, or storyboard boards intended for final/client use
 - Banana Pro / banana / OpenRouter image generation that may consume quota, requires `OPENROUTER_API_KEY`, or uploads reference images
+- Dreamina CLI / Jimeng official CLI generation that may consume credits, requires CLI install/login, uploads private media, runs batch generation, uses 4K/1080p/final output, or triggers long polling
 - Seedance / 即梦2.0 video generation that may consume quota, requires `ARK_API_KEY` or a local key file, uses public image URLs, or triggers long polling
 - unknown tool-specific prompt conversion
 - any action that consumes quota without a clear preview

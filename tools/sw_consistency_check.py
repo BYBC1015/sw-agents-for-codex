@@ -34,6 +34,14 @@ ROOT_ACTIVE_FILES = [
     "Feature_Trigger_Index.md",
 ]
 
+HOT_ENTRY_FILES = [
+    "VERSION.md",
+    "SW_V1.0.md",
+    "sw_update.md",
+    "sw_rescue.md",
+    "sw_help.md",
+]
+
 USER_SKILL_FILES = [
     USERPROFILE / ".codex" / "skills" / "sw-v1-0" / "SKILL.md",
     USERPROFILE / ".codex" / "skills" / "sw-update" / "SKILL.md",
@@ -43,6 +51,7 @@ USER_SKILL_FILES = [
     USERPROFILE / ".codex" / "skills" / "sw-rescue" / "agents" / "openai.yaml",
     USERPROFILE / ".codex" / "skills" / "sw-help" / "agents" / "openai.yaml",
     USERPROFILE / ".codex" / "skills" / "banana-pro" / "SKILL.md",
+    USERPROFILE / ".codex" / "skills" / "dreamina-cli" / "SKILL.md",
     USERPROFILE / ".codex" / "skills" / "seedance-2-video" / "SKILL.md",
     USERPROFILE / ".codex" / "skills" / "url-relay" / "SKILL.md",
     USERPROFILE / ".codex" / "skills" / "black-background-cutout" / "SKILL.md",
@@ -56,6 +65,7 @@ PLUGIN_FILES = [
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "sw-rescue" / "SKILL.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "sw-help" / "SKILL.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "banana-pro" / "SKILL.md",
+    USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "dreamina-cli" / "SKILL.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "seedance-2-video" / "SKILL.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "url-relay" / "SKILL.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "black-background-cutout" / "SKILL.md",
@@ -117,6 +127,8 @@ REPO_TOOL_SKILL_FILES = [
     ROOT / "banana-pro" / "SKILL.md",
     ROOT / "banana-pro" / "scripts" / "generate_openrouter_image.py",
     ROOT / "banana-pro" / "bin" / "banana-pro",
+    ROOT / "dreamina-cli" / "SKILL.md",
+    ROOT / "dreamina-cli" / "agents" / "openai.yaml",
     ROOT / "seedance-2-video" / "SKILL.md",
     ROOT / "seedance-2-video" / "scripts" / "seedance_task.py",
     ROOT / "url-relay" / "SKILL.md",
@@ -135,6 +147,31 @@ REPO_TOOL_SKILL_FILES = [
     ROOT / "Obsidian_Aesthetic_Vault" / "obsidian-vault-config.json",
 ]
 
+TOOL_REGISTRY_LITE_FILE = ROOT / "tools" / "sw_tool_registry_lite.json"
+TOOL_REGISTRY_LITE_REQUIRED_IDS = {
+    "black-background-cutout",
+    "banana-pro",
+    "dreamina-cli",
+    "seedance-2-video",
+    "url-relay",
+    "kling-api",
+    "storyboard-visual-word",
+    "feishu-docs",
+}
+TOOL_REGISTRY_LITE_REQUIRED_FIELDS = {
+    "id",
+    "name",
+    "capability",
+    "skill_path",
+    "loads_as",
+    "trigger_mode",
+    "configured_by",
+    "cost_lane",
+    "confirmation_required",
+    "fallback",
+}
+TOOL_REGISTRY_LITE_COST_LANES = {"low", "medium", "high"}
+
 SECRET_PATTERNS = [
     re.compile(r"sk-or-v1-[A-Za-z0-9]{24,}"),
     re.compile(r"ark-[0-9a-fA-F]{8}-[0-9a-fA-F-]{20,}"),
@@ -143,6 +180,14 @@ SECRET_PATTERNS = [
 
 TEXT_SUFFIXES = {".md", ".yaml", ".yml", ".json", ".py", ".toml", ".txt"}
 MEDIA_SUFFIXES = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".mp4", ".mov", ".avi"}
+IGNORED_SCAN_DIRS = {
+    ".codex",
+    ".git",
+    "__pycache__",
+    "banana_outputs",
+    "seedance_outputs",
+    "cutout_transparent_png",
+}
 AESTHETIC_MEDIA_ROOTS = [
     ROOT / "01_Research" / "HQ_Aesthetic_References",
     ROOT / "01_Research" / "Aesthetic_Daily_Selected",
@@ -181,6 +226,25 @@ def read_text(path: Path) -> str:
 
 def fail(issues: list[str], message: str) -> None:
     issues.append(message)
+
+
+def emit(line: str) -> None:
+    try:
+        print(line)
+    except UnicodeEncodeError:
+        encoding = sys.stdout.encoding or "utf-8"
+        safe = line.encode(encoding, errors="backslashreplace").decode(encoding)
+        print(safe)
+
+
+def is_ignored_scan_path(path: Path) -> bool:
+    return any(part in IGNORED_SCAN_DIRS for part in path.parts)
+
+
+def check_required_repo_files(issues: list[str], rel_paths: list[str]) -> None:
+    for rel in rel_paths:
+        if not (ROOT / rel).exists():
+            fail(issues, f"missing required repo file: {rel}")
 
 
 def parse_version(issues: list[str]) -> str:
@@ -314,6 +378,7 @@ def check_repo_tool_skills(issues: list[str]) -> None:
         text = read_text(registry)
         for required in [
             "Banana Pro",
+            "Dreamina CLI",
             "Seedance",
             "URL Relay",
             "Black Background Cutout",
@@ -325,12 +390,85 @@ def check_repo_tool_skills(issues: list[str]) -> None:
                 fail(issues, f"Tool_Registry.md does not mention {required}")
 
 
+def check_tool_registry_lite(issues: list[str]) -> None:
+    if not TOOL_REGISTRY_LITE_FILE.exists():
+        fail(issues, f"missing lite tool registry: {TOOL_REGISTRY_LITE_FILE.relative_to(ROOT)}")
+        return
+
+    try:
+        data = json.loads(read_text(TOOL_REGISTRY_LITE_FILE))
+    except Exception as exc:
+        fail(issues, f"lite tool registry is not valid JSON: {exc}")
+        return
+
+    if data.get("purpose") != "internal_sw_tool_routing":
+        fail(issues, "lite tool registry has an unexpected purpose")
+
+    tools = data.get("tools")
+    if not isinstance(tools, list):
+        fail(issues, "lite tool registry tools must be a list")
+        return
+
+    seen: set[str] = set()
+    for index, tool in enumerate(tools):
+        if not isinstance(tool, dict):
+            fail(issues, f"lite tool registry entry #{index} must be an object")
+            continue
+
+        tool_id = tool.get("id")
+        if not isinstance(tool_id, str) or not tool_id:
+            fail(issues, f"lite tool registry entry #{index} has no id")
+            continue
+        if tool_id in seen:
+            fail(issues, f"duplicate lite tool registry id: {tool_id}")
+        seen.add(tool_id)
+
+        missing = sorted(TOOL_REGISTRY_LITE_REQUIRED_FIELDS - set(tool))
+        if missing:
+            fail(issues, f"lite tool registry {tool_id} missing fields: {', '.join(missing)}")
+
+        skill_path = tool.get("skill_path")
+        if not isinstance(skill_path, str) or not skill_path:
+            fail(issues, f"lite tool registry {tool_id} has invalid skill_path")
+        elif Path(skill_path).is_absolute():
+            fail(issues, f"lite tool registry {tool_id} uses an absolute skill_path")
+        elif not (ROOT / skill_path).exists():
+            fail(issues, f"lite tool registry {tool_id} skill_path missing: {skill_path}")
+
+        if tool.get("loads_as") != "tool_skill":
+            fail(issues, f"lite tool registry {tool_id} must load as tool_skill")
+        if tool.get("cost_lane") not in TOOL_REGISTRY_LITE_COST_LANES:
+            fail(issues, f"lite tool registry {tool_id} has invalid cost_lane")
+
+        for field in ["configured_by", "confirmation_required", "fallback"]:
+            values = tool.get(field)
+            if not isinstance(values, list) or not all(isinstance(item, str) for item in values):
+                fail(issues, f"lite tool registry {tool_id} {field} must be a string list")
+
+        serialized = json.dumps(tool, sort_keys=True)
+        for pattern in SECRET_PATTERNS:
+            if pattern.search(serialized):
+                fail(issues, f"possible secret in lite tool registry entry: {tool_id}")
+
+    missing_ids = sorted(TOOL_REGISTRY_LITE_REQUIRED_IDS - seen)
+    extra_ids = sorted(seen - TOOL_REGISTRY_LITE_REQUIRED_IDS)
+    if missing_ids:
+        fail(issues, f"lite tool registry missing ids: {', '.join(missing_ids)}")
+    if extra_ids:
+        fail(issues, f"lite tool registry has unexpected ids: {', '.join(extra_ids)}")
+
+    by_id = {tool.get("id"): tool for tool in tools if isinstance(tool, dict)}
+    for tool_id in ["banana-pro", "dreamina-cli", "seedance-2-video", "kling-api"]:
+        confirmations = by_id.get(tool_id, {}).get("confirmation_required", [])
+        if "real_generation" not in confirmations:
+            fail(issues, f"lite tool registry {tool_id} must require real_generation confirmation")
+
+
 def check_secret_leaks(issues: list[str]) -> None:
-    ignored_dirs = {".git", "__pycache__", "banana_outputs", "seedance_outputs", "cutout_transparent_png"}
     for path in ROOT.rglob("*"):
         if not path.is_file():
             continue
-        if any(part in ignored_dirs for part in path.parts):
+        if is_ignored_scan_path(path):
             continue
         try:
             text = read_text(path)
@@ -343,7 +481,6 @@ def check_secret_leaks(issues: list[str]) -> None:
 
 def iter_text_files(paths: list[Path]) -> list[Path]:
     files: list[Path] = []
-    ignored_dirs = {".git", "__pycache__", "banana_outputs", "seedance_outputs", "cutout_transparent_png"}
     for base in paths:
         if not base.exists():
             continue
@@ -353,7 +490,7 @@ def iter_text_files(paths: list[Path]) -> list[Path]:
                 continue
             if path.suffix.lower() not in TEXT_SUFFIXES:
                 continue
-            if any(part in ignored_dirs for part in path.parts):
+            if is_ignored_scan_path(path):
                 continue
             files.append(path)
     return files
@@ -417,10 +554,19 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--scope",
         choices=["repo", "installed", "all"],
-        default="all",
+        default=None,
         help=(
             "repo checks only repository files for CI; installed checks local "
             "user/plugin copies; all does both."
+        ),
+    )
+    parser.add_argument(
+        "--profile",
+        choices=["hot", "work", "release"],
+        default=None,
+        help=(
+            "hot runs the minimal daily gate, work runs normal maintenance "
+            "checks, and release keeps the full legacy publish gate."
         ),
     )
     return parser.parse_args()
@@ -428,29 +574,38 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
+    profile = args.profile or "release"
+    scope = args.scope or ("repo" if profile in {"hot", "work"} else "all")
     issues: list[str] = []
     version = parse_version(issues)
 
-    if args.scope in {"repo", "all"}:
+    if scope in {"repo", "all"}:
+        check_required_repo_files(issues, HOT_ENTRY_FILES)
         check_fixed_replies(issues, version)
+        check_tool_registry_lite(issues)
+
+    if profile in {"work", "release"} and scope in {"repo", "all"}:
         check_prompt_references(issues)
         check_project_memory_templates(issues)
         check_repo_tool_skills(issues)
-        check_secret_leaks(issues)
         check_aesthetic_media_not_tracked(issues)
 
-    if args.scope in {"installed", "all"}:
+    if profile == "release" and scope in {"repo", "all"}:
+        check_secret_leaks(issues)
+
+    if scope in {"installed", "all"}:
         check_external_copies(issues, version)
 
-    check_text_integrity(issues, args.scope)
+    if profile == "release":
+        check_text_integrity(issues, scope)
 
     if issues:
-        print(f"SW consistency check failed for scope={args.scope}:")
+        emit(f"SW consistency check failed for {version} (scope={scope}, profile={profile}):")
         for issue in issues:
-            print(f"- {issue}")
+            emit(f"- {issue}")
         return 1
 
-    print(f"SW consistency check passed for {version} (scope={args.scope}).")
+    emit(f"SW consistency check passed for {version} (scope={scope}, profile={profile}).")
     return 0
 
 

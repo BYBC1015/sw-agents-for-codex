@@ -1,24 +1,57 @@
 # Visual Development Board Rules
 
-Use this reference only when the user asks for character sheets, character setting images, scene setting images, production-design boards, one-page storyboard boards, or storyboard contact sheets. Do not load it for normal brief, direction, copy, poster, or simple prompt work.
+Use this reference only when the user asks for Project Asset Graphs, character sheets, character setting images, scene setting images, production-design boards, one-page storyboard boards, storyboard contact sheets, or Storyboard Animatic Sheets for AI-video execution. Do not load it for normal brief, direction, copy, poster, or simple prompt work.
 
 ## Purpose
 
-SW should support three visual-development board types:
+SW should support five visual-development board types:
 
-1. Character Setting Sheet: locks a character before storyboard, image generation, or video generation.
-2. Scene Setting Sheet: locks a location, set, props, lighting, material language, and color continuity.
-3. Integrated Storyboard Sheet: groups sequential shots into one board so the user can review flow and continuity quickly.
+1. Project Asset Graph: maps existing and to-create project assets before storyboard so character, scene, prop, wardrobe, product, and source-reference continuity is explicit.
+2. Character Setting Sheet: locks a character before storyboard, image generation, or video generation.
+3. Scene Setting Sheet: locks a location, set, props, lighting, material language, and color continuity.
+4. Integrated Storyboard Sheet: groups sequential shots into one board so the user can review flow and continuity quickly.
+5. Storyboard Animatic Sheet: a high-information storyboard blueprint for AI video execution. It combines panel artwork with a director strip so Seedance/Jimeng can follow the storyboard instead of re-inventing coverage.
 
 These boards are production references. They are not final posters and should not ask the image model to create accurate long text. Use clean labels only when useful; exact titles, Chinese copy, logo, and final typography belong in post-production.
 
 ## Routing
 
+- Project Asset Graph request, project start with unlocked recurring assets, or storyboard request with unclear asset continuity: `production-designer`; add `asset-producer` only when asset source/risk matters; then `storyboard-director`.
 - Character setting request: `production-designer` + `asset-producer` if asset source/risk matters, then `prompt-director` if prompt/image generation is requested.
 - Scene setting request: `production-designer`, then `prompt-director` if prompt/image generation is requested.
 - Integrated storyboard request: `storyboard-director`; add `cinematographer` only when shot language is weak or cinematic continuity matters; then `prompt-director` if prompt/image generation is requested.
+- Storyboard animatic sheet request, or a storyboard intended to drive one Seedance/AI-video sequence: `storyboard-director`; add `cinematographer` only when lens/camera continuity is weak; then `prompt-director` to write the GPT Image 2 / image skill board prompt.
 - If the user also asks to generate with Banana Pro, the chain is upstream role -> `prompt-director` -> `banana-pro`.
-- If the user also asks to generate video with Seedance, lock the selected storyboard group first, then `prompt-director` -> `url-relay` if local reference media exists -> `seedance-2-video`.
+- If the user also asks to generate video with Seedance, lock or create the selected storyboard animatic sheet first, then `prompt-director` -> `url-relay` if local reference media exists -> `seedance-2-video`.
+
+## Project Asset Graph
+
+Use this when a video, film, campaign story, storyboard, product story, or AI-video project needs recurring asset continuity but the asset system is not locked yet.
+
+It is a low-cost text/board handoff before storyboard. It should not become a full character sheet, scene sheet, or generated visual board unless the user asks or generation needs that expansion.
+
+Low-cost handoff before storyboard:
+
+```text
+Project Asset Graph:
+- Asset source mode: existing / generate / mixed / unknown
+- Existing assets:
+- Assets to create:
+- Character nodes:
+- Scene/location nodes:
+- Prop/product/wardrobe nodes:
+- Continuity locks:
+- Forbidden drift:
+- Storyboard handoff:
+- Open questions:
+```
+
+Rules:
+
+- Ask proactively at project start or when the user asks for a storyboard: what assets already exist, what must be created, and what must stay locked.
+- If the user says fast, "you decide", or provides too little context, create a draft graph with assumptions and continue.
+- Use stable ids for graph nodes; those ids should appear later in shot tables, storyboard panels, and Selected Asset Packets.
+- Use full Character Setting Sheet or Scene Setting Sheet only for nodes that need visual locking or generation.
 
 ## Character Setting Sheet
 
@@ -111,6 +144,153 @@ Compare Board:
 ```
 
 Do not turn Compare Board into another storyboard table or batch board prompt. It only decides what survives into the next selected group.
+
+## Storyboard Animatic Sheet
+
+Use this when the storyboard will become the source of truth for Seedance/Jimeng/AI-video execution, especially for a 10-20 second sequence where one video-generation task must imply multiple cuts, burst inserts, choreography, spatial continuity, or a strong final payoff.
+
+This is stricter than an ordinary integrated storyboard sheet. The output should be a designed one-image production blueprint, usually generated through GPT Image 2 / the default image skill. The sheet must carry enough information that the later video prompt can say "follow the storyboard exactly" without re-explaining the whole world.
+
+### Scope
+
+- Default dense-sequence scope: 15 seconds, 16:9, about 12-20 panels when the concept needs burst cuts or micro-actions.
+- Use the real shot/beat count. Do not force 20 panels when the sequence is simple, and do not force 9 panels when a dense animatic needs more micro-beats.
+- Ordinary review boards still use the normal integrated storyboard rules. Use this animatic template only when the board is intended to drive AI-video execution or the user explicitly asks for this high-density storyboard-sheet style.
+- The storyboard image may show panel labels, shot tags, and director-strip labels outside the panel artwork. Do not rely on accurate long body text; the text blocks are production-notation placeholders.
+
+### Required Information Density
+
+Before writing the image prompt, prepare these fields:
+
+```text
+Storyboard Animatic Sheet Blueprint:
+- Title:
+- Meta line:
+- Priority:
+- Micro brief:
+- Sequence ID:
+- Reference priority:
+- Premise:
+- Location:
+- Start -> End:
+- Action chain:
+- Prop/effect state:
+- Must read:
+- Character sanitization:
+- Identity consistency:
+- Storyboard purity:
+- Master shot rule:
+- Emotional arc:
+- Style lock:
+- Effect lock:
+- Environment lock:
+- Spatial continuity lock:
+- Director strip tracks:
+- Panel headers:
+- Camera + lens plan:
+- Action path:
+- Rhythm track:
+- Escalation map:
+- State track:
+- Style track:
+- Sequence/grid:
+```
+
+### GPT Image 2 / Image Skill Board Prompt Shape
+
+Use this structure when converting the blueprint into the board prompt:
+
+```text
+Create a 16:9 image.
+
+[PROJECT CARD]
+Create a compact designed masthead, not a table.
+TITLE:
+META LINE:
+PRIORITY:
+MICRO BRIEF:
+
+[CONTINUITY HEADER]
+SEQUENCE ID:
+REFERENCE PRIORITY: [reference 1 controls identity / reference 2 controls environment geometry / storyboard controls staging, motion, geography, continuity, cut rhythm, and effect logic.]
+
+[SCENE PACKET]
+PREMISE:
+LOCATION:
+START -> END:
+ACTION CHAIN:
+PROP / EFFECT STATE:
+MUST READ:
+
+[CHARACTER SANITIZATION]
+C1:
+Remove contradictory traits, invisible psychology, excessive costume detail, and backstory that cannot appear in a panel.
+
+[IDENTITY CONSISTENCY]
+[State what the character/product reference controls, what the storyboard controls, and what must not change.]
+
+[STORYBOARD PURITY]
+Panel images are visual-only rough sketches or production panels. Put panel numbers, beat names, and lens tags in the header strip outside each panel image. No captions, subtitles, logos, watermarks, UI, ghost poses, duplicate bodies, or technical overlays inside panels.
+
+[MASTER SHOT RULE]
+P01 shows the full playable geography and stable travel direction.
+
+[EMOTIONAL ARC]
+[State the visible emotional/energy progression through stance, gaze, action, light, rhythm, or final stillness.]
+
+[STYLE LOCKS]
+STYLE LOCK:
+EFFECT LOCK:
+ENVIRONMENT LOCK:
+
+[SPATIAL CONTINUITY LOCK]
+[List the wide/anchor panels that share the same layout, screen direction, foreground/background, and allowed changes.]
+
+[DIRECTOR STRIP]
+Bottom animatic track board aligned to panel columns. Tracks: BEAT LINE, CAMERA PATH, ACTION PATH, RHYTHM TRACK, ESCALATION MAP, STATE TRACK, STYLE TRACK. Use shot chips, thin lines, rhythm blocks, small intensity bars, one-to-three-word labels. No seconds or timestamps.
+RHYTHM TRACK format: `RHY P##: [hold|slow reveal|build|burst|impact|pause|recover|final hit] / [short block|medium block|long block] / [clean beat|match beat|smash beat|held beat|whip beat]`.
+ESCALATION MAP format: `ESC P##: [L1 calm|L2 tension|L3 rise|L4 surge|L5 peak] / [flat|rise|spike|drop|release|unresolved]`.
+PANEL HEADERS:
+CAMERA + LENS PLAN:
+ACTION PATH:
+RHYTHM TRACK:
+ESCALATION MAP:
+STATE TRACK:
+STYLE TRACK:
+
+[SEQUENCE]
+Grid: [panel count and layout]; panel artwork stays [chosen board style] while the director strip makes the sequence readable through camera path, action path, rhythm, escalation, state, and style tracks.
+```
+
+### Director Strip Requirements
+
+The director strip is mandatory for this template. It turns a static storyboard into an animatic control layer:
+
+- `BEAT LINE`: the narrative job of each panel.
+- `CAMERA PATH`: camera direction, hold/push/whip/orbit/track relation, or stable camera state.
+- `ACTION PATH`: subject or effect trajectory across the panel sequence.
+- `RHYTHM TRACK`: hold/build/burst/pause/impact/final-hit density using short/medium/long blocks.
+- `ESCALATION MAP`: intensity curve from calm to peak, drop, release, or unresolved state.
+- `STATE TRACK`: what the scene is currently doing, such as still, ignition, build, fragment, pause, decision, impact, awe.
+- `STYLE TRACK`: per-panel visual grammar, such as grounded, spark, sweep, detail, crash, intimate, halo, slice, ripple.
+
+### Handoff To Seedance
+
+After the animatic sheet is generated or selected, package it before Seedance:
+
+```text
+Selected Asset Packet:
+- Object ID: [sequence-id]-animatic-sheet
+- Source stage: Storyboard Animatic Sheet
+- Asset type: storyboard blueprint / AI-video motion source
+- Purpose: Seedance/Jimeng sequence execution
+- Selected input: storyboard sheet image + optional character sheet + optional environment reference
+- Reference roles: storyboard sheet = motion source + structure; character sheet = identity; environment reference = structure/style
+- Locked items: panel order, panel beats, character identity, environment geography, effect logic, final payoff
+- Avoid: alternative coverage, extra characters, redesigned subject, new location, copied labels/text, logo/watermark
+- Next tool: prompt-director -> seedance-2-video
+- Privacy/cost gate:
+```
 
 ## Full Storyboard Generation
 

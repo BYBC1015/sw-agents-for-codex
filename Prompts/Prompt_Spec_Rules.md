@@ -15,6 +15,8 @@
 - Seedance 2.0 / `seedance-2-video` 是提示词后的视频生成成员；只在用户明确要求即梦2.0生成、即梦生成、Seedance 2.0、Ark Seedance、豆包 Seedance 或 `@seedance-2-video` 时调用，普通视频提示词不要自动切换到 Seedance。
 - 用户同时要求“设计脚本/分镜/镜头/剪辑/调色”和“使用即梦/Seedance生成”时，不能越过上游设计环节直接生成。先由对应 Studio 角色锁定镜头和节奏，再由 `prompt-director` 转成可执行提示词，最后交给 `seedance-2-video` 生成选中的一条镜头/片段。
 - 如果 Seedance/即梦提示词使用本地参考图或本地视频片段，先通过 `url-relay` 取得公网 `http(s)` URL，再写入工具执行参数；不要把本地路径当作 Ark 可抓取 URL。
+- 如果视频/分镜项目的角色、场景、道具、产品、服装或参考素材未锁定，先确认或生成 `Project Asset Graph`；Seedance/即梦执行提示词里的 character、environment 和 panel beats 必须继承该资产图、角色/场景设定图或 Storyboard Animatic Sheet，不要临场发明新资产。
+- 如果即梦/Seedance 要按整张 storyboard 生成一个 sequence，必须先有高信息量 `Storyboard Animatic Sheet`：panel grid + director strip + panel beats。没有这类 sheet 时，不要只写“引用 storyboard”来假装已锁定镜头顺序。
 
 ## 按需参考文件
 
@@ -204,6 +206,54 @@ Prompt rules for this packet:
 - 每个镜头单独写提示词，避免一个 prompt 同时塞入太多动作。
 - 第一镜头必须有钩子：冲突、动作、视觉奇观、问题或强信息。
 - 每个镜头要能接上前后镜头：主体、色彩、空间或动作至少保持一个连续线索。
+
+### Storyboard Animatic Sheet -> Seedance 提示词
+
+Canonical source: 本节是 Storyboard Animatic Sheet 到 Seedance/Jimeng 执行提示词的唯一完整模板。`seedance-2-video/SKILL.md` 和 `Prompts/Video_Motion_Edit_Prompt_Rules.md` 只能引用本节或写字段摘要，不要复制完整模板，避免版本漂移。
+
+当视频 prompt 来自高信息量分镜蓝图时，先把复杂度前移到 storyboard sheet，再让即梦执行，不要在即梦 prompt 里重新发明镜头。
+
+前提：
+
+- 已有或将生成 `Storyboard Animatic Sheet`。
+- Sheet 同时包含上方 panel grid 和下方 director strip。
+- Director strip 至少包含 `Beat Line / Camera Path / Action Path / Rhythm Track / Escalation Map / State Track / Style Track`。
+- 角色设定图、场景设定图、环境参考图要用 `Reference roles` 分清：`identity`、`structure`、`style`、`motion source`。
+
+Seedance 执行提示词模板：
+
+```text
+Use @[storyboard ref] as the storyboard blueprint for the sequence. Treat every storyboard panel as a consecutive shot within a single cinematic sequence. Follow panel order exactly and do not invent alternative coverage. The storyboard is the primary source of truth for visual storytelling. Recreate the filmed sequence implied by the panels rather than the physical storyboard artwork.
+
+Use @[character ref] as the authoritative character/product identity reference.
+Use @[environment ref] as the authoritative scene geography and atmosphere reference.
+
+EMOTIONAL GUIDANCE:
+Valence:
+Arousal:
+
+AUDIO:
+[No background music / ambience only / specified sound layer]
+
+PANEL BEATS:
+P01:
+P02:
+P03:
+...
+
+LOCKED CONTINUITY:
+- Character/product identity:
+- Environment geography:
+- Camera/screen direction:
+- Effect logic:
+- Final payoff:
+
+AVOID:
+- Do not copy storyboard labels, paper texture, panel borders, masthead, or director-strip graphics.
+- Do not add new characters, new locations, alternative coverage, wrong props, readable fake text, logos, or watermarks.
+```
+
+`PANEL BEATS` 必须来自 sheet 的 Panel Headers、Camera + Lens Plan、Action Path、Rhythm Track、Escalation Map、State Track 和 Style Track。不要只按图片外观猜，也不要省略节奏变化。
 
 ## 运镜翻译表
 
@@ -445,6 +495,7 @@ Use `Prompts/Visual_Development_Board_Rules.md` only when the user asks for char
 - Character sheets should lock identity before multi-shot work: full-body hero pose, neutral front/back/profile turnarounds, 4-6 expression studies, detail crops, silhouette study, signature prop, and color palette.
 - Scene sheets should lock location continuity before multi-shot work: establishing view, secondary angles, material/detail crops, practical lighting, key props, and color/material palette.
 - Integrated storyboard sheets should be one image board per group. Default group duration is 15 seconds, with at most 9 shots per board. If the duration exceeds 15 seconds or the shot count exceeds 9, start the next group.
+- Storyboard Animatic Sheets are stricter AI-video blueprints. Use them when the storyboard will drive Seedance/Jimeng execution. They may use about 12-20 panels for a dense 15-second sequence, but must include panel grid + director strip + panel beats, not just a pretty contact sheet.
 - Do not jump straight to image generation. First output the sheet/board handoff or storyboard group table, then generate one selected board prompt.
 - If the user says to use Banana Pro for a character sheet or storyboard sheet, treat it as confirmation for one draft board only. Batch boards require separate confirmation.
 - Exact labels, Chinese text, logos, and final typography should be added after generation unless the user explicitly accepts model text risk.

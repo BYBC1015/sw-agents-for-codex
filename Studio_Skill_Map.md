@@ -14,7 +14,7 @@ For project work, load only the current needed role files and show the role trac
 | Strategy | `research-scout`, `creative-director`, `aesthetic-director`, `presentation-designer`, `copywriter` |
 | Poster | `poster-art-director`, `layout-designer`, `asset-producer`, `prompt-director` |
 | Presentation | `presentation-designer`, `copywriter`, `layout-designer`, `asset-producer`, `review-producer`, `finishing-producer` |
-| Video | `scriptwriter`, `storyboard-director`, `cinematographer`, `edit-director`, `motion-designer`, `sound-designer`, `colorist` |
+| Video | `scriptwriter`, `production-designer`, `storyboard-director`, `cinematographer`, `edit-director`, `motion-designer`, `sound-designer`, `colorist` |
 | Film | `film-director`, `scriptwriter`, `production-designer`, `cinematographer`, `storyboard-director`, `edit-director`, `sound-designer`, `colorist` |
 | Tools | `tool-integrator`, `prompt-director`, `asset-producer` |
 | Historical Accuracy | `historical-consultant`, `asset-producer`, `prompt-director`, `review-producer` |
@@ -36,7 +36,7 @@ brief-strategist -> creative-director -> aesthetic-director (when deck look is n
 Video:
 
 ```text
-brief-strategist -> creative-director -> aesthetic-director (when visual language is not locked) -> scriptwriter -> storyboard-director -> cinematographer -> edit-director -> motion-designer -> sound-designer -> colorist -> review-producer -> finishing-producer
+brief-strategist -> creative-director -> aesthetic-director (when visual language is not locked) -> scriptwriter -> production-designer (Project Asset Graph when continuity assets are not locked) -> storyboard-director -> cinematographer -> edit-director -> motion-designer -> sound-designer -> colorist -> review-producer -> finishing-producer
 ```
 
 Film / brand film:
@@ -69,9 +69,9 @@ change-manager -> affected role -> review-producer
 - Presentation/deck slide copy and title takeaways: `copywriter`; layout/readability: `layout-designer`.
 - Presentation/deck final check: `review-producer`; export/package: `finishing-producer`.
 - Video script: `scriptwriter`.
-- Storyboard: `storyboard-director`.
+- Project Asset Graph / scene/set/product world: `production-designer`.
+- Storyboard after asset continuity is locked or assumed: `storyboard-director`.
 - Camera/lighting: `cinematographer`.
-- Scene/set/product world: `production-designer`.
 - Edit rhythm: `edit-director`.
 - Motion titles/graphics: `motion-designer`.
 - Music/SFX/voice: `sound-designer`.

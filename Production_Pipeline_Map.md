@@ -135,6 +135,44 @@ Key gates:
 - preserve locked items through `prompt-director` and downstream tools
 - resolve privacy/cost before public upload, paid generation, long polling, or external publishing
 
+## Project Asset Graph Workflow
+
+Use this before storyboard or AI-video planning when a project has recurring characters, scenes, props, wardrobe, vehicles, product environments, existing footage, or reference assets that must stay consistent across shots.
+
+This is a project-level continuity map, not a selected-object handoff. It happens before storyboards; Selected Asset Packet happens later when one concrete item is selected for prompt writing, URL relay, generation, DOCX, or Feishu.
+
+```text
+brief-strategist / scriptwriter / film-director
+-> production-designer
+-> Project Asset Graph
+-> storyboard-director
+```
+
+Output only:
+
+```text
+Project Asset Graph:
+- Asset source mode: existing / generate / mixed / unknown
+- Existing assets:
+- Assets to create:
+- Character nodes:
+- Scene/location nodes:
+- Prop/product/wardrobe nodes:
+- Continuity locks:
+- Forbidden drift:
+- Storyboard handoff:
+- Open questions:
+```
+
+Key gates:
+
+- ask proactively at project start or when the user requests a storyboard: what assets already exist, what must be created, and what must stay locked
+- if the user says fast / you decide, create a low-cost draft graph with assumptions instead of blocking the storyboard
+- use stable ids such as `char-01`, `scene-forest-lake`, `prop-saber`, `wardrobe-main`, or `vehicle-med-ship`
+- keep the graph compact; do not expand into full character sheets or scene sheets unless the user asks or generation needs them
+- hand the graph to `storyboard-director` so panels inherit identity, scene geometry, props, wardrobe, and continuity constraints
+- use Selected Asset Packet later only for the specific graph node, frame, board, file, or URL chosen for a tool handoff
+
 ## Presentation / Deck Workflow
 
 ```text
@@ -172,9 +210,9 @@ studio-orchestrator
 -> creative-director
 -> aesthetic-director (when visual language is not locked)
 -> scriptwriter
+-> production-designer (Project Asset Graph when continuity assets are not locked)
 -> storyboard-director
 -> cinematographer
--> production-designer (when scene/world matters)
 -> edit-director
 -> motion-designer
 -> sound-designer
@@ -189,9 +227,12 @@ studio-orchestrator
 Key gates:
 
 - structure before shot list
+- Project Asset Graph before storyboard when recurring characters, scenes, props, wardrobe, vehicles, products, existing footage, or reference assets must stay consistent
 - aesthetic profile before storyboard image prompts or reference-frame selection
 - shot list before edit plan
 - selected AI shots only after specs are locked and represented as a Selected Asset Packet
+- storyboard-locked Seedance/Jimeng sequences require a Storyboard Animatic Sheet first: panel grid + director strip + panel beats. A normal storyboard image without director strip is only a visual reference.
+- official Dreamina/Jimeng CLI image/video generation also happens only after the selected shot/reference/media packet and `prompt-director`; inspect `dreamina -h` before real use and do not install, login, upload, generate, batch, or long-poll without confirmation
 - when a selected AI video shot uses local reference media, resolve the packet's `Privacy/cost gate`, then use `url-relay` after `prompt-director` and before `seedance-2-video`
 - historical accuracy, when enabled, checks storyboard first frames, still visual assets, and representative Seedance frames/stills when available
 - sound, motion, and color are separate from storyboard
@@ -206,7 +247,7 @@ studio-orchestrator
 -> film-director
 -> aesthetic-director (when look/world grammar is not locked)
 -> scriptwriter
--> production-designer
+-> production-designer (Project Asset Graph)
 -> cinematographer
 -> storyboard-director
 -> edit-director
@@ -222,13 +263,14 @@ Key gates:
 - directing intent before script
 - aesthetic profile before production-design, cinematography, storyboard boards, or generation prompts
 - script/treatment before storyboard
+- Project Asset Graph before storyboard: characters, locations, props, wardrobe, vehicles, product environments, and reference assets must be asked for or assumed
 - cinematography and production design before AI video prompts
 - historical accuracy, when enabled, locks period/civilization choices before production design and checks still images after generation
 - edit before sound/color finalization
 
 ## Visual Development Board Workflow
 
-Use this only when the user asks for character setting sheets, scene setting sheets, production-design boards, or one-image storyboard boards.
+Use this only when the user asks for Project Asset Graphs, character setting sheets, scene setting sheets, production-design boards, one-image storyboard boards, or a Storyboard Animatic Sheet for AI-video execution.
 
 Character setting sheet:
 
@@ -259,6 +301,27 @@ storyboard-director
 -> banana-pro (only if explicitly requested)
 ```
 
+Storyboard Animatic Sheet for Seedance/Jimeng:
+
+```text
+storyboard-director
+-> cinematographer (only if camera/lens continuity needs help)
+-> Selected Asset Packet (storyboard sheet = motion source + structure; character = identity; environment = structure/style)
+-> prompt-director (GPT Image 2 / image skill board prompt, then Seedance execution prompt)
+-> url-relay (only if local reference media needs public URLs)
+-> seedance-2-video (only when explicitly requested)
+```
+
+Dreamina/Jimeng official CLI image/video task:
+
+```text
+upstream visual/video role when needed
+-> Selected Asset Packet
+-> prompt-director
+-> url-relay (only if the current CLI requires public URLs for local media)
+-> dreamina-cli (only when explicitly requested)
+```
+
 Key gates:
 
 - one storyboard board group = one image board
@@ -266,6 +329,7 @@ Key gates:
 - each group must stay <=15 seconds total duration
 - maximum shots per board = 9, but 9 shots is only the upper limit
 - do not force a 3x3 board; choose the board layout from the actual shot count
+- Storyboard Animatic Sheets are the exception for dense AI-video blueprints: a 15-second burst-cut sequence may use about 12-20 panels, but it must include Project Card, Continuity Header, Scene Packet, Identity/Environment/Effect/Spatial locks, Panel Headers, Camera + Lens Plan, Action Path, Rhythm Track, Escalation Map, State Track, Style Track, and a bottom director strip
 - if a shot cannot land cleanly at the 15-second boundary, first adjust shot durations slightly; if that breaks the beat, start the next group
 - exceeding 15 seconds or 9 shots starts the next group
 - full-storyboard triggers use the real script shot count; supplemental shots need narrative purpose, and 3x3 contact sheets may leave black slots instead of forcing filler

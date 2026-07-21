@@ -1,0 +1,183 @@
+{
+  "version": 1,
+  "purpose": "internal_sw_tool_routing",
+  "tools": [
+    {
+      "id": "black-background-cutout",
+      "name": "Black Background Cutout",
+      "capability": "local_image_cutout",
+      "skill_path": "black-background-cutout/SKILL.md",
+      "loads_as": "tool_skill",
+      "trigger_mode": "explicit",
+      "configured_by": [],
+      "cost_lane": "low",
+      "confirmation_required": [],
+      "fallback": [
+        "prompt_only_guidance",
+        "professional_image_editing"
+      ]
+    },
+    {
+      "id": "banana-pro",
+      "name": "Banana Pro",
+      "capability": "image_generation",
+      "skill_path": "banana-pro/SKILL.md",
+      "loads_as": "tool_skill",
+      "trigger_mode": "explicit",
+      "configured_by": [
+        "~/.config/banana-pro/openrouter.env",
+        "OPENROUTER_API_KEY"
+      ],
+      "cost_lane": "high",
+      "confirmation_required": [
+        "real_generation",
+        "private_upload",
+        "batch_generation",
+        "final_output"
+      ],
+      "fallback": [
+        "dry_run_payload",
+        "prompt_only_handoff"
+      ]
+    },
+    {
+      "id": "seedance-2-video",
+      "name": "Seedance 2 Video",
+      "capability": "video_generation",
+      "skill_path": "seedance-2-video/SKILL.md",
+      "loads_as": "tool_skill",
+      "trigger_mode": "explicit",
+      "configured_by": [
+        "ARK_API_KEY",
+        "~/.config/codex-seedance-2-video/secrets.json"
+      ],
+      "cost_lane": "high",
+      "confirmation_required": [
+        "real_generation",
+        "private_upload",
+        "batch_generation",
+        "1080p_or_final_output",
+        "temporary_relay_fallback"
+      ],
+      "fallback": [
+        "dry_run_manifest",
+        "prompt_only_handoff",
+        "url_relay_pause"
+      ]
+    },
+    {
+      "id": "dreamina-cli",
+      "name": "Dreamina CLI",
+      "capability": "image_video_generation",
+      "skill_path": "dreamina-cli/SKILL.md",
+      "loads_as": "tool_skill",
+      "trigger_mode": "explicit",
+      "configured_by": [
+        "dreamina on PATH",
+        "C:/Users/Administrator/bin/dreamina.exe",
+        "dreamina login",
+        "~/.dreamina_cli"
+      ],
+      "cost_lane": "high",
+      "confirmation_required": [
+        "install_cli",
+        "login_or_relogin",
+        "real_generation",
+        "private_upload",
+        "batch_generation",
+        "final_output"
+      ],
+      "fallback": [
+        "help_only_inspection",
+        "prompt_only_handoff",
+        "seedance_api_route_when_user_requests_ark"
+      ]
+    },
+    {
+      "id": "url-relay",
+      "name": "URL Relay",
+      "capability": "media_url_relay",
+      "skill_path": "url-relay/SKILL.md",
+      "loads_as": "tool_skill",
+      "trigger_mode": "explicit_or_dependency",
+      "configured_by": [
+        "SW_RELAY_TOKEN",
+        "~/.config/sw-media-uploader/config.json"
+      ],
+      "cost_lane": "medium",
+      "confirmation_required": [
+        "private_upload",
+        "temporary_relay_fallback"
+      ],
+      "fallback": [
+        "ask_for_public_url",
+        "pause_downstream_generation"
+      ]
+    },
+    {
+      "id": "kling-api",
+      "name": "Kling API",
+      "capability": "video_generation",
+      "skill_path": "kling-api/SKILL.md",
+      "loads_as": "tool_skill",
+      "trigger_mode": "explicit",
+      "configured_by": [
+        "KLING_ACCESS_KEY",
+        "KLING_SECRET_KEY",
+        "~/.config/kling-api/secrets.json"
+      ],
+      "cost_lane": "high",
+      "confirmation_required": [
+        "real_generation",
+        "private_upload",
+        "batch_generation"
+      ],
+      "fallback": [
+        "dry_run_payload",
+        "prompt_only_handoff"
+      ]
+    },
+    {
+      "id": "storyboard-visual-word",
+      "name": "Storyboard Visual Word",
+      "capability": "docx_visual_handoff",
+      "skill_path": "storyboard-visual-word/SKILL.md",
+      "loads_as": "tool_skill",
+      "trigger_mode": "explicit",
+      "configured_by": [],
+      "cost_lane": "medium",
+      "confirmation_required": [
+        "private_asset_export",
+        "internal_appendix"
+      ],
+      "fallback": [
+        "markdown_handoff",
+        "prompt_only_fallback"
+      ]
+    },
+    {
+      "id": "feishu-docs",
+      "name": "Feishu Docs",
+      "capability": "external_document_publish",
+      "skill_path": "feishu-docs/SKILL.md",
+      "loads_as": "tool_skill",
+      "trigger_mode": "explicit",
+      "configured_by": [
+        "FEISHU_APP_ID",
+        "FEISHU_APP_SECRET",
+        "FEISHU_FOLDER_TOKEN",
+        "~/.config/sw-feishu/config.json"
+      ],
+      "cost_lane": "medium",
+      "confirmation_required": [
+        "external_publish",
+        "private_material_publish",
+        "local_path_exposure"
+      ],
+      "fallback": [
+        "local_markdown_render",
+        "dry_run_publish_plan"
+      ]
+    }
+  ]
+}

@@ -23,6 +23,8 @@ If the user already provides a final video prompt and the needed public image UR
 
 If a Selected Asset Packet is present, treat it as the selected-shot source of truth. Preserve `Object ID`, `Reference roles`, `Locked items`, `Avoid`, and `Privacy/cost gate`; do not substitute a different shot or media source.
 
+If a Project Asset Graph is present upstream, preserve its character, scene, prop, product, wardrobe, existing-footage, and reference-asset locks through the Seedance prompt. Do not invent replacement assets when the graph or packet already defines them.
+
 ## Security Rule
 
 Never write a real API key into this skill, generated files, prompts, manifests, logs, or examples. Read the key from `ARK_API_KEY` first, then from the local private key file created by `setup-key`.
@@ -89,14 +91,23 @@ Before real generation, confirm these fields are known or reasonably defaulted:
 
 Seedance prompts should be compact and concrete:
 
-- One clip per prompt.
+- One clip per prompt. A storyboard-locked multi-panel sequence is allowed only when a Storyboard Animatic Sheet supplies the panel order and director strip.
 - Specify subject, action, scene, camera movement, composition, lighting, color, atmosphere, duration, and constraints.
 - When using image-to-video or first-frame control, let the source image carry appearance and composition; use the prompt mainly for action, camera path, stability locks, and end state.
+- When using a Storyboard Animatic Sheet, the storyboard image is the `motion source + structure` reference for the whole sequence. The prompt must say that the storyboard is the primary source of truth, every panel is consecutive, panel order is mandatory, and alternative coverage should not be invented.
+- Storyboard-locked Seedance prompts must include concise `PANEL BEATS` derived from the sheet's panel headers, camera/lens plan, action path, rhythm track, escalation map, state track, and style track. Do not ask Seedance to reproduce storyboard paper, panel borders, mastheads, labels, or the director-strip graphics.
+- If character and environment references are also present, keep roles separated: Project Asset Graph = continuity locks, character sheet or character still = identity, environment reference = scene geography/style, storyboard sheet = motion source + structure.
 - Replace vague wording such as "更电影感" with controllable choices: lens feel, camera path, light direction, contrast, depth of field, color temperature, pace, and frame size.
 - For one-take, bullet-time, hero-shot, montage, match cut, speed ramp, or complex movement requests, read the current SW root's `Prompts/Video_Motion_Edit_Prompt_Rules.md` first when available; if this skill is used from an installed copy, fall back to `C:\Users\Administrator\Documents\New project\Prompts\Video_Motion_Edit_Prompt_Rules.md`. Keep each generated clip to one continuous camera path.
 - Multi-cut ideas should be split into separate clip prompts plus an edit plan; do not submit one overloaded multi-scene prompt as a single Seedance task.
 - Avoid asking the model to create accurate small text, logos, QR codes, legal copy, or exact subtitles. Add those in editing/post.
 - For historical projects, if Historical Accuracy is enabled, check visible costume, architecture, props, symbols, materials, and anachronisms before generation and again when reviewing stills or output frames.
+
+Storyboard execution contract:
+
+- Canonical template lives in the current SW root at `Prompts/Prompt_Spec_Rules.md` -> `Storyboard Animatic Sheet -> Seedance 提示词`.
+- This skill intentionally keeps only the field contract to avoid template drift.
+- If the canonical file is unavailable, do not invent a different template; use the same required sections: storyboard source-of-truth rule, character identity reference, environment geography/atmosphere reference, emotional guidance, audio instruction, `PANEL BEATS`, locked continuity, and avoid list.
 
 ## Workflow
 
