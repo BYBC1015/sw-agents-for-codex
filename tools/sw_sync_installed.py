@@ -60,6 +60,7 @@ ENTRY_SKILLS = {
 TOOL_SKILLS = [
     "banana-pro",
     "dreamina-cli",
+    "kling-cli",
     "seedance-2-video",
     "url-relay",
     "black-background-cutout",
@@ -131,6 +132,7 @@ def fixed_help_reply() -> str:
 - Project Asset Graph: automatic after SW activation for video/film/storyboard starts when recurring assets are not locked. Ask existing assets / assets to create / continuity locks before storyboard.
 - Banana Pro: trigger with banana / Banana Pro / Nano Banana / @banana-pro / ? banana ??.
 - Dreamina CLI: trigger with Dreamina CLI / Jimeng CLI / official Jimeng CLI / dreamina / @dreamina-cli / official Jimeng image generation / official Jimeng video generation. Uses the local dreamina command after prompt prep; inspect CLI help before real use.
+- Kling CLI: trigger with Kling CLI / 可灵 MCP / kling-cli / @kling-cli / 可灵文生图 / 可灵图生视频 / 可灵生成视频. Uses the official kling command and OAuth credentials; inspect who_am_i/tool_list before real use.
 - Seedance 2.0 Video: trigger with Seedance 2.0 / Ark Seedance / @seedance-2-video / use Seedance to generate video. This remains the Ark Seedance API route.
 - URL Relay: trigger with URL relay / public URL / upload reference image / upload reference video / @url-relay. Used before downstream tools when local files need public URLs.
 - Black Background Cutout: trigger with cutout / remove background / remove black background / transparent PNG / @black-background-cutout. Fast local transparent PNG preview for black/simple solid backgrounds; not finishing-grade.
@@ -346,6 +348,10 @@ def plugin_manifest(version: str) -> dict:
             "dreamina",
             "dreamina-cli",
             "jimeng",
+            "kling",
+            "kling-cli",
+            "kling-mcp",
+            "klingai",
             "seedance",
             "banana-pro",
             "storyboard-visual-word",
@@ -390,6 +396,7 @@ def plugin_manifest(version: str) -> dict:
                 "@url-relay",
                 "@black-background-cutout",
                 "@dreamina-cli",
+                "@kling-cli",
                 "@seedance-2-video",
                 "@banana-pro",
                 "@storyboard-visual-word",

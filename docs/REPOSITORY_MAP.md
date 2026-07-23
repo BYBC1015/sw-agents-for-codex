@@ -52,12 +52,13 @@ The directory contains additional specialist roles for layout, deck, sound, edit
 | Path | Role |
 | --- | --- |
 | `banana-pro/` | Banana Pro / OpenRouter image generation skill and scripts. |
+| `kling-cli/` | Kling official CLI/MCP image and video generation skill. |
 | `seedance-2-video/` | Seedance 2.0 / Volcano Ark video generation skill and scripts. |
 | `url-relay/` | Public URL relay for local media files. |
 | `black-background-cutout/` | Local simple-background cutout tool. |
 | `storyboard-visual-word/` | DOCX visual director handoff generation. |
 | `feishu-docs/` | Feishu/Lark Docs render and publish workflow. |
-| `kling-api/` | Kling API integration skill. |
+| `kling-api/` | Kling AK/SK official API integration skill. |
 
 ## Maintenance
 

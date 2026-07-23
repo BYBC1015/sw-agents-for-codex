@@ -1,4 +1,4 @@
-# Feature Trigger Index
+﻿# Feature Trigger Index
 
 This compact index is for `@sw_help`, `/sw_help`, `/sw-help`, feature discovery, and low-cost trigger checks. It does not start a project by itself.
 
@@ -70,6 +70,36 @@ upstream Studio role if needed -> Selected Asset Packet if a concrete object is 
 Do not trigger for ordinary image/video prompt drafting. Do not execute the installer, login/relogin, private upload, real generation, batch generation, or long polling without confirmation. If `dreamina` is not installed, report that the CLI is missing and offer the official install route.
 
 Model behavior: do not hardcode supported models. Inspect `dreamina -h` and `dreamina <subcommand> -h` before real use.
+
+## Kling CLI
+
+Purpose: explicit Kling official CLI / MCP image and video generation after SW prompt preparation.
+
+Use this route for the OAuth-based official Kling CLI/MCP integration. If the user explicitly asks for AK/SK official API usage, route to `kling-api` instead.
+
+Trigger only when the user explicitly asks for:
+
+- `Kling CLI`
+- `可灵 MCP`
+- `kling-cli`
+- `@kling-cli`
+- 可灵官方 CLI
+- 可灵文生图
+- 可灵图生图
+- 可灵文生视频
+- 可灵图生视频
+- Kling image generation through the official CLI
+- Kling video generation through the official CLI
+
+Default route:
+
+```text
+upstream Studio role if needed -> Selected Asset Packet if a concrete object is selected -> prompt-director -> kling-cli
+```
+
+Do not trigger for ordinary image/video prompt drafting. Do not execute the installer, login/relogin, private upload, real generation, batch generation, or long polling without confirmation. If `kling` is not installed or OAuth credentials are missing, report the missing state and use prompt-only/preflight.
+
+Model behavior: do not hardcode supported models. Inspect `kling who_am_i` and, when needed, `kling tool_list` or `kling <command> --help` before real use.
 
 ## Seedance 2.0 Video
 
@@ -368,7 +398,7 @@ Trigger when the user says:
 Required reply:
 
 ```text
-SW rescue synchronized. Current version: V1.13.1
+SW rescue synchronized. Current version: V1.14.0
 ```
 
 This is not a project start, not a normal sync replacement, and not a tool-generation step.

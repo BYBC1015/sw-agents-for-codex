@@ -24,6 +24,7 @@ SW Help:
 - Project Asset Graph: automatic after SW activation for video/film/storyboard starts when recurring assets are not locked. Ask existing assets / assets to create / continuity locks before storyboard.
 - Banana Pro: trigger with banana / Banana Pro / Nano Banana / @banana-pro / 用 banana 出图.
 - Dreamina CLI: trigger with Dreamina CLI / Jimeng CLI / official Jimeng CLI / dreamina / @dreamina-cli / 即梦官方 CLI / 即梦生成图片 / 即梦生成视频. Uses the local dreamina command after prompt prep; inspect CLI help before real use.
+- Kling CLI: trigger with Kling CLI / 可灵 MCP / kling-cli / @kling-cli / 可灵文生图 / 可灵图生视频 / 可灵生成视频. Uses the official kling command and OAuth credentials after prompt prep; inspect who_am_i/tool_list before real use.
 - Seedance 2.0 Video: trigger with 即梦2.0生成 / 即梦生成 / Seedance 2.0 / Ark Seedance / @seedance-2-video / 用即梦生成视频. This remains the Ark Seedance API route.
 - URL Relay: trigger with URL中转 / 公网URL / 上传参考图 / 上传参考视频 / @url-relay. Used before downstream tools when local files need public URLs.
 - Black Background Cutout: trigger with 抠图 / 扣图 / 去底 / 去黑底 / 黑底转透明 / 透明底 PNG / @black-background-cutout. Fast local transparent PNG preview for black/simple solid backgrounds; not finishing-grade.

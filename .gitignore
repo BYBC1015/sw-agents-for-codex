@@ -27,6 +27,7 @@ build/
 # Local environment files
 .env
 .env.*
+.agents/
 .codex/
 *.key
 *.pem

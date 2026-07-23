@@ -94,6 +94,33 @@
       ]
     },
     {
+      "id": "kling-cli",
+      "name": "Kling CLI",
+      "capability": "image_video_generation_mcp",
+      "skill_path": "kling-cli/SKILL.md",
+      "loads_as": "tool_skill",
+      "trigger_mode": "explicit",
+      "configured_by": [
+        "kling on PATH",
+        "kling login",
+        "~/.kling/.credentials"
+      ],
+      "cost_lane": "high",
+      "confirmation_required": [
+        "login_or_relogin",
+        "real_generation",
+        "private_upload",
+        "batch_generation",
+        "final_output",
+        "long_polling"
+      ],
+      "fallback": [
+        "help_only_inspection",
+        "prompt_only_handoff",
+        "kling_api_route_when_user_requests_ak_sk"
+      ]
+    },
+    {
       "id": "url-relay",
       "name": "URL Relay",
       "capability": "media_url_relay",

@@ -233,6 +233,7 @@ Key gates:
 - selected AI shots only after specs are locked and represented as a Selected Asset Packet
 - storyboard-locked Seedance/Jimeng sequences require a Storyboard Animatic Sheet first: panel grid + director strip + panel beats. A normal storyboard image without director strip is only a visual reference.
 - official Dreamina/Jimeng CLI image/video generation also happens only after the selected shot/reference/media packet and `prompt-director`; inspect `dreamina -h` before real use and do not install, login, upload, generate, batch, or long-poll without confirmation
+- official Kling CLI/MCP image/video generation also happens only after the selected shot/reference/media packet and `prompt-director`; inspect `kling who_am_i` and `tool_list`/help before real use and do not install, login, upload, generate, batch, or long-poll without confirmation
 - when a selected AI video shot uses local reference media, resolve the packet's `Privacy/cost gate`, then use `url-relay` after `prompt-director` and before `seedance-2-video`
 - historical accuracy, when enabled, checks storyboard first frames, still visual assets, and representative Seedance frames/stills when available
 - sound, motion, and color are separate from storyboard
@@ -320,6 +321,15 @@ upstream visual/video role when needed
 -> prompt-director
 -> url-relay (only if the current CLI requires public URLs for local media)
 -> dreamina-cli (only when explicitly requested)
+```
+
+Kling official CLI/MCP image/video task:
+
+```text
+upstream visual/video role when needed
+-> Selected Asset Packet
+-> prompt-director
+-> kling-cli (only when explicitly requested)
 ```
 
 Key gates:

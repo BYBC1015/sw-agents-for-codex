@@ -12,7 +12,7 @@ Judge these before every activated SW project reply:
 - cost mode: normal, low-token, detailed, company delivery
 - risk: copyright, brand, platform, tool, missing information
 - aesthetic auto-selection: use when visual style is missing, SW should decide the look, or project-local references need interpretation
-- feature risk: Banana explicit generation, Seedance/即梦 explicit video generation, historical accuracy reminder, project memory
+- feature risk: Banana explicit generation, Dreamina/Jimeng CLI generation, Kling CLI/MCP generation, Seedance/即梦 explicit video generation, historical accuracy reminder, project memory
 
 ## Priority Routing
 
@@ -23,6 +23,14 @@ Dreamina/Jimeng official CLI override:
 - If the same request also asks for script, storyboard, camera, edit rhythm, motion, sound, color, poster, PPT/deck/slide, layout, character, product, prop, or scene design, route the upstream Studio role first, then `prompt-director`, then `dreamina-cli`. Do not let the tool trigger bypass the design role.
 - If local image/video/audio references are involved, inspect current CLI help before deciding whether local files are supported. If public URLs are required, insert `url-relay`; stop before real generation if install, login, upload permission, paid generation, batch generation, or long polling is not confirmed.
 - Keep `seedance-2-video` for Ark Seedance API / Seedance 2.0 requests. Ambiguous 即梦 wording should not silently switch to the official CLI unless the user names the CLI route.
+
+Kling official CLI/MCP override:
+
+- Official Kling CLI/MCP triggers include Kling CLI, 可灵 MCP, `kling-cli`, `@kling-cli`, 可灵官方 CLI, 可灵文生图, 可灵图生图, 可灵文生视频, 可灵图生视频, and wording that explicitly means the OAuth/MCP local CLI route rather than AK/SK API.
+- A complete final Kling CLI/MCP prompt routes `prompt-director` -> `kling-cli`; add `tool-integrator` only when installed state, OAuth login state, capability, model support, parameters, or MCP tool availability is unclear.
+- If the same request also asks for script, storyboard, camera, edit rhythm, motion, sound, color, poster, PPT/deck/slide, layout, character, product, prop, or scene design, route the upstream Studio role first, then `prompt-director`, then `kling-cli`. Do not let the tool trigger bypass the design role.
+- Before real generation, inspect `kling who_am_i` and, when needed, `kling tool_list` or `kling <command> --help`; do not hardcode models or parameters. Stop before install, login/relogin, private upload, paid generation, batch generation, final output, or long polling unless confirmed.
+- Keep `kling-api` for explicit AK/SK official API requests. Do not silently switch between `kling-cli` and `kling-api`.
 
 0. Rescue-only commands (`/sw-rescue`, `@sw_rescue`, `SW_RESCUE`, `SW_REPAIR`, `SW_FORCE_UPDATE`) -> use `sw-rescue`, reply with the fixed rescue line, and do not start a project.
 0. `@sw_help`, `/sw_help`, feature trigger questions -> use the embedded `sw-help` short answer first; read `Feature_Trigger_Index.md` only for detailed triggers/debug; do not start a project.
@@ -45,6 +53,8 @@ Dreamina/Jimeng official CLI override:
    - If an upstream role has selected a concrete poster/deck/storyboard/reference/media object for prompt writing, URL upload, generation, DOCX, or Feishu, insert a Selected Asset Packet before `prompt-director` or the explicit tool. Do not treat it as a separate Studio role.
    - Explicit 香蕉 / banana / Banana Pro / Nano Banana / OpenRouter image-generation request with a complete final prompt -> `prompt-director` -> `banana-pro`; add `tool-integrator` only when capability, parameters, API, or connection state is unclear.
    - If explicit Banana generation is bundled with storyboard, video/film shot design, poster, PPT/deck/slide, layout, character, product, prop, or scene design, route the upstream Studio role first, then `prompt-director` -> `banana-pro`. Do not let the tool trigger bypass the design role.
+   - Explicit Kling CLI / 可灵 MCP / `kling-cli` / `@kling-cli` image or video generation request with a complete final prompt -> `prompt-director` -> `kling-cli`; add `tool-integrator` only when install state, OAuth login state, capability, model support, parameters, or MCP availability is unclear.
+   - If explicit Kling CLI/MCP generation is bundled with script, storyboard, video/film shot design, camera, edit rhythm, motion, sound, color, scene design, film treatment, poster, PPT/deck/slide, layout, character, product, prop, or scene design, route the upstream Studio role first, then `prompt-director` -> `kling-cli`. Do not let the tool trigger bypass the design role.
    - Explicit 即梦2.0生成 / 即梦生成 / Seedance 2.0 / Ark Seedance video-generation request with a complete final prompt -> `prompt-director` -> `seedance-2-video`; add `tool-integrator` only when capability, parameters, API, key state, or connection state is unclear.
    - If explicit Seedance generation is bundled with script, storyboard, video/film shot design, camera, edit rhythm, motion, sound, color, scene design, or film treatment, route the upstream Studio role first, then `prompt-director` -> `seedance-2-video`. Do not let the tool trigger bypass the design role.
    - If explicit Seedance generation says to follow a storyboard, first route to `production-designer` for Project Asset Graph when continuity assets are not locked, then route to `storyboard-director` for a Storyboard Animatic Sheet or verify an equivalent panel-beat handoff exists. Then package it as a Selected Asset Packet before `prompt-director` writes the storyboard + character + environment + panel beats execution prompt.

@@ -64,6 +64,8 @@ The cost gate decides:
 - For explicit Banana requests with a complete prompt or clear selected-object handoff, use the API fast path: skip separate doctor/key checks, skip pattern references unless needed, write the prompt to a file when possible, and run the wrapper directly. Let the runner return `missing-key`, `ok`, or `no-image`.
 - Explicit Dreamina CLI / Jimeng CLI / official Jimeng CLI / dreamina / `@dreamina-cli` image or video generation requests can add `dreamina-cli` after `prompt-director`; use `tool-integrator` only when installed state, login state, capability, model support, parameters, or connection state is unclear. Do not load it for generic image/video prompts.
 - Dreamina CLI is a post-prompt execution step, not a shortcut around Studio roles. If the request also asks for storyboard, script, camera, edit, motion, sound, color, poster/deck layout, character/product/prop design, or scene planning, the responsible Studio role must produce the upstream handoff before `prompt-director` and `dreamina-cli`.
+- Explicit Kling CLI / 可灵 MCP / `kling-cli` / `@kling-cli` image or video generation requests can add `kling-cli` after `prompt-director`; use `tool-integrator` only when install state, OAuth login state, capability, model support, parameters, or MCP tool availability is unclear. Do not load it for generic image/video prompts.
+- Kling CLI is a post-prompt execution step, not a shortcut around Studio roles. If the request also asks for storyboard, script, camera, edit, motion, sound, color, poster/deck layout, character/product/prop design, or scene planning, the responsible Studio role must produce the upstream handoff before `prompt-director` and `kling-cli`.
 - When a concrete object has been selected upstream, use a Selected Asset Packet before `prompt-director` or any tool execution. It prevents the selected URL, reference image role, locked items, avoid list, and next tool from being carried only as loose prose.
 - Quick edits are a low/mid-cost exception to full project routing: if the user already has the object and asks for a local fix, keep the role chain short and output the revised object first.
 - Quick edits may apply to poster/images, presentation outlines or selected pages, storyboard groups or selected shots, edit plans or timeline segments, and prompt refinements.
@@ -73,6 +75,7 @@ The cost gate decides:
 - Poster work is not PPT work: do not default to system-font text overlays for poster hero titles or title effects. Use image-native visual typography for the poster's main visual text, and reserve editable/system text for exact information, small copy, legal/logo/QR, or explicit editable-layer requests.
 - `banana-pro` is a tool skill, not a Studio role. It does not count as an extra Studio support role, but generation still uses the high-cost gate when quota, uploads, or final-use assets are involved.
 - `dreamina-cli` is a tool skill, not a Studio role. It may consume Dreamina credits, require CLI install/login, upload private media, and run async polling. Do not execute its installer, login/relogin, real generation, private upload, batch generation, or final-output generation without the relevant confirmation.
+- `kling-cli` is a tool skill, not a Studio role. It may consume Kling credits, require CLI install/OAuth login, upload private media, and run async polling. Do not install, login/relogin, run real generation, upload private media, batch generate, or claim final output without the relevant confirmation.
 - Explicit 即梦2.0生成 / 即梦生成 / Seedance 2.0 / Ark Seedance video-generation requests can add `seedance-2-video` after `prompt-director`; use `tool-integrator` only when capability, parameters, API, key state, or connection state is unclear. Do not load it for generic video prompts or storyboard work.
 - Seedance is a post-prompt execution step, not a shortcut around Studio roles. If the request also asks for script, storyboard, camera, edit, motion, sound, color, scene design, or film treatment, the responsible Studio role must produce the upstream handoff before `prompt-director` and `seedance-2-video`.
 - If a Seedance request depends on a storyboard sheet, require a Storyboard Animatic Sheet or equivalent panel-beat handoff before claiming storyboard-locked execution. The sheet must carry panel grid + director strip; otherwise use the board only as a visual reference and write a normal single-clip prompt.
@@ -99,6 +102,7 @@ The cost gate decides:
 - Add `Prompts/Video_Motion_Edit_Prompt_Rules.md` only for one-take, bullet-time, hero-shot, complex movement, edit-technique, Storyboard Animatic Sheet execution, or execution-level AI video prompts.
 - Add `Prompts/Visual_Development_Board_Rules.md` only for Project Asset Graphs, character setting sheets, scene setting sheets, production-design boards, integrated storyboard sheets, or Storyboard Animatic Sheets.
 - Add `Prompts/Tool_Official_Prompt_Deltas.md` only when a named tool such as Dreamina CLI/Jimeng, Seedance, Kling, Banana Pro/Gemini image, or OpenAI image needs official prompt-case conversion, or when repeated tool execution failures indicate a tool-specific prompt delta. Read only the relevant section; do not load full manuals during normal work.
+- Add `kling-cli/SKILL.md` only when the user explicitly asks for Kling CLI / 可灵 MCP / `@kling-cli` execution or when debugging Kling CLI/MCP installation, login, model support, or generation failures.
 - Add `01_Research/Oscar_Best_Picture_Visual_Reference.md` only when the user asks for Oscar/classic film visual references.
 - Add `01_Research/Aesthetic_Daily_Selected/Daily_Selected_Index.md` only when the user asks for daily selected references, local moodboards, or newly supplied aesthetic PDFs; do not load all extracted images by default.
 - Add `storyboard-visual-word/SKILL.md` only when the user asks for a 视觉方案文件, 视觉导演方案, Word视觉方案, DOCX视觉方案, 分镜视觉方案文件, or `@storyboard-visual-word`; do not load it for ordinary storyboard planning.
@@ -179,11 +183,12 @@ Pause and ask for confirmation before:
 - character setting sheets, scene setting sheets, or storyboard boards intended for final/client use
 - Banana Pro / banana / OpenRouter image generation that may consume quota, requires `OPENROUTER_API_KEY`, or uploads reference images
 - Dreamina CLI / Jimeng official CLI generation that may consume credits, requires CLI install/login, uploads private media, runs batch generation, uses 4K/1080p/final output, or triggers long polling
+- Kling CLI / 可灵 MCP generation that may consume credits, requires CLI install/OAuth login, uploads private media, runs batch generation, uses 4K/final output, or triggers long polling
 - Seedance / 即梦2.0 video generation that may consume quota, requires `ARK_API_KEY` or a local key file, uses public image URLs, or triggers long polling
 - unknown tool-specific prompt conversion
 - any action that consumes quota without a clear preview
 
-Explicit generation wording such as "use banana to generate one draft", "直接用 banana 跑一张", or "use 即梦2.0生成一条草稿" counts as confirmation for one draft asset only. It does not confirm batch generation, private reference uploads, 4K/1080p/final delivery, long unattended polling, or final-use brand/face/product output.
+Explicit generation wording such as "use banana to generate one draft", "直接用 banana 跑一张", "use Kling to generate one draft", or "use 即梦2.0生成一条草稿" counts as confirmation for one draft asset only. It does not confirm batch generation, private reference uploads, 4K/1080p/final delivery, long unattended polling, or final-use brand/face/product output.
 
 If blocked, produce a preview, risk note, or one-question confirmation instead of executing.
 

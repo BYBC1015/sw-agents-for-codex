@@ -52,6 +52,7 @@ USER_SKILL_FILES = [
     USERPROFILE / ".codex" / "skills" / "sw-help" / "agents" / "openai.yaml",
     USERPROFILE / ".codex" / "skills" / "banana-pro" / "SKILL.md",
     USERPROFILE / ".codex" / "skills" / "dreamina-cli" / "SKILL.md",
+    USERPROFILE / ".codex" / "skills" / "kling-cli" / "SKILL.md",
     USERPROFILE / ".codex" / "skills" / "seedance-2-video" / "SKILL.md",
     USERPROFILE / ".codex" / "skills" / "url-relay" / "SKILL.md",
     USERPROFILE / ".codex" / "skills" / "black-background-cutout" / "SKILL.md",
@@ -66,6 +67,7 @@ PLUGIN_FILES = [
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "sw-help" / "SKILL.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "banana-pro" / "SKILL.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "dreamina-cli" / "SKILL.md",
+    USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "kling-cli" / "SKILL.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "seedance-2-video" / "SKILL.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "url-relay" / "SKILL.md",
     USERPROFILE / "plugins" / "sw-v1-0" / "skills" / "black-background-cutout" / "SKILL.md",
@@ -129,6 +131,8 @@ REPO_TOOL_SKILL_FILES = [
     ROOT / "banana-pro" / "bin" / "banana-pro",
     ROOT / "dreamina-cli" / "SKILL.md",
     ROOT / "dreamina-cli" / "agents" / "openai.yaml",
+    ROOT / "kling-cli" / "SKILL.md",
+    ROOT / "kling-cli" / "reference.md",
     ROOT / "seedance-2-video" / "SKILL.md",
     ROOT / "seedance-2-video" / "scripts" / "seedance_task.py",
     ROOT / "url-relay" / "SKILL.md",
@@ -152,6 +156,7 @@ TOOL_REGISTRY_LITE_REQUIRED_IDS = {
     "black-background-cutout",
     "banana-pro",
     "dreamina-cli",
+    "kling-cli",
     "seedance-2-video",
     "url-relay",
     "kling-api",
@@ -379,6 +384,7 @@ def check_repo_tool_skills(issues: list[str]) -> None:
         for required in [
             "Banana Pro",
             "Dreamina CLI",
+            "Kling CLI",
             "Seedance",
             "URL Relay",
             "Black Background Cutout",
@@ -458,7 +464,7 @@ def check_tool_registry_lite(issues: list[str]) -> None:
         fail(issues, f"lite tool registry has unexpected ids: {', '.join(extra_ids)}")
 
     by_id = {tool.get("id"): tool for tool in tools if isinstance(tool, dict)}
-    for tool_id in ["banana-pro", "dreamina-cli", "seedance-2-video", "kling-api"]:
+    for tool_id in ["banana-pro", "dreamina-cli", "kling-cli", "seedance-2-video", "kling-api"]:
         confirmations = by_id.get(tool_id, {}).get("confirmation_required", [])
         if "real_generation" not in confirmations:
             fail(issues, f"lite tool registry {tool_id} must require real_generation confirmation")

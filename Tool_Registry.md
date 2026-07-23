@@ -47,6 +47,39 @@ Checked on 2026-07-13:
 - Verified command families: `text2image`, `image2image`, `image_upscale`, `text2video`, `image2video`, `frames2video`, `multiframe2video`, `multimodal2video`, `query_result`, `list_task`, `session`, `user_credit`, `login`, `relogin`, `logout`.
 - The CLI can upload local files directly for image/video reference modes. URL Relay is only needed when a downstream tool or workflow explicitly requires public `http(s)` URLs.
 
+## Kling CLI Local Status Addendum
+
+Checked on 2026-07-23:
+
+- Official Kling CLI/MCP skill is installed from `klingai-tech/skills` and copied into the SW repo as `kling-cli/`.
+- China-region CLI package `@klingai/cli-cn` is installed locally; `kling --version` reports `kling-cli 0.1.3`.
+- OAuth authorization for `https://klingai.com/mcp` is complete. Credentials are stored locally at `~/.kling/.credentials`; do not read, copy, print, or commit credential contents.
+- Verified non-generation commands: `kling who_am_i` and `kling tool_list` both succeed.
+- Verified MCP tool families include `text_to_image`, `image_to_image`, `text_to_video`, `image_to_video`, `file_upload`, `query_tasks`, `query_membership_and_credits`, and `who_am_i`.
+- Real generation was not run during installation/integration.
+
+```text
+Tool name: Kling CLI
+Tool type: image generation / video generation / official Kling CLI / MCP execution
+Integration status: local tool skill integrated; official `kling` command installed and OAuth-authorized for the China-region `klingai.com` MCP endpoint; real generation depends on account credits and explicit user confirmation.
+Trigger phrases: Kling CLI, 可灵 MCP, kling-cli, @kling-cli, 可灵官方 CLI, 可灵文生图, 可灵图生图, 可灵文生视频, 可灵图生视频, use Kling to generate image/video.
+Best use: official Kling text-to-image, image-to-image, text-to-video, image-to-video, local file upload, task query, and credit/membership checks after SW prompt preparation.
+Not suited for: generic image/video prompt drafting, AK/SK API tasks, bypassing upstream storyboard/camera/scene design, unconfirmed login/relogin, private upload, batch generation, or final client output.
+Inputs needed: final image/video prompt, selected asset packet when references are involved, model/parameter choice from `kling who_am_i`, optional local/public reference media, confirmation for quota-consuming generation or private uploads.
+Outputs: `generationId`, task status from `query_tasks`, generated image/video URLs, cover URLs, credit consumption when returned, and failure reasons.
+Prompt format: `prompt-director` first produces the universal prompt, then converts only the selected image/clip/task for Kling using live CLI/MCP model declarations.
+Critical parameters: `kling who_am_i`, `kling tool_list`, `kling <command> --help`, `--model`, `--omni`, `duration`, `aspectRatio`, `imageCount`, `resolution`, `--poll`, `generationId`.
+Limits/risks: account credits may be consumed; local media may be uploaded to Kling; generated URLs may expire; models and parameters are service-declared and can change; credentials must never be read or displayed.
+Cost level: help/who_am_i/tool_list/query is low; real generation, private upload, batch output, final quality, and long polling are high.
+Privacy note: never expose `~/.kling/.credentials`, OAuth tokens, local private paths, client assets, or private generated URLs in repo docs or public handoffs.
+QA method: after generation, check output exists, duration/resolution/count match the promise, audio setting when requested, visible black/failure frames for video, and alignment with the selected asset packet and prompt.
+Fallback: keep universal/tool prompt; if `kling` is missing, offer official install route; if not logged in, ask to run `kling login`; if model/parameter fails, inspect `who_am_i`/help and ask before retrying; if user needs AK/SK official API, route to `kling-api`.
+Owner route: upstream Studio role if needed -> Selected Asset Packet -> prompt-director -> kling-cli. tool-integrator only enters when capability, install/login state, model, parameter, or MCP availability is unclear.
+Dispatch display: `prompt-director` appears in `Studio roles:`; `kling-cli` must appear separately as `Tool skill:`, never as a Studio role.
+Read path: prefer `kling-cli/SKILL.md`, then user-level `C:\Users\Administrator\.codex\skills\kling-cli\SKILL.md`, then plugin-level `C:\Users\Administrator\plugins\sw-v1-0\skills\kling-cli\SKILL.md`.
+Execution entry: local command `kling`; before real generation run `kling who_am_i` and relevant `tool_list`/help inspection; do not bypass CLI by handcrafting HTTP/MCP requests.
+```
+
 ## 已登记工具成员
 
 ```text

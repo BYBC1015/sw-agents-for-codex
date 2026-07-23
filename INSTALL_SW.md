@@ -22,7 +22,7 @@ The bootstrap script will:
 - synchronize SW skills into `~/.codex/skills`
 - synchronize the local plugin into `~/plugins/sw-v1-0`
 - run the SW doctor and consistency checks
-- check whether Banana Pro, Seedance 2.0, URL Relay, Storyboard Visual Word, Feishu Docs, the aesthetic index, and the Obsidian aesthetic vault are usable
+- check whether Banana Pro, Kling CLI/MCP, Seedance 2.0, URL Relay, Storyboard Visual Word, Feishu Docs, the aesthetic index, and the Obsidian aesthetic vault are usable
 - check whether local private keys/configs are present without printing secrets
 - report what is ready and what still needs local configuration
 
@@ -45,6 +45,7 @@ The installer copies repository-controlled skills and plugin entries to local Co
 | `~/.codex/skills/sw-rescue` | Stale chat/chip rescue entry |
 | `~/.codex/skills/sw-help` | Low-cost feature help entry |
 | `~/.codex/skills/banana-pro` | Banana Pro / OpenRouter image generation tool |
+| `~/.codex/skills/kling-cli` | Kling official CLI/MCP image and video generation tool |
 | `~/.codex/skills/seedance-2-video` | Seedance 2.0 / 即梦2.0 video generation tool |
 | `~/.codex/skills/url-relay` | Public URL relay for local media files |
 | `~/.codex/skills/black-background-cutout` | Local black/simple solid-background cutout tool |
@@ -79,6 +80,27 @@ python .\banana-pro\scripts\generate_openrouter_image.py --setup-key
 ```
 
 This saves `OPENROUTER_API_KEY` to the private file outside the repository. The key must not be committed into the SW repo or printed in handoff documents.
+
+### Kling CLI / 可灵 MCP
+
+Required for real Kling image/video generation:
+
+```text
+kling command installed
+kling login completed
+~/.kling/.credentials present
+```
+
+Kling credentials are OAuth credentials created by `kling login`. Do not read, copy, print, or commit `~/.kling/.credentials`.
+
+Before real use, inspect live capability with:
+
+```powershell
+kling who_am_i
+kling tool_list
+```
+
+Generation tasks can consume Kling credits. SW treats install, login/relogin, private upload, real generation, batch output, final delivery, and long polling as confirmation-gated actions.
 
 ### Seedance 2.0 / 即梦2.0
 
@@ -157,6 +179,7 @@ Available features:
 - [ready] SW core workflow (/sw, @SW_V1.0)
 - [ready] SW update/help/rescue entries
 - [ready or needs_config] Banana Pro
+- [ready or needs_config] Kling CLI / MCP
 - [ready or needs_config] Seedance 2.0
 - [ready or needs_config] URL Relay
 - [ready] Storyboard Visual Word
@@ -186,4 +209,4 @@ Then in Codex use:
 
 If the bootstrap report says URL Relay needs configuration, configure the relay token first. Missing token or missing upload URL should not fall back to Catbox/Litterbox automatically.
 
-If real image/video generation is unavailable, check `OPENROUTER_API_KEY` for Banana Pro and `ARK_API_KEY` for Seedance. The tools can still generate dry-run payloads without keys.
+If real image/video generation is unavailable, check `OPENROUTER_API_KEY` for Banana Pro, `kling login` for Kling CLI, and `ARK_API_KEY` for Seedance. The tools can still generate prompt-only or dry-run payloads where supported.

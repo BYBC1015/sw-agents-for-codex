@@ -45,6 +45,7 @@ This file supports `Cost_Governor.md`. `Cost_Governor.md` decides the runtime co
 Treat these as high-cost:
 
 - real Dreamina/Jimeng official CLI image or video generation, CLI install/login/relogin, private media upload, batch generation, 4K/1080p/final output, or long unattended polling
+- real Kling CLI/MCP image or video generation, CLI install/login/relogin, private media upload, batch generation, final output, or long unattended polling
 - detailed image generation prompts for multiple assets
 - detailed video prompts for multiple shots
 - full character sheets, scene sheets, or generated visual boards expanded from a Project Asset Graph
@@ -54,7 +55,7 @@ Treat these as high-cost:
 - full campaign expansion
 - broad rewrite after feedback
 - tool-specific prompt conversion when tool behavior is uncertain
-- real Banana Pro image generation or real Seedance/即梦2.0 video generation
+- real Banana Pro image generation, real Kling CLI/MCP generation, or real Seedance/即梦2.0 video generation
 - URL Relay upload when it involves private/client assets or directly precedes real paid generation
 
 Project memory reads and one-line memory suggestions are low-cost. Writing to `.sw/MEMORY.md` requires explicit user approval and should append only 1-3 concise bullets.
@@ -64,6 +65,8 @@ PPT/deck structure from `presentation-designer` stays low-to-medium by default; 
 Historical accuracy trigger scanning is low-cost and current-message only. Do not load historical references, browse, or run `historical-consultant` until the user confirms. Once enabled, strict period research, source notes, and post-generation image QA can become medium-to-high cost depending on depth.
 
 Dreamina/Jimeng official CLI preflight is low-cost when it only checks whether the `dreamina` command exists or reads CLI help. Real generation is high-cost because it can consume Dreamina credits, require login, upload local media, create async tasks, and wait for polling. Default to one selected image or clip; batch outputs, private/client assets, final delivery quality, and long polling need explicit confirmation.
+
+Kling CLI/MCP preflight is low-cost when it only checks whether the `kling` command exists, verifies OAuth login with `who_am_i`, reads `tool_list`, or queries an existing task. Real generation is high-cost because it can consume Kling credits, require login, upload local media, create async tasks, and wait for polling. Default to one selected image or clip; batch outputs, private/client assets, final delivery quality, and long polling need explicit confirmation.
 
 Seedance/即梦2.0 dry-run is low-cost because it only validates a sanitized payload. Real generation is high-cost because it can consume quota, require public image URLs, and wait in a long queue. Default to one selected clip/shot at `720p`; batch shots, multiple ratios, `1080p`, and long polling need explicit confirmation.
 

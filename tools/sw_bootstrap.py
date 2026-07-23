@@ -37,6 +37,7 @@ RELAY_CONFIG_FILE = Path.home() / ".config" / "sw-media-uploader" / "config.json
 FEISHU_CONFIG_FILE = Path.home() / ".config" / "sw-feishu" / "config.json"
 DREAMINA_CONFIG_DIR = Path.home() / ".dreamina_cli"
 DREAMINA_DEFAULT_EXE = USERPROFILE / "bin" / "dreamina.exe"
+KLING_CREDENTIALS_FILE = Path.home() / ".kling" / ".credentials"
 
 SW_UPLOAD_URL = "http://123.56.255.86/upload"
 SW_PUBLIC_BASE = "http://123.56.255.86/u"
@@ -241,6 +242,7 @@ def installed_paths() -> dict[str, bool]:
         "user_rescue": USER_SKILLS / "sw-rescue" / "SKILL.md",
         "user_banana": USER_SKILLS / "banana-pro" / "SKILL.md",
         "user_dreamina": USER_SKILLS / "dreamina-cli" / "SKILL.md",
+        "user_kling": USER_SKILLS / "kling-cli" / "SKILL.md",
         "user_seedance": USER_SKILLS / "seedance-2-video" / "SKILL.md",
         "user_url_relay": USER_SKILLS / "url-relay" / "SKILL.md",
         "user_black_background_cutout": USER_SKILLS / "black-background-cutout" / "SKILL.md",
@@ -308,6 +310,21 @@ def check_dreamina() -> dict[str, Any]:
             "https://jimeng.jianying.com/cli, then run dreamina login."
         ),
         "detail": "Bootstrap checks only whether the local dreamina command exists; it does not install, login, or generate.",
+    }
+
+
+def check_kling() -> dict[str, Any]:
+    command = shutil.which("kling") or shutil.which("kling.cmd")
+    credentials_present = KLING_CREDENTIALS_FILE.exists()
+    status = READY if command and credentials_present else NEEDS_CONFIG
+    return {
+        "name": "Kling official CLI / MCP",
+        "status": status,
+        "command": command,
+        "credentials_state": "present" if credentials_present else "missing",
+        "credentials_path": str(KLING_CREDENTIALS_FILE),
+        "setup_hint": "Install the region-matched @klingai CLI package, then run kling login.",
+        "detail": "Bootstrap checks only whether the kling command and OAuth credentials file exist; it does not read credentials or generate.",
     }
 
 
@@ -432,6 +449,11 @@ def feature_status(
             "detail": "Official Jimeng/Dreamina CLI route is available when the dreamina command is installed; login/generation are confirmed at use time.",
         },
         {
+            "name": "Kling CLI / MCP",
+            "status": keys["kling"]["status"] if installed["user_kling"] else FAILED,
+            "detail": "Official Kling CLI route is available when the kling command is installed and OAuth credentials exist; generation is confirmed at use time.",
+        },
+        {
             "name": "Seedance 2.0",
             "status": keys["seedance"]["status"] if installed["user_seedance"] else FAILED,
             "detail": "Video generation is ready when ARK_API_KEY is configured; otherwise dry-run/payload only.",
@@ -478,6 +500,8 @@ def collect_needs(features: list[dict[str, Any]], key_reports: dict[str, Any], r
         needs.append("Banana Pro key: set ~/.config/banana-pro/openrouter.env or OPENROUTER_API_KEY.")
     if key_reports["dreamina"]["status"] == NEEDS_CONFIG:
         needs.append("Dreamina CLI: install the local dreamina command and login only after explicit confirmation.")
+    if key_reports["kling"]["status"] == NEEDS_CONFIG:
+        needs.append("Kling CLI: install the region-matched kling command and run kling login only after explicit confirmation.")
     if key_reports["seedance"]["status"] == NEEDS_CONFIG:
         needs.append("Seedance key: run seedance_task.py setup-key or set ARK_API_KEY locally.")
     if relay["status"] == NEEDS_CONFIG:
@@ -508,6 +532,7 @@ def print_human(report: dict[str, Any]) -> None:
     print("Private config state:")
     print(f"- Banana Pro key: {report['keys']['banana']['key_state']}")
     print(f"- Dreamina CLI: {'installed' if report['keys']['dreamina']['command'] else 'missing'}")
+    print(f"- Kling CLI: {'installed' if report['keys']['kling']['command'] else 'missing'}, credentials {report['keys']['kling']['credentials_state']}")
     print(f"- Seedance key: {report['keys']['seedance']['key_state']}")
     print(f"- URL Relay token: {report['url_relay']['token_state']}")
     print(f"- Feishu app secret: {report['keys']['feishu']['app_secret_state']}")
@@ -574,7 +599,13 @@ def main() -> int:
             report["ok"] = False
 
     installed = installed_paths()
-    keys = {"banana": check_banana(), "dreamina": check_dreamina(), "seedance": check_seedance(), "feishu": check_feishu()}
+    keys = {
+        "banana": check_banana(),
+        "dreamina": check_dreamina(),
+        "kling": check_kling(),
+        "seedance": check_seedance(),
+        "feishu": check_feishu(),
+    }
     relay = check_url_relay(args.no_network, args.timeout)
     obsidian = check_obsidian_vault()
     features = feature_status(installed, keys, relay, obsidian)

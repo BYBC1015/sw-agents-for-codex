@@ -1,4 +1,4 @@
-# Command Aliases 快捷调用入口
+﻿# Command Aliases 快捷调用入口
 
 本文件定义“文本型斜杠命令”和“文本型 @ 调用”。目标是让用户不用每次粘贴完整启动语。
 
@@ -25,7 +25,7 @@
 调用成功后必须先回复：
 
 ```text
-SW loaded successfully. Current version: V1.13.1
+SW loaded successfully. Current version: V1.14.0
 ```
 
 如果只输入调用命令，回复成功语后停止等待诉求。如果调用命令后附带需求，先回复成功语，再继续执行项目流程。
@@ -39,7 +39,7 @@ Version sync:
 Required reply:
 
 ```text
-SW version synchronized. Current version: V1.13.1
+SW version synchronized. Current version: V1.14.0
 ```
 
 Historical conversation fallback:
@@ -69,7 +69,7 @@ or:
 Required reply:
 
 ```text
-SW rescue synchronized. Current version: V1.13.1
+SW rescue synchronized. Current version: V1.14.0
 ```
 
 Use this when startup/update chips keep replaying old sealed snapshots. It must not start a project and must not route through `sw-v1-0` or `sw-update`.

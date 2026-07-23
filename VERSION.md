@@ -1,6 +1,6 @@
-# SW Version
+﻿# SW Version
 
-Current runtime version: V1.13.1
+Current runtime version: V1.14.0
 Stable invocation name: SW_V1.0
 Stable invocation aliases: `/sw`, `/SW_V1.0`, `@SW_V1.0`, `/sw_v1.0`, `/sw-v1-0`
 Version sync aliases: `@sw_update`, `SW_UPDATE`, `/sw_update`, `/sw-update`, `SW_REFRESH`
@@ -86,6 +86,7 @@ Each entry must include:
 
 | Version | Date | Change |
 | --- | --- | --- |
+| V1.14.0 | 2026-07-23 | Added `kling-cli` as an explicit-call official Kling CLI/MCP tool skill for image and video generation. The new OAuth/MCP route is separate from the existing AK/SK `kling-api` route: Kling CLI/MCP requests now go through upstream Studio roles when needed, then `prompt-director`, then `kling-cli`, while explicit AK/SK API requests remain on `kling-api`. The integration adds a repository tool skill copy, lightweight registry entry, help/trigger routing, bootstrap detection, installed skill/plugin sync, and guardrails for install/login, credential secrecy, live model/tool inspection, real generation, private upload, batch output, async polling, and post-generation review. |
 | V1.13.1 | 2026-07-20 | Fixed Banana Pro key replacement precedence. The Banana runner and bootstrap check now prefer the local private `~/.config/banana-pro/openrouter.env` key before stale process or Windows user environment values, so replacing the key in the local private config takes effect without waiting for a Codex restart. No invocation or generation behavior changed. |
 | V1.13.0 | 2026-07-13 | Added `dreamina-cli` as an explicit-call official Dreamina/Jimeng CLI tool skill for image and video generation. The new route is separate from `seedance-2-video`: Dreamina/Jimeng official CLI requests now go through upstream Studio roles when needed, then `prompt-director`, then `dreamina-cli`, while Ark Seedance API requests remain on `seedance-2-video`. The integration adds a lightweight registry entry, help/trigger routing, official prompt delta, bootstrap detection, installed skill/plugin sync, and guardrails for installer, login, private upload, real generation, batch output, model support, async query/download, and post-generation review. |
 | V1.12.17 | 2026-06-12 | Added Project Asset Graph as the lightweight project-level asset continuity step before storyboard. Video, film, campaign story, product story, storyboard, and storyboard-locked Seedance/Jimeng routes now ask or assume existing assets, assets to create, characters, scenes, props/products/wardrobe, and continuity locks before shot tables and storyboard boards. This prevents storyboard and AI-video prompts from inventing assets mid-flow while keeping fast mode low-cost. |

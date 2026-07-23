@@ -1,4 +1,4 @@
-# 新项目启动语
+﻿# 新项目启动语
 
 以后每次需要启用 SW 工作室时，先显式调用：
 
@@ -21,7 +21,7 @@
 调用成功后，Codex 应只回复：
 
 ```text
-SW loaded successfully. Current version: V1.13.1
+SW loaded successfully. Current version: V1.14.0
 ```
 
 然后你再输入项目诉求即可。Codex 会在已启用 SW 的前提下判断这是海报、PPT/deck、视频，还是海报+视频，并按本项目的设计工作室架构执行。

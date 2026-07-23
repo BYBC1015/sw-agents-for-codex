@@ -1,4 +1,4 @@
-# SW Agents for Codex
+﻿# SW Agents for Codex
 
 [![SW CI](https://github.com/BYBC1015/sw-agents-for-codex/actions/workflows/sw-ci.yml/badge.svg)](https://github.com/BYBC1015/sw-agents-for-codex/actions/workflows/sw-ci.yml)
 
@@ -6,7 +6,7 @@ SW Agents for Codex is a local Codex skill framework for creative production wor
 
 It is built for daily creative work where the hard part is not only generating an asset, but keeping the idea, references, constraints, revision history, and final handoff stable.
 
-Current runtime: `V1.13.1`
+Current runtime: `V1.14.0`
 
 Stable entry: `/sw`, `/SW_V1.0`, or `@SW_V1.0`
 
@@ -17,7 +17,7 @@ Install guide: [INSTALL_SW.md](INSTALL_SW.md)
 - Turns rough creative requirements into a controlled production flow.
 - Routes work to small local studio roles such as brief, storyboard, prompt, layout, review, and finishing.
 - Keeps SW opt-in: ordinary design words do not trigger the full studio framework.
-- Supports explicit tool skills for Banana Pro, Dreamina CLI, Seedance 2.0, URL Relay, Feishu Docs, storyboard DOCX handoff, and local cutout work.
+- Supports explicit tool skills for Banana Pro, Dreamina CLI, Kling CLI/MCP, Seedance 2.0, URL Relay, Feishu Docs, storyboard DOCX handoff, and local cutout work.
 - Adds cost gates before expensive image/video generation or external upload steps.
 - Preserves project state through lightweight structures such as Project Asset Graph, Selected Asset Packet, Change Delta Packet, Review Delta Packet, and Storyboard Animatic Sheet.
 
@@ -56,7 +56,7 @@ Then open Codex and start SW explicitly:
 Expected reply:
 
 ```text
-SW loaded successfully. Current version: V1.13.1
+SW loaded successfully. Current version: V1.14.0
 ```
 
 ## Core Commands
@@ -69,6 +69,7 @@ SW loaded successfully. Current version: V1.13.1
 | `@sw_help` | Show compact feature triggers without loading the full framework. |
 | `@banana-pro` | Run explicit Banana Pro / OpenRouter image generation after prompt prep. |
 | `@dreamina-cli` | Use the official Dreamina/Jimeng CLI route after prompt prep and CLI help inspection. |
+| `@kling-cli` | Use the official Kling CLI/MCP route after prompt prep and live model/tool inspection. |
 | `@seedance-2-video` | Run explicit Seedance 2.0 video generation after storyboard/prompt prep. |
 | `@url-relay` | Upload local media to a configured public URL relay for downstream tools. |
 | `@storyboard-visual-word` | Build a DOCX visual director handoff from selected images. |
@@ -113,6 +114,7 @@ Full architecture details:
 | [Prompts/](Prompts/) | Prompt standards and tool-specific prompt deltas. |
 | [banana-pro/](banana-pro/) | Explicit Banana Pro / OpenRouter image generation skill. |
 | [dreamina-cli/](dreamina-cli/) | Explicit official Dreamina/Jimeng CLI image and video generation skill. |
+| [kling-cli/](kling-cli/) | Explicit official Kling CLI/MCP image and video generation skill. |
 | [seedance-2-video/](seedance-2-video/) | Explicit Seedance 2.0 video generation skill. |
 | [url-relay/](url-relay/) | Public URL relay tool for local media handoff. |
 | [tools/](tools/) | Bootstrap, doctor, sync, and consistency scripts. |
@@ -154,6 +156,7 @@ The README shows only the current public entry points. Detailed release history 
 
 Latest highlighted runtime changes:
 
+- `V1.14.0`: Added the explicit Kling official CLI/MCP route as `kling-cli`, separate from the existing AK/SK `kling-api` route, with OAuth/login, live model inspection, generation, upload, batch, and polling guardrails.
 - `V1.13.1`: Fixed Banana Pro key replacement precedence so the local private `openrouter.env` key wins over stale process environment values.
 - `V1.13.0`: Added the explicit Dreamina/Jimeng official CLI route as `dreamina-cli`, separate from the Ark Seedance API route, with install/login/generation/upload/batch/async guardrails.
 - `V1.12.17`: Added Project Asset Graph before storyboard so video/film/storyboard routes ask or assume existing assets, assets to create, and continuity locks before shot tables or AI-video prompts.

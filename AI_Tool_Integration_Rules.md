@@ -19,6 +19,9 @@
 - Dreamina CLI / `dreamina-cli` 是显式调用的官方即梦/Dreamina CLI 图像与视频生成成员，位于 `prompt-director` 之后：只有用户明确提到 Dreamina CLI、Jimeng CLI、official Jimeng CLI、dreamina、`@dreamina-cli`、即梦官方 CLI、即梦生成图片，或明确要求通过官方 CLI 生成图像/视频时才加载；普通图片/视频提示词仍由 Studio roles 与 `prompt-director` 处理。
 - Dreamina CLI 不能越过上游设计岗位。若同一请求包含分镜、脚本、镜头语言、剪辑节奏、声音、调色、海报、PPT/deck/slide、版式、角色、产品、道具或场景设计，先由对应 Studio role 产出设计 handoff，再由 `prompt-director` 转为最终 prompt，最后才交给 Dreamina CLI 生成选中的图片、片段或任务。
 - Dreamina CLI 依赖本地 `dreamina` 命令、账号登录态和异步任务查询。不要直接执行 `curl | bash`、登录、重登、真实生成、上传私密素材或批量生成，除非用户明确确认。不要硬编码模型能力；每次真实调用前用 `dreamina -h` 和 `dreamina <subcommand> -h` 确认当前 CLI 暴露的模型、参数、数量、时长、画幅和下载方式。未安装或未登录时只做 help/preflight 或 prompt-only handoff，不声称已生成。
+- Kling CLI / `kling-cli` 是显式调用的官方可灵 CLI/MCP 图像与视频生成成员，位于 `prompt-director` 之后：只有用户明确提到 Kling CLI、可灵 MCP、`kling-cli`、`@kling-cli`、可灵文生图、可灵图生图、可灵文生视频、可灵图生视频，或明确要求通过官方可灵 CLI/MCP 生成图像/视频时才加载；普通图片/视频提示词仍由 Studio roles 与 `prompt-director` 处理。
+- Kling CLI 不能越过上游设计岗位。若同一请求包含分镜、脚本、镜头语言、剪辑节奏、声音、调色、海报、PPT/deck/slide、版式、角色、产品、道具或场景设计，先由对应 Studio role 产出设计 handoff，再由 `prompt-director` 转为最终 prompt，最后才交给 Kling CLI 生成选中的图片、片段或任务。
+- Kling CLI 依赖本地 `kling` 命令、OAuth 登录态和异步任务查询。不要读取或展示 `~/.kling/.credentials` 内容；不要绕过 CLI 直接请求 MCP/API；不要安装、登录、重登、真实生成、上传私密素材或批量生成，除非用户明确确认。不要硬编码模型能力；真实调用前用 `kling who_am_i`、必要时 `kling tool_list` 或 `kling <command> --help` 确认当前模型、参数、数量、时长、画幅和下载/轮询方式。未安装或未登录时只做 help/preflight 或 prompt-only handoff，不声称已生成。
 - Seedance 2.0 Video / `seedance-2-video` 是显式调用的视频生成成员，位于 `prompt-director` 之后：只有用户明确提到即梦2.0生成、即梦生成、Seedance 2.0、Ark Seedance、豆包 Seedance、`@seedance-2-video`，或明确要求用这个成员生成视频时才加载；普通视频提示词和分镜仍由 Studio roles 与 `prompt-director` 处理。
 - Seedance 不能越过上游视频设计岗位。若同一请求包含脚本、分镜、镜头语言、剪辑节奏、动效、声音、调色、场景或电影方案，先由对应 Studio role 产出 handoff，再由 `prompt-director` 转为最终视频 prompt，最后才交给 Seedance 生成选中的一条镜头/片段。
 - 当 Seedance 要严格按 storyboard 执行一个 sequence 时，先创建或选中 Storyboard Animatic Sheet。该 sheet 必须包含 panel grid + director strip；`prompt-director` 再把它转成“引用 storyboard + 角色 + 环境 + PANEL BEATS”的 Seedance 执行 prompt。普通分镜图或无 director strip 的 contact sheet 只能作为视觉参考，不足以声明严格按分镜执行。
@@ -90,6 +93,7 @@
 | 需要封面或海报主视觉 | 图像生成/图像编辑 + 后期排版 |
 | 用户明确要求香蕉 / banana / Banana Pro / Nano Banana / OpenRouter 图像生成 | 已有完整 prompt：`prompt-director` -> `banana-pro`；仍需设计：先上游 Studio role -> `prompt-director` -> `banana-pro`；`tool-integrator` 只在能力、参数或接入状态不清楚时介入 |
 | 用户明确要求 Dreamina CLI / Jimeng CLI / official Jimeng CLI / dreamina / @dreamina-cli / 即梦官方 CLI 图像或视频生成 | 已有完整 prompt：`prompt-director` -> `dreamina-cli`；仍需设计：先上游 Studio role -> `prompt-director` -> `dreamina-cli`；未安装/未登录/模型参数不清楚时先 help/preflight，不直接生成 |
+| 用户明确要求 Kling CLI / 可灵 MCP / kling-cli / @kling-cli / 可灵官方 CLI 图像或视频生成 | 已有完整 prompt：`prompt-director` -> `kling-cli`；仍需设计：先上游 Studio role -> `prompt-director` -> `kling-cli`；未安装/未登录/模型参数不清楚时先 who_am_i/tool_list/help preflight，不直接生成 |
 | 用户明确要求即梦2.0生成 / 即梦生成 / Seedance 2.0 / Ark Seedance 视频生成 | 已有完整 prompt：`prompt-director` -> `seedance-2-video`；仍需设计：先上游 Studio role -> `prompt-director` -> `seedance-2-video`；`tool-integrator` 只在能力、参数、key 或接入状态不清楚时介入 |
 | 下游 AI 工具需要公网 URL，但用户提供本地图片/视频文件 | `url-relay` 将本地素材中转为 `http(s)` URL；随后回到 Banana/Seedance/其他工具；隐私不明时先确认 |
 | 用户明确要求视觉方案文件 / 视觉导演方案 / Word视觉方案 / DOCX视觉方案 | 已有选定图片和设定：`storyboard-visual-word`；仍需分镜/设定/选图：先上游 Studio role -> 可选生成工具 -> `storyboard-visual-word` |

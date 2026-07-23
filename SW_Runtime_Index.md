@@ -1,4 +1,4 @@
-# SW Runtime Index
+﻿# SW Runtime Index
 
 This is the compact runtime index for SW_V1.0. Read it before deeper project files only after the user explicitly invokes SW or resumes an already activated SW design-studio project.
 
@@ -7,19 +7,19 @@ This is the compact runtime index for SW_V1.0. Read it before deeper project fil
 Activation reply:
 
 ```text
-SW loaded successfully. Current version: V1.13.1
+SW loaded successfully. Current version: V1.14.0
 ```
 
 Sync reply:
 
 ```text
-SW version synchronized. Current version: V1.13.1
+SW version synchronized. Current version: V1.14.0
 ```
 
 Rescue reply:
 
 ```text
-SW rescue synchronized. Current version: V1.13.1
+SW rescue synchronized. Current version: V1.14.0
 ```
 
 If the user only invokes SW, sync, or rescue, reply with the matching fixed line and stop.
@@ -197,6 +197,11 @@ Rules:
   - If the same request includes storyboard, video, film, poster, PPT/deck/slide, layout, character, product, prop, scene design, camera, edit, motion, sound, or color work, run the responsible Studio role first, then `prompt-director`, then `dreamina-cli` only for the selected image/clip/task.
   - Add `tool-integrator` only when CLI capability, installed state, login state, model support, parameters, or connection state is unclear.
   Treat `dreamina-cli` as the official Dreamina/Jimeng local CLI execution member for both image and video generation. It uses the local `dreamina` command, account login/session state, and async task query. Do not run the installer, login, or real generation without confirmation. Do not hardcode model support; inspect `dreamina -h` and `dreamina <subcommand> -h` before real use. If `dreamina` is missing, report that the CLI is not installed and offer the official install route; do not claim an image or video was generated.
+- Explicit Kling CLI / 可灵 MCP / `kling-cli` / `@kling-cli` / 可灵 image or video generation through the official CLI:
+  - If the user already provides a complete final image/video prompt, use `prompt-director` -> `kling-cli`.
+  - If the same request includes storyboard, video, film, poster, deck/slide layout, character, product, prop, scene design, camera, edit, motion, sound, or color work, run the responsible Studio role first, then `prompt-director`, then `kling-cli` only for the selected image/clip/task.
+  - Add `tool-integrator` only when CLI capability, install state, OAuth login state, model support, parameters, or MCP tool availability is unclear.
+  Treat `kling-cli` as the official Kling CLI / MCP execution member for both image and video generation. It uses the local `kling` command and OAuth credentials in `~/.kling/.credentials`; never read or display credential contents. Before real generation, run `kling who_am_i` and, when needed, `kling tool_list` or `kling <command> --help`; do not hardcode models or parameters. Keep `kling-api` separate for explicit AK/SK API requests.
 - Explicit 抠图 / 扣图 / 去底 / 去黑底 / 黑底转透明 / 透明底 PNG / `@black-background-cutout`:
   - If the user provides existing local image files, load `black-background-cutout` directly. It is a local pixel-processing tool for black/simple solid backgrounds, not AI generation and not a Studio role.
   - It creates fast transparent PNG previews and may leave slight fringing. Do not present it as finishing-grade, no-fringe, or a solution for AI lettering reuse. For complex photo cutouts or formal delivery, recommend professional cutout/refinement or regenerated transparent assets.
@@ -280,9 +285,11 @@ Rules:
 
 ## Tool Skill Loading
 
-Tool skills are not Studio roles. Do not look for `Studio_Skills/banana-pro/SKILL.md`, `Studio_Skills/dreamina-cli/SKILL.md`, `Studio_Skills/seedance-2-video/SKILL.md`, `Studio_Skills/url-relay/SKILL.md`, `Studio_Skills/storyboard-visual-word/SKILL.md`, or `Studio_Skills/feishu-docs/SKILL.md`.
+Tool skills are not Studio roles. Do not look for `Studio_Skills/banana-pro/SKILL.md`, `Studio_Skills/dreamina-cli/SKILL.md`, `Studio_Skills/kling-cli/SKILL.md`, `Studio_Skills/seedance-2-video/SKILL.md`, `Studio_Skills/url-relay/SKILL.md`, `Studio_Skills/storyboard-visual-word/SKILL.md`, or `Studio_Skills/feishu-docs/SKILL.md`.
 
 Dreamina CLI is a tool skill, not a Studio role. Use it only for explicit Dreamina CLI / Jimeng CLI / official Jimeng CLI / dreamina / `@dreamina-cli` image or video generation requests. Keep `seedance-2-video` for Ark Seedance API / Seedance 2.0 requests.
+
+Kling CLI is a tool skill, not a Studio role. Use it only for explicit Kling CLI / 可灵 MCP / `kling-cli` / `@kling-cli` / 可灵 image or video generation requests. Keep `kling-api` for explicit AK/SK official API requests.
 
 When the user explicitly asks for 香蕉 / banana / Banana Pro / Nano Banana / `@banana-pro`, first decide whether upstream Studio work is still needed. Load Banana Pro only after the current upstream deliverable and prompt are ready.
 
@@ -305,6 +312,8 @@ Default upstream chains:
 - direct final prompt request: `prompt-director` -> `banana-pro`
 - Dreamina CLI image/video request: upstream visual/video role if needed -> Selected Asset Packet -> `prompt-director` -> `dreamina-cli`
 - direct final Dreamina CLI prompt request: `prompt-director` -> `dreamina-cli`
+- Kling CLI image/video request: upstream visual/video role if needed -> Selected Asset Packet -> `prompt-director` -> `kling-cli`
+- direct final Kling CLI prompt request: `prompt-director` -> `kling-cli`
 - direct local cutout request: `black-background-cutout`
 - Seedance video clip request: `storyboard-director`, `cinematographer`, or `edit-director` if needed -> Selected Asset Packet -> `prompt-director` -> `seedance-2-video`
 - Seedance storyboard-locked sequence request: Project Asset Graph if continuity assets are not locked -> `storyboard-director` creates or selects the Storyboard Animatic Sheet -> Selected Asset Packet with storyboard = `motion source + structure`, character = `identity`, environment = `structure/style` -> `prompt-director` writes the "storyboard + character + environment + panel beats" execution prompt -> `seedance-2-video`
@@ -331,6 +340,14 @@ For Dreamina CLI execution, load:
    - `dreamina-cli/SKILL.md`
    - `C:\Users\Administrator\.codex\skills\dreamina-cli\SKILL.md`
    - `C:\Users\Administrator\plugins\sw-v1-0\skills\dreamina-cli\SKILL.md`
+
+For Kling CLI execution, load:
+
+1. `Studio_Skills/prompt-director/SKILL.md`
+2. the first available Kling CLI tool skill path:
+   - `kling-cli/SKILL.md`
+   - `C:\Users\Administrator\.codex\skills\kling-cli\SKILL.md`
+   - `C:\Users\Administrator\plugins\sw-v1-0\skills\kling-cli\SKILL.md`
 
 For Seedance execution, load:
 
@@ -391,6 +408,13 @@ Studio roles: Prompt Director / `prompt-director` (loaded). Cost lane: high-cost
 Tool skill: Dreamina CLI / `dreamina-cli` (loaded by explicit user request).
 ```
 
+Kling CLI trace:
+
+```text
+Studio roles: Prompt Director / `prompt-director` (loaded). Cost lane: high-cost.
+Tool skill: Kling CLI / `kling-cli` (loaded by explicit user request).
+```
+
 Seedance with local media trace:
 
 ```text
@@ -424,6 +448,10 @@ Execution rule:
 - If `dreamina` is missing, report that the official CLI is not installed and offer the official install route. Do not execute `curl | bash` without confirmation.
 - Treat explicit "use Dreamina/Jimeng CLI to generate one draft" as confirmation for one draft image or clip only; still pause for install, login/relogin, private uploads, batch generation, final-use brand/face/product assets, 4K/1080p/final delivery, or long unattended polling.
 - For Dreamina async tasks, treat submission as complete only after a usable `submit_id` is returned, then query/download results before claiming output exists.
+- If the user asks for Kling CLI / 可灵 MCP generation, first use `kling who_am_i` and the relevant `kling tool_list` or `kling <command> --help` before real use. Do not hardcode model support.
+- If `kling` is missing, report that the official CLI is not installed and offer the official install route. Do not install, login/relogin, or run real generation without confirmation.
+- Treat explicit "use Kling/可灵 CLI to generate one draft" as confirmation for one draft image or clip only; still pause for login/relogin, private uploads, batch generation, final-use brand/face/product assets, 4K/final delivery, or long unattended polling.
+- For Kling async tasks, treat submission as complete only after a real `generationId` is returned, then use `kling query_tasks` before claiming output exists. If credentials are missing or invalid, run `kling login` only after user confirmation and never read `.credentials`.
 - If `ARK_API_KEY` or the Seedance local private key file is available and video generation is confirmed, run the Seedance script from the loaded skill folder.
 - Treat explicit "use 即梦2.0 to generate one draft clip" as confirmation for one draft clip only; still pause for private uploads, final-use brand/face/product assets, 1080p, long polling, or batch generation.
 - For storyboard-locked Seedance execution, require a Storyboard Animatic Sheet or an equivalent panel-beat handoff before saying the tool will follow a storyboard exactly. The tool prompt should reference storyboard + character + environment and include `PANEL BEATS`; it must not ask Seedance to reproduce the physical storyboard sheet, labels, grid, masthead, or director strip.
