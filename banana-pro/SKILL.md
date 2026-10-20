@@ -141,3 +141,7 @@ Banana Pro result:
 - Do not use `banana-pro` to bypass confirmed historical accuracy checking. If historical checking is enabled, the output is not acceptable until the generated still/image has been checked.
 - Do not say an image was generated unless the script returned saved image files.
 - If the API returns no images after the built-in retry, report the response path and suggest prompt simplification.
+
+## Protected continuity locks
+
+For a saved Canvas shot, pass the current `shot-packet` JSON through `--lock-file`. Locks are preserved through compression and empty-result retry. Stale dependency packets fail before network calls. If locks cannot fit the budget, increase `--compress-limit` or use `--no-compress`; do not remove locks to make the call succeed. Reference images still need explicit `--reference-image` / `--reference-url` arguments.

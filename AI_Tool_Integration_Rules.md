@@ -94,6 +94,8 @@
 | 用户明确要求香蕉 / banana / Banana Pro / Nano Banana / OpenRouter 图像生成 | 已有完整 prompt：`prompt-director` -> `banana-pro`；仍需设计：先上游 Studio role -> `prompt-director` -> `banana-pro`；`tool-integrator` 只在能力、参数或接入状态不清楚时介入 |
 | 用户明确要求 Dreamina CLI / Jimeng CLI / official Jimeng CLI / dreamina / @dreamina-cli / 即梦官方 CLI 图像或视频生成 | 已有完整 prompt：`prompt-director` -> `dreamina-cli`；仍需设计：先上游 Studio role -> `prompt-director` -> `dreamina-cli`；未安装/未登录/模型参数不清楚时先 help/preflight，不直接生成 |
 | 用户明确要求 Kling CLI / 可灵 MCP / kling-cli / @kling-cli / 可灵官方 CLI 图像或视频生成 | 已有完整 prompt：`prompt-director` -> `kling-cli`；仍需设计：先上游 Studio role -> `prompt-director` -> `kling-cli`；未安装/未登录/模型参数不清楚时先 who_am_i/tool_list/help preflight，不直接生成 |
+| 用户明确要求 Kling API / 可灵 API / API Key 视频生成或参考视频编辑 | 普通视频用 Kling 3.0；参考视频生成和原片编辑用 Kling 3.0 Omni；已有设计 handoff 后由 `prompt-director` -> `kling-api`，按当前接口构造 payload，旧 `/v1` 仅用于明确 legacy 模式 |
+| 用户要求接入 Hermes 或与 Hermes 协作 | `hermes-bridge` 将本机 Hermes 接到同一仓库与可灵执行脚本；采用带负责方和任务 ID 的本地交接文件，不自动启动后台通信或模型调用 |
 | 用户明确要求即梦2.0生成 / 即梦生成 / Seedance 2.0 / Ark Seedance 视频生成 | 已有完整 prompt：`prompt-director` -> `seedance-2-video`；仍需设计：先上游 Studio role -> `prompt-director` -> `seedance-2-video`；`tool-integrator` 只在能力、参数、key 或接入状态不清楚时介入 |
 | 下游 AI 工具需要公网 URL，但用户提供本地图片/视频文件 | `url-relay` 将本地素材中转为 `http(s)` URL；随后回到 Banana/Seedance/其他工具；隐私不明时先确认 |
 | 用户明确要求视觉方案文件 / 视觉导演方案 / Word视觉方案 / DOCX视觉方案 | 已有选定图片和设定：`storyboard-visual-word`；仍需分镜/设定/选图：先上游 Studio role -> 可选生成工具 -> `storyboard-visual-word` |

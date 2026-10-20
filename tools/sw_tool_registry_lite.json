@@ -117,7 +117,7 @@
       "fallback": [
         "help_only_inspection",
         "prompt_only_handoff",
-        "kling_api_route_when_user_requests_ak_sk"
+        "kling_api_route_when_user_requests_api_key_or_ak_sk"
       ]
     },
     {
@@ -144,11 +144,12 @@
     {
       "id": "kling-api",
       "name": "Kling API",
-      "capability": "video_generation",
+      "capability": "video_generation_and_reference_editing",
       "skill_path": "kling-api/SKILL.md",
       "loads_as": "tool_skill",
       "trigger_mode": "explicit",
       "configured_by": [
+        "KLING_API_KEY",
         "KLING_ACCESS_KEY",
         "KLING_SECRET_KEY",
         "~/.config/kling-api/secrets.json"
@@ -204,6 +205,28 @@
       "fallback": [
         "local_markdown_render",
         "dry_run_publish_plan"
+      ]
+    },
+    {
+      "id": "hermes-bridge",
+      "name": "Hermes Collaboration Bridge",
+      "capability": "local_agent_handoff",
+      "skill_path": "hermes-bridge/SKILL.md",
+      "loads_as": "tool_skill",
+      "trigger_mode": "explicit",
+      "configured_by": [
+        "existing Hermes installation",
+        "HERMES_HOME or Hermes default runtime"
+      ],
+      "cost_lane": "low",
+      "confirmation_required": [
+        "external_messages",
+        "real_generation",
+        "private_upload"
+      ],
+      "fallback": [
+        "local_handoff_only",
+        "report_missing_runtime"
       ]
     }
   ]

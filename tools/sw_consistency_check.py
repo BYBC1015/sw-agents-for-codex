@@ -124,6 +124,11 @@ PROJECT_MEMORY_TEMPLATE_FILES = [
 ]
 
 REPO_TOOL_SKILL_FILES = [
+    ROOT / "Storyboard_Continuity_Protocol.md",
+    ROOT / "apps" / "media-canvas" / "storyboard.py",
+    ROOT / "apps" / "media-canvas" / "web" / "storyboard.js",
+    ROOT / "apps" / "media-canvas" / "integrations" / "media-canvas" / "SKILL.md",
+    ROOT / "apps" / "media-canvas" / "integrations" / "sw-canvas" / "SKILL.md",
     ROOT / "INSTALL_SW.md",
     ROOT / "tools" / "sw_bootstrap.py",
     ROOT / "banana-pro" / "SKILL.md",
@@ -160,6 +165,7 @@ TOOL_REGISTRY_LITE_REQUIRED_IDS = {
     "seedance-2-video",
     "url-relay",
     "kling-api",
+    "hermes-bridge",
     "storyboard-visual-word",
     "feishu-docs",
 }
@@ -178,6 +184,7 @@ TOOL_REGISTRY_LITE_REQUIRED_FIELDS = {
 TOOL_REGISTRY_LITE_COST_LANES = {"low", "medium", "high"}
 
 SECRET_PATTERNS = [
+    re.compile(r"api-key-kling-[A-Za-z0-9_-]{24,}"),
     re.compile(r"sk-or-v1-[A-Za-z0-9]{24,}"),
     re.compile(r"ark-[0-9a-fA-F]{8}-[0-9a-fA-F-]{20,}"),
     re.compile(r"swrel_[A-Za-z0-9_-]{32,}"),
@@ -186,6 +193,7 @@ SECRET_PATTERNS = [
 TEXT_SUFFIXES = {".md", ".yaml", ".yml", ".json", ".py", ".toml", ".txt"}
 MEDIA_SUFFIXES = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".mp4", ".mov", ".avi"}
 IGNORED_SCAN_DIRS = {
+    ".tmp", "tmp", "output", "outputs", "node_modules", ".venv", "venv", ".runtime", ".codex-hub-state",
     ".codex",
     ".git",
     "__pycache__",
@@ -471,7 +479,7 @@ def check_tool_registry_lite(issues: list[str]) -> None:
 
 
 def check_secret_leaks(issues: list[str]) -> None:
-    for path in ROOT.rglob("*"):
+    for path in scan_files(ROOT):
         if not path.is_file():
             continue
         if is_ignored_scan_path(path):
@@ -485,12 +493,22 @@ def check_secret_leaks(issues: list[str]) -> None:
                 fail(issues, f"possible secret leaked in repo file: {path.relative_to(ROOT)}")
 
 
+def scan_files(base: Path):
+    if base.is_file():
+        yield base
+        return
+    for directory, dirs, names in os.walk(base):
+        dirs[:] = [name for name in dirs if name not in IGNORED_SCAN_DIRS]
+        for name in names:
+            yield Path(directory) / name
+
+
 def iter_text_files(paths: list[Path]) -> list[Path]:
     files: list[Path] = []
     for base in paths:
         if not base.exists():
             continue
-        candidates = base.rglob("*") if base.is_dir() else [base]
+        candidates = scan_files(base)
         for path in candidates:
             if not path.is_file():
                 continue

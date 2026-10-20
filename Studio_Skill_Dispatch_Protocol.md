@@ -403,7 +403,7 @@ If a historical conversation cannot read the latest local files, tell the user t
 - `banana-pro` is a post-prompt image-generation member, similar to `imagegen`; route `prompt-director` -> `banana-pro` for explicit generation requests
 - if the request includes upstream design work, do not let `banana-pro` skip the relevant Studio role; generate only after the selected prompt handoff is ready
 - `kling-cli` loads only when the user explicitly asks for Kling CLI, 可灵 MCP, `@kling-cli`, or this official Kling CLI/MCP generation member
-- `kling-cli` is a post-prompt image/video generation member; route `prompt-director` -> `kling-cli` for explicit generation requests and keep `kling-api` for explicit AK/SK API requests
+- `kling-cli` is a post-prompt image/video generation member; route `prompt-director` -> `kling-cli` for explicit generation requests and keep `kling-api` for explicit API Key or legacy AK/SK API requests
 - if the request includes upstream image/video/design work, do not let `kling-cli` skip the relevant Studio role; generate only after the selected prompt handoff is ready
 - `seedance-2-video` loads only when the user explicitly asks for 即梦2.0生成, 即梦生成, Seedance 2.0, Ark Seedance, 豆包 Seedance, `@seedance-2-video`, or this video-generation member
 - `seedance-2-video` is a post-prompt video-generation member; route `prompt-director` -> `seedance-2-video` for explicit generation requests
@@ -417,3 +417,7 @@ If a historical conversation cannot read the latest local files, tell the user t
 - `storyboard-visual-word` is a downstream DOCX handoff member; route it after selected visuals and scene rationale are ready, not during ordinary storyboard planning
 - preserve locked decisions and pass only the useful handoff packet to the next role
 - project memory suggestions are optional one-liners and require explicit user approval before writing
+
+## Persisted storyboard continuity
+
+For Canvas-backed shot production, revisions or review, read `Storyboard_Continuity_Protocol.md` on demand. Reuse stable shot/entity IDs, preserve exact version references, preview shared-asset impact, and require evidence from the actual output before visual approval. This adds no default startup reads and no new studio roles.

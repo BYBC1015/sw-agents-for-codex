@@ -54,3 +54,7 @@ Ask 0-3 by default; ask up to 5 only when delivery cannot be judged without miss
 - For video deliverables, review still frames, storyboard images, visual assets, and references; do not claim final video-generation QA unless a video-generation tool is actually integrated.
 - Do not invent new directions unless the current work fails the brief.
 - Hand off the `Review Delta Packet` to `change-manager` for revisions, or to `finishing-producer` only when no must-fix item remains.
+
+## Canvas continuity
+
+For persisted storyboard review, inspect actual output and record evidence against the selected shot version. Metadata checks alone do not justify pass; final manifest export must reject missing outputs, stale dependencies and unreviewed shots. Read `Storyboard_Continuity_Protocol.md` only for this path.

@@ -1,263 +1,112 @@
-# Kling API Reference
+# Kling current API reference
 
-Source verified from the official Kling AI document page:
+Verified against official documentation on **2026-09-11**. Current API Key endpoints differ from the [legacy API](kling-api-legacy.md).
 
-- `https://klingai.com/document-api/quickStart/productIntroduction/overview`
-- `https://klingai.com/document-api/apiReference%2FcommonInfo`
-- `https://klingai.com/document-api/apiReference%2Fmodel%2FtextToVideo`
-- `https://klingai.com/document-api/apiReference%2Fmodel%2FimageToVideo`
-- `https://klingai.com/document-api/apiReference%2Fmodel%2FmultiImageToVideo`
-- `https://klingai.com/document-api/apiReference%2Fmodel%2FOmniVideo`
-- `https://klingai.com/document-api/apiReference%2FcallbackProtocol`
-- `https://klingai.com/document-api/apiReference%2FrateLimits`
+## Official sources
 
-## Base URL
+- [Overview](https://klingai.com/document-api/guides/get-started/overview)
+- [Quick start](https://klingai.com/document-api/guides/get-started/quick-start)
+- [Authentication](https://klingai.com/document-api/api/get-started/authentication)
+- [Kling 3.0 text-to-video](https://klingai.com/document-api/api/video/3-0-omni/text-to-video)
+- [Kling 3.0 image-to-video](https://klingai.com/document-api/api/video/3-0-omni/image-to-video)
+- [Kling 3.0 Omni](https://klingai.com/document-api/api/video/3-0-omni/video-omni)
+- [Account usage](https://klingai.com/document-api/api/assets/account-usage)
 
-Official current China-region base URL:
+Navigation groups ordinary 3.0 and 3.0 Omni together; ordinary video endpoints still use `kling-3.0`. Do not derive endpoint spelling from documentation URLs.
 
-```text
-https://api-beijing.klingai.com
-```
+## Authentication and routes
 
-The docs state the older `https://api.klingai.com` domain changed to `https://api-beijing.klingai.com` for China-region servers.
+China base: `https://api-beijing.klingai.com`. Other regions: `https://api-singapore.klingai.com`. Use the account's region; SW is configured for China. Set `Authorization: Bearer <API Key>` and `Content-Type: application/json`. API Keys support both current and legacy models per the guide; AK/SK JWTs support legacy interfaces only. The runner keeps current and legacy payloads separate.
 
-## Auth
+| Action | Method and path |
+| --- | --- |
+| Ordinary Kling 3.0 from text | `POST /text-to-video/kling-3.0` |
+| Ordinary Kling 3.0 from images | `POST /image-to-video/kling-3.0` |
+| Kling 3.0 Omni | `POST /omni-video/kling-3.0-omni` |
+| Query tasks | `GET /tasks?task_ids=<id>` |
+| Query by external ID | `GET /tasks?external_task_ids=<id>` |
+| List tasks, read-only | `POST /tasks`, e.g. `{"limit":1}` |
+| Free resource-pack/auth check | `GET /account/costs?start_time=<ms>&end_time=<ms>` |
 
-Credentials:
+The task ID parameters are mutually exclusive; multiple IDs are comma-separated. The account query is explicitly free, QPS ≤1, with required Unix-millisecond start/end times. Resource-pack quantities may lag 12 hours. An empty list does not establish cash balance or model permission.
 
-- `AccessKey`
-- `SecretKey`
-
-JWT:
-
-- Header: `{"alg":"HS256","typ":"JWT"}`
-- Payload:
-  - `iss`: AccessKey
-  - `exp`: current Unix time + 1800 seconds
-  - `nbf`: current Unix time - 5 seconds
-- Signature: HMAC SHA256 with SecretKey
-
-Request header:
-
-```text
-Authorization: Bearer <JWT>
-Content-Type: application/json
-```
-
-## Status
-
-Task status values:
-
-- `submitted`
-- `processing`
-- `succeed`
-- `failed`
-
-Result video URL path:
-
-```text
-data.task_result.videos[0].url
-```
-
-Generated image/video URLs may be cleaned after 30 days. Download or transfer successful results.
-
-## Text To Video
-
-Create:
-
-```text
-POST /v1/videos/text2video
-```
-
-Query one:
-
-```text
-GET /v1/videos/text2video/{task_id}
-```
-
-List:
-
-```text
-GET /v1/videos/text2video?pageNum=1&pageSize=30
-```
-
-Common payload fields:
-
-- `model_name`: optional, examples include `kling-v2-6`, `kling-v3`.
-- `prompt`: required for normal single-shot generation.
-- `negative_prompt`: optional, max 2500 chars.
-- `multi_shot`: optional boolean. If true, `prompt` is ignored and `multi_prompt` is used.
-- `shot_type`: `customize` or `intelligence`; required when `multi_shot=true`.
-- `multi_prompt`: array of `{index, prompt, duration}`. Max 6 shots, each prompt max 512 chars, durations sum to total duration.
-- `sound`: `on` or `off`.
-- `cfg_scale`: 0-1; not supported by `kling-v2.x`.
-- `mode`: `std`, `pro`, or `4k` where model supports it.
-- `camera_control`: optional object, not compatible with every model/mode.
-- `aspect_ratio`: `16:9`, `9:16`, `1:1`.
-- `duration`: string seconds. V3 supports 3-15 seconds; v2.6 commonly supports 5/10 and some modes.
-- `watermark_info`: `{"enabled": boolean}`.
-- `callback_url`: optional.
-- `external_task_id`: optional, unique per user.
-
-## Image To Video
-
-Create:
-
-```text
-POST /v1/videos/image2video
-```
-
-Query one:
-
-```text
-GET /v1/videos/image2video/{task_id}
-```
-
-List:
-
-```text
-GET /v1/videos/image2video?pageNum=1&pageSize=30
-```
-
-Common payload fields:
-
-- `model_name`: optional, examples include `kling-v2-6`, `kling-v3`.
-- `image`: first-frame/reference image. URL or raw Base64, no `data:image/...` prefix.
-- `image_tail`: optional tail-frame image. URL or raw Base64, no prefix.
-- `prompt`: required for normal single-shot generation.
-- `negative_prompt`: optional.
-- `multi_shot`, `shot_type`, `multi_prompt`: same multi-shot rules as text-to-video.
-- `element_list`: optional reference subject IDs, max 3.
-- `voice_list`: optional voice IDs, max 2; mutually exclusive with `element_list`.
-- `sound`: `on` or `off`.
-- `mode`: `std`, `pro`, or `4k` where supported.
-- `duration`: string seconds.
-- `callback_url`, `external_task_id`, `watermark_info`: optional.
-
-Image constraints:
-
-- Format: `.jpg`, `.jpeg`, `.png`.
-- File size: max 10 MB.
-- Minimum dimensions: 300 px.
-- Aspect ratio: between `1:2.5` and `2.5:1`.
-- `image` and `image_tail` cannot both be empty.
-- `image_tail`, motion brush masks, and `camera_control` are mutually exclusive.
-
-## Multi Image To Video
-
-Create:
-
-```text
-POST /v1/videos/multi-image2video
-```
-
-Query one:
-
-```text
-GET /v1/videos/multi-image2video/{task_id}
-```
-
-List:
-
-```text
-GET /v1/videos/multi-image2video?pageNum=1&pageSize=30
-```
-
-Common payload fields:
-
-- `model_name`: default in docs is `kling-v1-6`.
-- `image_list`: required, max 4 items, each `{ "image": "<url-or-base64>" }`.
-- `prompt`: required, max 2500 chars.
-- `negative_prompt`: optional.
-- `mode`: `std` or `pro`.
-- `duration`: `5` or `10`.
-- `aspect_ratio`: `16:9`, `9:16`, `1:1`.
-- `watermark_info`, `callback_url`, `external_task_id`: optional.
-
-## Omni-Video
-
-Create:
-
-```text
-POST /v1/videos/omni-video
-```
-
-Query one:
-
-```text
-GET /v1/videos/omni-video/{task_id}
-```
-
-List:
-
-```text
-GET /v1/videos/omni-video?pageNum=1&pageSize=30
-```
-
-Common payload fields:
-
-- `model_name`: optional; official enum includes `kling-video-o1` and `kling-v3-omni`.
-- `prompt`: optional in multi-shot customize mode, otherwise required. Omni prompts can reference assets with `<<<image_1>>>`, `<<<video_1>>>`, and `<<<element_1>>>`.
-- `multi_shot`: optional boolean. If true, `shot_type` is required and `multi_prompt` is used for `customize`.
-- `multi_prompt`: max 6 shots; each shot prompt max 512 chars; shot durations sum to total duration.
-- `image_list`: optional reference images, scene/style references, or first/end frames. Items use `image_url`; optional `type` is `first_frame` or `end_frame`.
-- `element_list`: optional subject library references with `element_id`.
-- `video_list`: optional single public MP4/MOV URL. `refer_type=feature` uses the video as style/motion/camera reference; `refer_type=base` edits the supplied video.
-- `mode`: `std`, `pro`, or `4k` where supported.
-- `aspect_ratio`: `16:9`, `9:16`, `1:1`; not supported for video edit or first/end-frame image-to-video cases.
-- `duration`: `3` to `15` seconds where supported; ignored for `refer_type=base` edits, which follow the input video duration.
-- `sound`: `on` or `off`; official docs say it must be `off` when `video_list` is provided.
-- `watermark_info`, `callback_url`, `external_task_id`: optional.
-
-Omni-Video does not expose the normal `camera_control` object. Put camera instructions into the prompt, or use `video_list` with `refer_type=feature` when a movement reference is needed.
-
-## Camera Control
-
-`camera_control` is optional and model-dependent.
-
-Preset `type` values include:
-
-- `simple`
-- `down_back`
-- `forward_up`
-- `right_turn_forward`
-- `left_turn_forward`
-
-For `type=simple`, configure exactly one non-zero field in `config`:
-
-- `horizontal`: -10 to 10
-- `vertical`: -10 to 10
-- `pan`: -10 to 10
-- `tilt`: -10 to 10
-- `roll`: -10 to 10
-- `zoom`: -10 to 10
-
-## Rate Limits
-
-Kling API concurrency is account-level and resource-pack dependent. Query APIs do not occupy generation concurrency. Running generation tasks occupy concurrency until they end, including failed tasks.
-
-When over concurrency limit, the API may return:
+## Ordinary Kling 3.0
 
 ```json
 {
-  "code": 1303,
-  "message": "parallel task over resource pack limit"
+  "prompt": "A calm product shot with a slow camera push-in.",
+  "settings": {
+    "multi_shot": false,
+    "audio": "off",
+    "resolution": "1080p",
+    "aspect_ratio": "16:9",
+    "duration": 5
+  }
 }
 ```
 
-Use queueing and exponential backoff instead of hammering task creation.
+- `duration`: integer 3–15 seconds, default 5.
+- `resolution`: `720p`, `1080p`, `4k`. Official default 720p; SW defaults to 1080p, matching its earlier pro default.
+- `audio`: `native` or `off`, default off.
+- `multi_shot`: boolean. Official default true; SW explicitly uses false for one selected clip.
+- Text `aspect_ratio`: `16:9`, `9:16`, `1:1`.
+- Prompt maximum 3072 characters; official guidance recommends ≤2500.
+- Optional `options` contains supported task options, including `external_task_id`, `callback_url`, and `watermark_info`.
 
-## Common Error Codes
+Image generation replaces the top-level prompt with `contents`:
 
-- `401 / 1000-1004`: authorization missing, invalid, not yet valid, or expired.
-- `429 / 1101`: account arrears.
-- `429 / 1102`: prepaid resource pack exhausted or expired.
-- `403 / 1103`: no permission for requested resource, interface, or model.
-- `400 / 1200-1201`: invalid parameter.
-- `404 / 1202`: invalid method.
-- `404 / 1203`: resource or model not found.
-- `400 / 1300-1301`: content or platform safety policy.
-- `429 / 1302`: request too fast.
-- `429 / 1303`: concurrency/resource pack limit.
-- `429 / 1304`: IP allowlist policy.
-- `500 / 5000`, `503 / 5001`, `504 / 5002`: server-side error, maintenance, or timeout.
+```json
+{
+  "contents": [
+    {"type": "prompt", "text": "The camera slowly approaches the subject."},
+    {"type": "first_frame", "url": "https://example.com/start.png"},
+    {"type": "last_frame", "url": "https://example.com/end.png"}
+  ],
+  "settings": {"multi_shot": false, "audio": "off", "resolution": "1080p", "duration": 5}
+}
+```
+
+First frame required, last frame optional; tail-only input is not supported. Images: URL or raw Base64; jpg/jpeg/png, ≤50MB, both dimensions ≥300px, aspect ratio 0.4–2.5. Legacy's old 10MB limit does not apply to current images.
+
+## Omni reference versus editing
+
+Current contents types include `prompt`, `refer_image`, `first_frame`, `last_frame`, `element`, `feature_video`, `base_video`. Assign reference assets an `id`, then cite `@id` in the prompt. The runner uses IDs such as `video_1` and `image_1`.
+
+```json
+{
+  "contents": [
+    {"type": "prompt", "text": "参考 @video_1 的运镜节奏，生成雨夜街道场景。"},
+    {"type": "feature_video", "url": "https://example.com/reference.mp4", "id": "video_1"}
+  ],
+  "settings": {"resolution": "1080p", "audio": "off", "multi_shot": true}
+}
+```
+
+`feature_video` guides a new clip and requires `audio=off`. The runner follows the official example with `multi_shot=true` by default for feature reference. The English schema restricts this to true, while the Chinese wording is less explicit; use the documented true setting for this mode.
+
+`base_video` edits the supplied clip. Explicitly name requested changes and preserved elements. Audio may be `original` or `off`; native audio, first/end frames, and multi-shot are unsupported.
+
+The official video examples omit duration and aspect ratio; the runner follows that convention for base-video edits. Current documentation does not explicitly guarantee exact source timing/dimension inheritance. Treat preservation as a requested constraint and check the result.
+
+Video inputs: URL only, mp4/mov, ≤200MB, 3–15.5 seconds, both dimensions 700–4553px, total pixels ≤8,294,400, aspect ratio 0.4–2, frame rate 24–60fps. Output is 24fps. At most one video. There is no documented local-path, video-Base64, or multipart upload field; local videos need an authorized upload workflow first.
+
+Image/subject counts depend on the combination. With a video, at most one video-character subject is supported; video-character subjects and reference images cannot be combined. Consult the linked Omni schema for complex combinations rather than assuming a universal seven-image allowance.
+
+## Task lifecycle
+
+Submission uses an object under data: `{"code":0,"data":{"id":"task-id","status":"submitted"}}`.
+
+Queries return an **array**:
+
+```json
+{
+  "code": 0,
+  "data": [{
+    "id": "task-id",
+    "status": "succeeded",
+    "outputs": [{"type": "video", "url": "https://example.com/result.mp4", "duration": "5.04"}]
+  }]
+}
+```
+
+Current statuses: `submitted`, `processing`, `succeeded`, `failed`. Legacy uses `succeed` and different result fields. Download `outputs[].url` where `type=video`. The service retains generated files for 30 days. Record `api_version` with a task so resuming uses the appropriate query parser.

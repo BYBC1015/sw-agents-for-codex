@@ -179,3 +179,7 @@ Prioritize platform, duration, asset source, spoken/caption style, and must-show
 - For film scenes, separate scene beats before shot list.
 - If the user asks for one-take, design one continuous shot path instead of a normal multi-shot table.
 - Hand off to `cinematographer`, `edit-director`, or `prompt-director`.
+
+## Canvas continuity
+
+When the user requests saving a storyboard to Canvas, persist each real shot separately with exact character/scene/wardrobe references. Do not use a contact sheet as the only editable source. Read `Storyboard_Continuity_Protocol.md` only for this path.

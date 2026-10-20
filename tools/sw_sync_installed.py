@@ -13,6 +13,7 @@ import json
 import os
 import re
 import shutil
+import sys
 from pathlib import Path
 
 
@@ -61,6 +62,8 @@ TOOL_SKILLS = [
     "banana-pro",
     "dreamina-cli",
     "kling-cli",
+    "kling-api",
+    "hermes-bridge",
     "seedance-2-video",
     "url-relay",
     "black-background-cutout",
@@ -74,6 +77,7 @@ RUNTIME_PACK_FILES = [
     "Cost_Governor.md",
     "Studio_Role_Label_Protocol.md",
     "Studio_Skill_Dispatch_Protocol.md",
+    "Storyboard_Continuity_Protocol.md",
 ]
 
 PORTABLE_RUNTIME_DIRS = [
@@ -284,6 +288,7 @@ def ignore_generated(_: str, names: list[str]) -> set[str]:
         "openrouter_payload.json",
         "openrouter_response.json",
         "run_manifest.json",
+        "kling-api.rar",
     }
     return {name for name in names if name in blocked or name.endswith((".pyc", ".tmp", ".log"))}
 
@@ -292,6 +297,10 @@ def copy_skill_dir(src: Path, dst: Path, dry_run: bool) -> None:
     print(f"copy: {src} -> {dst}")
     if dry_run:
         return
+    resolved = dst.resolve()
+    allowed = [USER_SKILLS.resolve(), (PLUGIN_ROOT / "skills").resolve()]
+    if not any(resolved != root and resolved.is_relative_to(root) for root in allowed):
+        raise ValueError(f"Skill sync destination is outside installed skill directories: {dst}")
     if dst.exists():
         shutil.rmtree(dst)
     shutil.copytree(src, dst, ignore=ignore_generated)
@@ -351,6 +360,8 @@ def plugin_manifest(version: str) -> dict:
             "kling",
             "kling-cli",
             "kling-mcp",
+            "kling-api",
+            "hermes-bridge",
             "klingai",
             "seedance",
             "banana-pro",
@@ -397,6 +408,7 @@ def plugin_manifest(version: str) -> dict:
                 "@black-background-cutout",
                 "@dreamina-cli",
                 "@kling-cli",
+                "@kling-api",
                 "@seedance-2-video",
                 "@banana-pro",
                 "@storyboard-visual-word",
@@ -407,18 +419,42 @@ def plugin_manifest(version: str) -> dict:
     }
 
 
+def sync_tool_skill(skill_id: str, destination: Path, dry_run: bool) -> None:
+    copy_skill_dir(ROOT / skill_id, destination, dry_run)
+    if skill_id == "hermes-bridge":
+        write_json(destination / "references" / "runtime.json", {
+            "sw_project_root": str(ROOT),
+            "source_skill": str(ROOT / skill_id / "SKILL.md"),
+            "kling_runner": str(ROOT / "kling-api" / "scripts" / "kling_task.py"),
+            "version_source": str(ROOT / "VERSION.md"),
+        }, dry_run)
+
+
+def sync_canvas(destination: Path, dry_run: bool) -> None:
+    canvas = ROOT / "apps" / "media-canvas"
+    for skill_id in ("sw-canvas", "media-canvas"):
+        src = canvas / "integrations" / skill_id
+        dst = destination / skill_id
+        copy_skill_dir(src, dst, dry_run)
+        for path in src.rglob("*.md"):
+            content = read_text(path).replace("{{CANVAS_ROOT}}", str(canvas)).replace("{{PYTHON}}", sys.executable)
+            write_text(dst / path.relative_to(src), content, dry_run)
+
+
 def sync_user(version: str, dry_run: bool) -> None:
     for skill_id in ENTRY_SKILLS:
         sync_entry_skill(USER_SKILLS, skill_id, version, dry_run)
     for skill_id in TOOL_SKILLS:
-        copy_skill_dir(ROOT / skill_id, USER_SKILLS / skill_id, dry_run)
+        sync_tool_skill(skill_id, USER_SKILLS / skill_id, dry_run)
+    sync_canvas(USER_SKILLS, dry_run)
 
 
 def sync_plugin(version: str, dry_run: bool) -> None:
     for skill_id in ENTRY_SKILLS:
         sync_entry_skill(PLUGIN_ROOT / "skills", skill_id, version, dry_run)
     for skill_id in TOOL_SKILLS:
-        copy_skill_dir(ROOT / skill_id, PLUGIN_ROOT / "skills" / skill_id, dry_run)
+        sync_tool_skill(skill_id, PLUGIN_ROOT / "skills" / skill_id, dry_run)
+    sync_canvas(PLUGIN_ROOT / "skills", dry_run)
     for command in ["sw", "sw-v1-0", "sw-update", "sw-rescue", "sw-help", "aesthetic"]:
         write_text(PLUGIN_ROOT / "commands" / f"{command}.md", command_text(command, version), dry_run)
     write_json(PLUGIN_ROOT / ".codex-plugin" / "plugin.json", plugin_manifest(version), dry_run)

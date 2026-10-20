@@ -159,3 +159,7 @@ Known drawbacks and limits:
 - Traces can include sensitive user material if captured too broadly, so default SW traces must stay compact and internal.
 - Too many handoffs can slow simple design tasks and increase tokens; keep the default to one primary role plus one support role.
 - Guardrail placement matters: first-role input checks and final-role output checks do not cover every tool action, so tool integrations still need their own safety rules.
+
+## Persisted storyboard continuity
+
+For Canvas-backed shot production, revisions or review, read `Storyboard_Continuity_Protocol.md` on demand. Reuse stable shot/entity IDs, preserve exact version references, preview shared-asset impact, and require evidence from the actual output before visual approval. This adds no default startup reads and no new studio roles.

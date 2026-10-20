@@ -24,3 +24,17 @@ jobs:
 
       - name: Run SW repository checks
         run: python tools/sw_consistency_check.py --scope repo
+      - name: Install Canvas image dependency
+        run: python -m pip install -r apps/media-canvas/requirements.txt playwright
+      - name: Install browser for Canvas interaction tests
+        run: python -m playwright install --with-deps chromium
+      - name: Test SW and protected generation locks
+        run: python -B -m unittest discover -s tests -v
+      - name: Test Canvas and storyboard continuity
+        run: python -B -m unittest discover -s apps/media-canvas/tests -v
+      - name: Check Canvas JavaScript
+        run: |
+          node --check apps/media-canvas/web/app.js
+          node --check apps/media-canvas/web/projects.js
+          node --check apps/media-canvas/web/storyboard.js
+          node --check apps/media-canvas/web/site-tools.js

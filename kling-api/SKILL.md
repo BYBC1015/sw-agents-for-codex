@@ -1,136 +1,71 @@
 ---
 name: kling-api
-description: Generate and manage Kling AI / 可灵 official API video tasks. Use when the user explicitly asks for Kling API, 可灵 API, 可灵生成, Kling video generation, text-to-video, image-to-video, multi-image-to-video, Omni-Video, Kling-V3-Omni, task polling, downloading Kling results, or creating a clean shareable Kling API skill for another team. Do not use for generic storyboard, video planning, or prompt writing unless the user asks to execute through Kling API.
+description: Generate, query, and download videos through the official Kling API, including Kling 3.0 and 3.0 Omni video reference or scene/element editing. Use for requested Kling API or API Key integration; keep OAuth Kling CLI/MCP separate.
+metadata:
+  version: "1.16.0"
 ---
 
 # Kling API
 
-Use this as a clean, standalone tool skill for the official Kling AI API. It does not depend on SW, project memory, URL Relay, or any private company workflow.
+Use the official current API with an API Key. Ordinary text/image videos default to **Kling 3.0**; video reference or editing an existing clip uses **Kling 3.0 Omni**. This tool also runs independently of SW. When SW is active, consume the selected prompt and asset handoff from upstream design work.
 
-## Safety Contract
+## Private setup
 
-- Never write AccessKey, SecretKey, JWT token, generated Authorization header, or private media URLs into this skill, repo files, prompts, logs, or examples.
-- Prefer `dry-run` before `run`. `dry-run` prints the payload shape without submitting a task.
-- Real API submission can consume credits. Only use `run --yes` after the user explicitly confirms real generation.
-- Local image files are encoded and transmitted to Kling during real `run`. Require `--confirm-upload` when using `--image-file` or `--image-tail-file` with `run`.
-- Generated result URLs may expire. Download or transfer the final video after success.
+The runner uses Python's standard library. Private config: `~/.config/kling-api/secrets.json` (`XDG_CONFIG_HOME` overrides its config root), with `api_key` and optionally `base_url`. Local private config takes priority over environment credentials; `KLING_API_KEY` and `KLING_BASE_URL` are fallbacks.
 
-## Setup
-
-Use environment variables or a local private config file.
-
-Environment variables:
-
-```bash
-KLING_ACCESS_KEY=...
-KLING_SECRET_KEY=...
-KLING_BASE_URL=https://api-beijing.klingai.com
-```
-
-One-time local setup:
-
-```bash
+```text
 python scripts/kling_task.py setup-key
 python scripts/kling_task.py doctor
 ```
 
-The private config is saved outside this skill folder at `~/.config/kling-api/secrets.json`.
+`setup-key` accepts hidden input; `--api-key-stdin` supports trusted local secret input without placing a key in command arguments. Never print credentials or put them in repository files, prompts, manifests, examples, or handoffs. Never read CLI OAuth credentials. Share this skill without private config; another machine supplies its own key. Hermes on this machine uses the same runner and private user config.
 
-## Official API Notes
+API Key authentication is `Authorization: Bearer <API Key>`, directly, at `https://api-beijing.klingai.com`. Do not turn a new key into AK/SK or JWT. Existing AK/SK users may explicitly select `--api-version legacy`; the payloads differ.
 
-Read `references/kling-api.md` when exact endpoint, parameter, model, status, or troubleshooting details matter.
+## References
 
-Core verified official routes:
+- [Current API](references/kling-api.md): endpoints, contents/settings, Omni reference modes, limits and task lifecycle, verified 2026-09-11.
+- [Legacy API](references/kling-api-legacy.md): old `/v1/videos/*` schema only for legacy compatibility. Do not reuse its reference tokens or response fields in a current request.
 
-- `POST /v1/videos/text2video`, `GET /v1/videos/text2video/{task_id}`
-- `POST /v1/videos/image2video`, `GET /v1/videos/image2video/{task_id}`
-- `POST /v1/videos/multi-image2video`, `GET /v1/videos/multi-image2video/{task_id}`
-- `POST /v1/videos/omni-video`, `GET /v1/videos/omni-video/{task_id}`
-- Default base URL for China-region servers: `https://api-beijing.klingai.com`
-- Auth: JWT signed with SecretKey, payload `iss=<AccessKey>`, then `Authorization: Bearer <token>`.
-- Omni-Video supports model names such as `kling-video-o1` and `kling-v3-omni`; it uses prompt references like `<<<image_1>>>`, `<<<video_1>>>`, and `<<<element_1>>>`.
-- The official Omni-Video payload does not expose `camera_control`; describe camera movement in the prompt or use a reference video with `refer_type=feature`.
+## Choose a mode
 
-## Workflow
+| Request | Runner options | Current model |
+| --- | --- | --- |
+| Ordinary text video | `--kind text` | Kling 3.0 |
+| First-frame or first/last-frame video | `--kind image` | Kling 3.0 |
+| Use a video's camera/action as a reference for a new clip | `--kind omni --video-refer-type feature` | Kling 3.0 Omni |
+| Modify an existing video's elements, clothing, or scene | `--kind omni --video-refer-type base` | Kling 3.0 Omni |
 
-1. Build or receive one final video prompt. Keep story planning and storyboard work outside this tool skill.
-2. Run `dry-run` to inspect payload and defaults.
-3. Run `doctor` if key, media path, or public URL readiness is uncertain.
-4. Run `run --yes` only after real-generation confirmation.
-5. If interrupted, resume with `poll`.
+Always specify reference mode for a video. Name what changes and what remains. Reference assets in prompts with `@video_1` or `@image_1`; current API does not use legacy angle-bracket tokens.
 
-## Examples
+Local videos need a Kling-accessible public URL: no documented local-path, video-Base64, or multipart upload field. Use the configured upload workflow within the user's authorization, then pass its URL. Do not upload during integration checks. Local images can use `--image-file`; real submission requires `--confirm-upload`.
 
-Text-to-video dry run:
+## Prepare, submit, resume
 
-```bash
-python scripts/kling_task.py dry-run \
-  --kind text \
-  --prompt "A calm cinematic product shot, slow dolly-in, blue rim light, no readable text." \
-  --model-name kling-v2-6 \
-  --duration 5 \
-  --mode pro \
-  --aspect-ratio 16:9 \
-  --sound off
+Inspect one concrete `dry-run`, then submit only within the user's authorization for that generation. Setup and document maintenance do not authorize a charged video. Existing explicit authorization for the same clip is sufficient; do not ask again.
+
+Ordinary video defaults: 5 seconds, 1080p, silent, single shot.
+
+```text
+python scripts/kling_task.py dry-run --kind text --prompt "A calm product shot with a slow controlled dolly-in." --duration 5 --resolution 1080p --audio off
 ```
 
-Image-to-video with a public first frame:
+Motion/camera reference:
 
-```bash
-python scripts/kling_task.py dry-run \
-  --kind image \
-  --image-url https://example.com/first-frame.png \
-  --prompt "The camera slowly pushes forward on rails, stable motion, no shake, soft morning light." \
-  --duration 5 \
-  --mode pro
+```text
+python scripts/kling_task.py dry-run --kind omni --video-url https://example.com/reference.mp4 --video-refer-type feature --prompt "参考 @video_1 的运镜与动作节奏，生成雨夜街道画面。" --audio off
 ```
 
-Omni-Video dry run with `Kling-V3-Omni`:
+Edit the original scene and retain its audio:
 
-```bash
-python scripts/kling_task.py dry-run \
-  --kind omni \
-  --model-name kling-v3-omni \
-  --image-url https://example.com/reference.png \
-  --prompt "Use <<<image_1>>> as the visual reference. A stable slow forward camera move, rail-mounted feeling, no handheld shake." \
-  --duration 5 \
-  --mode pro \
-  --aspect-ratio 16:9
+```text
+python scripts/kling_task.py dry-run --kind omni --video-url https://example.com/source.mp4 --video-refer-type base --prompt "将 @video_1 的背景改为雨夜街道；保留人物身份、动作、机位、时序与其他元素。" --audio original
 ```
 
-Real submit after confirmation:
+Replace `dry-run` with `run`, add a unique `--output-dir` and `--yes` for an authorized task. Prefer `--submit-only` and subsequent bounded polling when the agent needs to remain responsive. A submission is accepted only after a real task ID is returned. Do not automatically resubmit after timeout or interruption.
 
-```bash
-python scripts/kling_task.py run \
-  --kind image \
-  --image-url https://example.com/first-frame.png \
-  --prompt-file video_prompt.txt \
-  --duration 5 \
-  --mode pro \
-  --output-dir outputs/kling-shot-001 \
-  --yes
+```text
+python scripts/kling_task.py poll --output-dir outputs/kling-shot-001 --timeout 40
 ```
 
-Resume polling:
-
-```bash
-python scripts/kling_task.py poll --output-dir outputs/kling-shot-001
-```
-
-Use local image files only when the user understands they will be uploaded to Kling:
-
-```bash
-python scripts/kling_task.py run \
-  --kind image \
-  --image-file ./first-frame.png \
-  --prompt-file video_prompt.txt \
-  --output-dir outputs/kling-shot-001 \
-  --confirm-upload \
-  --yes
-```
-
-## Handoff Rules
-
-For another team, share the whole `kling-api/` folder only. They must run `setup-key` locally with their own AccessKey and SecretKey.
-
-If they already have a video workflow, add this skill after their prompt-preparation stage. Do not replace their creative planning, storyboard, legal review, or delivery review stages.
+Record the manifest location in a local handoff so Hermes or Codex can continue the same task. Deliver after success and file verification; download results before their URLs expire. Inspect the output against the requested edits and preserved elements.

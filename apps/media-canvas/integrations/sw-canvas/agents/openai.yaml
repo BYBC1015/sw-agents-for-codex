@@ -1,0 +1,6 @@
+interface:
+  display_name: "SW Canvas"
+  short_description: "新对话自动新建并绑定独立空画布，已有绑定则恢复；可手动选择或指定继承项目。"
+  default_prompt: "使用 $sw-canvas 打开当前对话的画布；未绑定时自动创建并绑定独立空画布，已有绑定则恢复对应项目。"
+policy:
+  allow_implicit_invocation: true

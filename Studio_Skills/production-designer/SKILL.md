@@ -90,3 +90,7 @@ For project start or storyboard requests, prioritize these questions: what exist
 - For scene setting sheets, lock environment before storyboard or image/video generation: geography, time of day, practical lights, material language, key props, paths, and color temperature.
 - Keep copyrighted/logos/reference-specific elements out unless authorized.
 - Hand off to `asset-producer`, `prompt-director`, `cinematographer`, or `review-producer`.
+
+## Canvas continuity
+
+When saving a Project Asset Graph to Canvas, map stable node IDs to versioned entities. Preview affected shots before updating shared entity settings. Read `Storyboard_Continuity_Protocol.md` only for this path.

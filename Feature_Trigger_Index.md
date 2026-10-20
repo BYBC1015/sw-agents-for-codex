@@ -1,4 +1,4 @@
-﻿# Feature Trigger Index
+# Feature Trigger Index
 
 This compact index is for `@sw_help`, `/sw_help`, `/sw-help`, feature discovery, and low-cost trigger checks. It does not start a project by itself.
 
@@ -75,7 +75,11 @@ Model behavior: do not hardcode supported models. Inspect `dreamina -h` and `dre
 
 Purpose: explicit Kling official CLI / MCP image and video generation after SW prompt preparation.
 
-Use this route for the OAuth-based official Kling CLI/MCP integration. If the user explicitly asks for AK/SK official API usage, route to `kling-api` instead.
+Use this route for the OAuth-based official Kling CLI/MCP integration. If the user explicitly asks for API Key or legacy AK/SK official API usage, route to `kling-api` instead.
+
+API examples: “用可灵 API 生成普通视频” selects Kling 3.0; “用 3.0 Omni 参考这个视频的运镜” selects reference generation; “用 3.0 Omni 修改原视频的场景/元素” selects base-video editing. Read the current API tool skill for the contents/settings schema.
+
+Hermes collaboration: “接入 Hermes” / “与 Hermes 协作” selects `hermes-bridge`; it uses the existing local Hermes runtime and shared project/Kling runner. It does not start a background conversation or activate SW automatically.
 
 Trigger only when the user explicitly asks for:
 
@@ -398,7 +402,7 @@ Trigger when the user says:
 Required reply:
 
 ```text
-SW rescue synchronized. Current version: V1.14.0
+SW rescue synchronized. Current version: V1.16.0
 ```
 
 This is not a project start, not a normal sync replacement, and not a tool-generation step.

@@ -1,4 +1,4 @@
-﻿# SW Runtime Index
+# SW Runtime Index
 
 This is the compact runtime index for SW_V1.0. Read it before deeper project files only after the user explicitly invokes SW or resumes an already activated SW design-studio project.
 
@@ -7,19 +7,19 @@ This is the compact runtime index for SW_V1.0. Read it before deeper project fil
 Activation reply:
 
 ```text
-SW loaded successfully. Current version: V1.14.0
+SW loaded successfully. Current version: V1.16.0
 ```
 
 Sync reply:
 
 ```text
-SW version synchronized. Current version: V1.14.0
+SW version synchronized. Current version: V1.16.0
 ```
 
 Rescue reply:
 
 ```text
-SW rescue synchronized. Current version: V1.14.0
+SW rescue synchronized. Current version: V1.16.0
 ```
 
 If the user only invokes SW, sync, or rescue, reply with the matching fixed line and stop.
@@ -201,7 +201,7 @@ Rules:
   - If the user already provides a complete final image/video prompt, use `prompt-director` -> `kling-cli`.
   - If the same request includes storyboard, video, film, poster, deck/slide layout, character, product, prop, scene design, camera, edit, motion, sound, or color work, run the responsible Studio role first, then `prompt-director`, then `kling-cli` only for the selected image/clip/task.
   - Add `tool-integrator` only when CLI capability, install state, OAuth login state, model support, parameters, or MCP tool availability is unclear.
-  Treat `kling-cli` as the official Kling CLI / MCP execution member for both image and video generation. It uses the local `kling` command and OAuth credentials in `~/.kling/.credentials`; never read or display credential contents. Before real generation, run `kling who_am_i` and, when needed, `kling tool_list` or `kling <command> --help`; do not hardcode models or parameters. Keep `kling-api` separate for explicit AK/SK API requests.
+  Treat `kling-cli` as the official Kling CLI / MCP execution member for both image and video generation. It uses the local `kling` command and OAuth credentials in `~/.kling/.credentials`; never read or display credential contents. Before real generation, run `kling who_am_i` and, when needed, `kling tool_list` or `kling <command> --help`; do not hardcode models or parameters. Keep `kling-api` separate for explicit API Key or legacy AK/SK API requests.
 - Explicit 抠图 / 扣图 / 去底 / 去黑底 / 黑底转透明 / 透明底 PNG / `@black-background-cutout`:
   - If the user provides existing local image files, load `black-background-cutout` directly. It is a local pixel-processing tool for black/simple solid backgrounds, not AI generation and not a Studio role.
   - It creates fast transparent PNG previews and may leave slight fringing. Do not present it as finishing-grade, no-fringe, or a solution for AI lettering reuse. For complex photo cutouts or formal delivery, recommend professional cutout/refinement or regenerated transparent assets.
@@ -289,7 +289,11 @@ Tool skills are not Studio roles. Do not look for `Studio_Skills/banana-pro/SKIL
 
 Dreamina CLI is a tool skill, not a Studio role. Use it only for explicit Dreamina CLI / Jimeng CLI / official Jimeng CLI / dreamina / `@dreamina-cli` image or video generation requests. Keep `seedance-2-video` for Ark Seedance API / Seedance 2.0 requests.
 
-Kling CLI is a tool skill, not a Studio role. Use it only for explicit Kling CLI / 可灵 MCP / `kling-cli` / `@kling-cli` / 可灵 image or video generation requests. Keep `kling-api` for explicit AK/SK official API requests.
+Kling CLI is a tool skill, not a Studio role. Use it only for explicit Kling CLI / 可灵 MCP / `kling-cli` / `@kling-cli` / 可灵 image or video generation requests. Keep `kling-api` for explicit API Key or legacy AK/SK official API requests.
+
+Kling API defaults: ordinary videos use Kling 3.0; video reference and video edits use Kling 3.0 Omni. Read `kling-api/SKILL.md` for the current API Key endpoints and contents/settings schema. A motion/camera reference (`feature_video`) and editing an existing clip (`base_video`) are different operations. Preserve original timing, camera, subjects, and audio unless the requested edit changes them. Old `/v1` payloads belong to the explicit legacy route.
+
+For an explicit Hermes collaboration request, read `hermes-bridge/SKILL.md`. The installed local Hermes skill reads this repository and uses the same Kling runner and private user configuration. Use a small file handoff with ownership and task IDs; do not describe this as an active background connection or send messages without authorization. Neither a tool setup nor a Hermes request activates the SW design workflow by itself.
 
 When the user explicitly asks for 香蕉 / banana / Banana Pro / Nano Banana / `@banana-pro`, first decide whether upstream Studio work is still needed. Load Banana Pro only after the current upstream deliverable and prompt are ready.
 
@@ -510,3 +514,7 @@ Before replying, internally confirm:
 - for maintenance/publish, `tools/sw_consistency_check.py` passes before commit
 
 For complex handoffs, tool integration, eval/debug, or architecture maintenance, apply the OpenAI Agents SDK-inspired pattern from `Agent_Skill_Tech_Principles.md`: compact ownership handoff, blocking guardrails before risky work, lightweight internal trace, and explicit tool-level safety checks. Do not imply a real SDK run unless one was actually used.
+
+## Persisted storyboard continuity
+
+For Canvas-backed shot production, revisions or review, read `Storyboard_Continuity_Protocol.md` on demand. Reuse stable shot/entity IDs, preserve exact version references, preview shared-asset impact, and require evidence from the actual output before visual approval. This adds no default startup reads and no new studio roles.

@@ -52,9 +52,11 @@ class ConsistencyCheckProfileTests(unittest.TestCase):
             "black-background-cutout",
             "banana-pro",
             "dreamina-cli",
+            "kling-cli",
             "seedance-2-video",
             "url-relay",
             "kling-api",
+            "hermes-bridge",
             "storyboard-visual-word",
             "feishu-docs",
         }
@@ -92,6 +94,7 @@ class ConsistencyCheckProfileTests(unittest.TestCase):
         files = checker.iter_text_files([ROOT])
 
         self.assertFalse(any(".codex" in path.relative_to(ROOT).parts for path in files))
+        self.assertFalse(any(set(path.relative_to(ROOT).parts) & {"output", ".tmp", "node_modules", ".runtime"} for path in files))
 
 
 class DoctorGitStatusTests(unittest.TestCase):

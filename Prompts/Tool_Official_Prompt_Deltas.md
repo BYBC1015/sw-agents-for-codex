@@ -38,7 +38,17 @@ Use this delta when the user explicitly asks for Dreamina CLI, Jimeng CLI, offic
 - QA after output: image/video exists, count/duration/resolution match the request, audio status is known when relevant, no black/failure frames, and the result follows the selected prompt/handoff.
 - Fallback: if CLI is missing, login is missing, help is unavailable, or the requested model/parameter is not supported, keep a prompt-only handoff and do not claim output was generated.
 
-## Kling 2.6-3
+## Kling 3.0 / 3.0 Omni (API updated 2026-09-11)
+
+For official API work, read `kling-api/references/kling-api.md`. Ordinary video uses Kling 3.0; video references and edits use Kling 3.0 Omni. Current API uses prompt/contents plus settings and model-specific paths; do not reuse legacy `/v1` payloads.
+
+- Current references use `@video_1`, `@image_1` or the assigned asset ID. Legacy `<<<video_1>>>` syntax belongs only to legacy requests.
+- Motion/camera reference: `feature_video`, describe which motion/camera traits to borrow and which new subject/scene to create; audio must be off.
+- Edit an existing video: `base_video`, state the exact elements/scenes to change and preserve other identities, actions, composition, timing and camera motion. Use original audio when requested; base editing supports original/off audio, no multi-shot or first/end frames. Verify preservation after generation.
+- Reference roles stay explicit: identity, scene/style, motion/camera, or source to edit. Do not let a motion reference silently replace the selected character/product.
+- Ordinary Kling 3.0 clips support 3–15 integer seconds. Use only necessary shot transitions; one selected clip defaults to single shot. New endpoints and `succeeded`/outputs response fields are separate from legacy model_name/succeed/task_result.
+
+General camera and prompt guidance (also useful for legacy 2.6):
 
 Use this delta for Kling / 可灵 2.6-3 prompt optimization, especially when the user asks about camera motion, image-to-video, start/end frames, or audio-video prompts.
 

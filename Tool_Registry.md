@@ -47,6 +47,15 @@ Checked on 2026-07-13:
 - Verified command families: `text2image`, `image2image`, `image_upscale`, `text2video`, `image2video`, `frames2video`, `multiframe2video`, `multimodal2video`, `query_result`, `list_task`, `session`, `user_credit`, `login`, `relogin`, `logout`.
 - The CLI can upload local files directly for image/video reference modes. URL Relay is only needed when a downstream tool or workflow explicitly requires public `http(s)` URLs.
 
+## Kling API and Hermes — updated 2026-09-11
+
+- Kling API setup uses a private user config outside the repository, `~/.config/kling-api/secrets.json`, with `api_key` and the official China base URL. The API Key is sent as a Bearer credential; it is separate from CLI OAuth and legacy AK/SK signing.
+- Ordinary video default: Kling 3.0. Video motion/camera reference and editing existing elements/scenes: Kling 3.0 Omni. `feature_video` guides a new clip; `base_video` edits the input clip. These modes must not be silently interchanged.
+- Current official API schemas use `contents` and `settings`; the legacy `/v1/videos/*` payloads remain available only through the explicit legacy runner option. Read `kling-api/references/kling-api.md` for verified endpoints and examples.
+- Execution: `kling-api/scripts/kling_task.py`. Local `doctor` and `dry-run` do not submit generation; `doctor --online` uses the official free account query and prints only verification status. Real generation and reference uploads require user authorization for the concrete task.
+- Hermes is already installed locally. `hermes-bridge/SKILL.md` and its installer provide a verified, narrowly scoped skill bridge to the live SW repository and the same Kling runner. No duplicate key files or model configuration are needed. This is local skill/file collaboration, not an always-running communication service.
+- Setup, document refresh, and bridge installation do not imply permission to generate videos, send messages, publish material, or run unattended batches.
+
 ## Kling CLI Local Status Addendum
 
 Checked on 2026-07-23:
@@ -64,7 +73,7 @@ Tool type: image generation / video generation / official Kling CLI / MCP execut
 Integration status: local tool skill integrated; official `kling` command installed and OAuth-authorized for the China-region `klingai.com` MCP endpoint; real generation depends on account credits and explicit user confirmation.
 Trigger phrases: Kling CLI, 可灵 MCP, kling-cli, @kling-cli, 可灵官方 CLI, 可灵文生图, 可灵图生图, 可灵文生视频, 可灵图生视频, use Kling to generate image/video.
 Best use: official Kling text-to-image, image-to-image, text-to-video, image-to-video, local file upload, task query, and credit/membership checks after SW prompt preparation.
-Not suited for: generic image/video prompt drafting, AK/SK API tasks, bypassing upstream storyboard/camera/scene design, unconfirmed login/relogin, private upload, batch generation, or final client output.
+Not suited for: generic image/video prompt drafting, API Key or legacy AK/SK API tasks, bypassing upstream storyboard/camera/scene design, unconfirmed login/relogin, private upload, batch generation, or final client output.
 Inputs needed: final image/video prompt, selected asset packet when references are involved, model/parameter choice from `kling who_am_i`, optional local/public reference media, confirmation for quota-consuming generation or private uploads.
 Outputs: `generationId`, task status from `query_tasks`, generated image/video URLs, cover URLs, credit consumption when returned, and failure reasons.
 Prompt format: `prompt-director` first produces the universal prompt, then converts only the selected image/clip/task for Kling using live CLI/MCP model declarations.
@@ -73,7 +82,7 @@ Limits/risks: account credits may be consumed; local media may be uploaded to Kl
 Cost level: help/who_am_i/tool_list/query is low; real generation, private upload, batch output, final quality, and long polling are high.
 Privacy note: never expose `~/.kling/.credentials`, OAuth tokens, local private paths, client assets, or private generated URLs in repo docs or public handoffs.
 QA method: after generation, check output exists, duration/resolution/count match the promise, audio setting when requested, visible black/failure frames for video, and alignment with the selected asset packet and prompt.
-Fallback: keep universal/tool prompt; if `kling` is missing, offer official install route; if not logged in, ask to run `kling login`; if model/parameter fails, inspect `who_am_i`/help and ask before retrying; if user needs AK/SK official API, route to `kling-api`.
+Fallback: keep universal/tool prompt; if `kling` is missing, offer official install route; if not logged in, ask to run `kling login`; if model/parameter fails, inspect `who_am_i`/help and ask before retrying; if user needs API Key or legacy AK/SK official API, route to `kling-api`.
 Owner route: upstream Studio role if needed -> Selected Asset Packet -> prompt-director -> kling-cli. tool-integrator only enters when capability, install/login state, model, parameter, or MCP availability is unclear.
 Dispatch display: `prompt-director` appears in `Studio roles:`; `kling-cli` must appear separately as `Tool skill:`, never as a Studio role.
 Read path: prefer `kling-cli/SKILL.md`, then user-level `C:\Users\Administrator\.codex\skills\kling-cli\SKILL.md`, then plugin-level `C:\Users\Administrator\plugins\sw-v1-0\skills\kling-cli\SKILL.md`.

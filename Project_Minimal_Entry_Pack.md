@@ -1,4 +1,4 @@
-﻿# Project Minimal Entry Pack
+# Project Minimal Entry Pack
 
 Use this when preparing another project folder for SW.
 
@@ -38,19 +38,19 @@ Copy these when you want version history and troubleshooting available inside th
 Startup:
 
 ```text
-SW loaded successfully. Current version: V1.14.0
+SW loaded successfully. Current version: V1.16.0
 ```
 
 Version sync:
 
 ```text
-SW version synchronized. Current version: V1.14.0
+SW version synchronized. Current version: V1.16.0
 ```
 
 Rescue:
 
 ```text
-SW rescue synchronized. Current version: V1.14.0
+SW rescue synchronized. Current version: V1.16.0
 ```
 
 ## Optional Project Memory Pack

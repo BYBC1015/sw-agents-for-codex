@@ -66,3 +66,7 @@ Ask 1-3 by default; ask up to 5 only when feedback conflicts with the locked dir
 - When a `Change Delta Packet` exists, preserve `Keep unchanged`, route only the affected object/role, and do not turn local feedback into a fresh brief unless the level is L/XL.
 - Prefer local edit for S-level review feedback; regenerate only the selected asset/frame/page when local edit cannot solve it.
 - Hand off to the affected role after classification.
+
+## Canvas continuity
+
+For persisted shots, query shared-asset impact and patch only selected fields. Preserve unchanged shot records; never automatically regenerate every affected shot. Read `Storyboard_Continuity_Protocol.md` only for this path.

@@ -26,11 +26,13 @@ Dreamina/Jimeng official CLI override:
 
 Kling official CLI/MCP override:
 
-- Official Kling CLI/MCP triggers include Kling CLI, 可灵 MCP, `kling-cli`, `@kling-cli`, 可灵官方 CLI, 可灵文生图, 可灵图生图, 可灵文生视频, 可灵图生视频, and wording that explicitly means the OAuth/MCP local CLI route rather than AK/SK API.
+- Official Kling CLI/MCP triggers include Kling CLI, 可灵 MCP, `kling-cli`, `@kling-cli`, 可灵官方 CLI, 可灵文生图, 可灵图生图, 可灵文生视频, 可灵图生视频, and wording that explicitly means the OAuth/MCP local CLI route rather than the API Key/legacy AK/SK API.
 - A complete final Kling CLI/MCP prompt routes `prompt-director` -> `kling-cli`; add `tool-integrator` only when installed state, OAuth login state, capability, model support, parameters, or MCP tool availability is unclear.
 - If the same request also asks for script, storyboard, camera, edit rhythm, motion, sound, color, poster, PPT/deck/slide, layout, character, product, prop, or scene design, route the upstream Studio role first, then `prompt-director`, then `kling-cli`. Do not let the tool trigger bypass the design role.
 - Before real generation, inspect `kling who_am_i` and, when needed, `kling tool_list` or `kling <command> --help`; do not hardcode models or parameters. Stop before install, login/relogin, private upload, paid generation, batch generation, final output, or long polling unless confirmed.
-- Keep `kling-api` for explicit AK/SK official API requests. Do not silently switch between `kling-cli` and `kling-api`.
+- Keep `kling-api` for explicit API Key or legacy AK/SK official API requests. Do not silently switch between `kling-cli` and `kling-api`.
+- For Kling API video work, use Kling 3.0 for ordinary generation and Kling 3.0 Omni for reference-video generation or base-video edits. Read the current tool skill before constructing payloads; the current API and legacy `/v1` schemas differ.
+- Explicit Hermes collaboration/setup routes to `hermes-bridge`, a local tool bridge rather than a Studio role. Use the existing runtime and shared Kling runner; do not start another agent or copy private credentials as part of a file handoff.
 
 0. Rescue-only commands (`/sw-rescue`, `@sw_rescue`, `SW_RESCUE`, `SW_REPAIR`, `SW_FORCE_UPDATE`) -> use `sw-rescue`, reply with the fixed rescue line, and do not start a project.
 0. `@sw_help`, `/sw_help`, feature trigger questions -> use the embedded `sw-help` short answer first; read `Feature_Trigger_Index.md` only for detailed triggers/debug; do not start a project.

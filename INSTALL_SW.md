@@ -28,6 +28,12 @@ The bootstrap script will:
 
 ## Codex Instruction
 
+### Kling API and existing Hermes installations
+
+Kling API is installed with the tool skills. Run `python kling-api/scripts/kling_task.py setup-key` for private API Key setup, then `doctor` for a local check or `doctor --online` for the official free account query. These commands do not generate video. Current ordinary videos use Kling 3.0; reference-video work and edits use 3.0 Omni. Legacy callers explicitly select `--api-version legacy`.
+
+To connect an already installed Hermes runtime, preview `python hermes-bridge/scripts/install_bridge.py`, then use `--execute` to install the local bridge. It links to this checkout and the same Kling runner/config. It does not install Hermes, copy credentials, change its model, or open a background connection. Use `--project-root` and `--hermes-home` if relocating the checkout or selecting a Hermes profile.
+
 If using Codex instead of running the command manually, give Codex this instruction:
 
 ```text
@@ -210,3 +216,7 @@ Then in Codex use:
 If the bootstrap report says URL Relay needs configuration, configure the relay token first. Missing token or missing upload URL should not fall back to Catbox/Litterbox automatically.
 
 If real image/video generation is unavailable, check `OPENROUTER_API_KEY` for Banana Pro, `kling login` for Kling CLI, and `ARK_API_KEY` for Seedance. The tools can still generate prompt-only or dry-run payloads where supported.
+
+## Bundled SW Canvas
+
+`apps/media-canvas` contains the complete local Canvas source. Install `apps/media-canvas/requirements.txt`, then run its `launcher.py`. SW sync installs both Canvas skills pointing to the current checkout. Existing data locations are reused when present; see the Canvas README for portable paths and environment overrides.

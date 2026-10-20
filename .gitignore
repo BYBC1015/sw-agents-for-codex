@@ -53,3 +53,8 @@ seedance_payload*.json
 seedance_response*.json
 banana_prompt_full.txt
 banana_prompt_used.txt
+.tmp/
+.codex-hub-state/
+output/
+tmp/
+continuity_locks.json

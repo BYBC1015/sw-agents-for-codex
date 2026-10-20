@@ -90,11 +90,44 @@ def _compress_prompt(prompt: str, limit: int) -> tuple[str, bool]:
     return head, True
 
 
-def _retry_prompt(prompt: str) -> str:
-    compact, _ = _compress_prompt(prompt, 900)
+def _read_locks(path: str | None) -> list[str]:
+    if not path:
+        return []
+    data = json.loads(Path(path).read_text(encoding="utf-8-sig"))
+    if isinstance(data, dict):
+        if any(i.get("type") == "dependency" for i in data.get("issues", [])):
+            raise ValueError("Shot packet has outdated dependencies; reconcile references before generation.")
+        data = data.get("locks")
+    if not isinstance(data, list) or len(data) > 200 or any(not isinstance(v, str) or not v.strip() for v in data):
+        raise ValueError("Lock file must contain a list of nonempty strings or a shot packet with locks.")
+    return list(dict.fromkeys(v.strip() for v in data))
+
+
+def _protected_prompt(prompt: str, locked: list[str], limit: int, compress: bool = True) -> tuple[str, bool]:
+    # Explicit continuity and negative constraint lines also survive legacy callers without a packet.
+    inline = [line.strip() for line in prompt.splitlines() if re.search(
+        r"锁定|必须保留|禁止|不得|must keep|locked|do not|negative|avoid", line, re.I)]
+    protected = list(dict.fromkeys([*locked, *inline]))
+    block = "\n\nLOCKED CONSTRAINTS (preserve verbatim):\n" + "\n".join(protected) if protected else ""
+    if not compress:
+        return prompt + block, False
+    if limit < 1:
+        raise ValueError("Compression limit must be positive.")
+    if len(prompt + block) <= limit:
+        return prompt + block, False
+    remaining = limit - len(block)
+    if remaining < 200:
+        raise ValueError("Locked constraints exceed the prompt budget. Increase --compress-limit or use --no-compress; locks were not truncated.")
+    compact, _ = _compress_prompt(prompt, remaining)
+    # Only flexible description may be shortened. The locked block is always complete.
+    return compact[:remaining] + block, True
+
+
+def _retry_prompt(prompt: str, locked: list[str] | None = None, limit: int = 900) -> str:
+    compact, _ = _protected_prompt(prompt, locked or [], limit)
     return (
         f"{compact}\n"
-        "Generate one clean image only. Keep the subject clear, composition simple, no text, no logo, no watermark."
+        "Generate one image. Preserve all locked constraints and any explicitly requested lettering."
     )
 
 
@@ -313,6 +346,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate a Banana Pro image via OpenRouter.")
     parser.add_argument("--prompt", help="Final image prompt text.")
     parser.add_argument("--prompt-file", help="UTF-8 file containing the final image prompt.")
+    parser.add_argument("--lock-file", help="UTF-8 JSON locks list or Canvas shot-packet. Locks survive compression and retry.")
     parser.add_argument("--output-dir", help="Directory for payload, response, and images. Overrides --output-root.")
     parser.add_argument("--output-root", default=DEFAULT_OUTPUT_ROOT, help="Root directory used when --output-dir is omitted.")
     parser.add_argument("--slug", help="Optional readable output folder slug.")
@@ -353,6 +387,11 @@ def main() -> int:
     if not prompt:
         raise SystemExit("Prompt is empty.")
 
+    locked = _read_locks(args.lock_file)
+    prompt_to_send, compressed = _protected_prompt(prompt, locked, args.compress_limit, args.compress_prompt)
+    # Prepare the retry before any paid call so an impossible lock budget fails locally.
+    retry_prompt = _retry_prompt(prompt, locked, max(900, args.compress_limit)) if args.retry_on_empty and args.compress_prompt else prompt_to_send
+
     stamp = time.strftime("%Y%m%d-%H%M%S")
     output_dir = _resolve_output_dir(args, prompt, stamp)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -360,8 +399,9 @@ def main() -> int:
     full_prompt_path = output_dir / "banana_prompt_full.txt"
     used_prompt_path = output_dir / "banana_prompt_used.txt"
     full_prompt_path.write_text(prompt, encoding="utf-8")
-    prompt_to_send, compressed = _compress_prompt(prompt, args.compress_limit) if args.compress_prompt else (prompt, False)
     used_prompt_path.write_text(prompt_to_send, encoding="utf-8")
+    if args.lock_file:
+        (output_dir / "continuity_locks.json").write_text(json.dumps({"locks": locked}, ensure_ascii=False, indent=2), encoding="utf-8")
 
     payload = _build_payload(args, prompt_to_send)
     payload_path = output_dir / "openrouter_payload.json"
@@ -401,7 +441,7 @@ def main() -> int:
     images = _extract_image_urls(result)
     retried = False
     if not images and args.retry_on_empty:
-        retry_payload = _build_payload(args, _retry_prompt(prompt_to_send))
+        retry_payload = _build_payload(args, retry_prompt)
         retry_payload_path = output_dir / "openrouter_payload_retry.json"
         retry_payload_path.write_text(json.dumps(retry_payload, ensure_ascii=False, indent=2), encoding="utf-8")
         result = _post_json(retry_payload, api_key, args.timeout)

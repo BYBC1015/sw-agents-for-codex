@@ -110,3 +110,7 @@ Ask 3 by default; ask up to 5 when subject, tool, aspect ratio, duration, style,
 - For revisions, change only the affected parameters.
 - If historical accuracy has been explicitly enabled, include the compact Period Lock Card constraints from `historical-consultant` in the prompt and add a post-generation image QA note. Do not enable historical checking by yourself.
 - For video prompts under historical checking, write still-frame/shot visual constraints only; do not imply SW can generate or audit final video until a video module exists.
+
+## Canvas continuity
+
+For a saved shot, reread its shot-packet and resolve stale dependencies before tool execution. Pass its protected locks to Banana --lock-file and preserve those locks for other tools. Compare the original shot version again before attaching a result. Read `Storyboard_Continuity_Protocol.md` only for this path.

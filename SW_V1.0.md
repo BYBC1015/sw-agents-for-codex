@@ -1,4 +1,4 @@
-﻿# SW_V1.0 Activation
+# SW_V1.0 Activation
 
 This is the stable project-start entry for the SW design studio workflow.
 
@@ -39,7 +39,7 @@ activate SW_V1.0
 After text activation succeeds, reply exactly:
 
 ```text
-SW loaded successfully. Current version: V1.14.0
+SW loaded successfully. Current version: V1.16.0
 ```
 
 If the user only invokes SW, stop after the required reply and wait for the project request.
@@ -85,7 +85,7 @@ If the same request asks for upstream design work and Banana Pro output, do not 
 
 If the same request asks for upstream image/video work and Dreamina CLI / Jimeng CLI / official Jimeng CLI output, do not jump straight to generation. Produce the responsible Studio role handoff first, convert it through `prompt-director`, then use `dreamina-cli` only for the selected image/clip/task. Do not install the CLI, login, or run real generation without confirmation.
 
-If the same request asks for upstream image/video work and Kling CLI / 可灵 MCP output, do not jump straight to generation. Produce the responsible Studio role handoff first, convert it through `prompt-director`, then use `kling-cli` only for the selected image/clip/task. Do not install the CLI, login/relogin, read credentials, upload private media, or run real generation without confirmation. Keep `kling-api` for explicit AK/SK official API requests.
+If the same request asks for upstream image/video work and Kling CLI / 可灵 MCP output, do not jump straight to generation. Produce the responsible Studio role handoff first, convert it through `prompt-director`, then use `kling-cli` only for the selected image/clip/task. Do not install the CLI, login/relogin, read credentials, upload private media, or run real generation without confirmation. Keep `kling-api` for explicit API Key or legacy AK/SK official API requests.
 
 If the same request asks for upstream video/film work and Seedance/即梦 output, do not jump straight to generation. Produce the responsible Studio role handoff first, preserve any Project Asset Graph, convert it through `prompt-director`, then use `seedance-2-video` only for the selected clip/shot.
 
@@ -108,7 +108,7 @@ For synchronization in historical conversations or other project folders, use:
 Expected sync reply:
 
 ```text
-SW version synchronized. Current version: V1.14.0
+SW version synchronized. Current version: V1.16.0
 ```
 
 If normal sync still returns a stale sealed chip, use the standalone rescue entry:
@@ -120,7 +120,7 @@ If normal sync still returns a stale sealed chip, use the standalone rescue entr
 Expected rescue reply:
 
 ```text
-SW rescue synchronized. Current version: V1.14.0
+SW rescue synchronized. Current version: V1.16.0
 ```
 
 ## Minimum Project Folder Package
