@@ -1,6 +1,6 @@
-# SW Canvas 0.4.0
+# SW Canvas 0.4.1
 
-Local visual production workspace bundled with SW V1.16.0. Stores project media references, tasks, revisions, annotations and versioned storyboard records. No model calls or cloud uploads happen automatically.
+Local visual production workspace bundled with SW V1.16.1. Stores project media references, tasks, revisions, annotations and versioned storyboard records. No model calls or cloud uploads happen automatically.
 
 ## Start
 
@@ -14,6 +14,12 @@ python -B -X utf8 apps/media-canvas/launcher.py
 Windows: `Start-Canvas.cmd` or `start.ps1`. To leave the browser closed, pass `--no-browser` to the Python launcher or `-NoBrowser` to PowerShell. The server listens only on 127.0.0.1:8961; an existing service with another version is reported instead of being killed automatically. Close the old server or choose another port before starting the upgrade.
 
 `python tools/sw_sync_installed.py` installs the `sw-canvas` and `media-canvas` skills with paths resolved to this checkout. Moving the checkout requires rerunning sync.
+
+On Windows, the launcher uses local WMI to create a hidden server independently of the invoking shell's process tree. Startup parameters are passed as data; only required system/media environment settings are forwarded. No scheduled task or login startup is installed. Other platforms use a separate process session. The server records its PID and startup/exit diagnostics in the data directory.
+
+If a saved page reports `ERR_CONNECTION_REFUSED`, run the launcher again and refresh that same URL. This restores the service without creating a project or changing conversation bindings. Browser refresh cannot start a stopped local program; after reboot, start Canvas once. If local WMI is unavailable, the launcher reports the failure instead of claiming success.
+
+In a bound Canvas workflow, register generated media in Canvas and return a short text receipt/link in chat. Banana follows the same rule; its JSON image links are not instructions to embed images. Mandatory native tool output and images explicitly requested in chat still follow their respective rules. Previously displayed chat images remain in history.
 
 ## Storyboards
 

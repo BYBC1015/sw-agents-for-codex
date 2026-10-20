@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 import shutil
 
-VERSION = '0.4.0'
+VERSION = '0.4.1'
 HOME = Path(os.environ.get('MEDIA_CANVAS_HOME', str(Path.home() / 'SWCanvas'))).expanduser().resolve()
 LEGACY_WORKSPACE = Path('T:/Work素材')
 LEGACY_DATA = Path('E:/Downloads/制作画布_项目数据')

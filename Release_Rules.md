@@ -69,6 +69,8 @@ Local installed-entry checks remain the job of:
 python .\tools\sw_doctor.py --scope all
 ```
 
+Canvas launcher releases also require the real Windows lifecycle tests (`apps/media-canvas/tests/test_launcher.py`), including survival after calling-process-tree termination. CI runs these on Windows as well as the broader Linux/browser suite.
+
 ## Sync Rule
 
 Use `tools/sw_sync_installed.py` after version bumps or entry changes. It updates:

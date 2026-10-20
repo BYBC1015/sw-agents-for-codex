@@ -220,3 +220,5 @@ If real image/video generation is unavailable, check `OPENROUTER_API_KEY` for Ba
 ## Bundled SW Canvas
 
 `apps/media-canvas` contains the complete local Canvas source. Install `apps/media-canvas/requirements.txt`, then run its `launcher.py`. SW sync installs both Canvas skills pointing to the current checkout. Existing data locations are reused when present; see the Canvas README for portable paths and environment overrides.
+
+On Windows, local WMI starts the hidden background service independently of the command session. No login startup is installed. If a saved Canvas URL refuses connection, run the launcher once and refresh the original URL; do not create or rebind a project just to restore the service.

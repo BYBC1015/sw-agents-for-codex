@@ -239,3 +239,7 @@ Before replying, internally check:
 - Did I ask useful questions without slowing the user down?
 - Did I preserve confirmed decisions?
 - Did I avoid claiming a role was loaded if it was not available?
+
+## Canvas result receipts
+
+For an explicitly bound Canvas workflow, register results there and return IDs/version, a short conclusion and the Canvas link. Do not manually repeat generated images or whole-board screenshots; show selected images when the user requests chat previews or a tool requires native output. Read only previews needed for visual judgment. This does not delete historical chat images or guarantee lower context usage/latency.

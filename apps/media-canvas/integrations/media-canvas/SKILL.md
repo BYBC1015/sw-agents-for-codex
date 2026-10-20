@@ -3,10 +3,12 @@ name: media-canvas
 description: SW Canvas 项目协作：明确选择后绑定、导入、版本回写与完整交接；启动用 sw-canvas。
 ---
 
-# SW Canvas 协作 · 0.4.0
+# SW Canvas 协作 · 0.4.1
 
 CLI：{{CANVAS_ROOT}}\canvas_cli.py，使用 {{PYTHON}} -B -X utf8。
 软件与 SW 工作室独立；软件维护、打开或交接不授权媒体制作。
+
+连接拒绝时先运行 `{{CANVAS_ROOT}}\start.ps1 -NoBrowser`，再刷新用户明确指定的原链接；恢复服务无需 `launch`、创建项目或更改对话绑定。Windows 服务独立运行；电脑重启后需要重新启动。
 
 ## 定位与低消耗读取
 

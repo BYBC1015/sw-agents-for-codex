@@ -1,6 +1,6 @@
 # SW Version
 
-Current runtime version: V1.16.0
+Current runtime version: V1.16.1
 Stable invocation name: SW_V1.0
 Stable invocation aliases: `/sw`, `/SW_V1.0`, `@SW_V1.0`, `/sw_v1.0`, `/sw-v1-0`
 Version sync aliases: `@sw_update`, `SW_UPDATE`, `/sw_update`, `/sw-update`, `SW_REFRESH`
@@ -86,6 +86,7 @@ Each entry must include:
 
 | Version | Date | Change |
 | --- | --- | --- |
+| V1.16.1 | 2026-10-20 | Fixed Windows Canvas background startup and aligned Banana result replies with bound Canvas workflows. |
 | V1.16.0 | 2026-10-20 | Added versioned shot records, dependency impact checks, protected generation locks and visual-review-gated manifests; bundled portable SW Canvas 0.4.0. |
 | V1.15.0 | 2026-09-11 | Updated Kling API Key integration to current Kling 3.0/3.0 Omni endpoints; added local Hermes collaboration bridge and retained legacy compatibility. |
 | V1.14.0 | 2026-07-23 | Added `kling-cli` as an explicit-call official Kling CLI/MCP tool skill for image and video generation. The new OAuth/MCP route is separate from the existing AK/SK `kling-api` route: Kling CLI/MCP requests now go through upstream Studio roles when needed, then `prompt-director`, then `kling-cli`, while explicit AK/SK API requests remain on `kling-api`. The integration adds a repository tool skill copy, lightweight registry entry, help/trigger routing, bootstrap detection, installed skill/plugin sync, and guardrails for install/login, credential secrecy, live model/tool inspection, real generation, private upload, batch output, async polling, and post-generation review. |

@@ -3,7 +3,7 @@ name: sw-canvas
 description: SW Canvas 快速启动；新对话自动新建并绑定独立空画布，已有绑定则恢复对应项目。
 ---
 
-# SW Canvas · 0.4.0
+# SW Canvas · 0.4.1
 
 单独启动只执行以下轻量入口，不加载其他 skill、项目列表、完整交接或图片：
 ```powershell
@@ -20,6 +20,7 @@ if ([string]::IsNullOrWhiteSpace($env:CODEX_THREAD_ID)) { 'http://127.0.0.1:8961
 - 同一对话已有明确绑定：恢复对应画布；仅打开时不自动读取项目内容。
 - 用户明确指定新建、切换、导入、处理或交接时，再读 ~/.codex/skills/media-canvas/SKILL.md。
 - 启动后一句短答即可。不启动 SW 工作室，不执行媒体队列。
+- 旧画布出现 `ERR_CONNECTION_REFUSED` 时，先运行上述 `start.ps1 -NoBrowser` 恢复服务；这不需要 `launch`，不会新建或改绑项目。然后刷新用户明确指定的原画布 URL。Windows 后台服务独立于启动命令；电脑重启后仍需启动一次，网页刷新本身不能启动本机程序。
 
 ## 画布优先回传
 

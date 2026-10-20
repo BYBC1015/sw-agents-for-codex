@@ -10,6 +10,16 @@ on:
       - main
 
 jobs:
+  windows-launcher:
+    name: Windows Canvas lifecycle
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -r apps/media-canvas/requirements.txt
+      - run: python -B -X utf8 -m unittest discover -s apps/media-canvas/tests -p test_launcher.py -v
   consistency:
     name: Repository consistency
     runs-on: ubuntu-latest

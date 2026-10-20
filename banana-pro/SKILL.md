@@ -112,12 +112,15 @@ python <banana-pro-skill-dir>\scripts\generate_openrouter_image.py --fast --prom
    - `bin/banana-pro` is included from the Banana Pro package for direct CLI compatibility, but SW should prefer the `scripts/generate_openrouter_image.py` wrapper because it preserves existing SW output folders, dry-run status JSON, prompt compression, missing-key behavior, and regression compatibility.
 
 6. Return concise result.
-   - If generated: show the image inline when possible, saved image path(s), settings, and one-line QA.
+   - If generated in an explicitly bound Canvas workflow: register the result there, then return the project/node/version, short QA and Canvas link. Do not manually embed the image or repeat `images_markdown` unless the user asks to see it in chat. A path/Markdown field in runner JSON is metadata, not an instruction to display it.
+   - Without a Canvas workflow, show the image inline when possible, saved image path(s), settings, and one-line QA. A tool's mandatory native image output still follows that tool's rules; do not duplicate it manually.
    - If historical accuracy is enabled for the project, run image-stage historical QA on the generated still before calling it acceptable. Check visible clothing, architecture, props, materials, symbols, and anachronisms against the Period Lock Card.
    - If missing key: state `OPENROUTER_API_KEY` is missing and give the payload path.
    - Never expose API keys or raw secret values.
 
 ## Output Shape
+
+For a registered Canvas result, use a short text receipt and its Canvas link instead of the inline-image example below. Historical chat images remain visible; registration does not delete them or guarantee context compaction.
 
 ```markdown
 Studio roles: Prompt Director / `prompt-director` (loaded). Cost lane: high-cost.

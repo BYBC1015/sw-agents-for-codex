@@ -7,19 +7,19 @@ This is the compact runtime index for SW_V1.0. Read it before deeper project fil
 Activation reply:
 
 ```text
-SW loaded successfully. Current version: V1.16.0
+SW loaded successfully. Current version: V1.16.1
 ```
 
 Sync reply:
 
 ```text
-SW version synchronized. Current version: V1.16.0
+SW version synchronized. Current version: V1.16.1
 ```
 
 Rescue reply:
 
 ```text
-SW rescue synchronized. Current version: V1.16.0
+SW rescue synchronized. Current version: V1.16.1
 ```
 
 If the user only invokes SW, sync, or rescue, reply with the matching fixed line and stop.
@@ -518,3 +518,7 @@ For complex handoffs, tool integration, eval/debug, or architecture maintenance,
 ## Persisted storyboard continuity
 
 For Canvas-backed shot production, revisions or review, read `Storyboard_Continuity_Protocol.md` on demand. Reuse stable shot/entity IDs, preserve exact version references, preview shared-asset impact, and require evidence from the actual output before visual approval. This adds no default startup reads and no new studio roles.
+
+## Canvas result receipts
+
+For an explicitly bound Canvas workflow, register results there and return IDs/version, a short conclusion and the Canvas link. Do not manually repeat generated images or whole-board screenshots; show selected images when the user requests chat previews or a tool requires native output. Read only previews needed for visual judgment. This does not delete historical chat images or guarantee lower context usage/latency.

@@ -130,3 +130,7 @@ Stop before expanding when:
 - Clear risk without confirmation produces only: `检测到历史准确性风险。是否开启历史准确性检查？默认不开启。`
 - After confirmation, historical checking must include final visual output/image QA when images are generated or reviewed.
 - Video-stage checking covers still frames, storyboard images, references, visual assets, and representative Seedance output frames when available. Do not claim full automated video QA beyond visible frames/stills.
+
+## Canvas result receipts
+
+For an explicitly bound Canvas workflow, register results there and return IDs/version, a short conclusion and the Canvas link. Do not manually repeat generated images or whole-board screenshots; show selected images when the user requests chat previews or a tool requires native output. Read only previews needed for visual judgment. This does not delete historical chat images or guarantee lower context usage/latency.

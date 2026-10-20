@@ -198,13 +198,13 @@ class Handler(BaseHTTPRequestHandler):
         else:raise ValueError('未找到接口')
         return result
 
-def main():
+def main(argv=None):
     parser=argparse.ArgumentParser()
     parser.add_argument('--data-dir',type=Path,default=DEFAULT_DATA)
     parser.add_argument('--port',type=int,default=8961)
     parser.add_argument('--registry',type=Path,default=DEFAULT_REGISTRY)
     parser.add_argument('--workspace-root',type=Path,default=DEFAULT_WORKSPACE)
-    args=parser.parse_args();store=Store(args.data_dir)
+    args=parser.parse_args(argv);store=Store(args.data_dir)
     server=ThreadingHTTPServer(('127.0.0.1',args.port),Handler)
     server.daemon_threads=True;server.store=store
     server.registry=Registry(args.registry,args.workspace_root);server.registry.register(store.root)

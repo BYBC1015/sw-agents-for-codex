@@ -6,7 +6,7 @@ SW Agents for Codex is a local Codex skill framework for creative production wor
 
 It is built for daily creative work where the hard part is not only generating an asset, but keeping the idea, references, constraints, revision history, and final handoff stable.
 
-Current runtime: `V1.16.0`
+Current runtime: `V1.16.1`
 
 Stable entry: `/sw`, `/SW_V1.0`, or `@SW_V1.0`
 
@@ -61,7 +61,7 @@ Then open Codex and start SW explicitly:
 Expected reply:
 
 ```text
-SW loaded successfully. Current version: V1.16.0
+SW loaded successfully. Current version: V1.16.1
 ```
 
 ## Core Commands
@@ -161,6 +161,7 @@ The README shows only the current public entry points. Detailed release history 
 
 Latest highlighted runtime changes:
 
+- `V1.16.1`: Keeps Windows Canvas independent of shell cleanup, restores saved pages without rebinding, and removes duplicate Banana chat previews in Canvas workflows. See [patch notes](docs/releases/V1.16.1.md).
 - `V1.16.0`: Adds [SW Canvas 0.4.0](apps/media-canvas/README.md), persistent shot versions, dependency impact checks, protected prompt locks, and explicit visual review before final manifest export.
 - `V1.15.0`: Updated Kling API Key support to current Kling 3.0 generation and 3.0 Omni video reference/edit endpoints; retained explicit legacy compatibility and added the local Hermes collaboration bridge.
 - `V1.14.0`: Added the explicit Kling official CLI/MCP route as `kling-cli`, separate from the existing AK/SK `kling-api` route, with OAuth/login, live model inspection, generation, upload, batch, and polling guardrails.

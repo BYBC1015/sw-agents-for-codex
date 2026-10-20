@@ -402,7 +402,7 @@ Trigger when the user says:
 Required reply:
 
 ```text
-SW rescue synchronized. Current version: V1.16.0
+SW rescue synchronized. Current version: V1.16.1
 ```
 
 This is not a project start, not a normal sync replacement, and not a tool-generation step.

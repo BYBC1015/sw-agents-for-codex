@@ -2,7 +2,7 @@
 name: kling-api
 description: Generate, query, and download videos through the official Kling API, including Kling 3.0 and 3.0 Omni video reference or scene/element editing. Use for requested Kling API or API Key integration; keep OAuth Kling CLI/MCP separate.
 metadata:
-  version: "1.16.0"
+  version: "1.16.1"
 ---
 
 # Kling API
